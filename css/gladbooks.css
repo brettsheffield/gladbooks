@@ -4,3 +4,73 @@ body {
   color: black;
   padding-top: 60px;
   padding-bottom: 40px; }
+
+div#footdiv {
+  background-color: #6e89a5;
+  color: white;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  width: 100%; }
+
+.navbar .nav {
+  border-radius: 25px;
+  margin-top: 12px;
+  margin-bottom: auto; }
+
+.nav {
+  background-color: #6e89a5; }
+
+.navbar-inner {
+  background-image: none; }
+
+.navbar-search {
+  background-image: none;
+  border-radius: 25px;
+  font-size: 14pt;
+  margin-top: 22px;
+  margin-bottom: 12px; }
+
+.navbar-search .search-query {
+  width: 200%; }
+
+.navbar .nav > .active > a, .navbar .nav > .active > a:hover, .navbar .nav > .active > a:focus {
+  background-color: #b2cde0;
+  color: black;
+  text-shadow: 0 1px 0 white; }
+
+.navbar .nav > li > a:hover {
+  background-color: #b2cde0;
+  border-radius: 25px;
+  color: black;
+  text-shadow: 0 1px 0 white; }
+
+.navbar .nav > li > a {
+  border-radius: 25px;
+  color: #b2cde0;
+  padding: 10px 15px;
+  text-shadow: 0 1px 0 gray; }
+
+div#pagearea {
+  background-color: #b2cde0;
+  color: white;
+  min-height: 700px;
+  padding-top: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  width: auto; }
+
+div#sitediv {
+  background-color: white;
+  color: black;
+  min-height: 650px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%; }
+
+#logo {
+  margin-left: 0.5em;
+  margin-right: 1em;
+  padding-top: 0.2em;
+  padding-bottom: 0.1em; }

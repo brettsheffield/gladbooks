@@ -3,32 +3,68 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Gladbooks</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
+	<head>
+		<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Gladbooks</title>
+    <meta name="description" content="Gladbooks Accounting System">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
-        <link rel="stylesheet" href="css/gladbooks.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+    <link rel="stylesheet" href="css/gladbooks.css">
 
-        <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
-    </head>
-    <body>
-        <!--[if lt IE 7]>
-            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
-        <![endif]-->
+    <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+	</head>
+	<body>
+		<!--[if lt IE 7]>
+    	<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+    <![endif]-->
 
-        <!-- This code is taken from http://twitter.github.com/bootstrap/examples/hero.html -->
+		<div id="sitediv">
+			<div class="navbar navbar-fixed-top">
+				<div class="navbar-inner">
+					<a id="logo" class="pull-left" href="/"><img id="logo" src="img/gladbooks-logo-small.png" alt="Gladbooks"/></a>
+					<ul class="nav">
+						<li><a href="#">Home</a></li>
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Accounts <b class="caret"></b> </a>
+							<ul class="dropdown-menu">
+								<li><a href="#">Chart of Accounts</a></li>
+								<li><a href="#">Customers</a></li>
+								<li><a href="#">Suppliers</a></li>
+							</ul>
+						</li>
+						<li><a href="#">Contacts</a></li>
+						<li><a href="#">Banking</a></li>
+						<li><a href="#">Receivables</a></li>
+						<li><a href="#">Payables</a></li>
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+								Reports
+								<b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="#">Balance Sheet</a></li>
+								<li><a href="#">Profit &amp; Loss</a></li>
+							</ul>
+						</li>
+						<li><a href="#">Help</a></li>
+					</ul>
+					<form class="navbar-search">
+						<input type="text" class="search-query" placeholder="Search">
+					</form>
+				</div><!-- navbar-inner -->
+			</div><!-- navbar -->
 
+			<div id="pagearea">
+			</div><!-- pagearea -->
 
-        <script src="/js/jquery/1.8.3/jquery.js"></script>
+			<div id="footdiv">&copy; 2013 Gladbooks Ltd</div>
+		</div><!-- sitediv -->
 
-        <script src="js/vendor/bootstrap.min.js"></script>
-
-        <script src="js/gladbooks.js"></script>
-
-    </body>
+		<script src="js/jquery/1.8.3/jquery.js"></script>
+    <script src="js/vendor/bootstrap.min.js"></script>
+    <script src="js/gladbooks.js"></script>
+	</body>
 </html>
