@@ -1,7 +1,9 @@
 /* sass file for Gladbooks base styles */
 body {
   background-color: gainsboro;
-  color: black; }
+  color: black;
+  padding-top: 60px;
+  padding-bottom: 40px; }
 
 div#footdiv {
   background-color: #6e89a5;
@@ -53,6 +55,7 @@ div#footdiv {
 div#pagearea {
   background-color: #b2cde0;
   color: white;
+  min-height: 700px;
   padding-top: 10px;
   padding-left: 20px;
   padding-right: 20px;
@@ -62,6 +65,7 @@ div#pagearea {
 div#sitediv {
   background-color: white;
   color: black;
+  min-height: 650px;
   margin-left: auto;
   margin-right: auto;
   width: 100%; }

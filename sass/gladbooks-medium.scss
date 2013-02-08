@@ -1,20 +1,19 @@
-/* sass file for Gladbooks base styles */
+/* 
+ * gladbooks-large.scss
+ * sass file for Gladbooks base styles
+ * Large screen edition
+ */
 
-$color-bg: gainsboro;
-$color-dark: #6e89a5;
-$color-light: #b2cde0;
+@media only screen and (min-width: 768px) {
 
 body {
-        background-color: $color-bg;
-	color: black;
+	padding-top: 60px;
+	padding-bottom: 40px;
 }
 
 div#footdiv {
-	background-color: $color-dark;
-	color: white;
 	margin-left: auto;
 	margin-right: auto;
-	text-align: center;
 	width: 100%;
 }
 
@@ -24,16 +23,7 @@ div#footdiv {
 	margin-bottom: auto;
 }
 
-.nav {
-	background-color: $color-dark;
-}
-
-.navbar-inner {
-	background-image: none;
-}
-
 .navbar-search {
-	background-image: none;
 	border-radius: 25px;
 	font-size: 14pt;
 	margin-top: 22px;
@@ -44,30 +34,18 @@ div#footdiv {
 	width: 200%;
 }
 
-.navbar .nav > .active > a, .navbar .nav > .active > a:hover, .navbar .nav > .active > a:focus {
-	background-color: $color-light;
-	color: black;
-	text-shadow: 0 1px 0 white;
-}
-
 .navbar .nav > li > a:hover {
-	background-color: $color-light;
 	border-radius: 25px;
-	color: black;
-	text-shadow: 0 1px 0 white;
 }
 
 .navbar .nav > li > a {
 	border-radius: 25px;
-	color: $color-light;
 	padding-top: 10px;
 	padding-bottom: 10px;
-	text-shadow: 0 1px 0 gray;
 }
 
 div#pagearea {
-	background-color: $color-light;
-       	color: white;
+	min-height: 715px;
 	padding-top: 10px;
 	padding-left: 20px;
 	padding-right: 20px;
@@ -76,8 +54,7 @@ div#pagearea {
 }
 
 div#sitediv {
-	background-color: white;
-	color: black;
+	min-height: 750px;
 	margin-left: auto;
 	margin-right: auto;
 	width: 100%;
@@ -88,4 +65,6 @@ div#sitediv {
 	margin-right: 1em;
 	padding-top: 0.2em;
 	padding-bottom: 0.1em;
+}
+
 }
