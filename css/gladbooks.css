@@ -1,59 +1,21 @@
 /* sass file for Gladbooks base styles */
+/* define some colours to use in our stylesheets */
+/* global element styles */
 body {
   background-color: gainsboro;
   color: black;
   padding: 0;
   margin: 0; }
 
+img {
+  max-width: 100%; }
+
+/* individual element styles by id */
 div#footdiv {
   background-color: #6e89a5;
   color: white;
   text-align: center;
   width: 100%; }
-
-.navbar .nav {
-  border-radius: 25px;
-  margin-top: 12px;
-  margin-bottom: auto;
-  margin-left: 5%;
-  margin-right: 5%; }
-
-.nav {
-  background-color: #6e89a5; }
-
-.navbar-inner {
-  background-image: none; }
-
-.navbar-search {
-  background-image: none;
-  border-radius: 25px;
-  font-size: 14pt;
-  margin-top: 22px;
-  margin-bottom: 12px;
-  margin-left: 5%;
-  margin-right: 5%;
-  width: 80%; }
-
-input, textarea, .uneditable-input {
-  width: 100%; }
-
-.navbar .nav > .active > a, .navbar .nav > .active > a:hover, .navbar .nav > .active > a:focus {
-  background-color: #b2cde0;
-  color: black;
-  text-shadow: 0 1px 0 white; }
-
-.navbar .nav > li > a:hover {
-  background-color: #b2cde0;
-  border-radius: 25px;
-  color: black;
-  text-shadow: 0 1px 0 white; }
-
-.navbar .nav > li > a {
-  border-radius: 25px;
-  color: #b2cde0;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  text-shadow: 0 1px 0 gray; }
 
 div#pagearea {
   background-color: #b2cde0;
@@ -71,9 +33,56 @@ div#sitediv {
   margin-left: auto;
   margin-right: auto; }
 
+/* class styles */
 .logo {
   padding-left: auto;
   padding-right: auto; }
 
-img {
-  max-width: 100%; }
+input,
+textarea,
+.uneditable-input {
+  width: 100%; }
+
+.navbar-search {
+  border-radius: 25px;
+  font-size: 14pt;
+  margin-top: 22px;
+  margin-bottom: 12px;
+  margin-left: 5%;
+  margin-right: 5%; }
+
+/* menu styling */
+.navbar .nav {
+  border-radius: 25px;
+  margin-top: 12px;
+  margin-bottom: auto;
+  margin-left: 5%;
+  margin-right: 5%; }
+
+.nav {
+  background-color: #6e89a5;
+  list-style: none;
+  margin: 0;
+  padding: 0; }
+
+ul > li > a {
+  border-radius: 25px;
+  color: #b2cde0;
+  display: block;
+  padding: 10px 25px;
+  text-decoration: none;
+  text-shadow: 0 1px 0 gray;
+  white-space: nowrap; }
+
+ul > li > a:hover {
+  background-color: #b2cde0;
+  border-radius: 25px;
+  color: black;
+  text-shadow: 0 1px 0 white; }
+
+.nav li ul {
+  display: none;
+  list-style: none; }
+
+.nav li:hover ul {
+  display: block; }

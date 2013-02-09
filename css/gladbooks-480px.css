@@ -3,41 +3,21 @@
  * sass file for Gladbooks base styles
  */
 @media only screen and (min-width: 480px) {
-  div#footdiv {
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%; }
+  /* define some colours to use in our stylesheets */
+  ul > li {
+    display: block;
+    float: left;
+    position: relative; }
 
-  .navbar .nav {
-    border-radius: 25px;
-    margin-top: 12px;
-    margin-bottom: auto; }
+  ul > li > a {
+    padding: 15px; }
 
-  .navbar-search {
-    border-radius: 25px;
-    font-size: 14pt;
-    margin-top: 22px;
-    margin-bottom: 12px; }
+  li > ul > li > a {
+    background-color: #6e89a5;
+    margin-left: -15px; }
 
-  .navbar .nav > li > a:hover {
-    border-radius: 25px; }
+  li:hover ul {
+    position: absolute; }
 
-  .navbar .nav > li > a {
-    padding-top: 10px;
-    padding-bottom: 10px; }
-
-  div#pagearea {
-    padding-top: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: 10px; }
-
-  div#sitediv {
-    max-width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%; }
-
-  #logo {
-    padding-top: 0.2em;
-    padding-bottom: 0.1em; } }
+  li:hover li {
+    float: none; } }
