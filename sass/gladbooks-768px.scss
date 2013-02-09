@@ -1,15 +1,9 @@
 /* 
- * gladbooks-large.scss
+ * gladbooks-768.scss
  * sass file for Gladbooks base styles
- * Large screen edition
  */
 
-@media only screen and (min-width: 1140px) {
-
-body {
-	padding-top: 60px;
-	padding-bottom: 40px;
-}
+@media only screen and (min-width: 768px) {
 
 div#footdiv {
 	margin-left: auto;
@@ -31,7 +25,6 @@ div#footdiv {
 }
 
 .navbar-search .search-query {
-	width: 200%;
 }
 
 .navbar .nav > li > a:hover {

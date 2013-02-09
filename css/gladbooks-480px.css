@@ -1,0 +1,45 @@
+/* 
+ * gladbooks-480.scss
+ * sass file for Gladbooks base styles
+ */
+@media only screen and (min-width: 480px) {
+  div#footdiv {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%; }
+
+  .navbar .nav {
+    border-radius: 25px;
+    margin-top: 12px;
+    margin-bottom: auto; }
+
+  .navbar-search {
+    border-radius: 25px;
+    font-size: 14pt;
+    margin-top: 22px;
+    margin-bottom: 12px; }
+
+  .navbar .nav > li > a:hover {
+    border-radius: 25px; }
+
+  .navbar .nav > li > a {
+    padding-top: 10px;
+    padding-bottom: 10px; }
+
+  div#pagearea {
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 10px; }
+
+  div#sitediv {
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%; }
+
+  #logo {
+    margin-left: 5%;
+    margin-right: auto;
+    padding-top: 0.2em;
+    padding-bottom: 0.1em; } }

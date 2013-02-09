@@ -7,13 +7,12 @@ $color-light: #b2cde0;
 body {
         background-color: $color-bg;
 	color: black;
+	padding: 0;
 }
 
 div#footdiv {
 	background-color: $color-dark;
 	color: white;
-	margin-left: auto;
-	margin-right: auto;
 	text-align: center;
 	width: 100%;
 }
@@ -22,6 +21,8 @@ div#footdiv {
 	border-radius: 25px;
 	margin-top: 12px;
 	margin-bottom: auto;
+	margin-left: 5%;
+	margin-right: 5%;
 }
 
 .nav {
@@ -38,10 +39,13 @@ div#footdiv {
 	font-size: 14pt;
 	margin-top: 22px;
 	margin-bottom: 12px;
+	margin-left: 5%;
+	margin-right: 5%;
+	width: 80%;
 }
 
-.navbar-search .search-query {
-	width: 200%;
+input, textarea, .uneditable-input {
+	width: 100%;
 }
 
 .navbar .nav > .active > a, .navbar .nav > .active > a:hover, .navbar .nav > .active > a:focus {
@@ -69,23 +73,22 @@ div#pagearea {
 	background-color: $color-light;
        	color: white;
 	padding-top: 10px;
-	padding-left: 20px;
-	padding-right: 20px;
 	padding-bottom: 10px;
-	width: auto;
+	width: 100%;
 }
 
 div#sitediv {
 	background-color: white;
 	color: black;
-	margin-left: auto;
-	margin-right: auto;
 	width: 100%;
 }
 
 #logo {
-	margin-left: 0.5em;
-	margin-right: 1em;
 	padding-top: 0.2em;
 	padding-bottom: 0.1em;
+	margin-left: 5%;
+}
+
+img {
+	max-width: 100%;
 }
