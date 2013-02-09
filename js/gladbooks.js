@@ -42,7 +42,7 @@ $(document).ready(function() {
 	if (g_password == '') { displayLoginBox(); }
 
 	/* prepare tabbed workarea */
-	//deployTabs();
+	deployTabs();
 
 	/* reload when logo clicked */
 	$("img#logo").click(function(event) {
