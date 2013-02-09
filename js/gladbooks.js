@@ -23,7 +23,7 @@
 var g_authurl = '/auth/';
 var g_resourcedefaultsurl = '/defaults/';
 var g_username = '';
-var g_password = 'disabled'; /* FIXME: temporarily disabled */
+var g_password = ''; /* FIXME: temporarily disabled */
 var g_loggedin = false;
 var g_accttype = {
 	"a":"asset",
@@ -96,7 +96,7 @@ $(document).ready(function() {
 function auth_check()
 {
 	$.ajax({
-		url: g_authurl,
+		url: g_authurl + g_username + '.xml',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(data) { loginok(data); },
 		error: function(data) { loginfailed(); },
