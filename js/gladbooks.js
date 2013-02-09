@@ -124,8 +124,8 @@ function addTab(title, content) {
 	/* add tab and closer */
 	$('ul.tablist').append('<li id="tabli' + tabid
 		+ '" class="tablet' + tabid + '">'
-		+ '<a href="#tab' + tabid + '">' + title + '</a>'
-		+ '<a id="tabcloser' + tabid + '" class="tabcloser" href="#tab'
+		+ '<a href="' + tabid + '">' + title + '</a>'
+		+ '<a id="tabcloser' + tabid + '" class="tabcloser" href="'
 		+ tabid  + '">'
 		+ 'X</a></li>');
 
@@ -154,6 +154,7 @@ function addTab(title, content) {
 }
 
 function activateTab(tabid) {
+		console.log("activating tab " + tabid);
         /* remove "active" styling from all tabs */
         $(".tabheaders li").removeClass('active');
         $(".tablet").removeClass('active');
@@ -166,6 +167,13 @@ function activateTab(tabid) {
 /* remove a tab */
 function closeTab(tabid) {
 	var tabcount = $('div#tabs').find('div').size();
+
+	/* if tab is active, activate another */
+	if ($('.tablet' + tabid).hasClass('active')) {
+		console.log("tab was active");
+		/* TODO: find a tab to activate properly */
+		activateTab(tabid - 1);
+	}
 
 	/* remove tab and content - call me in the morning if pain persists */
 	$('.tablet' + tabid).remove();
