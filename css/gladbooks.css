@@ -58,18 +58,21 @@ div#pagearea {
   background-color: #b2cde0;
   color: white;
   padding-top: 10px;
-  padding-bottom: 10px;
-  width: 100%; }
+  padding-bottom: 10px; }
 
 div#sitediv {
   background-color: white;
-  color: black;
   width: 100%; }
 
 #logo {
   padding-top: 0.2em;
   padding-bottom: 0.1em;
-  margin-left: 5%; }
+  margin-left: auto;
+  margin-right: auto; }
+
+.logo {
+  padding-left: auto;
+  padding-right: auto; }
 
 img {
   max-width: 100%; }
