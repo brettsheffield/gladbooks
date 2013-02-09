@@ -9,15 +9,9 @@
     float: left;
     position: relative; }
 
-  ul > li > a {
-    padding: 15px; }
-
-  li > ul > li > a {
-    background-color: #6e89a5;
-    margin-left: -15px; }
-
   li:hover ul {
     position: absolute; }
 
   li:hover li {
-    float: none; } }
+    float: none;
+    z-index: 1; } }

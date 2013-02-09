@@ -66,6 +66,7 @@ textarea,
 /* menu styling */
 
 .navbar .nav {
+	background-color: darken($color-dark, 10%);
 	border-radius: 25px;
 	margin-top: 12px;
 	margin-bottom: auto;
@@ -73,35 +74,37 @@ textarea,
 	margin-right: 5%;
 }
 
-.nav {
-	background-color: $color-dark;
-	list-style: none;
+/* menu styling */
+ul {
+	font-family: Arial, Verdana;
 	margin: 0;
 	padding: 0;
-}
-
-ul > li > a {
-	border-radius: 25px;
-	color: $color-light;
-	display: block;
-	padding: 10px 25px;
-	text-decoration: none;
-	text-shadow: 0 1px 0 gray;
-	white-space: nowrap;
-}
-
-ul > li > a:hover {
-	background-color: $color-light;
-	border-radius: 25px;
-	color: black;
-	text-shadow: 0 1px 0 white;
-}
-
-.nav li ul {
-	display: none;
 	list-style: none;
 }
-
-.nav li:hover ul {
+li ul { display: none; }
+ul li a {
+	border-radius: 25px;
 	display: block;
+	text-decoration: none;
+	color: $color-light;
+	border-top: 0px solid white;
+	padding: 10px 25px;
+	background: darken($color-dark, 10%);
+	text-shadow: 0 1px 0 grey;
+	white-space: nowrap;
+}
+ul li a:hover {
+	background: $color-dark;
+}
+li:hover ul { 
+	display: block; 
+}
+li:hover li { 
+	font-size: 80%;
+}
+li:hover a { background: $color-dark }
+li:hover li a:hover {
+	background: $color-light;
+	color: $color-dark;
+	text-shadow: 0 1px 0 white;
 }

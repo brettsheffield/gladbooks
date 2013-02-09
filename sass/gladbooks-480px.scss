@@ -7,23 +7,10 @@
 
 @import "sass/gladbooks-color.scss";
 
-.nav {
-	
-}
-
 ul > li {
         display: block;
 	float: left;
 	position: relative;
-}
-
-ul > li > a {
-	padding: 15px;
-}
-
-li > ul > li > a {
-	background-color: $color-dark;
-	margin-left: -15px;
 }
 
 li:hover ul {
@@ -32,6 +19,7 @@ li:hover ul {
 
 li:hover li {
 	float: none;
+	z-index: 1;
 }
 
 }
