@@ -1,0 +1,7 @@
+@media only screen and (min-width: 1500px) {
+  /* define some colours to use in our stylesheets */
+  #pagearea {
+    min-height: 750px; }
+
+  .tablet {
+    min-height: 720px; } }

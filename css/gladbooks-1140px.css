@@ -9,4 +9,7 @@
     margin-left: 3.5%; }
 
   #pagearea {
-    min-height: 690px; } }
+    min-height: 490px; }
+
+  .tablet {
+    min-height: 450px; } }

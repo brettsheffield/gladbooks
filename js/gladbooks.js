@@ -23,7 +23,7 @@
 var g_authurl = '/auth/';
 var g_resourcedefaultsurl = '/defaults/';
 var g_username = '';
-var g_password = ''; /* FIXME: temporarily disabled */
+var g_password = 'disabled'; /* FIXME: temporarily disabled */
 var g_loggedin = false;
 var g_accttype = {
 	"a":"asset",
@@ -73,11 +73,6 @@ $(document).ready(function() {
 		auth_check();
 	});
 	
-	// When clicking on the button close or the mask layer the popup closed
-	$('a.close, #mask').live('click', function() {
-		//hideLoginBox();
-	});
-
 	$(window).unload(function() {
 		logout();
 	});
@@ -112,7 +107,7 @@ function auth_encode(username, password) {
 
 /* prepare tabbed workarea */
 function deployTabs() {
-	$('#tabs').tabs({ collapsable: false, heightStyle: "fill" });
+	//$('#tabs').tabs({ collapsable: false, heightStyle: "fill" });
 	$('.tabcloser').click(function(event) {
 		event.preventDefault();
 		closeTab($(this).attr('href'));
@@ -120,13 +115,14 @@ function deployTabs() {
 
 	addTab("Lord Such", "<p>Screaming</p>");
 	addTab("Lady Such", "<p>Wailing</p>");
+	addTab("Jean Paul Satre", "<p>Egad, seriously?</p>");
 }
 
 function addTab(title, content) {
 	var tabid = g_tabid++;
 
 	/* add tab and closer */
-	$('ul#tablist').append('<li id="tabli' + tabid
+	$('ul.tablist').append('<li id="tabli' + tabid
 		+ '" class="tablet' + tabid + '">'
 		+ '<a href="#tab' + tabid + '">' + title + '</a>'
 		+ '<a id="tabcloser' + tabid + '" class="tabcloser" href="#tab'
@@ -134,8 +130,8 @@ function addTab(title, content) {
 		+ '<span class="ui-icon ui-icon-circle-close"></span></a></li>');
 
 	/* add content */
-	$('div#tabs').append('<div id="tab' + tabid + '" class="tablet'
-		+ tabid + '"/>');
+	$('div.tabcontent').append('<div id="tab' + tabid + '" class="tablet '
+		+ 'tablet' + tabid + '">');
 	$('div#tab' + tabid).append(content);
 
 	/* add closer event */
@@ -143,15 +139,31 @@ function addTab(title, content) {
 		event.preventDefault();
 		closeTab(tabid);
 	});
+
+	$(".tabs li").click(function(event) {
+		event.preventDefault();
+		/* remove "active" styling from all tabs */
+		$(".tabheaders li").removeClass('active');
+
+		/* mark selected tab as active */
+		$(this).addClass("active");
+
+		/* quick - hide the tablets */
+		$(".tablet").hide();
+
+		/* display content for selected tab */
+		var selected_tab = $(this).find("a").attr("href");
+		$(selected_tab).fadeIn(300);
+	});
 	
 	/* inform His Tabbliness */
-	$('#tabs').tabs("refresh");
+	//$('#tabs').tabs("refresh");
 
 	/* activate our new tab */
-	$('div#tabs').tabs("option", "active", -1);
+	//$('div#tabs').tabs("option", "active", -1);
 
 	/* fade in if we aren't already visible */
-	$('div#tabs').fadeIn(300);
+	$('div.tabs').fadeIn(300);
 }
 
 /* remove a tab */

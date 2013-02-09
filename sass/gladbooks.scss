@@ -8,7 +8,6 @@ body {
 	color: black;
 	font-size: 14pt;
 	font-family: verdana,helvetica,arial,sans-serif;
-	font-size: 62.5%;
 	padding: 0;
 	margin: 0;
 }
@@ -35,6 +34,10 @@ div#pagearea {
 div#sitediv {
 	background-color: white;
 	width: 100%;
+}
+
+div#tabs {
+        display: none;
 }
 
 #logo {
@@ -66,7 +69,6 @@ textarea,
 
 
 /* menu styling */
-
 .navbar .nav {
 	background-color: darken($color-dark, 10%);
 	border-radius: 25px;
@@ -76,7 +78,6 @@ textarea,
 	margin-right: 5%;
 }
 
-/* menu styling */
 ul {
 	font-family: Arial, Verdana;
 	margin: 0;
@@ -84,7 +85,7 @@ ul {
 	list-style: none;
 }
 li ul { display: none; }
-ul li a {
+.navbar ul li a {
 	border-radius: 25px;
 	display: block;
 	text-decoration: none;
@@ -95,7 +96,7 @@ ul li a {
 	text-shadow: 0 1px 0 grey;
 	white-space: nowrap;
 }
-ul li a:hover {
+.navbar ul li a:hover {
 	background: $color-dark;
 }
 li:hover ul { 
@@ -110,6 +111,56 @@ li:hover li a:hover {
 	color: $color-dark;
 	text-shadow: 0 1px 0 white;
 }
+
+/* tabs */
+.tabs {
+	margin-left: 5%;
+	margin-right: 5%;
+	min-height: 100px;
+}
+
+.tabheaders ul li a {
+	padding: 0 10px;
+}
+
+.tabheaders li {
+	background: $color-dark;
+	border-radius: 5px 5px 0px 0px;
+	border: solid darken($color-dark, 10%) solid 1px;
+	border-bottom: 0;
+	margin-right: 1px;
+	text-shadow: 0 1px 0 grey;
+}
+
+.tabheaders li > a {
+	color: $color-light;
+	text-decoration: none;
+}
+
+li.active, li:hover, li:hover a {
+	background: white;
+}
+
+li.active > a, li:hover > a {
+	color: $color-dark;
+	text-shadow: 0 1px 0 $color-dark;
+}
+
+.tablet {
+	background: white;
+	border: solid 1px $color-dark;
+	color: $color-dark;
+	float: left;
+	display: none;
+	padding-left: 2%;
+	padding-right: 2%;
+	width: 96%;
+}
+
+.tabcloser {
+	display: none;
+}
+
 
 /* login box */
 #mask {

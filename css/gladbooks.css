@@ -6,7 +6,6 @@ body {
   color: black;
   font-size: 14pt;
   font-family: verdana,helvetica,arial,sans-serif;
-  font-size: 62.5%;
   padding: 0;
   margin: 0; }
 
@@ -29,6 +28,9 @@ div#pagearea {
 div#sitediv {
   background-color: white;
   width: 100%; }
+
+div#tabs {
+  display: none; }
 
 #logo {
   padding-top: 0.2em;
@@ -62,7 +64,6 @@ textarea,
   margin-left: 5%;
   margin-right: 5%; }
 
-/* menu styling */
 ul {
   font-family: Arial, Verdana;
   margin: 0;
@@ -72,7 +73,7 @@ ul {
 li ul {
   display: none; }
 
-ul li a {
+.navbar ul li a {
   border-radius: 25px;
   display: block;
   text-decoration: none;
@@ -83,7 +84,7 @@ ul li a {
   text-shadow: 0 1px 0 grey;
   white-space: nowrap; }
 
-ul li a:hover {
+.navbar ul li a:hover {
   background: #6e89a5; }
 
 li:hover ul {
@@ -99,6 +100,47 @@ li:hover li a:hover {
   background: white;
   color: #6e89a5;
   text-shadow: 0 1px 0 white; }
+
+/* tabs */
+.tabs {
+  margin-left: 5%;
+  margin-right: 5%;
+  min-height: 100px; }
+
+.tabheaders ul li a {
+  padding: 0 10px; }
+
+.tabheaders li {
+  background: #6e89a5;
+  border-radius: 5px 5px 0px 0px;
+  border: solid #56708a solid 1px;
+  border-bottom: 0;
+  margin-right: 1px;
+  text-shadow: 0 1px 0 grey; }
+
+.tabheaders li > a {
+  color: #b2cde0;
+  text-decoration: none; }
+
+li.active, li:hover, li:hover a {
+  background: white; }
+
+li.active > a, li:hover > a {
+  color: #6e89a5;
+  text-shadow: 0 1px 0 #6e89a5; }
+
+.tablet {
+  background: white;
+  border: solid 1px #6e89a5;
+  color: #6e89a5;
+  float: left;
+  display: none;
+  padding-left: 2%;
+  padding-right: 2%;
+  width: 96%; }
+
+.tabcloser {
+  display: none; }
 
 /* login box */
 #mask {
