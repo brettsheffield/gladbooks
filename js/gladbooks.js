@@ -142,28 +142,25 @@ function addTab(title, content) {
 
 	$(".tabs li").click(function(event) {
 		event.preventDefault();
-		/* remove "active" styling from all tabs */
-		$(".tabheaders li").removeClass('active');
-
-		/* mark selected tab as active */
-		$(this).addClass("active");
-
-		/* quick - hide the tablets */
-		$(".tablet").hide();
-
-		/* display content for selected tab */
 		var selected_tab = $(this).find("a").attr("href");
-		$(selected_tab).fadeIn(300);
+		activateTab(selected_tab);
 	});
 	
-	/* inform His Tabbliness */
-	//$('#tabs').tabs("refresh");
-
 	/* activate our new tab */
-	//$('div#tabs').tabs("option", "active", -1);
+	activateTab(tabid);
 
 	/* fade in if we aren't already visible */
 	$('div.tabs').fadeIn(300);
+}
+
+function activateTab(tabid) {
+        /* remove "active" styling from all tabs */
+        $(".tabheaders li").removeClass('active');
+        $(".tablet").removeClass('active');
+
+        /* mark selected tab as active */
+        $(".tablet" + tabid).addClass("active");
+
 }
 
 /* remove a tab */

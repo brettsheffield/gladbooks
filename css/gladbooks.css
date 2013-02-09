@@ -139,6 +139,9 @@ li.active > a, li:hover > a {
   padding-right: 2%;
   width: 96%; }
 
+.active {
+  display: block; }
+
 .tabcloser {
   display: none; }
 

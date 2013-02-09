@@ -157,6 +157,10 @@ li.active > a, li:hover > a {
 	width: 96%;
 }
 
+.active {
+	display: block;
+}
+
 .tabcloser {
 	display: none;
 }
