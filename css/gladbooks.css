@@ -2,7 +2,8 @@
 body {
   background-color: gainsboro;
   color: black;
-  padding: 0; }
+  padding: 0;
+  margin: 0; }
 
 div#footdiv {
   background-color: #6e89a5;
