@@ -127,7 +127,7 @@ function addTab(title, content) {
 		+ '<a href="#tab' + tabid + '">' + title + '</a>'
 		+ '<a id="tabcloser' + tabid + '" class="tabcloser" href="#tab'
 		+ tabid  + '">'
-		+ '<span class="ui-icon ui-icon-circle-close"></span></a></li>');
+		+ 'X</a></li>');
 
 	/* add content */
 	$('div.tabcontent').append('<div id="tab' + tabid + '" class="tablet '
