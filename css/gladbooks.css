@@ -4,6 +4,7 @@
 body {
   background-color: gainsboro;
   color: black;
+  font-size: 14pt;
   padding: 0;
   margin: 0; }
 
@@ -46,7 +47,6 @@ textarea,
 .navbar-search {
   border-radius: 25px;
   font-size: 14pt;
-  margin-top: 22px;
   margin-bottom: 12px;
   margin-left: 5%;
   margin-right: 5%; }
@@ -94,6 +94,6 @@ li:hover a {
   background: #6e89a5; }
 
 li:hover li a:hover {
-  background: #b2cde0;
+  background: white;
   color: #6e89a5;
   text-shadow: 0 1px 0 white; }

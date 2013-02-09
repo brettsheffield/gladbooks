@@ -7,10 +7,37 @@
 
 @import "sass/gladbooks-color.scss";
 
+body {
+	font-size: 8pt;
+}
+
+#logo {
+	padding: 10px 20px 0px;
+}
+
+#pagearea {
+	min-height: 150px;
+}
+
+/* search bar */
+.search-query {
+	float: right;
+	margin-top: -40px;
+	width: 50%;
+}
+
+/* menu styling overrides for larger screens */
+ul.nav {
+	padding-left: 20px;
+}
 ul > li {
         display: block;
 	float: left;
 	position: relative;
+}
+
+ul li a {
+	padding: 10px;
 }
 
 li:hover ul {
