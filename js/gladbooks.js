@@ -438,17 +438,24 @@ function populateAccountTypeDDowns() {
 }
 
 /* set up journal form */
-function showJournalForm() {
+function showJournalForm(tab = false) {
 	var ledger_lines = 1;
 
 	/* load dropdown contents */
 	$.get('/test/accounts/', populateAccountsDDowns, "xml");
 	populateAccountTypeDDowns();
 
-	/* clone template into new tab */
 	var jf = $('div.dataformdiv.template').clone();
 	jf.removeClass('template');
-	addTab('Journal Entry', jf, true);
+	if (tab) {
+		/* clear existing tab */
+		tab.empty();
+		tab.append(jf);
+	}
+	else {
+		/* clone template into new tab */
+		addTab('Journal Entry', jf, true);
+	}
 
 	/* add some ledger lines */
 	var jl = jf.find('fieldset.ledger').clone();
@@ -458,7 +465,21 @@ function showJournalForm() {
 		ledger_lines++;
 	}
 
+	/* add datepicker */
+	var transactdate = jf.find('.transactdate');
+	var currentDate = new Date();
+	transactdate.val($.now());
+	transactdate.datepicker({
+		dateFormat: "yy-mm-dd",
+		constrainInput: true
+	});
+	transactdate.datepicker("setDate",currentDate);
+
+	/* display the form */
 	jf.fadeIn(300);
+
+	/* set focus */
+	jf.find(".description").focus();
 
 	/* set up click() events */
 	$('button#journalsubmit').click(function(event) {
@@ -484,7 +505,9 @@ function validateJournalEntry(form) {
 				xml = false;
 				return false;
 			}
-			xml = '<journal description="'+ $(this).val().trim() +'">';
+			xml = '<journal ';
+			xml += 'transactdate="' + $(form).find('.transactdate').val() + '" ';
+			xml += 'description="'+ $(this).val().trim() +'">';
 		}
 		else if ($(this).hasClass('account')) {
 			account = $(this).val();
@@ -539,6 +562,8 @@ function submitJournalEntry(event, form) {
 function submitJournalEntrySuccess(xml) {
 	$('p.journalstatus').text("Journal posted");
 	hideSpinner();
+	var activeForm = $('.tablet.active');
+	showJournalForm(activeForm);
 }
 
 function submitJournalEntryError(xml) {

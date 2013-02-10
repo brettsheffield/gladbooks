@@ -258,6 +258,9 @@ form.signin input::-webkit-input-placeholder {
 button#journalsubmit {
   height: 2.0em; }
 
+.datefield {
+  width: 6em; }
+
 input.description {
   width: 30em; }
 
