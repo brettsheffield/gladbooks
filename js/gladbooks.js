@@ -44,6 +44,9 @@ $(document).ready(function() {
 	/* prepare tabbed workarea */
 	deployTabs();
 
+	/* prepare menu */
+	prepMenu();
+
 	/* reload when logo clicked */
 	$("img#logo").click(function(event) {
 		event.preventDefault();
@@ -297,6 +300,14 @@ function hideLoginBox() {
 	}); 
 }
 
+/* prepare static menus */
+function prepMenu() {
+	$('ul.nav').find('a').each(function() {
+		console.log("Menu: " + $(this).text());
+		$(this).click(clickMenu);
+	});
+}
+
 function getMenu() {
 	$.ajax({
 		url: g_authurl + g_username +  ".xml",
@@ -341,20 +352,20 @@ function setMenu(xml) {
 function clickMenu(event) {
 	event.preventDefault();
 
-	/* fadeout whatever is on the page already */
-	$('div#pagearea').children().fadeOut(300);
+	console.log("Menu '" + $(this).text() + "' was clicked");
 
 	if ($(this).attr("href") == '#journal') {
 		showJournalForm();
 		return;
 	}
+	/*
 	showSpinner();
 	$.get($(this).attr("href"), 0, displayResultsGeneric, "xml");
+	*/
 }
 
 /* display XML results as a sortable table */
 function displayResultsGeneric(xml) {
-	//$("div#pagearea").empty();
 	$t = "<table class=\"datatable\">";
 	$t += "<thead>";
 	$t += "<tr>";
@@ -427,7 +438,10 @@ function populateAccountTypeDDowns() {
 /* set up journal form */
 function showJournalForm() {
 
-	dlgJournal = $('div#pagearea').dialog();
+	//dlgJournal = $('div#pagearea').dialog();
+	jf = $('.dataformdiv').clone();
+	jf.removeClass('dataformdiv');
+	addTab('Journal Entry', jf, true);
 
 	/* load dropdown contents */
 	$.get('/test/accounts/', populateAccountsDDowns, "xml");

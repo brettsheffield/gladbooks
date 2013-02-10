@@ -36,11 +36,11 @@
 						</form>
 					</div>
 					<ul class="nav clearfix">
-						<li><a href="#">Home</a></li>
 						<li>
 							<a href="#">Accounts<b class="caret"></b></a>
 							<ul>
 								<li><a href="#">Chart of Accounts</a></li>
+								<li><a href="#journal">Journal Entry</a></li>
 								<li><a href="#">Customers</a></li>
 								<li><a href="#">Suppliers</a></li>
 							</ul>
@@ -78,8 +78,34 @@
         </form>
       </div><!-- login-box -->
 
+      <div class="dataformdiv">
+        <h2 class="formtitle">Journal Entry</h2>
+        <form method="post" class="journalform" action="/journal/">
+          <fieldset class="journal">
+            <caption>Description / Narrative</caption>
+            <input class="description" autocomplete="off"/>
+          </fieldset>
+          <fieldset class="ledger">
+            <select class="account"/>
+            </select>
+            <select class="type"/>
+            </select>
+            <input class="amount" autocomplete="off"/>
+          </fieldset>
+        </form>
+        <button id="journalsubmit">Post Journal</button>
+        <p class="journalstatus"/>
+      </div><!--dataformdiv-->
+
+      <div id="loading-div-background">
+        <div id="loading-div" class="ui-corner-all" >
+          <img class="spinner" src="/img/spinner.gif" alt="Loading.."/>
+          <h2 class="spinwaittxt">Please wait....</h2>
+        </div><!-- loading-div -->
+      </div><!-- loading-div-background -->
+
 			<div id="pagearea">
-				<div class="tabs">
+				<div class="tabs clearfix">
 					<div class="tabheaders clearfix">
 						<ul class="tablist"/>
 					</div>

@@ -28,7 +28,7 @@
     float: left;
     position: relative; }
 
-  ul li a {
+  .navbar ul li a {
     padding: 10px; }
 
   li:hover ul {
@@ -36,4 +36,8 @@
 
   li:hover li {
     float: none;
-    z-index: 1; } }
+    z-index: 1; }
+
+  /* tabs */
+  .tablet {
+    max-height: 190px; } }

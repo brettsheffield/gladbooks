@@ -140,6 +140,7 @@ li:hover li a:hover {
   color: #6e89a5;
   float: left;
   display: none;
+  overflow: auto;
   padding-left: 2%;
   padding-right: 2%;
   width: 96%; }
@@ -249,3 +250,71 @@ form.signin input::-webkit-input-placeholder {
 
 .button:hover {
   background: #ddd; }
+
+/* dataform */
+.dataformdiv {
+  background-color: white;
+  border-radius: 4px 4px 4px 4px;
+  box-shadow: 0px 0px 20px #6e89a5;
+  /* CSS3 */
+  -moz-box-shadow: 0px 0px 20px #6e89a5;
+  /* Firefox */
+  -webkit-box-shadow: 0px 0px 20px #6e89a5;
+  /* Safari, Chrome */
+  display: none;
+  left: 50%;
+  margin-left: -300px;
+  margin-top: -100px;
+  height: 235px;
+  position: absolute;
+  text-align: center;
+  top: 33%;
+  width: 600px; }
+
+button#journalsubmit {
+  height: 2.0em; }
+
+input.description {
+  width: 30em; }
+
+select.account {
+  width: 30em; }
+
+input.amount {
+  text-align: right;
+  width: 5em; }
+
+/* spinner */
+#loading-div-background {
+  display: none;
+  height: 100%;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%; }
+
+#loading-div {
+  box-shadow: 0px 0px 20px #6e89a5;
+  /* CSS3 */
+  -moz-box-shadow: 0px 0px 20px #6e89a5;
+  /* Firefox */
+  -webkit-box-shadow: 0px 0px 20px #6e89a5;
+  /* Safari, Chrome */
+  background-color: white;
+  border-radius: 4px 4px 4px 4px;
+  height: 180px;
+  left: 50%;
+  margin-left: -150px;
+  margin-top: -100px;
+  position: absolute;
+  text-align: center;
+  top: 33%;
+  width: 300px; }
+
+img.spinner {
+  height: 32px;
+  margin: 32px; }
+
+.spinwaittxt {
+  color: gray;
+  font-weight: normal; }
