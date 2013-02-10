@@ -417,75 +417,70 @@ function showSpinner() {
 
 /* Populate Accounts Drop-Downs with XML Data */
 function populateAccountsDDowns(xml) {
-	$('select.account').append($("<option />").val(0).text('<select account>'));
+	$('select.account:not(.populated)').empty();
+	$('select.account:not(.populated)').append($("<option />").val(0).text('<select account>'));
 	$(xml).find('row').each(function() {
 		var accountid = $(this).find('id').text();
 		var accounttype = $(this).find('type').text();
 		var accountdesc = accountid + " - " +
 		$(this).find('description').text() +" ("+ g_accttype[accounttype] +")";
 
-		$('select.account').append($("<option />").val(accountid).text(accountdesc));
+		$('select.account:not(.populated)').append($("<option />").val(accountid).text(accountdesc));
 	});
-
-	finishJournalFormSetup();
+	$('select.account:not(.populated)').addClass('populated');
 }
 
 function populateAccountTypeDDowns() {
-	$('select.type').append($("<option />").val('debit').text('debit'));
-	$('select.type').append($("<option />").val('credit').text('credit'));
+	$('select.type:not(.populated)').empty();
+	$('select.type:not(.populated)').append($("<option />").val('debit').text('debit'));
+	$('select.type:not(.populated)').append($("<option />").val('credit').text('credit'));
+	$('select.type:not(.populated)').addClass('populated');
 }
 
 /* set up journal form */
 function showJournalForm() {
-
-	//dlgJournal = $('div#pagearea').dialog();
-	jf = $('.dataformdiv').clone();
-	jf.removeClass('dataformdiv');
-	addTab('Journal Entry', jf, true);
+	var ledger_lines = 1;
 
 	/* load dropdown contents */
 	$.get('/test/accounts/', populateAccountsDDowns, "xml");
 	populateAccountTypeDDowns();
 
-	/* set up click() events */
-	$('button#journalsubmit').click(submitJournalEntry);
+	/* clone template into new tab */
+	var jf = $('div.dataformdiv.template').clone();
+	jf.removeClass('template');
+	addTab('Journal Entry', jf, true);
 
-}
-
-function finishJournalFormSetup() {
-	var ledger_lines = 1;
-	/* grab a copy of the ledger form with default values and events set */
-	g_frmLedger = $('fieldset.ledger').clone(true, true);
-
-	/* lay out some blank ledger lines */
+	/* add some ledger lines */
+	var jl = jf.find('fieldset.ledger').clone();
 	while (ledger_lines < g_max_ledgers_per_journal) {
-		$('form.journalform').append(g_frmLedger.clone(true, true));
+		console.log("I want to add a ledger");
+		jf.find('form').append(jl.clone());
 		ledger_lines++;
 	}
 
-	/* copy the form to the working area */
-	$('div#pagearea').append($('div#dataformdiv').clone(true, true));
+	jf.fadeIn(300);
 
-	/* fade in the form */
-	//$('div#dataformdiv').fadeIn(300);
+	/* set up click() events */
+	$('button#journalsubmit').click(function(event) {
+		submitJournalEntry(event, jf);
+	});
 
-	/* set focus */
-	$("input.description").focus();
 }
 
-function validateJournalEntry() {
+function validateJournalEntry(form) {
 	var xml = '<journal/>';
 	var account;
 	var type;
 	var amount;
 	var debits = 0;
 	var credits = 0;
-	$('p.journalstatus').text("");
-	$('form.journalform').find('fieldset').children().each(function() {
+
+	$(form).find('p.journalstatus').text("");
+	$(form).find('fieldset').children().each(function() {
 		if ($(this).hasClass('description')) {
 			/* ensure we have a description */
 			if ($(this).val().trim().length == 0) {
-				$('p.journalstatus').text("A description is required");
+				$(form).find('p.journalstatus').text("A description is required");
 				xml = false;
 				return false;
 			}
@@ -516,15 +511,16 @@ function validateJournalEntry() {
 
 	/* quick check to ensure debits - credits = 0 */
 	if ((debits != credits) || (debits + credits == 0)) {
-		$('p.journalstatus').text("Transaction is unbalanced");
+		$(form).find('p.journalstatus').text("Transaction is unbalanced");
 		xml = false;
 	}
 
 	return xml;
 }
 
-function submitJournalEntry() {
-	xml = validateJournalEntry();
+function submitJournalEntry(event, form) {
+	event.preventDefault();
+	xml = validateJournalEntry(form);
 	if (!xml) {
 		return;
 	}

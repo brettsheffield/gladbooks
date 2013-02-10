@@ -266,20 +266,7 @@ form.signin input::-webkit-input-placeholder { color:#6e89a5; text-shadow:0 0 2p
 
 /* dataform */
 .dataformdiv {
-        background-color: white;
-        border-radius:4px 4px 4px 4px;
-        box-shadow: 0px 0px 20px #6e89a5; /* CSS3 */
-        -moz-box-shadow: 0px 0px 20px #6e89a5; /* Firefox */
-        -webkit-box-shadow: 0px 0px 20px #6e89a5; /* Safari, Chrome */
         display: none;
-        left: 50%;
-        margin-left:-300px;
-        margin-top: -100px;
-        height: 235px;
-        position: absolute;
-        text-align: center;
-        top: 33%;
-        width: 600px;
 }
 
 button#journalsubmit {
