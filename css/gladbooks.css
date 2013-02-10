@@ -305,3 +305,9 @@ img.spinner {
 .spinwaittxt {
   color: gray;
   font-weight: normal; }
+
+/* jquery-ui style overrides */
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default {
+  background: #b2cde0; }

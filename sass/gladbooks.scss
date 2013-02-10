@@ -323,3 +323,9 @@ img.spinner {
         font-weight: normal;
 }
 
+/* jquery-ui style overrides */
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default {
+	background: $color-light;
+}
