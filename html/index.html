@@ -83,18 +83,20 @@
         <form method="post" class="journalform" action="/journal/">
           <fieldset class="journal">
             <caption>Transaction Date</caption>
-            <input class="transactdate datefield" autocomplete="off"/>
+            <input class="transactdate datefield" autocomplete="off" required/>
 						<br/>
             <caption>Description / Narrative</caption>
-            <input class="description" autocomplete="off"/>
+            <input class="description" autocomplete="off" placeholder="Enter a description of this journal entry" required/>
           </fieldset>
           <fieldset class="ledger">
-            <select class="account"/>
-            <select class="type"/>
-            <input class="amount" autocomplete="off"/>
+            <select class="account">
+						</select>
+            <select class="type">
+						</select>
+            <input class="amount" autocomplete="off" placeholder="0.00"/>
           </fieldset>
         </form>
-        <button id="journalsubmit">Post Journal</button>
+        <button id="journalsubmit" class="submit">Post Journal</button>
         <p class="journalstatus"/>
       </div><!--dataformdiv-->
 
@@ -112,7 +114,6 @@
 					</div>
 					<div class="tabcontent"></div>
 				</div><!-- tabs -->
-
 			</div><!-- pagearea -->
 
 			<div id="footdiv">&copy; 2013 Gladbooks Ltd</div>

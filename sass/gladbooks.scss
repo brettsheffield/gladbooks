@@ -278,16 +278,41 @@ button#journalsubmit {
 }
 
 input.description {
-        width: 30em;
+	max-width: 95%;
 }
 
 select.account {
-        width: 30em;
+	max-width: 95%;
 }
 
 input.amount {
         text-align: right;
         width: 5em;
+}
+
+fieldset.ledger {
+}
+
+button.submit {
+	border-radius: 25px;
+}
+button.submit:hover {
+	opacity:.85;
+	cursor: pointer;
+}
+
+/* placeholder styling */
+:-moz-placeholder {
+	color: blue;
+	font-weight: bold;
+	letter-spacing: 4px;
+	opacity: .25;
+}
+::-webkit-input-placeholder {
+	color: blue;
+	font-weight: bold;
+	letter-spacing: 4px;
+	opacity: .25;
 }
 
 /* spinner */
