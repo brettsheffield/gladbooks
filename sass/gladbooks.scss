@@ -86,13 +86,13 @@ ul {
 }
 li ul { display: none; }
 .navbar ul li a {
-	border-radius: 25px;
-	display: block;
-	text-decoration: none;
-	color: $color-light;
-	border-top: 0px solid white;
-	padding: 10px 25px;
 	background: darken($color-dark, 10%);
+	border-radius: 25px;
+	border-top: 0px solid white;
+	color: $color-light;
+	display: block;
+	padding: 10px 25px;
+	text-decoration: none;
 	text-shadow: 0 1px 0 grey;
 	white-space: nowrap;
 }
@@ -107,9 +107,9 @@ li:hover li {
 }
 li:hover a { background: $color-dark }
 li:hover li a:hover {
-	background: white;
-	color: $color-dark;
-	text-shadow: 0 1px 0 white;
+	background: $color-dark;
+	color: $color-light;
+	text-shadow: 0 1px 0 gray;
 }
 
 /* tabs */
@@ -128,8 +128,9 @@ li:hover li a:hover {
 	border-radius: 5px 5px 0px 0px;
 	border: solid darken($color-dark, 10%) solid 1px;
 	border-bottom: 0;
+	font-family: monospace;
 	margin-right: 1px;
-	text-shadow: 0 1px 0 grey;
+	text-shadow: 0 1px 0 gray;
 }
 
 .tabheaders li > a {
@@ -137,13 +138,17 @@ li:hover li a:hover {
 	text-decoration: none;
 }
 
-li.active, li:hover, li:hover a {
+.tabheaders li.active,
+.tabheaders li:hover,
+.tabheaders li:hover a {
 	background: white;
+	text-shadow: 0 1px 0 black;
 }
 
-li.active > a, li:hover > a {
+.tabheaders li.active > a,
+.tabheaders li:hover > a {
 	color: $color-dark;
-	text-shadow: 0 1px 0 $color-dark;
+	text-shadow: 0;
 }
 
 .tablet {

@@ -107,18 +107,14 @@ function auth_encode(username, password) {
 
 /* prepare tabbed workarea */
 function deployTabs() {
-	//$('#tabs').tabs({ collapsable: false, heightStyle: "fill" });
 	$('.tabcloser').click(function(event) {
 		event.preventDefault();
 		closeTab($(this).attr('href'));
 	});
-
-	addTab("Lord Such", "<p>Screaming</p>");
-	addTab("Lady Such", "<p>Wailing</p>");
-	addTab("Jean Paul Satre", "<p>Egad, seriously?</p>");
 }
 
-function addTab(title, content) {
+/* add a new tab with content, optionally activating it */
+function addTab(title, content, activate=false) {
 	var tabid = g_tabid++;
 
 	/* add tab and closer */
@@ -147,7 +143,9 @@ function addTab(title, content) {
 	});
 	
 	/* activate our new tab */
-	activateTab(tabid);
+	if (activate) {
+		activateTab(tabid);
+	}
 
 	/* fade in if we aren't already visible */
 	$('div.tabs').fadeIn(300);
@@ -161,7 +159,40 @@ function activateTab(tabid) {
 
         /* mark selected tab as active */
         $(".tablet" + tabid).addClass("active");
+}
 
+/* 
+ * Activate the "next" tab.
+ *
+ * Which tab is next?  Users have come to expect that if they close 
+ * the active tab, the next tab to the right will become active,
+ * unless there isn't one, in which case we go left instead.
+ * See Mozilla Firefox tabs for an example.
+ */
+function activateNextTab(tabid) {
+	var trytab = tabid + 1;
+
+	console.log("Looking for a tab to activate...");
+	/* Try right first */
+	while (trytab < g_tabid) {
+		console.log("Trying tab " + trytab);
+		if ($('.tablet' + trytab).length != 0) {
+			activateTab(trytab);
+			return true;
+		}
+		trytab++;
+	}
+	/* now go left */
+	trytab = tabid - 1;
+	while (trytab >= 0) {
+		console.log("Trying tab " + trytab);
+		if ($('.tablet' + trytab).length != 0) {
+			activateTab(trytab);
+			return true;
+		}
+		trytab--;
+	}
+	return false; /* no tab to activate */
 }
 
 /* remove a tab */
@@ -170,9 +201,8 @@ function closeTab(tabid) {
 
 	/* if tab is active, activate another */
 	if ($('.tablet' + tabid).hasClass('active')) {
-		console.log("tab was active");
-		/* TODO: find a tab to activate properly */
-		activateTab(tabid - 1);
+		console.log("tab (" + tabid  + ") was active");
+		activateNextTab(tabid);
 	}
 
 	/* remove tab and content - call me in the morning if pain persists */
@@ -182,7 +212,6 @@ function closeTab(tabid) {
 	if (tabcount == 1) {
 		$('div#tabs').fadeOut(300);
 	}
-
 }
 
 /* Add Authentication header with logged-in user's credentials */
