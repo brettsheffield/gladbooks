@@ -117,7 +117,7 @@ function deployTabs() {
 }
 
 /* add a new tab with content, optionally activating it */
-function addTab(title, content, activate=false) {
+function addTab(title, content, activate) {
 	var tabid = g_tabid++;
 
 	/* add tab and closer */
@@ -430,6 +430,7 @@ function populateAccountsDDowns(xml) {
 	$('select.account:not(.populated)').addClass('populated');
 }
 
+/* debits and credits */
 function populateAccountTypeDDowns() {
 	$('select.type:not(.populated)').empty();
 	$('select.type:not(.populated)').append($("<option />").val('debit').text('debit'));
@@ -438,7 +439,7 @@ function populateAccountTypeDDowns() {
 }
 
 /* set up journal form */
-function showJournalForm(tab = false) {
+function showJournalForm(tab) {
 	var ledger_lines = 1;
 
 	/* load dropdown contents */
@@ -488,6 +489,7 @@ function showJournalForm(tab = false) {
 
 }
 
+/* validate journal entry form and return xml to submit */
 function validateJournalEntry(form) {
 	var xml = '<journal/>';
 	var account;
@@ -559,6 +561,7 @@ function submitJournalEntry(event, form) {
     });
 }
 
+/* journal was posted successfully */
 function submitJournalEntrySuccess(xml) {
 	$('p.journalstatus').text("Journal posted");
 	hideSpinner();
@@ -566,6 +569,7 @@ function submitJournalEntrySuccess(xml) {
 	showJournalForm(activeForm);
 }
 
+/* problem posting journal */
 function submitJournalEntryError(xml) {
 	$('p.journalstatus').text("Error posting journal");
 	hideSpinner();
