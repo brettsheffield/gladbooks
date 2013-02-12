@@ -158,8 +158,6 @@ li:hover li a:hover {
 	float: left;
 	display: none;
 	overflow: auto;
-	padding-left: 2%;
-	padding-right: 2%;
 	width: 96%;
 }
 
@@ -267,6 +265,8 @@ form.signin input::-webkit-input-placeholder { color:#6e89a5; text-shadow:0 0 2p
 /* dataform */
 .dataformdiv {
         display: none;
+	padding-left: 2%;
+	padding-right: 2%;
 }
 
 button#journalsubmit {
@@ -354,3 +354,45 @@ img.spinner {
 .ui-widget-header .ui-state-default {
 	background: $color-light;
 }
+
+/* dataform results table */
+div.datatable {
+	font-family: monospace;
+       	font-size: 1.8em;
+	background-color: $color-dark;
+	border: 1px solid white;
+	text-color: black;
+	width: 100%;
+}
+.datatable {
+	background-color: $color-dark;
+       	border: 1px solid white;
+	text-color: black;
+	width: 100%;
+}
+
+th {
+	color: white;
+        font-family: verdana,helvetica,arial,sans-serif;
+	font-weight: bold;
+	text-align: left;
+}
+
+td > a {
+	font-family: Courier, Monospace;
+	font-weight: bold;
+}
+
+td {
+	font-family: Courier, monospace;
+	font-weight: normal;
+}
+
+.even {
+	background-color: $color-feint;
+}
+
+.odd {
+	background-color: white;
+}
+

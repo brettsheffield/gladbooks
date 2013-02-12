@@ -141,8 +141,6 @@ li:hover li a:hover {
   float: left;
   display: none;
   overflow: auto;
-  padding-left: 2%;
-  padding-right: 2%;
   width: 96%; }
 
 .active {
@@ -253,7 +251,9 @@ form.signin input::-webkit-input-placeholder {
 
 /* dataform */
 .dataformdiv {
-  display: none; }
+  display: none;
+  padding-left: 2%;
+  padding-right: 2%; }
 
 button#journalsubmit {
   height: 2.0em; }
@@ -331,3 +331,38 @@ img.spinner {
 .ui-widget-content .ui-state-default,
 .ui-widget-header .ui-state-default {
   background: #b2cde0; }
+
+/* dataform results table */
+div.datatable {
+  font-family: monospace;
+  font-size: 1.8em;
+  background-color: #6e89a5;
+  border: 1px solid white;
+  text-color: black;
+  width: 100%; }
+
+.datatable {
+  background-color: #6e89a5;
+  border: 1px solid white;
+  text-color: black;
+  width: 100%; }
+
+th {
+  color: white;
+  font-family: verdana,helvetica,arial,sans-serif;
+  font-weight: bold;
+  text-align: left; }
+
+td > a {
+  font-family: Courier, Monospace;
+  font-weight: bold; }
+
+td {
+  font-family: Courier, monospace;
+  font-weight: normal; }
+
+.even {
+  background-color: #eeeeff; }
+
+.odd {
+  background-color: white; }

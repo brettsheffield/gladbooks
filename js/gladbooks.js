@@ -357,6 +357,9 @@ function clickMenu(event) {
 	if ($(this).attr("href") == '#journal') {
 		showJournalForm();
 		return;
+	} 
+	else if ($(this).attr("href") == '#chart') {
+		showChart();
 	}
 	/*
 	showSpinner();
@@ -365,7 +368,7 @@ function clickMenu(event) {
 }
 
 /* display XML results as a sortable table */
-function displayResultsGeneric(xml) {
+function displayResultsGeneric(xml, title) {
 	$t = "<table class=\"datatable\">";
 	$t += "<thead>";
 	$t += "<tr>";
@@ -393,8 +396,10 @@ function displayResultsGeneric(xml) {
 	$t += "</tbody>";
 	$t += "</table>";
 
-	//$("div#pagearea").append($t);
-	addTab("Results", $($t));
+	if (! title) {
+		title = "Results";
+	}
+	addTab(title, $($t), true);
 
 	/* make our table pretty and sortable */
 	$(".datatable").tablesorter({
@@ -436,6 +441,13 @@ function populateAccountTypeDDowns() {
 	$('select.type:not(.populated)').append($("<option />").val('debit').text('debit'));
 	$('select.type:not(.populated)').append($("<option />").val('credit').text('credit'));
 	$('select.type:not(.populated)').addClass('populated');
+}
+
+/* fetch chart of accounts */
+function showChart() {
+	$.get('/test/accounts/', function(xml) {
+		displayResultsGeneric(xml, "Chart of Accounts");
+	});
 }
 
 /* set up journal form */
