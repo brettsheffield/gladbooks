@@ -67,8 +67,8 @@ textarea,
 	margin-right: 5%;
 }
 
-
 /* menu styling */
+
 .navbar .nav {
 	background-color: darken($color-dark, 10%);
 	border-radius: 25px;
@@ -78,16 +78,37 @@ textarea,
 	margin-right: 5%;
 }
 
-ul {
+nav ul ul {
+	display: none;
+	position: absolute; top: 100%;
+}
+
+nav ul {
 	font-family: Arial, Verdana;
+	list-style: none;
 	margin: 0;
 	padding: 0;
-	list-style: none;
 }
-li ul { display: none; }
+nav ul li {
+	float: left;
+}
+nav ul li:hover > ul {
+	display: block;
+}
+nav ul:after {
+	content: ""; clear: both; display: block;
+}
+nav ul ul li {
+	float: none; 
+	position: relative;
+}
+nav ul ul ul {
+	position: absolute; left: 100%; top:0;
+}
+
+/* tabs */
 .navbar ul li a {
 	background: darken($color-dark, 10%);
-	border-radius: 25px;
 	border-top: 0px solid white;
 	color: $color-light;
 	display: block;
@@ -99,20 +120,16 @@ li ul { display: none; }
 .navbar ul li a:hover {
 	background: $color-dark;
 }
-li:hover ul { 
-	display: block; 
-}
-li:hover li { 
+.tablist li:hover li { 
 	font-size: 80%;
 }
-li:hover a { background: $color-dark }
-li:hover li a:hover {
+.tablist li:hover a { background: $color-dark }
+.tablist li:hover li a:hover {
 	background: $color-dark;
 	color: $color-light;
 	text-shadow: 0 1px 0 gray;
 }
 
-/* tabs */
 .tabs {
 	margin-left: 5%;
 	margin-right: 5%;

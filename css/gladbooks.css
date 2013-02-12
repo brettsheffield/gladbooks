@@ -64,18 +64,40 @@ textarea,
   margin-left: 5%;
   margin-right: 5%; }
 
-ul {
+nav ul ul {
+  display: none;
+  position: absolute;
+  top: 100%; }
+
+nav ul {
   font-family: Arial, Verdana;
+  list-style: none;
   margin: 0;
-  padding: 0;
-  list-style: none; }
+  padding: 0; }
 
-li ul {
-  display: none; }
+nav ul li {
+  float: left; }
 
+nav ul li:hover > ul {
+  display: block; }
+
+nav ul:after {
+  content: "";
+  clear: both;
+  display: block; }
+
+nav ul ul li {
+  float: none;
+  position: relative; }
+
+nav ul ul ul {
+  position: absolute;
+  left: 100%;
+  top: 0; }
+
+/* tabs */
 .navbar ul li a {
   background: #56708a;
-  border-radius: 25px;
   border-top: 0px solid white;
   color: #b2cde0;
   display: block;
@@ -87,21 +109,17 @@ li ul {
 .navbar ul li a:hover {
   background: #6e89a5; }
 
-li:hover ul {
-  display: block; }
-
-li:hover li {
+.tablist li:hover li {
   font-size: 80%; }
 
-li:hover a {
+.tablist li:hover a {
   background: #6e89a5; }
 
-li:hover li a:hover {
+.tablist li:hover li a:hover {
   background: #6e89a5;
   color: #b2cde0;
   text-shadow: 0 1px 0 gray; }
 
-/* tabs */
 .tabs {
   margin-left: 5%;
   margin-right: 5%;
