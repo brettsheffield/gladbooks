@@ -369,6 +369,11 @@ function clickMenu(event) {
 
 /* display XML results as a sortable table */
 function displayResultsGeneric(xml, title) {
+	if ($(xml).find('row').length == 0) {
+		hideSpinner();
+		addTab(title, "<p>Nothing found</p>", true);
+		return;
+	}
 	$t = "<table class=\"datatable\">";
 	$t += "<thead>";
 	$t += "<tr>";
