@@ -33,7 +33,9 @@ CREATE TABLE journal (
 	id		SERIAL PRIMARY KEY,
 	transactdate	date,
 	description	TEXT,
-	entered		timestamp with time zone default now()
+	entered		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
 );
 
 CREATE TABLE ledger (
