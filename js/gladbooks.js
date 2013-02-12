@@ -461,7 +461,6 @@ function showJournalForm(tab) {
 	/* add some ledger lines */
 	var jl = jf.find('fieldset.ledger').clone();
 	while (ledger_lines < g_max_ledgers_per_journal) {
-		console.log("I want to add a ledger");
 		jf.find('form').append(jl.clone());
 		ledger_lines++;
 	}
@@ -486,6 +485,9 @@ function showJournalForm(tab) {
 	$('button#journalsubmit').click(function(event) {
 		submitJournalEntry(event, jf);
 	});
+
+	/* set up input validation events */
+	/* TODO */
 
 }
 
