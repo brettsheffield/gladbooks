@@ -56,7 +56,8 @@ $(document).ready(function() {
 	/* set up login box */
 	$("form.signin :input").bind("keydown", function(event) {
 		// handle enter key presses in input boxes
-		var keycode = (event.keyCode ? event.keyCode : (event.which ? event.which : event.charCode));
+		var keycode = (event.keyCode ? event.keyCode :
+			(event.which ? event.which : event.charCode));
 		if (keycode == 13) { // enter key pressed
 			// submit form
 			document.getElementById('btnLogin').click();
@@ -64,6 +65,7 @@ $(document).ready(function() {
 		}
 	});
 
+	/* logout menu */
 	$('a.logout-window').click(function() {
 		logout();
 		displayLoginBox();
@@ -139,6 +141,7 @@ function addTab(title, content, activate) {
 		closeTab(tabid);
 	});
 
+	/* set up tab navigation */
 	$(".tabs li").click(function(event) {
 		event.preventDefault();
 		var selected_tab = $(this).find("a").attr("href");
@@ -362,7 +365,6 @@ function clickMenu(event) {
 
 	if ($(this).attr("href") == '#journal') {
 		showJournalForm();
-		return;
 	} 
 	else if ($(this).attr("href") == '#chart') {
 		showChart();
@@ -425,14 +427,18 @@ function hideSpinner() {
 /* Populate Accounts Drop-Downs with XML Data */
 function populateAccountsDDowns(xml) {
 	$('select.account:not(.populated)').empty();
-	$('select.account:not(.populated)').append($("<option />").val(0).text('<select account>'));
+	$('select.account:not(.populated)').append(
+		$("<option />").val(0).text('<select account>')
+	);
 	$(xml).find('row').each(function() {
 		var accountid = $(this).find('id').text();
 		var accounttype = $(this).find('type').text();
 		var accountdesc = accountid + " - " +
 		$(this).find('description').text() +" ("+ g_accttype[accounttype] +")";
 
-		$('select.account:not(.populated)').append($("<option />").val(accountid).text(accountdesc));
+		$('select.account:not(.populated)').append(
+			$("<option />").val(accountid).text(accountdesc)
+		);
 	});
 	$('select.account:not(.populated)').addClass('populated');
 }
@@ -440,8 +446,12 @@ function populateAccountsDDowns(xml) {
 /* debits and credits */
 function populateAccountTypeDDowns() {
 	$('select.type:not(.populated)').empty();
-	$('select.type:not(.populated)').append($("<option />").val('debit').text('debit'));
-	$('select.type:not(.populated)').append($("<option />").val('credit').text('credit'));
+	$('select.type:not(.populated)').append(
+		$("<option />").val('debit').text('debit')
+	);
+	$('select.type:not(.populated)').append(
+		$("<option />").val('credit').text('credit')
+	);
 	$('select.type:not(.populated)').addClass('populated');
 }
 
@@ -530,12 +540,15 @@ function validateJournalEntry(form) {
 		if ($(this).hasClass('description')) {
 			/* ensure we have a description */
 			if ($(this).val().trim().length == 0) {
-				$(form).find('p.journalstatus').text("A description is required");
+				$(form).find('p.journalstatus').text(
+					"A description is required"
+				);
 				xml = false;
 				return false;
 			}
 			xml = '<request><data><journal ';
-			xml += 'transactdate="' + $(form).find('.transactdate').val() + '" ';
+			xml += 'transactdate="' + $(form).find('.transactdate').val()
+				+ '" ';
 			xml += 'description="'+ $(this).val().trim() +'">';
 		}
 		else if ($(this).hasClass('account')) {
@@ -547,7 +560,8 @@ function validateJournalEntry(form) {
 		else if ($(this).hasClass('amount')) {
 			amount = $(this).val();
 			if ((amount > 0) && (account > 0)) {
-				xml += '<' + type + ' account="' + account + '" amount="' + amount + '"/>'
+				xml += '<' + type + ' account="' + account + '" amount="'
+					+ amount + '"/>'
 				if (type == 'debit') {
 					debits += Number(amount);
 				}
