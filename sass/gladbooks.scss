@@ -121,34 +121,6 @@ nav ul {
 nav ul li:hover > ul {
 	display: block;
 }
-/*
-nav ul ul li {
-	float: none; 
-	position: relative;
-}
-
-nav ul > li {
-        display: block;
-	float: none;
-	position: relative;
-}
-
-nav li:hover ul,
-nav li:active ul {
-        position: relative;
-}
-nav li:hover li,
-nav li:active li {
-	z-index: 1;
-}
-
-nav ul:after {
-	content: " ";
-	clear: both;
-	display: block;
-}
-
-*/
 
 /* tabs */
 .tablist li:hover li { 
