@@ -27,10 +27,10 @@ body {
 }
 
 /* menu styling overrides for larger screens */
-ul.nav {
+nav ul {
 	padding-left: 20px;
 }
-ul > li {
+nav ul > li {
         display: block;
 	float: left;
 	position: relative;
@@ -40,31 +40,36 @@ ul > li {
 	padding: 10px;
 }
 
-li:hover ul {
+nav li:hover ul {
 	position: absolute;
 }
 
-li:hover li {
+nav li:hover li {
 	float: none;
 	z-index: 1;
 }
+
+nav ul ul ul {
+	left: 100%;
+        position: absolute;
+	top:0;
+}
+
+nav ul ul {
+	font-size: 100%;
+	padding-left: 0;
+}
+
 
 /* tabs */
 .tablet {
         max-height: 190px;
 }
 
-.tabheaders {
-        padding: 0;
-}
-
-.tablist {
-        padding: 0;
-}
-
 .tabheaders ul > li {
-        display: block;
-        float: left;
+	padding-top: 0;
+	padding-bottom: 0;
+	width: auto;
 }
 
 /* journal form */
