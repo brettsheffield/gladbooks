@@ -217,6 +217,12 @@ function closeTab(tabid) {
 	}
 }
 
+/* Remove all tabs from working area */
+function removeAllTabs() {
+	$('ul.tablist').children().remove(); /* tab headers */
+	$('div.tablet').fadeOut(300);		 /* content */
+}
+
 /* Add Authentication header with logged-in user's credentials */
 function setAuthHeader(xhr) {
 	var hash = auth_encode(g_username, g_password);
@@ -245,7 +251,7 @@ function logout()
 	dropMenu();
 
 	/* clear working area */
-	$("div#pagearea").empty();
+	removeAllTabs();
 
 	/* clear password */
 	g_password = '';
@@ -510,7 +516,7 @@ function showJournalForm(tab) {
 
 /* validate journal entry form and return xml to submit */
 function validateJournalEntry(form) {
-	var xml = '<journal/>';
+	var xml = '<request/>';
 	var account;
 	var type;
 	var amount;
@@ -526,7 +532,7 @@ function validateJournalEntry(form) {
 				xml = false;
 				return false;
 			}
-			xml = '<journal ';
+			xml = '<request><data><journal ';
 			xml += 'transactdate="' + $(form).find('.transactdate').val() + '" ';
 			xml += 'description="'+ $(this).val().trim() +'">';
 		}
@@ -550,7 +556,7 @@ function validateJournalEntry(form) {
 		}
 	});
 	if (xml) {
-		xml += '</journal>';
+		xml += '</journal></data></request>';
 	}
 
 	/* quick check to ensure debits - credits = 0 */
