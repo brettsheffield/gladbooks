@@ -14,6 +14,8 @@ test("build authentication hash", function() {
 module("POST Testing");
 
 test("journal entry - valid xml", function() {
+	g_username='betty';
+	g_password='ie5a8P40';
 	var url = "/test/journal/";
 	var xml = '<?xml version="1.0" encoding="UTF-8"?> <request><data><journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="1001" amount="120.00" /> <credit account="2001" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
 
@@ -23,13 +25,35 @@ test("journal entry - valid xml", function() {
 		type: 'POST',
 		data: xml,
 		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) { ok(true); start(); },
 		error: function(xml) { ok(false); start(); },
 	});
 	
 });
 
+test("journal entry - invalid credentials MUST be rejected", function() {
+	g_username='betty';
+	g_password='invalid_password';
+	var url = "/test/journal/";
+	var xml = '<?xml version="1.0" encoding="UTF-8"?> <request><data><journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="1001" amount="120.00" /> <credit account="2001" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
+
+	stop();
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: xml,
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { ok(false); start(); },
+		error: function(xml) { ok(true); start(); },
+	});
+	
+});
+
 test("journal entry - xml does not match schema", function() {
+	g_username='betty';
+	g_password='ie5a8P40';
 	var url = "/test/journal/";
 	var xml = '<?xml version="1.0" encoding="UTF-8"?> <request><data><journal transactdate="2013-01-01" description="My First Journal Entry"> <credit account="1001" amount="120.00" /> <credit account="2001" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
 
@@ -39,6 +63,7 @@ test("journal entry - xml does not match schema", function() {
 		type: 'POST',
 		data: xml,
 		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) { ok(false); start(); },
 		error: function(xml) { ok(true); start(); },
 	});
@@ -46,6 +71,8 @@ test("journal entry - xml does not match schema", function() {
 });
 
 test("journal entry - invalid account number MUST be rejected", function() {
+	g_username='betty';
+	g_password='ie5a8P40';
 	var url = "/test/journal/";
 	var xml = '<?xml version="1.0" encoding="UTF-8"?> <journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="999" amount="120.00" /> <credit account="2001" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal>';
 
@@ -55,6 +82,7 @@ test("journal entry - invalid account number MUST be rejected", function() {
 		type: 'POST',
 		data: xml,
 		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) { ok(false); start(); },
 		error: function(xml) { ok(true); start(); },
 	});
@@ -62,6 +90,8 @@ test("journal entry - invalid account number MUST be rejected", function() {
 });
 
 test("journal entry - unbalanced journal MUST be rejected", function() {
+	g_username='betty';
+	g_password='ie5a8P40';
 	var url = "/test/journal/";
 	var xml = '<?xml version="1.0" encoding="UTF-8"?> <journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="1001" amount="120.01" /> <credit account="2001" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal>';
 
@@ -71,6 +101,7 @@ test("journal entry - unbalanced journal MUST be rejected", function() {
 		type: 'POST',
 		data: xml,
 		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) { ok(false); start(); },
 		error: function(xml) { ok(true); start(); },
 	});
