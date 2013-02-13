@@ -51,7 +51,20 @@ li:hover li {
 
 /* tabs */
 .tablet {
-	max-height: 190px;
+        max-height: 190px;
+}
+
+.tabheaders {
+        padding: 0;
+}
+
+.tablist {
+        padding: 0;
+}
+
+.tabheaders ul > li {
+        display: block;
+        float: left;
 }
 
 /* journal form */
