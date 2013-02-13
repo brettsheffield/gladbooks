@@ -23,7 +23,7 @@
 var g_authurl = '/auth/';
 var g_resourcedefaultsurl = '/defaults/';
 var g_username = '';
-var g_password = 'disabled'; /* FIXME: temporarily disabled */
+var g_password = '';
 var g_loggedin = false;
 var g_accttype = {
 	"a":"asset",
@@ -367,10 +367,6 @@ function clickMenu(event) {
 	else if ($(this).attr("href") == '#chart') {
 		showChart();
 	}
-	/*
-	showSpinner();
-	$.get($(this).attr("href"), 0, displayResultsGeneric, "xml");
-	*/
 }
 
 /* display XML results as a sortable table */
@@ -426,11 +422,6 @@ function hideSpinner() {
 	$("#loading-div-background").hide();
 }
 
-/* show please wait dialog and spinner animation */
-function showSpinner() {
-	$("#loading-div-background").show();
-}
-
 /* Populate Accounts Drop-Downs with XML Data */
 function populateAccountsDDowns(xml) {
 	$('select.account:not(.populated)').empty();
@@ -456,8 +447,15 @@ function populateAccountTypeDDowns() {
 
 /* fetch chart of accounts */
 function showChart() {
-	$.get('/test/accounts/', function(xml) {
-		displayResultsGeneric(xml, "Chart of Accounts");
+	$.ajax({
+		url: '/test/accounts/',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) {
+			displayResultsGeneric(xml, "Chart of Accounts");
+		},
+		error: function(xml) {
+			displayResultsGeneric(xml, "Chart of Accounts");
+		}
 	});
 }
 
@@ -466,7 +464,11 @@ function showJournalForm(tab) {
 	var ledger_lines = 1;
 
 	/* load dropdown contents */
-	$.get('/test/accounts/', populateAccountsDDowns, "xml");
+	$.ajax({
+		url: '/test/accounts/',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: populateAccountsDDowns
+	});
 	populateAccountTypeDDowns();
 
 	var jf = $('div.dataformdiv.template').clone();

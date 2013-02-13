@@ -332,18 +332,20 @@ button.submit:hover {
   cursor: pointer; }
 
 /* placeholder styling */
+/*
 :-moz-placeholder {
-  color: blue;
-  font-weight: bold;
-  letter-spacing: 4px;
-  opacity: .25; }
-
+	color: blue;
+	font-weight: bold;
+	letter-spacing: 4px;
+	opacity: .25;
+}
 ::-webkit-input-placeholder {
-  color: blue;
-  font-weight: bold;
-  letter-spacing: 4px;
-  opacity: .25; }
-
+	color: blue;
+	font-weight: bold;
+	letter-spacing: 4px;
+	opacity: .25;
+}
+*/
 /* spinner */
 #loading-div-background {
   display: none;

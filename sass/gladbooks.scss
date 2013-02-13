@@ -154,7 +154,11 @@ nav ul:after {
 .tablist li:hover li { 
 	font-size: 80%;
 }
-.tablist li:hover a { background: $color-dark }
+
+.tablist li:hover a {
+	background: $color-dark
+}
+
 .tablist li:hover li a:hover {
 	background: $color-dark;
 	color: $color-light;
@@ -304,8 +308,14 @@ form.signin .textbox input {
         width:200px;
 }
 
-form.signin input:-moz-placeholder { color:#6e89a5; text-shadow:0 0 2px #fff; }
-form.signin input::-webkit-input-placeholder { color:#6e89a5; text-shadow:0 0 2px #000;  }
+form.signin input:-moz-placeholder {
+	color:#6e89a5;
+	text-shadow:0 0 2px #fff;
+}
+form.signin input::-webkit-input-placeholder {
+	color:#6e89a5;
+	text-shadow:0 0 2px #000;
+}
 
 .button {
         background: -moz-linear-gradient(center top, #f3f3f3, #dddddd);
@@ -325,7 +335,9 @@ form.signin input::-webkit-input-placeholder { color:#6e89a5; text-shadow:0 0 2p
         font:12px;
         width:150px;
 }
-.button:hover { background:#ddd; }
+.button:hover {
+	background:#ddd;
+}
 
 /* dataform */
 .dataformdiv {
@@ -367,6 +379,7 @@ button.submit:hover {
 }
 
 /* placeholder styling */
+/*
 :-moz-placeholder {
 	color: blue;
 	font-weight: bold;
@@ -379,6 +392,7 @@ button.submit:hover {
 	letter-spacing: 4px;
 	opacity: .25;
 }
+*/
 
 /* spinner */
 #loading-div-background {
