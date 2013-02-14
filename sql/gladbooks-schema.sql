@@ -1,6 +1,6 @@
 CREATE TABLE accounttype (
 	id		char(1) PRIMARY KEY,
-	name		TEXT,
+	name		TEXT UNIQUE,
 	entered		timestamp with time zone default now()
 );
 
@@ -19,13 +19,13 @@ CREATE SEQUENCE account_id_e_seq MINVALUE 5000 MAXVALUE 5999 OWNED BY account.id
 
 CREATE TABLE department (
 	id              SERIAL PRIMARY KEY,
-	name		TEXT,
+	name		TEXT UNIQUE,
 	entered		timestamp with time zone default now()
 );
 
 CREATE TABLE division (
 	id              SERIAL PRIMARY KEY,
-	name		TEXT,
+	name		TEXT UNIQUE,
 	entered		timestamp with time zone default now()
 );
 
@@ -37,6 +37,7 @@ CREATE TABLE journal (
 	authuser	TEXT,
 	clientip	TEXT
 );
+CREATE RULE journal_del AS ON DELETE TO journal DO NOTHING;
 
 CREATE TABLE ledger (
 	id		SERIAL PRIMARY KEY,
@@ -50,6 +51,7 @@ CREATE TABLE ledger (
 	credit		NUMERIC,
 	entered		timestamp with time zone default now()
 );
+CREATE RULE ledger_del AS ON DELETE TO ledger DO NOTHING;
 
 CREATE TABLE term (
 	id		SERIAL PRIMARY KEY,
@@ -371,6 +373,7 @@ CREATE TABLE salesorderdetail (
 	id		SERIAL PRIMARY KEY,
 	salesorder	INT4 references salesorder(id) NOT NULL,
 	organisation	INT4 references organisation(id) NOT NULL,
+	quotenumber	INT4 UNIQUE,
 	ponumber	TEXT,
 	description	TEXT,
 	cycle		INT4 references cycle(id) NOT NULL DEFAULT 0,
@@ -455,7 +458,20 @@ CREATE TABLE salesinvoiceitem (
 	id		SERIAL PRIMARY KEY,
 	salesinvoice	INT4 references salesinvoice(id) NOT NULL,
 	salesorderitemdetail	INT4 references salesorderitemdetail(id)
+			ON DELETE RESTRICT NOT NULL,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE salesinvoiceitem_tax (
+	id		SERIAL PRIMARY KEY,
+	salesinvoice	INT4 references salesinvoice(id) ON DELETE RESTRICT
 			NOT NULL,
+	taxrate		INT4 references taxrate(id) ON DELETE RESTRICT
+			NOT NULL,
+	nett		NUMERIC,
+	total		NUMERIC,
 	updated		timestamp with time zone default now(),
 	authuser	TEXT,
 	clientip	TEXT
