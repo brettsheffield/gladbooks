@@ -51,6 +51,426 @@ CREATE TABLE ledger (
 	entered		timestamp with time zone default now()
 );
 
+CREATE TABLE term (
+	id		SERIAL PRIMARY KEY,
+	termname	TEXT NOT NULL UNIQUE,
+	days		INT4 DEFAULT 0,
+	months		INT4 DEFAULT 0,
+	years		INT4 DEFAULT 0,
+	is_available	boolean DEFAULT true,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE contact (
+	id		SERIAL PRIMARY KEY,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE contactdetail (
+	id		SERIAL PRIMARY KEY,
+	contact		INT4 references contact(id) ON DELETE RESTRICT,
+	is_active	boolean DEFAULT true,
+	is_deleted	boolean DEFAULT false,
+	name		TEXT NOT NULL,
+	line_1		TEXT,
+	line_2		TEXT,
+	line_3		TEXT,
+	town		TEXT,
+	county		TEXT,
+	country		TEXT,
+	postcode	TEXT,
+	email		TEXT,
+	phone		TEXT,
+	phonealt	TEXT,
+	mobile		TEXT,
+	fax		TEXT,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE organisation (
+	id		SERIAL PRIMARY KEY,
+	orgcode		TEXT,
+	purchaseorder	INT4 NOT NULL DEFAULT 0,
+	purchaseinvoice	INT4 NOT NULL DEFAULT 0,
+	salesorder	INT4 NOT NULL DEFAULT 0,
+	salesinvoice	INT4 NOT NULL DEFAULT 0,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT,
+	UNIQUE (orgcode)
+);
+
+CREATE TABLE organisationdetail (
+	id		SERIAL PRIMARY KEY,
+	organisation	INT4 references organisation(id)
+			ON DELETE RESTRICT,
+	name		TEXT NOT NULL,
+	term		INT4 references term(id) ON DELETE RESTRICT
+			DEFAULT 0,
+	billcontact	INT4 references contact(id) ON DELETE RESTRICT,
+	is_active	boolean DEFAULT true NOT NULL,
+	is_suspended	boolean DEFAULT false NOT NULL,
+	is_vatreg	boolean DEFAULT false NOT NULL,
+	vatnumber	TEXT,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE organisation_contact (
+	id		SERIAL PRIMARY KEY,
+	organisation	INT4 references organisation(id)
+			ON DELETE RESTRICT,
+	contact		INT4 references contact(id) ON DELETE RESTRICT,
+	is_billing	boolean DEFAULT false,
+	is_shipping	boolean DEFAULT false,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE cycle (
+	id		SERIAL PRIMARY KEY,
+	cyclename	TEXT NOT NULL,
+	days		INT4 DEFAULT 0,
+	months		INT4 DEFAULT 0,
+	years		INT4 DEFAULT 0,
+	is_available	boolean DEFAULT true,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE bank (
+	id		SERIAL PRIMARY KEY,
+	transactdate	date NOT NULL,
+	description	TEXT,
+	account		INT4 references account(id) ON DELETE RESTRICT
+			NOT NULL,
+	journal		INT4 references journal(id) ON DELETE RESTRICT,
+	debit		NUMERIC,
+	credit		NUMERIC,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE email (
+	id		SERIAL PRIMARY KEY,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE emaildetail (
+	id		SERIAL PRIMARY KEY,
+	email		INT4 references email(id) ON DELETE RESTRICT,
+	sender		TEXT,
+	body		TEXT,
+	emailafter	timestamp with time zone default now(),
+	sent		timestamp with time zone,
+	is_deleted	boolean DEFAULT false,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE emailheader (
+	id		SERIAL PRIMARY KEY,
+	email		INT4 references email(id) ON DELETE RESTRICT,
+	header		TEXT NOT NULL,
+	value		TEXT NOT NULL,
+	is_deleted	boolean DEFAULT false,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE emailpart (
+	id		SERIAL PRIMARY KEY,
+	email		INT4 references email(id) ON DELETE RESTRICT,
+	file		TEXT,
+	is_deleted	boolean DEFAULT false,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+-- NOTE: references contactdetail, NOT contact, so we keep a record of the
+-- actual email address that was used at the time of sending.
+CREATE TABLE emailrecipient (
+	id		SERIAL PRIMARY KEY,
+	email		INT4 references email(id) ON DELETE RESTRICT,
+	contactdetail	INT4 references contactdetail(id) ON DELETE RESTRICT,
+	is_to		boolean DEFAULT false,
+	is_cc		boolean DEFAULT false,
+	is_bcc		boolean DEFAULT false,
+	is_deleted	boolean DEFAULT false,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE tax (
+	id		SERIAL PRIMARY KEY,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE taxdetail (
+	id		SERIAL PRIMARY KEY,
+	tax		INT4 references tax(id) ON DELETE RESTRICT,
+	account		INT4 references account(id) ON DELETE RESTRICT,
+	name		TEXT NOT NULL,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE taxrate (
+	id		SERIAL PRIMARY KEY,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE taxratedetail (
+	id		SERIAL PRIMARY KEY,
+	taxrate		INT4 references taxrate(id) ON DELETE RESTRICT
+			NOT NULL,
+	tax		INT4 references tax(id) ON DELETE RESTRICT NOT NULL,
+	rate		NUMERIC,
+	valid_from	timestamp,
+	valid_to	timestamp,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE product (
+	id		SERIAL PRIMARY KEY,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE productdetail (
+	id		SERIAL PRIMARY KEY,
+	product		INT4 references product(id) ON DELETE RESTRICT
+			NOT NULL,
+	shortname	TEXT NOT NULL UNIQUE,
+	description	TEXT NOT NULL,
+	price_buy	NUMERIC,
+	price_sell	NUMERIC,
+	margin		NUMERIC,
+	markup		NUMERIC,
+	is_available	boolean DEFAULT true,
+	is_offered	boolean DEFAULT true,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE product_tax (
+	id		SERIAL PRIMARY KEY,
+	product		INT4 references product(id) ON DELETE RESTRICT
+			NOT NULL,
+	tax		INT4 references tax(id) ON DELETE RESTRICT NOT NULL,
+	is_applicable	boolean DEFAULT true,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE purchaseinvoice (
+	id		SERIAL PRIMARY KEY,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE purchaseinvoicedetail (
+	id		SERIAL PRIMARY KEY,
+	purchaseinvoice	INT4 references purchaseinvoice(id) NOT NULL,
+	organisation	INT4 references organisation(id) NOT NULL,
+	journal		INT4 references journal(id),
+	subtotal	NUMERIC,
+	tax		NUMERIC,
+	total		NUMERIC,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE purchaseorder (
+	id		SERIAL PRIMARY KEY,
+	organisation	INT4 NOT NULL,
+	order		INT4 NOT NULL,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT,
+	UNIQUE (organisation, order),
+	CONSTRAINT purchaseorder_fkey_organisation
+		FOREIGN KEY (organisation) REFERENCES organisation(id)
+);
+
+CREATE TABLE purchaseorderdetail (
+	id		SERIAL PRIMARY KEY,
+	purchaseorder	INT4 NOT NULL,
+	purchaseinvoice	INT4,
+	cycle		INT4,
+	start_date	date,
+	end_date	date,
+	is_open		boolean DEFAULT true,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT,
+	CONSTRAINT purchaseorderdetail_fkey_purchaseorder
+		FOREIGN KEY (purchaseorder) REFERENCES purchaseorder(id),
+	CONSTRAINT purchaseorderdetail_fkey_purchaseinvoice
+		FOREIGN KEY (purchaseinvoice) REFERENCES purchaseinvoice(id),
+	CONSTRAINT purchaseorderdetail_fkey_cycle
+		FOREIGN KEY (cycle) REFERENCES cycle(id)
+);
+
+CREATE TABLE purchaseorderitem (
+	id		SERIAL PRIMARY KEY,
+	purchaseorder	INT4 REFERENCES purchaseorder(id) NOT NULL,
+	product		INT4 REFERENCES product(id) NOT NULL,
+	price		NUMERIC,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE purchasepayment (
+	id		SERIAL PRIMARY KEY,
+	organisation	INT4 references organisation(id) NOT NULL,
+	amount		NUMERIC NOT NULL,
+	journal		INT4 references journal(id),
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE salesorder (
+	id		SERIAL PRIMARY KEY,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE salesorderdetail (
+	id		SERIAL PRIMARY KEY,
+	salesorder	INT4 references salesorder(id) NOT NULL,
+	organisation	INT4 references organisation(id) NOT NULL,
+	ponumber	TEXT,
+	description	TEXT,
+	cycle		INT4 references cycle(id) NOT NULL DEFAULT 0,
+	start_date	date,
+	end_date	date,
+	is_open		boolean DEFAULT true,
+	is_deleted	boolean DEFAULT false,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE salesorderitem (
+	id		SERIAL PRIMARY KEY,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE salesorderitemdetail (
+	id		SERIAL PRIMARY KEY,
+	salesorderitem	INT4 references salesorderitem(id) NOT NULL,
+	salesorder	INT4 references salesorder(id) NOT NULL,
+	product		INT4 references product(id) NOT NULL,
+	linetext	TEXT,
+	discount	NUMERIC,
+	price		NUMERIC,
+	is_deleted	boolean DEFAULT false,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE salesorderitem_tax (
+	id		SERIAL PRIMARY KEY,
+	tax		INT4 references tax(id) NOT NULL,
+	salesorderitem	INT4 references salesorderitem(id) NOT NULL,
+	commenttext	TEXT,
+	is_applied	boolean DEFAULT true,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE salesinvoice (
+	id		SERIAL PRIMARY KEY,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE salesinvoicedetail (
+	id		SERIAL PRIMARY KEY,
+	salesinvoice	INT4 references salesinvoice(id) NOT NULL,
+	salesorder	INT4 references salesorder(id) NOT NULL,
+	period		INT4,
+	organisation	INT4 references organisation(id) NOT NULL,
+	ponumber	TEXT,
+	taxpoint	date,
+	endpoint	date,
+	issued		timestamp with time zone default now(),
+	due		date,
+	subtotal	NUMERIC,
+	tax		NUMERIC,
+	total		NUMERIC,
+	pdf		TEXT,
+	emailtext	TEXT,
+	emailafter	timestamp with time zone default now(),
+	sent		timestamp with time zone,
+	confirmstring	TEXT,
+	journal		INT4 references journal(id),
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+-- NOTE: references salesorderitemdetail NOT salesorderitem, 
+-- as the salesorder may be edited between recurring invoices and we need a 
+-- permanent record of the exact details on the invoice at the time it was
+-- issued.
+CREATE TABLE salesinvoiceitem (
+	id		SERIAL PRIMARY KEY,
+	salesinvoice	INT4 references salesinvoice(id) NOT NULL,
+	salesorderitemdetail	INT4 references salesorderitemdetail(id)
+			NOT NULL,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE salespayment (
+	id		SERIAL PRIMARY KEY,
+	organisation	INT4 references organisation(id) NOT NULL,
+	amount		NUMERIC,
+	journal		INT4 references journal(id),
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
 CREATE OR REPLACE FUNCTION check_ledger_balance()
 RETURNS trigger AS $check_ledger_balance$
 	DECLARE
