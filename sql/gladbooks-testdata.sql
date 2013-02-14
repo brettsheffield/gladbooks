@@ -12,6 +12,6 @@ INSERT INTO account (type, description) VALUES ('e', 'Utilities');
 
 INSERT INTO organisation VALUES (DEFAULT);
 INSERT INTO organisationdetail (organisation, name)
-	VALUES (currval(pg_get_serial_sequence('organisation','id')), 'This is my very first! COmpany');
+	VALUES (currval(pg_get_serial_sequence('organisation','id')), 'This is a test company! With some garbage£ & spaces''');
 
 COMMIT;
