@@ -533,6 +533,160 @@ CREATE TABLE salespayment (
 	clientip	TEXT
 );
 
+-- ---------------------------------------------------------------------------
+-- each organisation has its own unique gapless sequences for orders, invoices
+-- etc.
+-- ---------------------------------------------------------------------------
+
+-- purchase order sequences
+
+CREATE OR REPLACE FUNCTION organisation_purchaseorder_next(organisation_id INT4)
+RETURNS INT4 AS
+$$
+DECLARE
+	next_pk INT4;
+BEGIN
+	UPDATE organisation SET purchaseorder = purchaseorder + 1
+		WHERE id = organisation_id;
+	SELECT INTO next_pk purchaseorder FROM organisation
+		WHERE id = organisation_id;
+	RETURN next_pk;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION set_organisation_purchaseorder()
+RETURNS TRIGGER AS
+$$
+BEGIN
+	NEW.order = organisation_purchaseorder_next(NEW.organisation);
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER set_organisation_purchaseorder BEFORE INSERT ON purchaseorder
+FOR EACH ROW EXECUTE PROCEDURE set_organisation_purchaseorder();
+
+-- purchase invoice sequences
+
+CREATE OR REPLACE FUNCTION organisation_purchaseinvoice_next(organisation_id INT4)
+RETURNS INT4 AS
+$$
+DECLARE
+	next_pk INT4;
+BEGIN
+	UPDATE organisation SET purchaseinvoice = purchaseinvoice + 1
+		WHERE id = organisation_id;
+	SELECT INTO next_pk purchaseinvoice FROM organisation
+		WHERE id = organisation_id;
+	RETURN next_pk;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION set_organisation_purchaseinvoice()
+RETURNS TRIGGER AS
+$$
+BEGIN
+	NEW.order = organisation_purchaseinvoice_next(NEW.organisation);
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER set_organisation_purchaseinvoice
+BEFORE INSERT ON purchaseinvoice
+FOR EACH ROW EXECUTE PROCEDURE set_organisation_purchaseinvoice();
+
+-- salesorder sequences
+
+CREATE OR REPLACE FUNCTION organisation_salesorder_next(organisation_id INT4)
+RETURNS INT4 AS
+$$
+DECLARE
+	next_pk INT4;
+BEGIN
+	UPDATE organisation SET salesorder = salesorder + 1
+		WHERE id = organisation_id;
+	SELECT INTO next_pk salesorder FROM organisation
+		WHERE id = organisation_id;
+	RETURN next_pk;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION set_organisation_salesorder()
+RETURNS TRIGGER AS
+$$
+BEGIN
+	NEW.order = organisation_salesorder_next(NEW.organisation);
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER set_organisation_salesorder
+BEFORE INSERT ON salesorder
+FOR EACH ROW EXECUTE PROCEDURE set_organisation_salesorder();
+
+
+-- salesinvoice sequences
+
+CREATE OR REPLACE FUNCTION organisation_salesinvoice_next(organisation_id INT4)
+RETURNS INT4 AS
+$$
+DECLARE
+	next_pk INT4;
+BEGIN
+	UPDATE organisation SET salesinvoice = salesinvoice + 1
+		WHERE id = organisation_id;
+	SELECT INTO next_pk salesinvoice FROM organisation
+		WHERE id = organisation_id;
+	RETURN next_pk;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION set_organisation_salesinvoice()
+RETURNS TRIGGER AS
+$$
+BEGIN
+	NEW.order = organisation_salesinvoice_next(NEW.organisation);
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER set_organisation_salesinvoice
+BEFORE INSERT ON salesinvoice
+FOR EACH ROW EXECUTE PROCEDURE set_organisation_salesinvoice();
+
+-- ---------------------------------------------------------------------------
+
+-- ---------------------------------------------------------------------------
+-- Gladbooks Default Org ID style 8+ char based on organisation name
+-- ---------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION organisation_orgcode(organisation_name TEXT)
+RETURNS TEXT AS
+$$
+DECLARE
+	neworgcode	TEXT;
+	conflicts	INT4; 
+	idlen		INT4;
+BEGIN
+	idlen = 8;
+	neworgcode = regexp_replace(organisation_name, '[^a-zA-Z0-9]+' , '');
+	neworgcode = substr(neworgcode, 1, idlen);
+	neworgcode = upper(neworgcode);
+	SELECT INTO conflicts COUNT(id) FROM organisation
+		WHERE orgcode = neworgcode;
+	WHILE conflicts != 0 OR char_length(neworgcode) < idlen LOOP
+		neworgcode = substr(neworgcode, 1, idlen - 1);
+		neworgcode = concat(neworgcode, chr(int4(rand() * 26 + 65)));
+		SELECT INTO conflicts COUNT(id) FROM organisation
+			WHERE orgcode LIKE CONCAT(neworgcode,"%");
+		IF conflicts > 25 THEN
+			idlen = idlen + 1;
+		END IF;
+	END LOOP;
+	RETURN neworgcode;
+END;
+$$ LANGUAGE 'plpgsql';
+
+
 CREATE OR REPLACE FUNCTION check_ledger_balance()
 RETURNS trigger AS $check_ledger_balance$
 	DECLARE
