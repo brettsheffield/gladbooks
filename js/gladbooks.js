@@ -22,8 +22,8 @@
 
 var g_authurl = '/auth/';
 var g_resourcedefaultsurl = '/defaults/';
-var g_username = '';
-var g_password = '';
+var g_username = 'betty'; /* temp */
+var g_password = 'ie5a8P40';
 var g_loggedin = false;
 var g_accttype = {
 	"a":"asset",
