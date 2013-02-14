@@ -143,7 +143,7 @@ CREATE TABLE contactdetail (
 
 CREATE TABLE organisation (
 	id		SERIAL PRIMARY KEY,
-	orgcode		TEXT,
+	orgcode		TEXT DEFAULT NULL,
 	purchaseorder	INT4 NOT NULL DEFAULT 0,
 	purchaseinvoice	INT4 NOT NULL DEFAULT 0,
 	salesorder	INT4 NOT NULL DEFAULT 0,
@@ -159,8 +159,7 @@ CREATE TABLE organisationdetail (
 	organisation	INT4 references organisation(id)
 			ON DELETE RESTRICT,
 	name		TEXT NOT NULL,
-	term		INT4 references term(id) ON DELETE RESTRICT
-			DEFAULT 0,
+	terms		INT4 DEFAULT 30 NOT NULL,
 	billcontact	INT4 references contact(id) ON DELETE RESTRICT,
 	is_active	boolean DEFAULT true NOT NULL,
 	is_suspended	boolean DEFAULT false NOT NULL,
@@ -668,16 +667,16 @@ DECLARE
 	idlen		INT4;
 BEGIN
 	idlen = 8;
-	neworgcode = regexp_replace(organisation_name, '[^a-zA-Z0-9]+' , '');
+	neworgcode = regexp_replace(organisation_name, '[^a-zA-Z0-9]+','','g');
 	neworgcode = substr(neworgcode, 1, idlen);
 	neworgcode = upper(neworgcode);
 	SELECT INTO conflicts COUNT(id) FROM organisation
 		WHERE orgcode = neworgcode;
 	WHILE conflicts != 0 OR char_length(neworgcode) < idlen LOOP
 		neworgcode = substr(neworgcode, 1, idlen - 1);
-		neworgcode = concat(neworgcode, chr(int4(rand() * 26 + 65)));
+		neworgcode = concat(neworgcode, chr(int4(random() * 26 + 65)));
 		SELECT INTO conflicts COUNT(id) FROM organisation
-			WHERE orgcode LIKE CONCAT(neworgcode,"%");
+			WHERE orgcode LIKE CONCAT(neworgcode,'%');
 		IF conflicts > 25 THEN
 			idlen = idlen + 1;
 		END IF;
@@ -686,6 +685,18 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
+CREATE OR REPLACE FUNCTION set_orgcode()
+RETURNS TRIGGER AS
+$$
+BEGIN
+	UPDATE organisation SET orgcode = organisation_orgcode(NEW.name)
+		WHERE id = NEW.organisation AND orgcode IS NULL;
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER set_orgcode BEFORE INSERT ON organisationdetail
+FOR EACH ROW EXECUTE PROCEDURE set_orgcode();
 
 CREATE OR REPLACE FUNCTION check_ledger_balance()
 RETURNS trigger AS $check_ledger_balance$
@@ -769,3 +780,13 @@ INSERT INTO accounttype (id, name) VALUES ('e', 'expenditure');
 
 INSERT INTO department (id, name) VALUES (0, 'default');
 INSERT INTO division (id, name) VALUES (0, 'default');
+
+INSERT INTO cycle (id,cyclename,days,months,years) VALUES (0,'never',0,0,0);
+INSERT INTO cycle (cyclename) VALUES ('once');
+INSERT INTO cycle (cyclename,days,months,years) VALUES ('daily',1,0,0);
+INSERT INTO cycle (cyclename,days,months,years) VALUES ('monthly',0,1,0);
+INSERT INTO cycle (cyclename,days,months,years) VALUES ('bi-monthly',0,2,0);
+INSERT INTO cycle (cyclename,days,months,years) VALUES ('quarterly',0,3,0);
+INSERT INTO cycle (cyclename,days,months,years) VALUES ('half-yearly',0,6,0);
+INSERT INTO cycle (cyclename,days,months,years) VALUES ('annual',0,0,1);
+
