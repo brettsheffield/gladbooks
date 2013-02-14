@@ -29,18 +29,63 @@ CREATE TABLE division (
 	entered		timestamp with time zone default now()
 );
 
+-- for auditing we want journal and ledger primary keys to be sequential
+-- with no gaps, so an ordinary sequence won't do.
+-- using the method suggested at: http://www.varlena.com/GeneralBits/130.php
+
+CREATE TABLE journal_pk_counter (
+	journal_pk	INT4
+);
+INSERT INTO journal_pk_counter VALUES (0);
+CREATE RULE noins_journal_pk_counter AS ON INSERT TO journal_pk_counter
+	DO NOTHING;
+CREATE RULE nodel_journal_pk_counter AS ON DELETE TO journal_pk_counter
+	DO NOTHING;
+CREATE OR REPLACE FUNCTION journal_id_next()
+returns int4 AS
+$$
+DECLARE
+	next_pk int4;
+BEGIN
+	UPDATE journal_pk_counter SET journal_pk = journal_pk + 1;
+	SELECT INTO next_pk journal_pk FROM journal_pk_counter;
+	RETURN next_pk;
+END;
+$$ LANGUAGE 'plpgsql';
+
 CREATE TABLE journal (
-	id		SERIAL PRIMARY KEY,
+	id		INT4 DEFAULT journal_id_next(),
 	transactdate	date,
 	description	TEXT,
 	entered		timestamp with time zone default now(),
 	authuser	TEXT,
-	clientip	TEXT
+	clientip	TEXT,
+	CONSTRAINT journal_pk PRIMARY KEY (id)
 );
 CREATE RULE journal_del AS ON DELETE TO journal DO NOTHING;
 
+CREATE TABLE ledger_pk_counter (
+	ledger_pk	INT4
+);
+INSERT INTO ledger_pk_counter VALUES (0);
+CREATE RULE noins_ledger_pk_counter AS ON INSERT TO ledger_pk_counter
+	DO NOTHING;
+CREATE RULE nodel_ledger_pk_counter AS ON DELETE TO ledger_pk_counter
+	DO NOTHING;
+CREATE OR REPLACE FUNCTION ledger_id_next()
+returns int4 AS
+$$
+DECLARE
+	next_pk int4;
+BEGIN
+	UPDATE ledger_pk_counter SET ledger_pk = ledger_pk + 1;
+	SELECT INTO next_pk ledger_pk FROM ledger_pk_counter;
+	RETURN next_pk;
+END;
+$$ LANGUAGE 'plpgsql';
+
 CREATE TABLE ledger (
-	id		SERIAL PRIMARY KEY,
+	id		INT4 DEFAULT ledger_id_next(),
 	journal		INT4 references journal(id) ON DELETE RESTRICT,
 	account		INT4 references account(id) ON DELETE RESTRICT,
 	division	INT4 references division(id) ON DELETE RESTRICT
@@ -49,7 +94,8 @@ CREATE TABLE ledger (
 			DEFAULT 0,
 	debit		NUMERIC,
 	credit		NUMERIC,
-	entered		timestamp with time zone default now()
+	entered		timestamp with time zone default now(),
+	CONSTRAINT ledger_pk PRIMARY KEY (id)
 );
 CREATE RULE ledger_del AS ON DELETE TO ledger DO NOTHING;
 
