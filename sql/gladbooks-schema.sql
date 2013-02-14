@@ -33,6 +33,7 @@ CREATE TABLE division (
 -- with no gaps, so an ordinary sequence won't do.
 -- using the method suggested at: http://www.varlena.com/GeneralBits/130.php
 
+-- unique, contiguous sequence for journal primary key
 CREATE TABLE journal_pk_counter (
 	journal_pk	INT4
 );
@@ -41,6 +42,7 @@ CREATE RULE noins_journal_pk_counter AS ON INSERT TO journal_pk_counter
 	DO NOTHING;
 CREATE RULE nodel_journal_pk_counter AS ON DELETE TO journal_pk_counter
 	DO NOTHING;
+
 CREATE OR REPLACE FUNCTION journal_id_next()
 returns int4 AS
 $$
@@ -62,8 +64,11 @@ CREATE TABLE journal (
 	clientip	TEXT,
 	CONSTRAINT journal_pk PRIMARY KEY (id)
 );
+
+-- prevent deletes from journal table
 CREATE RULE journal_del AS ON DELETE TO journal DO NOTHING;
 
+-- unique, contiguous sequence for ledger primary key
 CREATE TABLE ledger_pk_counter (
 	ledger_pk	INT4
 );
@@ -72,6 +77,7 @@ CREATE RULE noins_ledger_pk_counter AS ON INSERT TO ledger_pk_counter
 	DO NOTHING;
 CREATE RULE nodel_ledger_pk_counter AS ON DELETE TO ledger_pk_counter
 	DO NOTHING;
+
 CREATE OR REPLACE FUNCTION ledger_id_next()
 returns int4 AS
 $$
@@ -97,19 +103,9 @@ CREATE TABLE ledger (
 	entered		timestamp with time zone default now(),
 	CONSTRAINT ledger_pk PRIMARY KEY (id)
 );
-CREATE RULE ledger_del AS ON DELETE TO ledger DO NOTHING;
 
-CREATE TABLE term (
-	id		SERIAL PRIMARY KEY,
-	termname	TEXT NOT NULL UNIQUE,
-	days		INT4 DEFAULT 0,
-	months		INT4 DEFAULT 0,
-	years		INT4 DEFAULT 0,
-	is_available	boolean DEFAULT true,
-	updated		timestamp with time zone default now(),
-	authuser	TEXT,
-	clientip	TEXT
-);
+-- prevent deletes from ledger table
+CREATE RULE ledger_del AS ON DELETE TO ledger DO NOTHING;
 
 CREATE TABLE contact (
 	id		SERIAL PRIMARY KEY,
@@ -338,15 +334,17 @@ CREATE TABLE product_tax (
 
 CREATE TABLE purchaseinvoice (
 	id		SERIAL PRIMARY KEY,
+	organisation	INT4 references organisation(id) NOT NULL,
+	invoicenum	INT4 NOT NULL,
 	updated		timestamp with time zone default now(),
 	authuser	TEXT,
-	clientip	TEXT
+	clientip	TEXT,
+	UNIQUE (organisation, invoicenum)
 );
 
 CREATE TABLE purchaseinvoicedetail (
 	id		SERIAL PRIMARY KEY,
 	purchaseinvoice	INT4 references purchaseinvoice(id) NOT NULL,
-	organisation	INT4 references organisation(id) NOT NULL,
 	journal		INT4 references journal(id),
 	subtotal	NUMERIC,
 	tax		NUMERIC,
@@ -359,11 +357,11 @@ CREATE TABLE purchaseinvoicedetail (
 CREATE TABLE purchaseorder (
 	id		SERIAL PRIMARY KEY,
 	organisation	INT4 NOT NULL,
-	order		INT4 NOT NULL,
+	ordernum	INT4 NOT NULL,
 	updated		timestamp with time zone default now(),
 	authuser	TEXT,
 	clientip	TEXT,
-	UNIQUE (organisation, order),
+	UNIQUE (organisation, ordernum),
 	CONSTRAINT purchaseorder_fkey_organisation
 		FOREIGN KEY (organisation) REFERENCES organisation(id)
 );
@@ -409,15 +407,17 @@ CREATE TABLE purchasepayment (
 
 CREATE TABLE salesorder (
 	id		SERIAL PRIMARY KEY,
+	organisation	INT4 references organisation(id) NOT NULL,
+	ordernum	INT4 NOT NULL,
 	updated		timestamp with time zone default now(),
 	authuser	TEXT,
-	clientip	TEXT
+	clientip	TEXT,
+	UNIQUE (organisation, ordernum)
 );
 
 CREATE TABLE salesorderdetail (
 	id		SERIAL PRIMARY KEY,
 	salesorder	INT4 references salesorder(id) NOT NULL,
-	organisation	INT4 references organisation(id) NOT NULL,
 	quotenumber	INT4 UNIQUE,
 	ponumber	TEXT,
 	description	TEXT,
@@ -465,9 +465,12 @@ CREATE TABLE salesorderitem_tax (
 
 CREATE TABLE salesinvoice (
 	id		SERIAL PRIMARY KEY,
+	organisation	INT4 references organisation(id) NOT NULL,
+	invoicenum	INT4 NOT NULL,
 	updated		timestamp with time zone default now(),
 	authuser	TEXT,
-	clientip	TEXT
+	clientip	TEXT,
+	UNIQUE (organisation, invoicenum)
 );
 
 CREATE TABLE salesinvoicedetail (
@@ -475,7 +478,6 @@ CREATE TABLE salesinvoicedetail (
 	salesinvoice	INT4 references salesinvoice(id) NOT NULL,
 	salesorder	INT4 references salesorder(id) NOT NULL,
 	period		INT4,
-	organisation	INT4 references organisation(id) NOT NULL,
 	ponumber	TEXT,
 	taxpoint	date,
 	endpoint	date,
@@ -557,7 +559,7 @@ CREATE OR REPLACE FUNCTION set_organisation_purchaseorder()
 RETURNS TRIGGER AS
 $$
 BEGIN
-	NEW.order = organisation_purchaseorder_next(NEW.organisation);
+	NEW.ordernum = organisation_purchaseorder_next(NEW.organisation);
 	RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -585,7 +587,7 @@ CREATE OR REPLACE FUNCTION set_organisation_purchaseinvoice()
 RETURNS TRIGGER AS
 $$
 BEGIN
-	NEW.order = organisation_purchaseinvoice_next(NEW.organisation);
+	NEW.invoicenum = organisation_purchaseinvoice_next(NEW.organisation);
 	RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -614,7 +616,7 @@ CREATE OR REPLACE FUNCTION set_organisation_salesorder()
 RETURNS TRIGGER AS
 $$
 BEGIN
-	NEW.order = organisation_salesorder_next(NEW.organisation);
+	NEW.ordernum = organisation_salesorder_next(NEW.organisation);
 	RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -644,7 +646,7 @@ CREATE OR REPLACE FUNCTION set_organisation_salesinvoice()
 RETURNS TRIGGER AS
 $$
 BEGIN
-	NEW.order = organisation_salesinvoice_next(NEW.organisation);
+	NEW.invoicenum = organisation_salesinvoice_next(NEW.organisation);
 	RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -685,6 +687,8 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
+-- the first time we write to organisationdetail with a new organisation
+-- we set the orgcode in organisation based on organisationdetail.name
 CREATE OR REPLACE FUNCTION set_orgcode()
 RETURNS TRIGGER AS
 $$
@@ -698,6 +702,9 @@ $$ LANGUAGE 'plpgsql';
 CREATE TRIGGER set_orgcode BEFORE INSERT ON organisationdetail
 FOR EACH ROW EXECUTE PROCEDURE set_orgcode();
 
+-- ---------------------------------------------------------------------------
+
+-- ensure ledger table debits and credits are in balance
 CREATE OR REPLACE FUNCTION check_ledger_balance()
 RETURNS trigger AS $check_ledger_balance$
 	DECLARE
@@ -712,6 +719,15 @@ RETURNS trigger AS $check_ledger_balance$
 	END;
 $check_ledger_balance$ LANGUAGE plpgsql;
 
+CREATE CONSTRAINT TRIGGER trig_check_ledger_balance
+	AFTER INSERT
+	ON ledger
+	DEFERRABLE INITIALLY DEFERRED
+	FOR EACH ROW
+	EXECUTE PROCEDURE check_ledger_balance()
+;
+
+-- ensure the ledger entries for a new journal balance
 CREATE OR REPLACE FUNCTION check_transaction_balance()
 RETURNS trigger AS $check_transaction_balance$
 	DECLARE
@@ -728,6 +744,15 @@ RETURNS trigger AS $check_transaction_balance$
 	END;
 $check_transaction_balance$ LANGUAGE plpgsql;
 
+CREATE CONSTRAINT TRIGGER trig_check_transaction_balance
+	AFTER INSERT
+	ON ledger
+	DEFERRABLE INITIALLY DEFERRED
+	FOR EACH ROW
+	EXECUTE PROCEDURE check_transaction_balance()
+;
+
+-- set account id in the correct range based on account type
 CREATE OR REPLACE FUNCTION set_account_id()
 RETURNS trigger AS $get_account_id$
 	BEGIN
@@ -755,23 +780,7 @@ CREATE TRIGGER trig_set_account_id
 	EXECUTE PROCEDURE set_account_id()
 ;
 
-CREATE CONSTRAINT TRIGGER trig_check_ledger_balance
-	AFTER INSERT
-	ON ledger
-	DEFERRABLE INITIALLY DEFERRED
-	FOR EACH ROW
-	EXECUTE PROCEDURE check_ledger_balance()
-;
-
-CREATE CONSTRAINT TRIGGER trig_check_transaction_balance
-	AFTER INSERT
-	ON ledger
-	DEFERRABLE INITIALLY DEFERRED
-	FOR EACH ROW
-	EXECUTE PROCEDURE check_transaction_balance()
-;
-
--- Default data for accounttype --
+-- Default data --
 INSERT INTO accounttype (id, name) VALUES ('a', 'assets');
 INSERT INTO accounttype (id, name) VALUES ('l', 'liabilities');
 INSERT INTO accounttype (id, name) VALUES ('c', 'capital');
