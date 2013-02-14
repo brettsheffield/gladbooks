@@ -369,6 +369,12 @@ function clickMenu(event) {
 	else if ($(this).attr("href") == '#chart') {
 		showChart();
 	}
+	else if ($(this).attr("href") == '#help') {
+		addTab("Help", "<h2>Help</h2>", true);
+	}
+	else {
+		addTab("Not Implemented", "<h2>Feature Not Available Yet</h2>", true);
+	}
 }
 
 /* display XML results as a sortable table */
