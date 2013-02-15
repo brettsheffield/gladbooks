@@ -3,12 +3,16 @@ CREATE TABLE accounttype (
 	name		TEXT UNIQUE,
 	entered		timestamp with time zone default now()
 );
+-- we don't delete account types
+CREATE RULE nodel_accounttype AS ON DELETE TO accounttype DO NOTHING;
 
 CREATE TABLE account (
 	id		INT4 PRIMARY KEY,
 	type		char(1) references accounttype(id) ON DELETE RESTRICT,
 	description	TEXT,
-	entered		timestamp with time zone default now()
+	entered		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT,
 );
 -- separate sequences for each account type --
 CREATE SEQUENCE account_id_a_seq MINVALUE 1000 MAXVALUE 1999 OWNED BY account.id;
