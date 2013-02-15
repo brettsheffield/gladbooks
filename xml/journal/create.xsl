@@ -34,10 +34,14 @@
 		<xsl:text>&apos;);</xsl:text><br/>       
 	</xsl:template>
 	<xsl:template match="credit">
-		<xsl:text>INSERT INTO ledger (journal, account, credit) VALUES (currval(pg_get_serial_sequence('journal','id')),'</xsl:text>
+		<xsl:text>INSERT INTO ledger (journal, account, credit, authuser, clientip) VALUES (currval(pg_get_serial_sequence('journal','id')),'</xsl:text>
 		<xsl:value-of select="@account"/>
 		<xsl:text>&apos;,&apos;</xsl:text>
 		<xsl:value-of select="@amount"/>
+		<xsl:text>','</xsl:text>
+		<xsl:copy-of select="$authuser"/>
+		<xsl:text>','</xsl:text>
+		<xsl:copy-of select="$clientip"/>
 		<xsl:text>&apos;);</xsl:text><br/>       
 	</xsl:template>
 </xsl:stylesheet>

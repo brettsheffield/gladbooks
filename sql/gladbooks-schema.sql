@@ -12,7 +12,7 @@ CREATE TABLE account (
 	description	TEXT,
 	entered		timestamp with time zone default now(),
 	authuser	TEXT,
-	clientip	TEXT,
+	clientip	TEXT
 );
 -- separate sequences for each account type --
 CREATE SEQUENCE account_id_a_seq MINVALUE 1000 MAXVALUE 1999 OWNED BY account.id;
@@ -105,6 +105,8 @@ CREATE TABLE ledger (
 	debit		NUMERIC,
 	credit		NUMERIC,
 	entered		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT,
 	CONSTRAINT ledger_pk PRIMARY KEY (id)
 );
 
