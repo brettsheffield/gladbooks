@@ -108,6 +108,25 @@ test("create account (expenditure)", function() {
 
 });
 
+test("create account (invalid type) - MUST be rejected", function() {
+	g_username='betty';
+	g_password='ie5a8P40';
+	var url = "/test/account/";
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="z" description="Test INVALID account creation is rejected"/></data></request>';
+
+	stop();
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: xml,
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { ok(false); start(); },
+		error: function(xml) { ok(true); start(); },
+	});
+
+});
+
 module("Journal");
 
 test("journal entry - valid xml", function() {

@@ -773,7 +773,7 @@ RETURNS trigger AS $get_account_id$
 		ELSIF NEW.type = 'e' THEN
 			SELECT nextval('account_id_e_seq') INTO NEW.id;
 		ELSE
-			RAISE EXCEPTION 'Invalid Account Type "%s"', NEW.type;
+			RAISE EXCEPTION 'Invalid Account Type "%"', NEW.type;
 		END IF;
 		RETURN NEW;
 	END;
