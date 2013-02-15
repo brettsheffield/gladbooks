@@ -364,13 +364,16 @@ function clickMenu(event) {
 	console.log("Menu '" + $(this).text() + "' was clicked");
 
 	if ($(this).attr("href") == '#journal') {
-		showJournalForm();
+		setupJournalForm();
 	} 
-	else if ($(this).attr("href") == '#chart') {
+	else if ($(this).attr("href") == '#chartview') {
 		showChart();
 	}
 	else if ($(this).attr("href") == '#help') {
 		addTab("Help", "<h2>Help</h2>", true);
+	}
+	else if ($(this).attr("href") == '#') {
+		// do nothing
 	}
 	else {
 		addTab("Not Implemented", "<h2>Feature Not Available Yet</h2>", true);
@@ -426,12 +429,17 @@ function displayResultsGeneric(xml, title) {
 }
 
 /* hide please wait dialog */
+function showSpinner() {
+	$("#loading-div-background").show();
+}
+
+/* hide please wait dialog */
 function hideSpinner() {
 	$("#loading-div-background").hide();
 }
 
 /* Populate Accounts Drop-Downs with XML Data */
-function populateAccountsDDowns(xml) {
+function populateAccountsDDowns(xml, tab) {
 	$('select.account:not(.populated)').empty();
 	$('select.account:not(.populated)').append(
 		$("<option />").val(0).text('<select account>')
@@ -447,6 +455,8 @@ function populateAccountsDDowns(xml) {
 		);
 	});
 	$('select.account:not(.populated)').addClass('populated');
+
+	finishJournalForm(tab);
 }
 
 /* debits and credits */
@@ -476,17 +486,22 @@ function showChart() {
 }
 
 /* set up journal form */
-function showJournalForm(tab) {
-	var ledger_lines = 1;
+function setupJournalForm(tab) {
 
 	/* load dropdown contents */
 	$.ajax({
 		url: '/test/accounts/',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
-		success: populateAccountsDDowns
+		success: function (xml) {
+			populateAccountsDDowns(xml, tab);
+		}
 	});
 	populateAccountTypeDDowns();
+}
 
+/* show the form, after setup is complete */
+function finishJournalForm(tab) {
+	var ledger_lines = 1;
 	var jf = $('div.dataformdiv.template').clone();
 	jf.removeClass('template');
 	if (tab) {
@@ -516,16 +531,16 @@ function showJournalForm(tab) {
 	});
 	transactdate.datepicker("setDate",currentDate);
 
+	/* set up click() events */
+	$('button#journalsubmit').click(function(event) {
+		submitJournalEntry(event, jf);
+	});
+
 	/* display the form */
 	jf.fadeIn(300);
 
 	/* set focus */
 	jf.find(".description").focus();
-
-	/* set up click() events */
-	$('button#journalsubmit').click(function(event) {
-		submitJournalEntry(event, jf);
-	});
 
 	/* set up input validation events */
 	/* TODO */
@@ -603,6 +618,7 @@ function submitJournalEntry(event, form) {
         type: 'POST',
         data: xml,
         contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
         success: function(xml) { submitJournalEntrySuccess(xml); },
         error: function(xml) { submitJournalEntryError(xml); },
     });
@@ -611,9 +627,9 @@ function submitJournalEntry(event, form) {
 /* journal was posted successfully */
 function submitJournalEntrySuccess(xml) {
 	$('p.journalstatus').text("Journal posted");
-	hideSpinner();
 	var activeForm = $('.tablet.active');
-	showJournalForm(activeForm);
+	setupJournalForm(activeForm);
+	hideSpinner();
 }
 
 /* problem posting journal */
