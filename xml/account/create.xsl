@@ -20,7 +20,6 @@
 		<xsl:text>','</xsl:text>
 		<xsl:copy-of select="$clientip"/>
 		<xsl:text>');</xsl:text>
-
 		<xsl:text>COMMIT;</xsl:text>
 	</xsl:template>
 
