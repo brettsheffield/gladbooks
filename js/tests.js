@@ -171,6 +171,7 @@ test("journal entry - xml does not match schema", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/journal/";
+	/* xml does not have a <debit> tag */
 	var xml = '<?xml version="1.0" encoding="UTF-8"?> <request><data><journal transactdate="2013-01-01" description="My First Journal Entry"> <credit account="1001" amount="120.00" /> <credit account="2001" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
 
 	stop();
@@ -190,7 +191,8 @@ test("journal entry - invalid account number MUST be rejected", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/journal/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?> <journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="999" amount="120.00" /> <credit account="2001" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal>';
+	/* account 999 does not exist */
+	var xml = '<?xml version="1.0" encoding="UTF-8"?> <request><data><journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="999" amount="120.00" /> <credit account="2001" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
 
 	stop();
 	$.ajax({
@@ -209,7 +211,8 @@ test("journal entry - unbalanced journal MUST be rejected", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/journal/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?> <journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="1001" amount="120.01" /> <credit account="2001" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal>';
+	/* amount of last credit is out by a penny */
+	var xml = '<?xml version="1.0" encoding="UTF-8"?> <request><data><journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="1001" amount="120.00" /> <credit account="2001" amount="20.00" /> <credit account="4000" amount="100.01" /> </journal></data></request>';
 
 	stop();
 	$.ajax({
