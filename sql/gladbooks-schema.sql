@@ -24,13 +24,17 @@ CREATE SEQUENCE account_id_e_seq MINVALUE 5000 MAXVALUE 5999 OWNED BY account.id
 CREATE TABLE department (
 	id              SERIAL PRIMARY KEY,
 	name		TEXT UNIQUE,
-	entered		timestamp with time zone default now()
+	entered		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
 );
 
 CREATE TABLE division (
 	id              SERIAL PRIMARY KEY,
 	name		TEXT UNIQUE,
-	entered		timestamp with time zone default now()
+	entered		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
 );
 
 -- for auditing we want journal and ledger primary keys to be sequential
