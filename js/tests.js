@@ -127,6 +127,48 @@ test("create account (invalid type) - MUST be rejected", function() {
 
 });
 
+module("Department");
+
+test("create department", function() {
+	g_username='betty';
+	g_password='ie5a8P40';
+	var url = "/test/department/";
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><department name="A whole new department, pour moi?"/></data></request>';
+
+	stop();
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: xml,
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { ok(true); start(); },
+		error: function(xml) { ok(false); start(); },
+	});
+
+});
+
+module("Division");
+
+test("create division", function() {
+	g_username='betty';
+	g_password='ie5a8P40';
+	var url = "/test/division/";
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><division name="A new division"/></data></request>';
+
+	stop();
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: xml,
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { ok(true); start(); },
+		error: function(xml) { ok(false); start(); },
+	});
+
+});
+
 module("Journal");
 
 test("journal entry - valid xml", function() {
