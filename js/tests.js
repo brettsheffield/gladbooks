@@ -290,3 +290,41 @@ test("create organisation", function() {
 
 });
 
+test("update organisation (name)", function() {
+	g_username='betty';
+	g_password='ie5a8P40';
+	var url = "/test/organisations/2";
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><organisation id="2" name="My nifty new organisation name to test updates"/></data></request>';
+
+	stop();
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: xml,
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { ok(true); start(); },
+		error: function(xml) { ok(false); start(); },
+	});
+
+});
+
+test("update organisation (vatreg)", function() {
+	g_username='betty';
+	g_password='ie5a8P40';
+	var url = "/test/organisations/2";
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><organisation id="2" vatnumber="EU 123 45678"/></data></request>';
+
+	stop();
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: xml,
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { ok(true); start(); },
+		error: function(xml) { ok(false); start(); },
+	});
+
+});
+
