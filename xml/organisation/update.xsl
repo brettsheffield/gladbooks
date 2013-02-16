@@ -11,10 +11,36 @@
 
 	<xsl:template match="organisation">
 		<xsl:text>BEGIN;</xsl:text>
+		<xsl:text>LOCK TABLE organisationdetail IN SHARE MODE;</xsl:text>
 		<xsl:text>INSERT INTO organisationdetail (organisation,</xsl:text>
 		<xsl:choose>
 			<xsl:when test="@name">
 				<xsl:text>name,</xsl:text>
+			</xsl:when>
+		</xsl:choose>
+		<xsl:choose>
+			<xsl:when test="@terms">
+				<xsl:text>terms,</xsl:text>
+			</xsl:when>
+		</xsl:choose>
+		<xsl:choose>
+			<xsl:when test="@billcontact">
+				<xsl:text>billcontact,</xsl:text>
+			</xsl:when>
+		</xsl:choose>
+		<xsl:choose>
+			<xsl:when test="@is_active">
+				<xsl:text>is_active,</xsl:text>
+			</xsl:when>
+		</xsl:choose>
+		<xsl:choose>
+			<xsl:when test="@is_suspended">
+				<xsl:text>is_suspended,</xsl:text>
+			</xsl:when>
+		</xsl:choose>
+		<xsl:choose>
+			<xsl:when test="@is_vatreg">
+				<xsl:text>is_vatreg,</xsl:text>
 			</xsl:when>
 		</xsl:choose>
 		<xsl:choose>
@@ -33,7 +59,36 @@
 				<xsl:text>','</xsl:text>
 			</xsl:when>
 		</xsl:choose>
-
+		<xsl:choose>
+			<xsl:when test="@terms">
+				<xsl:value-of select="@terms"/>
+				<xsl:text>','</xsl:text>
+			</xsl:when>
+		</xsl:choose>
+		<xsl:choose>
+			<xsl:when test="@billcontact">
+				<xsl:value-of select="@billcontact"/>
+				<xsl:text>','</xsl:text>
+			</xsl:when>
+		</xsl:choose>
+		<xsl:choose>
+			<xsl:when test="@is_active">
+				<xsl:value-of select="@is_active"/>
+				<xsl:text>','</xsl:text>
+			</xsl:when>
+		</xsl:choose>
+		<xsl:choose>
+			<xsl:when test="@is_suspended">
+				<xsl:value-of select="@is_suspended"/>
+				<xsl:text>','</xsl:text>
+			</xsl:when>
+		</xsl:choose>
+		<xsl:choose>
+			<xsl:when test="@is_vatreg">
+				<xsl:value-of select="@is_vatreg"/>
+				<xsl:text>','</xsl:text>
+			</xsl:when>
+		</xsl:choose>
 		<xsl:choose>
 			<xsl:when test="@vatnumber">
 				<xsl:value-of select="@vatnumber"/>

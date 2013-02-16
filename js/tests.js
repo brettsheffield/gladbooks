@@ -309,6 +309,82 @@ test("update organisation (name)", function() {
 
 });
 
+test("update organisation (terms)", function() {
+	g_username='betty';
+	g_password='ie5a8P40';
+	var url = "/test/organisations/2";
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><organisation id="2" terms="14"/></data></request>';
+
+	stop();
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: xml,
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { ok(true); start(); },
+		error: function(xml) { ok(false); start(); },
+	});
+
+});
+
+test("update organisation (is_active)", function() {
+	g_username='betty';
+	g_password='ie5a8P40';
+	var url = "/test/organisations/2";
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><organisation id="2" is_active="false"/></data></request>';
+
+	stop();
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: xml,
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { ok(true); start(); },
+		error: function(xml) { ok(false); start(); },
+	});
+
+});
+
+test("update organisation (is_suspended)", function() {
+	g_username='betty';
+	g_password='ie5a8P40';
+	var url = "/test/organisations/2";
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><organisation id="2" is_suspended="true"/></data></request>';
+
+	stop();
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: xml,
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { ok(true); start(); },
+		error: function(xml) { ok(false); start(); },
+	});
+
+});
+
+test("update organisation (is_vatreg)", function() {
+	g_username='betty';
+	g_password='ie5a8P40';
+	var url = "/test/organisations/2";
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><organisation id="2" is_vatreg="true"/></data></request>';
+
+	stop();
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: xml,
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { ok(true); start(); },
+		error: function(xml) { ok(false); start(); },
+	});
+
+});
+
 test("update organisation (vatreg)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';

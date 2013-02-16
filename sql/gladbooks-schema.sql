@@ -165,11 +165,11 @@ CREATE TABLE organisationdetail (
 	organisation	INT4 references organisation(id)
 			ON DELETE RESTRICT,
 	name		TEXT NOT NULL,
-	terms		INT4 DEFAULT 30 NOT NULL,
+	terms		INT4 NOT NULL,
 	billcontact	INT4 references contact(id) ON DELETE RESTRICT,
-	is_active	boolean DEFAULT true NOT NULL,
-	is_suspended	boolean DEFAULT false NOT NULL,
-	is_vatreg	boolean DEFAULT false NOT NULL,
+	is_active	boolean NOT NULL,
+	is_suspended	boolean NOT NULL,
+	is_vatreg	boolean NOT NULL,
 	vatnumber	TEXT,
 	updated		timestamp with time zone default now(),
 	authuser	TEXT,
@@ -741,7 +741,9 @@ BEGIN
 			SELECT MAX(id)
 			FROM organisationdetail
 			GROUP BY organisation
-		);
+		)
+		AND organisation = NEW.organisation;
+
 		IF NEW.name IS NULL THEN
 			NEW.name = oname;
 		END IF;
@@ -762,6 +764,20 @@ BEGIN
 		END IF;
 		IF NEW.vatnumber IS NULL THEN
 			NEW.vatnumber = ovatnumber;
+		END IF;
+	ELSE
+		/* set defaults */
+		IF NEW.terms IS NULL THEN
+			NEW.terms = 30;
+		END IF;
+		IF NEW.is_active IS NULL THEN
+			NEW.is_active = 'true';
+		END IF;
+		IF NEW.is_suspended IS NULL THEN
+			NEW.is_suspended = 'false';
+		END IF;
+		IF NEW.is_vatreg IS NULL THEN
+			NEW.is_vatreg = 'false';
 		END IF;
 	END IF;
 	RETURN NEW;
