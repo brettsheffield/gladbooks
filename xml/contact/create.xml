@@ -2,7 +2,19 @@
 <request>
 	<data>
 		<contact>
-			<name>Name of Contact</name>
+			<name>Mr Firstname Surname</name>
+			<line_1>First Line of Address</line_1>
+			<line_2>Second Line of Address</line_2>
+			<line_3>Third Line of Address</line_3>
+			<town>Someville</town>
+			<county>Somewhere</county>
+			<country>Grand Europia</country>
+			<postcode>GE12 34RO</postcode>
+			<email>noone@example.com</email>
+			<phone>01234 5678</phone>
+			<phonealt>01234 5678</phonealt>
+			<mobile>01234 5678</mobile>
+			<fax>01234 5678</fax>
 		</contact>
 	</data>
 </request>
