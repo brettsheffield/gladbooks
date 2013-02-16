@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:element name="request">
+  <xs:complexType>
+    <xs:sequence>
+
+      <xs:element name="data">
+        <xs:complexType>
+          <xs:sequence>
+
+						<xs:element name="contact" maxOccurs="1">
+							<xs:complexType>
+          			<xs:sequence>
+									<xs:element name="name" type="xs:string"/>
+									<xs:element name="line_1" type="xs:string" minOccurs="0"/>
+									<xs:element name="line_2" type="xs:string" minOccurs="0"/>
+									<xs:element name="line_3" type="xs:string" minOccurs="0"/>
+									<xs:element name="town" type="xs:string" minOccurs="0"/>
+									<xs:element name="county" type="xs:string" minOccurs="0"/>
+									<xs:element name="country" type="xs:string" minOccurs="0"/>
+									<xs:element name="postcode" type="xs:string" minOccurs="0"/>
+									<xs:element name="email" type="email" minOccurs="0"/>
+									<xs:element name="phone" type="xs:string" minOccurs="0"/>
+									<xs:element name="phonealt" type="xs:string" minOccurs="0"/>
+									<xs:element name="mobile" type="xs:string" minOccurs="0"/>
+									<xs:element name="fax" type="xs:string" minOccurs="0"/>
+									<xs:element name="is_active" type="xs:boolean" minOccurs="0"/>
+									<xs:element name="is_deleted" type="xs:boolean" minOccurs="0"/>
+          			</xs:sequence>
+							</xs:complexType>
+						</xs:element><!--contact-->
+
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element><!--data-->
+
+    </xs:sequence>
+  </xs:complexType>
+</xs:element><!--request-->
+
+<xs:simpleType name="email">
+	<xs:restriction base="xs:string">
+		<xs:pattern value="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"/>
+	</xs:restriction>
+</xs:simpleType>
+
+</xs:schema>
