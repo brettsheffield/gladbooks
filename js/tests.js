@@ -275,7 +275,7 @@ test("create organisation", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/organisations/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><organisation name="My nifty new organisation"/></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><organisation><name>My nifty new organisation</name></organisation></data></request>';
 
 	stop();
 	$.ajax({
@@ -294,7 +294,7 @@ test("update organisation (name)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/organisations/2";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><organisation id="2" name="My nifty new organisation name to test updates"/></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><organisation id="2"><name>My nifty new organisation name to test updates</name></organisation></data></request>';
 
 	stop();
 	$.ajax({
@@ -313,7 +313,7 @@ test("update organisation (terms)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/organisations/2";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><organisation id="2" terms="14"/></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><organisation id="2"><terms>14</terms></organisation></data></request>';
 
 	stop();
 	$.ajax({
@@ -389,7 +389,7 @@ test("update organisation (vatreg)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/organisations/2";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><organisation id="2" vatnumber="EU 123 45678"/></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><organisation id="2"><vatnumber>EU 123 45678</vatnumber></organisation></data></request>';
 
 	stop();
 	$.ajax({

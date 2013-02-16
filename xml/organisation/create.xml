@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <request>
 	<data>
-		<organisation name="Name of Organisation"/>
+		<organisation is_active="true" is_suspended="false" is_vatreg="true">
+			<name>Name of Organisation</name>
+			<terms>14</terms>
+			<vatnumber>EU 123 4567</vatnumber>
+		</organisation>
 	</data>
 </request>

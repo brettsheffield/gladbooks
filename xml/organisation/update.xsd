@@ -11,14 +11,16 @@
 
 						<xs:element name="organisation" maxOccurs="1">
 							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="name" type="xs:string" minOccurs="0"/>
+									<xs:element name="terms" type="xs:positiveInteger" minOccurs="0"/>
+									<xs:element name="billcontact" type="xs:positiveInteger" minOccurs="0"/>
+									<xs:element name="vatnumber" type="xs:string" minOccurs="0"/>
+								</xs:sequence>
 								<xs:attribute name="id" type="xs:string" use="required"/>
-								<xs:attribute name="name" type="xs:string"/>
-								<xs:attribute name="terms" type="xs:positiveInteger"/>
-								<xs:attribute name="billcontact" type="xs:positiveInteger"/>
 								<xs:attribute name="is_active" type="xs:boolean"/>
 								<xs:attribute name="is_suspended" type="xs:boolean"/>
 								<xs:attribute name="is_vatreg" type="xs:boolean"/>
-								<xs:attribute name="vatnumber" type="xs:string"/>
 							</xs:complexType>
 						</xs:element><!--organisation-->
 
