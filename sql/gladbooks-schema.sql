@@ -712,6 +712,64 @@ $$ LANGUAGE 'plpgsql';
 CREATE TRIGGER set_orgcode BEFORE INSERT ON organisationdetail
 FOR EACH ROW EXECUTE PROCEDURE set_orgcode();
 
+-- when INSERTing into organisationdetail, check for previous records
+-- for this organisation, and use those values in place of any values
+-- not supplied.
+CREATE OR REPLACE FUNCTION organisationdetailupdate()
+RETURNS TRIGGER AS
+$$
+DECLARE
+	priorentries	INT4;
+	oname		TEXT;
+	oterms		INT4;
+	obillcontact	INT4;
+	ois_active	boolean;
+	ois_suspended	boolean;
+	ois_vatreg	boolean;
+	ovatnumber	TEXT;
+BEGIN
+	SELECT INTO priorentries COUNT(id) FROM organisationdetail
+		WHERE organisation = NEW.organisation;
+	IF priorentries > 0 THEN
+		-- This isn't our first time, so use previous values 
+		SELECT INTO
+			oname, oterms, obillcontact, ois_active, ois_suspended,
+			ois_vatreg, ovatnumber
+			name, terms, billcontact, is_active, is_suspended,
+			is_vatreg, vatnumber
+		FROM organisationdetail WHERE id IN (
+			SELECT MAX(id)
+			FROM organisationdetail
+			GROUP BY organisation
+		);
+		IF NEW.name IS NULL THEN
+			NEW.name = oname;
+		END IF;
+		IF NEW.terms IS NULL THEN
+			NEW.terms = oterms;
+		END IF;
+		IF NEW.billcontact IS NULL THEN
+			NEW.billcontact = obillcontact;
+		END IF;
+		IF NEW.is_active IS NULL THEN
+			NEW.is_active = ois_active;
+		END IF;
+		IF NEW.is_suspended IS NULL THEN
+			NEW.is_suspended = ois_suspended;
+		END IF;
+		IF NEW.is_vatreg IS NULL THEN
+			NEW.is_vatreg = ois_vatreg;
+		END IF;
+		IF NEW.vatnumber IS NULL THEN
+			NEW.vatnumber = ovatnumber;
+		END IF;
+	END IF;
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER organisationdetailupdate BEFORE INSERT ON organisationdetail
+FOR EACH ROW EXECUTE PROCEDURE organisationdetailupdate();
 -- ---------------------------------------------------------------------------
 
 -- ensure ledger table debits and credits are in balance
