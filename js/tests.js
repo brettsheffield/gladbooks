@@ -133,7 +133,7 @@ test("create department", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/department/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><department name="A whole new department, pour moi?"/></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><department name="'+ UUID() +'"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -154,7 +154,7 @@ test("create division", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/division/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><division name="A new division"/></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><division name="'+ UUID() +'"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -404,3 +404,32 @@ test("update organisation (vatreg)", function() {
 
 });
 
+
+/*!
+* JavaScript UUID Generator, v0.0.1
+*
+* Copyright (c) 2009 Massimo Lombardo.
+* Dual licensed under the MIT and the GNU GPL licenses.
+*/
+function UUID() {
+    var uuid = (function () {
+        var i,
+            c = "89ab",
+            u = [];
+        for (i = 0; i < 36; i += 1) {
+            u[i] = (Math.random() * 16 | 0).toString(16);
+        }
+        u[8] = u[13] = u[18] = u[23] = "-";
+        u[14] = "4";
+        u[19] = c.charAt(Math.random() * 4 | 0);
+        return u.join("");
+    })();
+    return {
+        toString: function () {
+            return uuid;
+        },
+        valueOf: function () {
+            return uuid;
+        }
+    };
+}
