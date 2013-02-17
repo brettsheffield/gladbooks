@@ -463,7 +463,7 @@ function populateAccountsDDowns(xml, tab) {
 }
 
 /* debits and credits */
-function populateAccountTypeDDowns() {
+function populateDebitCreditDDowns() {
 	$('select.type:not(.populated)').empty();
 	$('select.type:not(.populated)').append(
 		$("<option />").val('debit').text('debit')
@@ -499,7 +499,7 @@ function setupJournalForm(tab) {
 			populateAccountsDDowns(xml, tab);
 		}
 	});
-	populateAccountTypeDDowns();
+	populateDebitCreditDDowns();
 }
 
 /* show the form, after setup is complete */
