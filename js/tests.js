@@ -1,3 +1,25 @@
+/* 
+ * tests.js - gladbooks api qunit tests
+ *
+ * this file is part of GLADBOOKS
+ *
+ * Copyright (c) 2012, 2013 Brett Sheffield <brett@gladbooks.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program (see the file COPYING in the distribution).
+ * If not, see <http://www.gnu.org/licenses/>.
+ */
+
 module("Login");
 
 test("build authentication hash", function() {
@@ -405,12 +427,13 @@ test("update organisation (vatreg)", function() {
 });
 
 
-/*!
-* JavaScript UUID Generator, v0.0.1
-*
-* Copyright (c) 2009 Massimo Lombardo.
-* Dual licensed under the MIT and the GNU GPL licenses.
-*/
+/*
+ * UUID()
+ * JavaScript UUID Generator, v0.0.1
+ *
+ * Copyright (c) 2009 Massimo Lombardo.
+ * Dual licensed under the MIT and the GNU GPL licenses.
+ */
 function UUID() {
     var uuid = (function () {
         var i,
