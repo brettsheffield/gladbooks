@@ -71,7 +71,7 @@
 			<xsl:when test="@id">
 				<xsl:text>'</xsl:text>
 				<xsl:value-of select="@id"/>
-				<xsl:text>',</xsl:text>
+				<xsl:text>','</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:text>currval(pg_get_serial_sequence('contact','id')),'</xsl:text>

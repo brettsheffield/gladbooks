@@ -788,6 +788,112 @@ CREATE TRIGGER organisationdetailupdate BEFORE INSERT ON organisationdetail
 FOR EACH ROW EXECUTE PROCEDURE organisationdetailupdate();
 -- ---------------------------------------------------------------------------
 
+-- when INSERTing into contactdetail, check for previous records
+-- for this contact, and use those values in place of any values
+-- not supplied.
+CREATE OR REPLACE FUNCTION contactdetailupdate()
+RETURNS TRIGGER AS
+$$
+DECLARE
+	priorentries	INT4;
+	ois_active	boolean;
+	ois_deleted	boolean;
+	oname		TEXT;
+	oline_1		TEXT;
+	oline_2		TEXT;
+	oline_3		TEXT;
+	otown		TEXT;
+	ocounty		TEXT;
+	ocountry	TEXT;
+	opostcode	TEXT;
+	oemail		TEXT;
+	ophone		TEXT;
+	ophonealt	TEXT;
+	omobile		TEXT;
+	ofax		TEXT;
+BEGIN
+	SELECT INTO priorentries COUNT(id) FROM contactdetail
+		WHERE contact = NEW.contact;
+	IF priorentries > 0 THEN
+		-- This isn't our first time, so use previous values 
+		SELECT INTO
+			ois_active, ois_deleted, oname, oline_1, oline_2, 
+			oline_3, otown, ocounty, ocountry, opostcode, oemail,
+			ophone, ophonealt, omobile, ofax
+
+			is_active, is_deleted, name, line_1, line_2, 
+			line_3, town, county, country, postcode, email,
+			phone, phonealt, mobile, fax
+
+		FROM contactdetail WHERE id IN (
+			SELECT MAX(id)
+			FROM contactdetail
+			GROUP BY contact
+		)
+		AND contact = NEW.contact;
+
+		IF NEW.is_active IS NULL THEN
+			NEW.is_active = ois_active;
+		END IF;
+		IF NEW.is_deleted IS NULL THEN
+			NEW.is_deleted = ois_deleted;
+		END IF;
+		IF NEW.name IS NULL THEN
+			NEW.name = oname;
+		END IF;
+		IF NEW.line_1 IS NULL THEN
+			NEW.line_1 = oline_1;
+		END IF;
+		IF NEW.line_2 IS NULL THEN
+			NEW.line_2 = oline_2;
+		END IF;
+		IF NEW.line_3 IS NULL THEN
+			NEW.line_3 = oline_3;
+		END IF;
+		IF NEW.town IS NULL THEN
+			NEW.town = otown;
+		END IF;
+		IF NEW.county IS NULL THEN
+			NEW.county = ocounty;
+		END IF;
+		IF NEW.country IS NULL THEN
+			NEW.country = ocountry;
+		END IF;
+		IF NEW.postcode IS NULL THEN
+			NEW.postcode = opostcode;
+		END IF;
+		IF NEW.email IS NULL THEN
+			NEW.email = oemail;
+		END IF;
+		IF NEW.phone IS NULL THEN
+			NEW.phone = ophone;
+		END IF;
+		IF NEW.phonealt IS NULL THEN
+			NEW.phonealt = ophonealt;
+		END IF;
+		IF NEW.mobile IS NULL THEN
+			NEW.mobile = omobile;
+		END IF;
+		IF NEW.fax IS NULL THEN
+			NEW.fax = ofax;
+		END IF;
+	ELSE
+		/* set defaults */
+		IF NEW.is_active IS NULL THEN
+			NEW.is_active = 'true';
+		END IF;
+		IF NEW.is_deleted IS NULL THEN
+			NEW.is_deleted = 'false';
+		END IF;
+	END IF;
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER contactdetailupdate BEFORE INSERT ON contactdetail
+FOR EACH ROW EXECUTE PROCEDURE contactdetailupdate();
+-- ---------------------------------------------------------------------------
+
 -- ensure ledger table debits and credits are in balance
 CREATE OR REPLACE FUNCTION check_ledger_balance()
 RETURNS trigger AS $check_ledger_balance$
