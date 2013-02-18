@@ -142,6 +142,33 @@
 		<xsl:text>','</xsl:text>
 		<xsl:copy-of select="$clientip"/>
 		<xsl:text>');</xsl:text>
+
+		<xsl:if test="organisation">
+			<xsl:text>INSERT INTO organisation_contact </xsl:text>
+			<xsl:text>(organisation,contact</xsl:text>
+			<xsl:if test="organisation/@is_billing">
+				<xsl:text>,is_billing</xsl:text>
+			</xsl:if>
+			<xsl:if test="organisation/@is_shipping">
+				<xsl:text>,is_shipping</xsl:text>
+			</xsl:if>
+			<xsl:text>) </xsl:text>
+			<xsl:text>VALUES ('</xsl:text>
+			<xsl:value-of select="organisation/@id"/>
+			<xsl:text>',currval(pg_get_serial_sequence('contact','id'))</xsl:text>
+			<xsl:if test="organisation/@is_billing">
+				<xsl:text>,'</xsl:text>
+				<xsl:value-of select="organisation/@is_billing"/>
+				<xsl:text>'</xsl:text>
+			</xsl:if>
+			<xsl:if test="organisation/@is_shipping">
+				<xsl:text>,'</xsl:text>
+				<xsl:value-of select="organisation/@is_shipping"/>
+				<xsl:text>'</xsl:text>
+			</xsl:if>
+			<xsl:text>);</xsl:text>
+		</xsl:if>
+
 		<xsl:text>COMMIT;</xsl:text>
 	</xsl:template>
 

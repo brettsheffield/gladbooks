@@ -617,7 +617,7 @@ function submitJournalEntry(event, form) {
 
 	showSpinner();
     $.ajax({
-        url: '/test/journal/',
+        url: '/test/journals/',
         type: 'POST',
         data: xml,
         contentType: 'text/xml',
@@ -663,7 +663,7 @@ function showChartAddForm(tab) {
 
     /* load dropdown contents */
     $.ajax({
-        url: '/test/accounttype/',
+        url: '/test/accounttypes/',
         beforeSend: function (xhr) { setAuthHeader(xhr); },
         success: function (xml) {
             populateAccountTypeDDowns(xml, newform);
@@ -705,7 +705,7 @@ function submitChartAdd(event, form) {
 
 	showSpinner();
     $.ajax({
-        url: '/test/account/',
+        url: '/test/accounts/',
         type: 'POST',
         data: xml,
         contentType: 'text/xml',

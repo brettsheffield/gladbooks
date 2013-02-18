@@ -27,6 +27,13 @@
 									<xs:element name="fax" type="xs:string" minOccurs="0"/>
 									<xs:element name="is_active" type="xs:boolean" minOccurs="0"/>
 									<xs:element name="is_deleted" type="xs:boolean" minOccurs="0"/>
+									<xs:element name="organisation" minOccurs="0">
+										<xs:complexType>
+											<xs:attribute name="id" type="xs:positiveInteger" use="required"/>
+											<xs:attribute name="is_billing" type="xs:boolean"/>
+											<xs:attribute name="is_shipping" type="xs:boolean"/>
+										</xs:complexType>
+									</xs:element>
           			</xs:sequence>
 							</xs:complexType>
 						</xs:element><!--contact-->

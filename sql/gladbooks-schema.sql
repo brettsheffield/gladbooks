@@ -686,7 +686,7 @@ BEGIN
 		WHERE orgcode = neworgcode;
 	WHILE conflicts != 0 OR char_length(neworgcode) < idlen LOOP
 		neworgcode = substr(neworgcode, 1, idlen - 1);
-		neworgcode = concat(neworgcode, chr(int4(random() * 26 + 65)));
+		neworgcode = concat(neworgcode, chr(int4(random() * 25 + 65)));
 		SELECT INTO conflicts COUNT(id) FROM organisation
 			WHERE orgcode LIKE CONCAT(neworgcode,'%');
 		IF conflicts > 25 THEN

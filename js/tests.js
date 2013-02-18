@@ -155,7 +155,45 @@ test("create contact", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/contacts/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><contact><name>My nifty new contact</name></contact></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><contact><name>Ms Contact Name</name><line_1>Line 1</line_1><line_2>Line 2</line_2><line_3>Line 3</line_3><town>Townsville</town><county>County</county><country>Grand Europia</country><postcode>EU01 23RO</postcode><email>someone@example.com</email><phone>01234 5678</phone><phonealt>0123 123</phonealt><mobile>333 3333</mobile><fax>456 4567</fax></contact></data></request>';
+
+	stop();
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: xml,
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { ok(true); start(); },
+		error: function(xml) { ok(false); start(); },
+	});
+
+});
+
+test("create billing contact for organisation", function() {
+	g_username='betty';
+	g_password='ie5a8P40';
+	var url = "/test/contacts/";
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><contact><name>Mr Bill Contact</name><organisation id="1" is_billing="true"/></contact></data></request>';
+
+	stop();
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: xml,
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { ok(true); start(); },
+		error: function(xml) { ok(false); start(); },
+	});
+
+});
+
+test("create shipping contact for organisation", function() {
+	g_username='betty';
+	g_password='ie5a8P40';
+	var url = "/test/contacts/";
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><contact><name>Mrs Shipping Address</name><organisation id="1" is_shipping="true"/></contact></data></request>';
 
 	stop();
 	$.ajax({
