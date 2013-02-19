@@ -1,14 +1,15 @@
 BEGIN;
-INSERT INTO account (accounttype, description) VALUES ('1', 'Bank Account 1');
-INSERT INTO account (accounttype, description) VALUES ('1', 'Bank Account 2');
-INSERT INTO account (accounttype, description) VALUES ('1', 'Accounts Receivable');
-INSERT INTO account (accounttype, description) VALUES ('2', 'Accounts Payable');
-INSERT INTO account (accounttype, description) VALUES ('3', 'Owner''s Equity');
-INSERT INTO account (accounttype, description) VALUES ('4', 'Product 1');
-INSERT INTO account (accounttype, description) VALUES ('4', 'Product 2');
-INSERT INTO account (accounttype, description) VALUES ('5', 'Materials');
-INSERT INTO account (accounttype, description) VALUES ('5', 'Utilities');
-INSERT INTO account (id, accounttype, description) VALUES (45, '2', 'test');
+INSERT INTO account (accounttype, description) VALUES ('1000', 'Current Account');
+INSERT INTO account (accounttype, description) VALUES ('1000', 'Savings Account');
+INSERT INTO account (accounttype, description) VALUES ('1000', 'Petty Cash');
+INSERT INTO account (accounttype, description) VALUES ('2000', 'Credit Cards');
+INSERT INTO account (accounttype, description) VALUES ('4000', 'Product 1');
+INSERT INTO account (accounttype, description) VALUES ('4000', 'Product 2');
+INSERT INTO account (accounttype, description) VALUES ('5000', 'Materials');
+INSERT INTO account (accounttype, description) VALUES ('6000', 'Travel');
+INSERT INTO account (accounttype, description) VALUES ('6000', 'Accommodation');
+INSERT INTO account (accounttype, description) VALUES ('7000', 'Utilities');
+INSERT INTO account (accounttype, description) VALUES ('8000', 'Depreciation');
 
 INSERT INTO organisation VALUES (DEFAULT);
 INSERT INTO organisationdetail (organisation, name)

@@ -126,6 +126,17 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
+CREATE OR REPLACE FUNCTION journal_id_last()
+returns int4 AS
+$$
+DECLARE
+	last_pk int4;
+BEGIN
+	SELECT INTO last_pk journal_pk FROM journal_pk_counter;
+	RETURN last_pk;
+END;
+$$ LANGUAGE 'plpgsql';
+
 CREATE TABLE journal (
 	id		INT4 DEFAULT journal_id_next(),
 	transactdate	date,
@@ -163,10 +174,12 @@ $$ LANGUAGE 'plpgsql';
 
 CREATE TABLE ledger (
 	id		INT4 DEFAULT ledger_id_next(),
-	journal		INT4 references journal(id) ON DELETE RESTRICT,
-	account		INT4 references account(id) ON DELETE RESTRICT,
+	journal		INT4 references journal(id) ON DELETE RESTRICT
+			NOT NULL,
+	account		INT4 references account(id) ON DELETE RESTRICT
+			NOT NULL,
 	division	INT4 references division(id) ON DELETE RESTRICT
-			DEFAULT 0,
+			NOT NULL DEFAULT 0,
 	department	INT4 references department(id) ON DELETE RESTRICT
 			DEFAULT 0,
 	debit		NUMERIC,
@@ -1006,16 +1019,28 @@ CREATE CONSTRAINT TRIGGER trig_check_transaction_balance
 ;
 
 -- Default data --
-INSERT INTO accounttype (name, range_min, range_max, next_id)
-	VALUES ('assets', '1000', '1999', 1000);
-INSERT INTO accounttype (name, range_min, range_max, next_id)
-	VALUES ('liabilities', '2000', '2999', 2000);
-INSERT INTO accounttype (name, range_min, range_max, next_id)
-	VALUES ('capital', '3000', '3999', 3000);
-INSERT INTO accounttype (name, range_min, range_max, next_id)
-	VALUES ('revenue', '4000', '4999', 4000);
-INSERT INTO accounttype (name, range_min, range_max, next_id)
-	VALUES ('expenditure', '5000', '5999', 5000);
+INSERT INTO accounttype (id, name, range_min, range_max, next_id)
+	VALUES ('0000', 'Fixed Assets', '0000', '0999', '0000');
+INSERT INTO accounttype (id, name, range_min, range_max, next_id)
+	VALUES ('1000','Current Assets', '1000', '1999', '1000');
+INSERT INTO accounttype (id, name, range_min, range_max, next_id)
+	VALUES ('2000','Current Liabilities', '2000', '2499', '2000');
+INSERT INTO accounttype (id, name, range_min, range_max, next_id)
+	VALUES ('2500','Long Term Liabilities', '2500', '2999', '2500');
+INSERT INTO accounttype (id, name, range_min, range_max, next_id)
+	VALUES ('3000','Capital and Reserves', '3000', '3999', '3000');
+INSERT INTO accounttype (id, name, range_min, range_max, next_id)
+	VALUES ('4000','Revenue', '4000', '4999', '4000');
+INSERT INTO accounttype (id, name, range_min, range_max, next_id)
+	VALUES ('5000','Expenditure', '5000', '5999', '5000');
+INSERT INTO accounttype (id, name, range_min, range_max, next_id)
+	VALUES ('6000','Direct Expenses', '6000', '6999', '6000');
+INSERT INTO accounttype (id, name, range_min, range_max, next_id)
+	VALUES ('7000','Overheads', '7000', '7999', '7000');
+INSERT INTO accounttype (id, name, range_min, range_max, next_id)
+	VALUES ('8000','Depreciation and Sundries', '8000', '8999', '8000');
+INSERT INTO accounttype (id, name, range_min, range_max, next_id)
+	VALUES ('9000','Suspense Accounts', '9000', '9999', '9000');
 
 INSERT INTO department (id, name) VALUES (0, 'default');
 INSERT INTO division (id, name) VALUES (0, 'default');
@@ -1031,21 +1056,29 @@ INSERT INTO cycle (cyclename,days,months,years) VALUES ('annual',0,0,1);
 
 -- Reserved nominal codes
 INSERT INTO account (id, accounttype, description)
-	VALUES ('1100', '1', 'Debtors Control Account');
+	VALUES ('1100', '1000', 'Debtors Control Account');
 INSERT INTO account (id, accounttype, description)
-	VALUES ('2100', '2', 'Creditors Control Account');
+	VALUES ('2100', '2000', 'Creditors Control Account');
 INSERT INTO account (id, accounttype, description)
-	VALUES ('2202', '2', 'VAT Liability Account');
+	VALUES ('2202', '2000', 'VAT Liability Account');
 INSERT INTO account (id, accounttype, description)
-	VALUES ('2210', '2', 'PAYE Liability Account');
+	VALUES ('2210', '2000', 'PAYE Liability Account');
 INSERT INTO account (id, accounttype, description)
-	VALUES ('2211', '2', 'NI Liability Account');
+	VALUES ('2211', '2000', 'NI Liability Account');
 INSERT INTO account (id, accounttype, description)
-	VALUES ('2220', '2', 'Wages Liability Account');
+	VALUES ('2220', '2000', 'Wages Liability Account');
 INSERT INTO account (id, accounttype, description)
-	VALUES ('2230', '2', 'Pension Liability Account');
+	VALUES ('2230', '2000', 'Pension Liability Account');
 INSERT INTO account (id, accounttype, description)
-	VALUES ('3200', '3', 'Retained Earnings Account');
+	VALUES ('3000', '3000', 'Share Capital');
+INSERT INTO account (id, accounttype, description)
+	VALUES ('3200', '3000', 'Retained Earnings Account');
+INSERT INTO account (id, accounttype, description)
+	VALUES ('5100', '5000', 'Shipping');
+INSERT INTO account (id, accounttype, description)
+	VALUES ('7501', '7000', 'Postage and Shipping');
+INSERT INTO account (id, accounttype, description)
+	VALUES ('9999', '9000', 'Suspense Account');
 
 -- Standard Rate VAT
 INSERT INTO tax VALUES (DEFAULT);

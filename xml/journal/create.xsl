@@ -27,14 +27,14 @@
 		<xsl:text>COMMIT;</xsl:text>
 	</xsl:template>
 	<xsl:template match="debit">
-		<xsl:text>INSERT INTO ledger (journal, account, debit) VALUES (currval(pg_get_serial_sequence('journal','id')),'</xsl:text>
+		<xsl:text>INSERT INTO ledger (journal, account, debit) VALUES (journal_id_last(),'</xsl:text>
 		<xsl:value-of select="@account"/>
 		<xsl:text>&apos;,&apos;</xsl:text>
 		<xsl:value-of select="@amount"/>
 		<xsl:text>&apos;);</xsl:text><br/>       
 	</xsl:template>
 	<xsl:template match="credit">
-		<xsl:text>INSERT INTO ledger (journal, account, credit, authuser, clientip) VALUES (currval(pg_get_serial_sequence('journal','id')),'</xsl:text>
+		<xsl:text>INSERT INTO ledger (journal, account, credit, authuser, clientip) VALUES (journal_id_last(),'</xsl:text>
 		<xsl:value-of select="@account"/>
 		<xsl:text>&apos;,&apos;</xsl:text>
 		<xsl:value-of select="@amount"/>

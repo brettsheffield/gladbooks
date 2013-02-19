@@ -25,13 +25,6 @@ var g_resourcedefaultsurl = '/defaults/';
 var g_username = 'betty'; /* temp */
 var g_password = 'ie5a8P40';
 var g_loggedin = false;
-var g_accttype = {
-	"a":"asset",
-	"l":"liability",
-	"c":"capital",
-	"r":"revenue",
-	"e":"expenditure"
-}
 var g_max_ledgers_per_journal=3;
 var g_frmLedger;
 var g_tabid = 0;
@@ -372,6 +365,9 @@ function clickMenu(event) {
 	else if ($(this).attr("href") == '#chartadd') {
 		showChartAddForm();
 	}
+	else if ($(this).attr("href") == '#rpt_balancesheet') {
+		showBalanceSheet();
+	}
 	else if ($(this).attr("href") == '#help') {
 		addTab("Help", "<h2>Help</h2>", true);
 	}
@@ -381,6 +377,19 @@ function clickMenu(event) {
 	else {
 		addTab("Not Implemented", "<h2>Feature Not Available Yet</h2>", true);
 	}
+}
+
+function showBalanceSheet() {
+	$.ajax({
+		url: '/test/reports/balancesheet/',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) {
+			displayResultsGeneric(xml, "Balance Sheet");
+		},
+		error: function(xml) {
+			displayResultsGeneric(xml, "Balance Sheet");
+		}
+	});
 }
 
 /* display XML results as a sortable table */
@@ -448,10 +457,10 @@ function populateAccountsDDowns(xml, tab) {
 		$("<option />").val(0).text('<select account>')
 	);
 	$(xml).find('row').each(function() {
-		var accountid = $(this).find('id').text();
+		var accountid = $(this).find('nominalcode').text();
 		var accounttype = $(this).find('type').text();
 		var accountdesc = accountid + " - " +
-		$(this).find('description').text() +" ("+ g_accttype[accounttype] +")";
+		$(this).find('account').text();
 
 		$('select.account:not(.populated)').append(
 			$("<option />").val(accountid).text(accountdesc)
@@ -558,6 +567,8 @@ function validateJournalEntry(form) {
 	var amount;
 	var debits = 0;
 	var credits = 0;
+	var debitxml = '';
+	var creditxml = '';
 
 	$(form).find('p.journalstatus').text("");
 	$(form).find('fieldset').children().each(function() {
@@ -584,18 +595,22 @@ function validateJournalEntry(form) {
 		else if ($(this).hasClass('amount')) {
 			amount = $(this).val();
 			if ((amount > 0) && (account > 0)) {
-				xml += '<' + type + ' account="' + account + '" amount="'
-					+ amount + '"/>'
 				if (type == 'debit') {
 					debits += Number(amount);
+					debitxml += '<' + type + ' account="' + account
+						+ '" amount="' + amount + '"/>'
 				}
 				else if (type == 'credit') {
 					credits += Number(amount);
+					creditxml += '<' + type + ' account="' + account
+						+ '" amount="' + amount + '"/>'
 				}
 			}
 		}
 	});
 	if (xml) {
+		xml += debitxml;
+		xml += creditxml;
 		xml += '</journal></data></request>';
 	}
 
@@ -710,8 +725,8 @@ function submitChartAdd(event, form) {
         data: xml,
         contentType: 'text/xml',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
-        //success: function(xml) { submitJournalEntrySuccess(xml); },
-        //error: function(xml) { submitJournalEntryError(xml); },
+        success: function(xml) { hideSpinner(); },
+        error: function(xml) { hideSpinner(); },
     });
 }
 

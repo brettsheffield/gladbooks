@@ -39,7 +39,7 @@ test("create account (asset)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/accounts/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="1" description="Test ASSET account creation"/></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="1000" description="Test ASSET account creation"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -58,7 +58,7 @@ test("create account (liability)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/accounts/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="2" description="Test LIABILITY account creation"/></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="2000" description="Test LIABILITY account creation"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -77,7 +77,7 @@ test("create account (capital)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/accounts/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="3" description="Test CAPITAL account creation"/></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="3000" description="Test CAPITAL account creation"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -96,7 +96,7 @@ test("create account (revenue)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/accounts/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="4" description="Test REVENUE account creation"/></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="4000" description="Test REVENUE account creation"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -115,7 +115,7 @@ test("create account (expenditure)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/accounts/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="5" description="Test EXPENDITURE account creation"/></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="5000" description="Test EXPENDITURE account creation"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -134,7 +134,7 @@ test("create account (invalid type) - MUST be rejected", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/accounts/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="999" description="Test INVALID account creation is rejected"/></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="666" description="Test INVALID account creation is rejected"/></data></request>';
 
 	stop();
 	$.ajax({
