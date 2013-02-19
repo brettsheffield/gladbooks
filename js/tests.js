@@ -39,7 +39,7 @@ test("create account (asset)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/accounts/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="a" description="Test ASSET account creation"/></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="1" description="Test ASSET account creation"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -58,7 +58,7 @@ test("create account (liability)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/accounts/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="l" description="Test LIABILITY account creation"/></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="2" description="Test LIABILITY account creation"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -77,7 +77,7 @@ test("create account (capital)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/accounts/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="c" description="Test CAPITAL account creation"/></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="3" description="Test CAPITAL account creation"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -96,7 +96,7 @@ test("create account (revenue)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/accounts/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="r" description="Test REVENUE account creation"/></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="4" description="Test REVENUE account creation"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -115,7 +115,7 @@ test("create account (expenditure)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/accounts/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="e" description="Test EXPENDITURE account creation"/></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="5" description="Test EXPENDITURE account creation"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -134,7 +134,7 @@ test("create account (invalid type) - MUST be rejected", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/accounts/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="z" description="Test INVALID account creation is rejected"/></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="999" description="Test INVALID account creation is rejected"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -275,7 +275,7 @@ test("journal entry - valid xml", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/journals/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?> <request><data><journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="1001" amount="120.00" /> <credit account="2001" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?> <request><data><journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="1100" amount="120.00" /> <credit account="2202" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
 
 	stop();
 	$.ajax({
@@ -294,7 +294,7 @@ test("journal entry - invalid credentials MUST be rejected", function() {
 	g_username='betty';
 	g_password='invalid_password';
 	var url = "/test/journals/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?> <request><data><journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="1001" amount="120.00" /> <credit account="2001" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?> <request><data><journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="1100" amount="120.00" /> <credit account="2202" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
 
 	stop();
 	$.ajax({
@@ -314,7 +314,7 @@ test("journal entry - xml does not match schema", function() {
 	g_password='ie5a8P40';
 	var url = "/test/journals/";
 	/* xml does not have a <debit> tag */
-	var xml = '<?xml version="1.0" encoding="UTF-8"?> <request><data><journal transactdate="2013-01-01" description="My First Journal Entry"> <credit account="1001" amount="120.00" /> <credit account="2001" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?> <request><data><journal transactdate="2013-01-01" description="My First Journal Entry"> <credit account="1100" amount="120.00" /> <credit account="2202" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
 
 	stop();
 	$.ajax({
@@ -334,7 +334,7 @@ test("journal entry - invalid account number MUST be rejected", function() {
 	g_password='ie5a8P40';
 	var url = "/test/journals/";
 	/* account 999 does not exist */
-	var xml = '<?xml version="1.0" encoding="UTF-8"?> <request><data><journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="999" amount="120.00" /> <credit account="2001" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?> <request><data><journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="999" amount="120.00" /> <credit account="2202" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
 
 	stop();
 	$.ajax({
@@ -354,7 +354,7 @@ test("journal entry - unbalanced journal MUST be rejected", function() {
 	g_password='ie5a8P40';
 	var url = "/test/journals/";
 	/* amount of last credit is out by a penny */
-	var xml = '<?xml version="1.0" encoding="UTF-8"?> <request><data><journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="1001" amount="120.00" /> <credit account="2001" amount="20.00" /> <credit account="4000" amount="100.01" /> </journal></data></request>';
+	var xml = '<?xml version="1.0" encoding="UTF-8"?> <request><data><journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="1100" amount="120.00" /> <credit account="2202" amount="20.00" /> <credit account="4000" amount="100.01" /> </journal></data></request>';
 
 	stop();
 	$.ajax({

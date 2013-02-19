@@ -11,7 +11,7 @@
 
 	<xsl:template match="account">
 		<xsl:text>BEGIN;</xsl:text>
-		<xsl:text>INSERT INTO account (type, description, authuser, clientip) VALUES ('</xsl:text>
+		<xsl:text>INSERT INTO account (accounttype, description, authuser, clientip) VALUES ('</xsl:text>
 		<xsl:value-of select="@type"/>
 		<xsl:text>','</xsl:text>
 		<xsl:value-of select="@description"/>
