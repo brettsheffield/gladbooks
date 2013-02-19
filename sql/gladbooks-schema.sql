@@ -1,6 +1,9 @@
 CREATE TABLE accounttype (
-	id		char(1) PRIMARY KEY,
-	name		TEXT UNIQUE,
+	id		SERIAL PRIMARY KEY,
+	name		TEXT UNIQUE NOT NULL,
+	range_min	INT4 NOT NULL,
+	range_max	INT4 NOT NULL,
+	next_id		INT4 NOT NULL DEFAULT 0,
 	entered		timestamp with time zone default now()
 );
 -- we don't delete account types
@@ -8,18 +11,78 @@ CREATE RULE nodel_accounttype AS ON DELETE TO accounttype DO NOTHING;
 
 CREATE TABLE account (
 	id		INT4 PRIMARY KEY,
-	type		char(1) references accounttype(id) ON DELETE RESTRICT,
+	accounttype	INT4 references accounttype(id) ON DELETE RESTRICT,
 	description	TEXT,
 	entered		timestamp with time zone default now(),
 	authuser	TEXT,
 	clientip	TEXT
 );
--- separate sequences for each account type --
-CREATE SEQUENCE account_id_a_seq MINVALUE 1000 MAXVALUE 1999 OWNED BY account.id;
-CREATE SEQUENCE account_id_l_seq MINVALUE 2000 MAXVALUE 2999 OWNED BY account.id;
-CREATE SEQUENCE account_id_c_seq MINVALUE 3000 MAXVALUE 3999 OWNED BY account.id;
-CREATE SEQUENCE account_id_r_seq MINVALUE 4000 MAXVALUE 4999 OWNED BY account.id;
-CREATE SEQUENCE account_id_e_seq MINVALUE 5000 MAXVALUE 5999 OWNED BY account.id;
+
+-- contiguous sequences for account nominal codes - we don't want gaps
+-- also need to skip over preassigned codes
+CREATE OR REPLACE FUNCTION accountid_next(accounttypeid INT4)
+RETURNS INT4 AS
+$$
+DECLARE
+        next_pk INT4;
+        used_pk INT4;
+	min_pk INT4;
+	max_pk INT4;
+BEGIN
+	LOOP
+		-- grab the next code and ranges to check against
+		SELECT INTO next_pk, min_pk,    max_pk
+			    next_id, range_min, range_max
+			FROM accounttype WHERE id = accounttypeid;
+		IF NOT FOUND THEN
+			RAISE EXCEPTION 'invalid account type';
+		END IF;
+		IF next_pk >= max_pk THEN
+			-- we've run out of codes for this type
+			RAISE EXCEPTION 'unable to assign nominal code % %', next_pk, max_pk;
+		END IF;
+		-- increment counter in accounttype table
+		UPDATE accounttype SET next_id = next_id + 1
+			WHERE id = accounttypeid;
+		-- check if this code has been manually assigned
+		SELECT INTO used_pk id FROM account WHERE id = next_pk;
+		IF NOT FOUND THEN
+			-- we've found a code, return it
+			RETURN next_pk;
+		END IF;
+	END LOOP;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION set_account_id()
+RETURNS TRIGGER AS
+$$
+DECLARE
+	code_min	INT4;
+	code_max	INT4;
+BEGIN
+	IF NEW.id IS NOT NULL THEN
+		-- account code was supplied, check it is within valid range
+		SELECT INTO code_min, code_max range_min, range_max
+			FROM accounttype
+			WHERE id = NEW.accounttype;
+		IF NOT FOUND THEN
+			RAISE EXCEPTION 'Invalid account type %',
+				NEW.accounttype;
+		END IF;
+		IF (NEW.id < code_min) OR (NEW.id > code_max) THEN
+			RAISE EXCEPTION 'Nominal code % is outside valid range (% - %) for account type %', NEW.id, code_min, code_max, NEW.accounttype;
+		END IF;
+	ELSE
+		-- no account code supplied, get next available
+	        NEW.id = accountid_next(NEW.accounttype);
+	END IF;
+        RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER set_account_id BEFORE INSERT ON account
+FOR EACH ROW EXECUTE PROCEDURE set_account_id();
 
 CREATE TABLE department (
 	id              SERIAL PRIMARY KEY,
@@ -942,40 +1005,17 @@ CREATE CONSTRAINT TRIGGER trig_check_transaction_balance
 	EXECUTE PROCEDURE check_transaction_balance()
 ;
 
--- set account id in the correct range based on account type
-CREATE OR REPLACE FUNCTION set_account_id()
-RETURNS trigger AS $get_account_id$
-	BEGIN
-		IF NEW.type = 'a' THEN
-			SELECT nextval('account_id_a_seq') INTO NEW.id;
-		ELSIF NEW.type = 'l' THEN
-			SELECT nextval('account_id_l_seq') INTO NEW.id;
-		ELSIF NEW.type = 'c' THEN
-			SELECT nextval('account_id_c_seq') INTO NEW.id;
-		ELSIF NEW.type = 'r' THEN
-			SELECT nextval('account_id_r_seq') INTO NEW.id;
-		ELSIF NEW.type = 'e' THEN
-			SELECT nextval('account_id_e_seq') INTO NEW.id;
-		ELSE
-			RAISE EXCEPTION 'Invalid Account Type "%"', NEW.type;
-		END IF;
-		RETURN NEW;
-	END;
-$get_account_id$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trig_set_account_id
-	BEFORE INSERT
-	ON account
-	FOR EACH ROW
-	EXECUTE PROCEDURE set_account_id()
-;
-
 -- Default data --
-INSERT INTO accounttype (id, name) VALUES ('a', 'assets');
-INSERT INTO accounttype (id, name) VALUES ('l', 'liabilities');
-INSERT INTO accounttype (id, name) VALUES ('c', 'capital');
-INSERT INTO accounttype (id, name) VALUES ('r', 'revenue');
-INSERT INTO accounttype (id, name) VALUES ('e', 'expenditure');
+INSERT INTO accounttype (name, range_min, range_max, next_id)
+	VALUES ('assets', '1000', '1999', 1000);
+INSERT INTO accounttype (name, range_min, range_max, next_id)
+	VALUES ('liabilities', '2000', '2999', 2000);
+INSERT INTO accounttype (name, range_min, range_max, next_id)
+	VALUES ('capital', '3000', '3999', 3000);
+INSERT INTO accounttype (name, range_min, range_max, next_id)
+	VALUES ('revenue', '4000', '4999', 4000);
+INSERT INTO accounttype (name, range_min, range_max, next_id)
+	VALUES ('expenditure', '5000', '5999', 5000);
 
 INSERT INTO department (id, name) VALUES (0, 'default');
 INSERT INTO division (id, name) VALUES (0, 'default');
@@ -989,3 +1029,49 @@ INSERT INTO cycle (cyclename,days,months,years) VALUES ('quarterly',0,3,0);
 INSERT INTO cycle (cyclename,days,months,years) VALUES ('half-yearly',0,6,0);
 INSERT INTO cycle (cyclename,days,months,years) VALUES ('annual',0,0,1);
 
+-- Reserved nominal codes
+INSERT INTO account (id, accounttype, description)
+	VALUES ('1100', '1', 'Debtors Control Account');
+INSERT INTO account (id, accounttype, description)
+	VALUES ('2100', '2', 'Creditors Control Account');
+INSERT INTO account (id, accounttype, description)
+	VALUES ('2202', '2', 'VAT Liability Account');
+INSERT INTO account (id, accounttype, description)
+	VALUES ('2210', '2', 'PAYE Liability Account');
+INSERT INTO account (id, accounttype, description)
+	VALUES ('2211', '2', 'NI Liability Account');
+INSERT INTO account (id, accounttype, description)
+	VALUES ('2220', '2', 'Wages Liability Account');
+INSERT INTO account (id, accounttype, description)
+	VALUES ('2230', '2', 'Pension Liability Account');
+INSERT INTO account (id, accounttype, description)
+	VALUES ('3200', '3', 'Retained Earnings Account');
+
+-- Standard Rate VAT
+INSERT INTO tax VALUES (DEFAULT);
+INSERT INTO taxdetail (tax, account, name) VALUES (currval(pg_get_serial_sequence('tax', 'id')), '2202', 'Standard Rate VAT');
+
+INSERT INTO taxrate VALUES (DEFAULT);
+INSERT INTO taxratedetail (taxrate, tax, rate, valid_from, valid_to) VALUES (currval(pg_get_serial_sequence('taxrate', 'id')),currval(pg_get_serial_sequence('tax', 'id')),'17.5', NULL, '2008-12-31');
+
+INSERT INTO taxrate VALUES (DEFAULT);
+INSERT INTO taxratedetail (taxrate, tax, rate, valid_from, valid_to) VALUES (currval(pg_get_serial_sequence('taxrate', 'id')),currval(pg_get_serial_sequence('tax', 'id')),'15.0', '2009-01-01', '2009-12-31');
+
+INSERT INTO taxrate VALUES (DEFAULT);
+INSERT INTO taxratedetail (taxrate, tax, rate, valid_from, valid_to) VALUES (currval(pg_get_serial_sequence('taxrate', 'id')),currval(pg_get_serial_sequence('tax', 'id')),'17.5', '2010-01-01', '2010-12-31');
+
+INSERT INTO taxrate VALUES (DEFAULT);
+INSERT INTO taxratedetail (taxrate, tax, rate, valid_from, valid_to) VALUES (currval(pg_get_serial_sequence('taxrate', 'id')),currval(pg_get_serial_sequence('tax', 'id')),'20.0', '2011-01-01', NULL);
+
+
+-- Reduced Rate VAT
+INSERT INTO tax VALUES (DEFAULT);
+INSERT INTO taxdetail (tax, account, name) VALUES (currval(pg_get_serial_sequence('tax', 'id')), '2202', 'Reduced Rate VAT');
+INSERT INTO taxrate VALUES (DEFAULT);
+INSERT INTO taxratedetail (taxrate, tax, rate, valid_from, valid_to) VALUES (currval(pg_get_serial_sequence('taxrate', 'id')),currval(pg_get_serial_sequence('tax', 'id')),'5.0', NULL, NULL);
+
+-- Zero Rate VAT
+INSERT INTO tax VALUES (DEFAULT);
+INSERT INTO taxdetail (tax, account, name) VALUES (currval(pg_get_serial_sequence('tax', 'id')), '2202', 'Zero Rate VAT');
+INSERT INTO taxrate VALUES (DEFAULT);
+INSERT INTO taxratedetail (taxrate, tax, rate, valid_from, valid_to) VALUES (currval(pg_get_serial_sequence('taxrate', 'id')),currval(pg_get_serial_sequence('tax', 'id')),'0.0', NULL, NULL);

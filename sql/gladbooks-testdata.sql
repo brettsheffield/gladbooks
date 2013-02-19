@@ -1,14 +1,14 @@
 BEGIN;
-INSERT INTO account (type, description) VALUES ('a', 'Bank Account 1');
-INSERT INTO account (type, description) VALUES ('a', 'Bank Account 2');
-INSERT INTO account (type, description) VALUES ('a', 'Accounts Receivable');
-INSERT INTO account (type, description) VALUES ('l', 'Accounts Payable');
-INSERT INTO account (type, description) VALUES ('l', 'VAT');
-INSERT INTO account (type, description) VALUES ('c', 'Owner''s Equity');
-INSERT INTO account (type, description) VALUES ('r', 'Product 1');
-INSERT INTO account (type, description) VALUES ('r', 'Product 2');
-INSERT INTO account (type, description) VALUES ('e', 'Materials');
-INSERT INTO account (type, description) VALUES ('e', 'Utilities');
+INSERT INTO account (accounttype, description) VALUES ('1', 'Bank Account 1');
+INSERT INTO account (accounttype, description) VALUES ('1', 'Bank Account 2');
+INSERT INTO account (accounttype, description) VALUES ('1', 'Accounts Receivable');
+INSERT INTO account (accounttype, description) VALUES ('2', 'Accounts Payable');
+INSERT INTO account (accounttype, description) VALUES ('3', 'Owner''s Equity');
+INSERT INTO account (accounttype, description) VALUES ('4', 'Product 1');
+INSERT INTO account (accounttype, description) VALUES ('4', 'Product 2');
+INSERT INTO account (accounttype, description) VALUES ('5', 'Materials');
+INSERT INTO account (accounttype, description) VALUES ('5', 'Utilities');
+INSERT INTO account (id, accounttype, description) VALUES (45, '2', 'test');
 
 INSERT INTO organisation VALUES (DEFAULT);
 INSERT INTO organisationdetail (organisation, name)
