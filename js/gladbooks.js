@@ -401,7 +401,7 @@ function displayResultsGeneric(xml, title, sorted) {
 		addTab(title, "<p>Nothing found</p>", true);
 		return;
 	}
-	$t = "<table class=\"datatable\">";
+	$t = '<table class="datatable">';
 	$t += "<thead>";
 	$t += "<tr>";
 	var row = 0;
@@ -409,19 +409,29 @@ function displayResultsGeneric(xml, title, sorted) {
 		row += 1;
 		if (row == 1) {
 			$(this).children().each(function() {
-				$t += "<th>" + this.tagName + "</th>";
+				$t += '<th class="xml-' + this.tagName + '">';
+				$t += this.tagName + '  </th>';
 			});
 			$t += "</tr>";
 			$t += "</thead>";
 			$t += "<tbody>";
 		}
 		if (row % 2 == 0) {
-			$t += "<tr class=\"even\">";
+			$t += '<tr class="even">';
 		} else {
-			$t += "<tr class=\"odd\">";
+			$t += '<tr class="odd">';
 		}
 		$(this).children().each(function() {
-			$t += "<td>" + $(this).text() + "</td>";
+			$t += '<td class="xml-' + this.tagName + '">' + $(this).text()
+			/* if this is a numeric value, and positive, add trailing space */
+			if ((this.tagName == 'debit') || (this.tagName == 'credit') 
+			 || (this.tagName == 'total'))
+			{
+				if ($(this).text().substr(-1) != ')') {
+					$t += ' ';
+				}
+			}
+			$t += '</td>';
 		});
 		$t += "</tr>";
 	});

@@ -377,7 +377,8 @@ th {
   color: white;
   font-family: verdana,helvetica,arial,sans-serif;
   font-weight: bold;
-  text-align: left; }
+  text-align: left;
+  text-transform: capitalize; }
 
 td > a {
   font-family: Courier, Monospace;
@@ -392,3 +393,10 @@ td {
 
 .odd {
   background-color: white; }
+
+.xml-debit,
+.xml-credit,
+.xml-total {
+  text-align: right;
+  white-space: pre;
+  width: 10em; }

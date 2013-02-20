@@ -1018,6 +1018,24 @@ CREATE CONSTRAINT TRIGGER trig_check_transaction_balance
 	EXECUTE PROCEDURE check_transaction_balance()
 ;
 
+CREATE OR REPLACE FUNCTION format_accounting(amount NUMERIC)
+RETURNS TEXT AS
+$$
+DECLARE
+	pretty	TEXT;
+BEGIN
+	SELECT INTO pretty to_char(amount, '9,999,999,990.00PR');
+	-- Angle brackets?  Seriously?  Why?
+	pretty = replace(pretty, '<', '(');
+	pretty = replace(pretty, '>', ')');
+	IF amount > 0 THEN
+		-- add trailing space for positive numbers
+		pretty = concat(pretty, ' ');
+	END IF;
+	RETURN pretty;
+END;
+$$ LANGUAGE 'plpgsql';
+
 -- views
 
 CREATE VIEW accountlist AS
@@ -1034,9 +1052,9 @@ CREATE OR REPLACE VIEW balancesheet AS
 	SELECT
 		account,
 		description,
-		sum(debit) AS debit,
-		sum(credit) AS credit,
-		sum(coalesce(debit,0)) - sum(coalesce(credit,0)) AS total
+		format_accounting(sum(debit)) AS debit,
+		format_accounting(sum(credit)) AS credit,
+		format_accounting(sum(coalesce(debit,0)) - sum(coalesce(credit,0))) AS total
 	FROM ledger l
 	INNER JOIN account a ON a.id=l.account
 	GROUP BY account, description, division, department
@@ -1044,9 +1062,9 @@ UNION
 	SELECT
 		NULL as account,
 		text 'TOTAL' AS description,
-		sum(debit) AS debit,
-		sum(credit) AS credit,
-		sum(coalesce(debit,0)) - sum(coalesce(credit,0)) AS total
+		format_accounting(sum(debit)) AS debit,
+		format_accounting(sum(credit)) AS credit,
+		format_accounting(sum(coalesce(debit,0)) - sum(coalesce(credit,0))) AS total
 	FROM ledger l
 	ORDER BY account ASC
 ;
