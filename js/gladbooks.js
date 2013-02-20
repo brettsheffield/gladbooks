@@ -22,8 +22,10 @@
 
 var g_authurl = '/auth/';
 var g_resourcedefaultsurl = '/defaults/';
-var g_username = 'betty'; /* temp */
-var g_password = 'ie5a8P40';
+var g_username = '';
+var g_password = '';
+var g_username = 'betty';    /* temp */
+var g_password = 'ie5a8P40'; /* temp */
 var g_loggedin = false;
 var g_max_ledgers_per_journal=3;
 var g_frmLedger;
@@ -393,7 +395,7 @@ function showBalanceSheet() {
 }
 
 /* display XML results as a sortable table */
-function displayResultsGeneric(xml, title) {
+function displayResultsGeneric(xml, title, sorted) {
 	if ($(xml).find('row').length == 0) {
 		hideSpinner();
 		addTab(title, "<p>Nothing found</p>", true);
@@ -432,10 +434,12 @@ function displayResultsGeneric(xml, title) {
 	addTab(title, $($t), true);
 
 	/* make our table pretty and sortable */
-	$(".datatable").tablesorter({
-		sortList: [[0,0], [1,0]], 
-		widgets: ['zebra'] 
-	});
+	if (sorted) {
+		$(".datatable").tablesorter({
+			sortList: [[0,0], [1,0]], 
+			widgets: ['zebra'] 
+		});
+	}
 
 	hideSpinner();
 }
@@ -489,7 +493,7 @@ function showChart() {
 		url: '/test/accounts/',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
-			displayResultsGeneric(xml, "Chart of Accounts");
+			displayResultsGeneric(xml, "Chart of Accounts", true);
 		},
 		error: function(xml) {
 			displayResultsGeneric(xml, "Chart of Accounts");
