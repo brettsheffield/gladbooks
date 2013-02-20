@@ -1069,6 +1069,63 @@ UNION
 	ORDER BY account ASC
 ;
 
+CREATE OR REPLACE VIEW profitandloss AS
+	SELECT
+		0 as lineorder,
+		account,
+		description,
+		format_accounting(
+			coalesce(sum(credit),0) - coalesce(sum(debit),0)) 
+		AS amount
+	FROM ledger l
+	INNER JOIN account a ON a.id=l.account
+	WHERE account BETWEEN 4000 AND 4999
+	GROUP BY account, description
+UNION
+	SELECT
+		1 as lineorder,
+		NULL as account,
+		text 'Total Revenue' as description,
+		format_accounting(
+			coalesce(sum(credit),0) - coalesce(sum(debit),0)) 
+		AS amount
+	FROM ledger
+	WHERE account BETWEEN 4000 AND 4999
+UNION
+	SELECT
+		2 as lineorder,
+		account,
+		description,
+		format_accounting(
+			coalesce(sum(debit),0) - coalesce(sum(credit),0)) 
+		AS amount
+	FROM ledger l
+	INNER JOIN account a ON a.id=l.account
+	WHERE account BETWEEN 5000 AND 8999
+	GROUP BY account, description
+UNION
+	SELECT
+		3 as lineorder,
+		NULL as account,
+		text 'Total Expenditure' as description,
+		format_accounting(
+			coalesce(sum(debit),0) - coalesce(sum(credit),0)) 
+		AS amount
+	FROM ledger
+	WHERE account BETWEEN 5000 AND 8999
+UNION
+	SELECT
+		4 as lineorder,
+		NULL as account,
+		text 'Total Profit / (Loss)' as description,
+		format_accounting(
+			coalesce(sum(credit),0) - coalesce(sum(debit),0)) 
+		AS amount
+	FROM ledger
+	WHERE account BETWEEN 4000 AND 8999
+ORDER BY lineorder, account ASC
+;
+
 CREATE VIEW organisationlist AS
 SELECT
 	organisation as id,

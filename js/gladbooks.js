@@ -370,6 +370,9 @@ function clickMenu(event) {
 	else if ($(this).attr("href") == '#rpt_balancesheet') {
 		showBalanceSheet();
 	}
+	else if ($(this).attr("href") == '#rpt_profitandloss') {
+		showProfitAndLoss();
+	}
 	else if ($(this).attr("href") == '#help') {
 		addTab("Help", "<h2>Help</h2>", true);
 	}
@@ -426,7 +429,7 @@ function displayResultsGeneric(xml, title, sorted) {
 			$t += '<td class="xml-' + this.tagName + '">' + $(this).text()
 			/* if this is a numeric value, and positive, add trailing space */
 			if ((this.tagName == 'debit') || (this.tagName == 'credit') 
-			 || (this.tagName == 'total'))
+			 || (this.tagName == 'total') || (this.tagName == 'amount'))
 			{
 				if ($(this).text().substr(-1) != ')') {
 					$t += ' ';
@@ -509,6 +512,21 @@ function showChart() {
 		},
 		error: function(xml) {
 			displayResultsGeneric(xml, "Chart of Accounts");
+		}
+	});
+}
+
+/* display P&L report */
+function showProfitAndLoss(startDate, endDate) {
+	showSpinner();
+	$.ajax({
+		url: '/test/reports/profitandloss/',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) {
+			displayResultsGeneric(xml, "Profit and Loss");
+		},
+		error: function(xml) {
+			displayResultsGeneric(xml, "Profit and Loss");
 		}
 	});
 }

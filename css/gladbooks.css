@@ -396,6 +396,7 @@ td {
 
 .xml-debit,
 .xml-credit,
+.xml-amount,
 .xml-total {
   text-align: right;
   white-space: pre;
