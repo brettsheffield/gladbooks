@@ -1018,6 +1018,53 @@ CREATE CONSTRAINT TRIGGER trig_check_transaction_balance
 	EXECUTE PROCEDURE check_transaction_balance()
 ;
 
+-- views
+
+CREATE VIEW accountlist AS
+SELECT
+	a.id as nominalcode,
+	a.description as account,
+	at.name as type
+FROM account a
+INNER JOIN accounttype at ON at.id = a.accounttype
+ORDER by a.id ASC
+;
+
+CREATE OR REPLACE VIEW balancesheet AS
+	SELECT
+		account,
+		description,
+		sum(debit) AS debit,
+		sum(credit) AS credit,
+		sum(coalesce(debit,0)) - sum(coalesce(credit,0)) AS total
+	FROM ledger l
+	INNER JOIN account a ON a.id=l.account
+	GROUP BY account, description, division, department
+UNION
+	SELECT
+		NULL as account,
+		text 'TOTAL' AS description,
+		sum(debit) AS debit,
+		sum(credit) AS credit,
+		sum(coalesce(debit,0)) - sum(coalesce(credit,0)) AS total
+	FROM ledger l
+	ORDER BY account ASC
+;
+
+CREATE VIEW organisationlist AS
+SELECT
+	organisation as id,
+	name
+FROM organisationdetail
+WHERE id IN (
+	SELECT MAX(id)
+	FROM organisationdetail
+	GROUP BY organisation
+)
+ORDER BY organisation ASC
+;
+
+
 -- Default data --
 INSERT INTO accounttype (id, name, range_min, range_max, next_id)
 	VALUES ('0000', 'Fixed Assets', '0000', '0999', '0000');
