@@ -382,6 +382,7 @@ function clickMenu(event) {
 }
 
 function showBalanceSheet() {
+	showSpinner();
 	$.ajax({
 		url: '/test/reports/balancesheet/',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
@@ -499,6 +500,7 @@ function populateDebitCreditDDowns() {
 
 /* fetch chart of accounts */
 function showChart() {
+	showSpinner();
 	$.ajax({
 		url: '/test/accounts/',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },

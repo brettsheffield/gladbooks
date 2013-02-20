@@ -1,0 +1,11 @@
+# siege testing gladd/gladbooks can be done using something like
+siege -c400 -t60s -i -f test.urls
+~                                                                              
+~                                                                              
+~                                                                              
+~                                                                              
+~                                                                              
+~                                                                              
+~                                                                              
+~                                                                              
+~                                                            
