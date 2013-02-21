@@ -1132,6 +1132,19 @@ ORDER BY lineorder, account ASC
 ) a
 ;
 
+CREATE VIEW contactlist AS
+SELECT
+	contact as id,
+	name
+FROM contactdetail
+WHERE id IN (
+	SELECT MAX(id)
+	FROM contactdetail
+	GROUP BY contact
+)
+ORDER BY contact ASC
+;
+
 CREATE VIEW organisationlist AS
 SELECT
 	organisation as id,

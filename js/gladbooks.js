@@ -367,6 +367,12 @@ function clickMenu(event) {
 	else if ($(this).attr("href") == '#chartadd') {
 		showChartAddForm();
 	}
+	else if ($(this).attr("href") == '#contacts') {
+		showContacts();
+	}
+	else if ($(this).attr("href") == '#contact.create') {
+		getForm('contact', 'create', 'Add New Contact');
+	}
 	else if ($(this).attr("href") == '#organisations') {
 		showOrganisations();
 	}
@@ -401,6 +407,20 @@ function showBalanceSheet() {
 		},
 		error: function(xml) {
 			displayResultsGeneric(xml, "Balance Sheet");
+		}
+	});
+}
+
+function showContacts() {
+	showSpinner();
+	$.ajax({
+		url: '/test/contacts/',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) {
+			displayResultsGeneric(xml, "Contacts");
+		},
+		error: function(xml) {
+			displayResultsGeneric(xml, "Contacts");
 		}
 	});
 }
