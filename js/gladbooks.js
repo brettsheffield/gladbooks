@@ -405,6 +405,20 @@ function showBalanceSheet() {
 	});
 }
 
+function showOrganisations() {
+	showSpinner();
+	$.ajax({
+		url: '/test/organisations/',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) {
+			displayResultsGeneric(xml, "Organisations");
+		},
+		error: function(xml) {
+			displayResultsGeneric(xml, "Organisations");
+		}
+	});
+}
+
 function getForm(object, action, title) {
 	$.ajax({
 		url: '/html/forms/' + object + '/' + action + '.html',
