@@ -1070,6 +1070,11 @@ UNION
 ;
 
 CREATE OR REPLACE VIEW profitandloss AS
+SELECT
+	account,
+	description,
+	amount
+FROM (
 	SELECT
 		0 as lineorder,
 		account,
@@ -1124,6 +1129,7 @@ UNION
 	FROM ledger
 	WHERE account BETWEEN 4000 AND 8999
 ORDER BY lineorder, account ASC
+) a
 ;
 
 CREATE VIEW organisationlist AS
