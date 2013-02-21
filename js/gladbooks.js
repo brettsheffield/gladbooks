@@ -367,6 +367,9 @@ function clickMenu(event) {
 	else if ($(this).attr("href") == '#chartadd') {
 		showChartAddForm();
 	}
+	else if ($(this).attr("href") == '#organisations') {
+		showOrganisations();
+	}
 	else if ($(this).attr("href") == '#rpt_balancesheet') {
 		showBalanceSheet();
 	}
@@ -396,6 +399,12 @@ function showBalanceSheet() {
 			displayResultsGeneric(xml, "Balance Sheet");
 		}
 	});
+}
+
+function showOrganisations() {
+	var title = 'Organisations';
+	var html = '<h2>' + title + '</h2>';
+	addTab(title, html, true);
 }
 
 /* display XML results as a sortable table */
