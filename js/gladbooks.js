@@ -370,6 +370,9 @@ function clickMenu(event) {
 	else if ($(this).attr("href") == '#organisations') {
 		showOrganisations();
 	}
+	else if ($(this).attr("href") == '#organisation.create') {
+		getForm('organisation', 'create', 'Add New Organisation');
+	}
 	else if ($(this).attr("href") == '#rpt_balancesheet') {
 		showBalanceSheet();
 	}
@@ -381,6 +384,7 @@ function clickMenu(event) {
 	}
 	else if ($(this).attr("href") == '#') {
 		// do nothing
+		console.log('Doing nothing, successfully');
 	}
 	else {
 		addTab("Not Implemented", "<h2>Feature Not Available Yet</h2>", true);
@@ -401,10 +405,65 @@ function showBalanceSheet() {
 	});
 }
 
-function showOrganisations() {
-	var title = 'Organisations';
-	var html = '<h2>' + title + '</h2>';
+function getForm(object, action, title) {
+	$.ajax({
+		url: '/html/forms/' + object + '/' + action + '.html',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(html) {
+			displayForm(object, action, title, html);
+		},
+		error: function(html) {
+			displayForm(object, action, title, html);
+		}
+	});
+}
+
+function displayForm(object, action, title, html) {
+	var content = '';
+	$(html).find('div.' + object + '.action').each(function() {
+		content += $(self).html();
+	});
 	addTab(title, html, true);
+	$('button.submit.formsubmit').on("click", function(event) {
+		event.preventDefault();
+		submitForm(object, action); 
+	});
+}
+
+/* build xml and submit form */
+function submitForm(object, action) {
+	var xml = '<request><data>';
+	var url = '';
+
+	console.log('Submitting form ' + object + ':' + action);
+
+	/* find out where to send this */
+	$('div.' + object + '.' + action).find('form').each(function() {
+		url = $(this).attr('action');
+	});
+
+	/* build xml request */
+	xml += '<' + object + '>';
+	$('div.' + object + '.' + action).find('input').each(function() {
+		xml += '<' + $(this).attr('name') + '>';
+		xml += $(this).val();
+		xml += '</' + $(this).attr('name') + '>';
+	});
+	xml += '</' + object + '>';
+	xml += '</data></request>';
+
+	showSpinner(); /* tell user to wait */
+
+	/* send request */
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: xml,
+        contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+        success: function(xml) { hideSpinner(); },
+        error: function(xml) { hideSpinner(); },
+    });
 }
 
 /* display XML results as a sortable table */
