@@ -350,20 +350,34 @@ button.submit:hover {
 }
 
 /* placeholder styling */
-/*
-:-moz-placeholder {
-	color: blue;
-	font-weight: bold;
-	letter-spacing: 4px;
-	opacity: .25;
+$placeholder-color: $color-dark;
+$placeholder-font-weight: bold;
+$placeholder-letter-spacing: 4px;
+$placeholder-opacity: .33;
+::-webkit-input-placeholder { /* WebKit browsers */
+	color:    $placeholder-color;
+	font-weight: $placeholder-font-weight;
+	letter-spacing: $placeholder-letter-spacing;
+	opacity: $placeholder-opacity;
 }
-::-webkit-input-placeholder {
-	color: blue;
-	font-weight: bold;
-	letter-spacing: 4px;
-	opacity: .25;
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+	color:    $placeholder-color;
+	font-weight: $placeholder-font-weight;
+	letter-spacing: $placeholder-letter-spacing;
+	opacity: $placeholder-opacity;
 }
-*/
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+	color:    $placeholder-color;
+	font-weight: $placeholder-font-weight;
+	letter-spacing: $placeholder-letter-spacing;
+	opacity: $placeholder-opacity;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+	color:    $placeholder-color;
+	font-weight: $placeholder-font-weight;
+	letter-spacing: $placeholder-letter-spacing;
+	opacity: $placeholder-opacity;
+}
 
 /* spinner */
 #loading-div-background {

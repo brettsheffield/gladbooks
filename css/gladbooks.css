@@ -303,20 +303,34 @@ button.submit:hover {
   cursor: pointer; }
 
 /* placeholder styling */
-/*
-:-moz-placeholder {
-	color: blue;
-	font-weight: bold;
-	letter-spacing: 4px;
-	opacity: .25;
-}
 ::-webkit-input-placeholder {
-	color: blue;
-	font-weight: bold;
-	letter-spacing: 4px;
-	opacity: .25;
-}
-*/
+  /* WebKit browsers */
+  color: #6e89a5;
+  font-weight: bold;
+  letter-spacing: 4px;
+  opacity: 0.33; }
+
+:-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: #6e89a5;
+  font-weight: bold;
+  letter-spacing: 4px;
+  opacity: 0.33; }
+
+::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: #6e89a5;
+  font-weight: bold;
+  letter-spacing: 4px;
+  opacity: 0.33; }
+
+:-ms-input-placeholder {
+  /* Internet Explorer 10+ */
+  color: #6e89a5;
+  font-weight: bold;
+  letter-spacing: 4px;
+  opacity: 0.33; }
+
 /* spinner */
 #loading-div-background {
   display: none;
