@@ -502,7 +502,7 @@ function submitForm(object, action) {
 
 /* display XML results as a sortable table */
 function displayResultsGeneric(xml, title, sorted) {
-	if ($(xml).find('row').length == 0) {
+	if ($(xml).find('resources').children().length == 0) {
 		hideSpinner();
 		addTab(title, "<p>Nothing found</p>", true);
 		return;
@@ -511,7 +511,7 @@ function displayResultsGeneric(xml, title, sorted) {
 	$t += "<thead>";
 	$t += "<tr>";
 	var row = 0;
-	$(xml).find('row').each(function() {
+	$(xml).find('resources').children().each(function() {
 		row += 1;
 		if (row == 1) {
 			$(this).children().each(function() {
@@ -523,9 +523,9 @@ function displayResultsGeneric(xml, title, sorted) {
 			$t += "<tbody>";
 		}
 		if (row % 2 == 0) {
-			$t += '<tr class="even">';
+			$t += '<tr class="even ' + this.tagName  + '">';
 		} else {
-			$t += '<tr class="odd">';
+			$t += '<tr class="odd ' + this.tagName  + '">';
 		}
 		$(this).children().each(function() {
 			$t += '<td class="xml-' + this.tagName + '">' + $(this).text()
@@ -550,6 +550,7 @@ function displayResultsGeneric(xml, title, sorted) {
 	addTab(title, $($t), true);
 
 	/* make our table pretty and sortable */
+	/* FIXME: this will affect *all* .datatable, not just this one */
 	if (sorted) {
 		$(".datatable").tablesorter({
 			sortList: [[0,0], [1,0]], 
