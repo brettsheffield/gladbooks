@@ -160,6 +160,9 @@ function activateTab(tabid) {
 
         /* mark selected tab as active */
         $(".tablet" + tabid).addClass("active");
+
+		/* set focus to control with class "focus" */
+        $(".tablet" + tabid).find(".focus").focus();
 }
 
 /* 
@@ -289,6 +292,7 @@ function displayLoginBox() {
 
 };
 
+/* Set Focus in Login Dialog Appropriately */
 function setFocusLoginBox() {
 	// if username is blank, set focus there, otherwise set it to password
 	if (g_username == '') {
@@ -298,6 +302,7 @@ function setFocusLoginBox() {
 	}
 };
 
+/* Hide Login Dialog */
 function hideLoginBox() {
 	$('#mask , .login-popup').fadeOut(300 , function() {
 		$('#mask').remove();  
@@ -312,6 +317,7 @@ function prepMenu() {
 	});
 }
 
+/* Fetch user specific menus in xml format */
 function getMenu() {
 	$.ajax({
 		url: g_authurl + g_username +  ".xml",
@@ -397,6 +403,7 @@ function clickMenu(event) {
 	}
 }
 
+/* Display Balance Sheet Report */
 function showBalanceSheet() {
 	showSpinner();
 	$.ajax({
@@ -411,6 +418,7 @@ function showBalanceSheet() {
 	});
 }
 
+/* Display Contact list */
 function showContacts() {
 	showSpinner();
 	$.ajax({
@@ -425,6 +433,7 @@ function showContacts() {
 	});
 }
 
+/* Display Organisation list */
 function showOrganisations() {
 	showSpinner();
 	$.ajax({
@@ -439,6 +448,22 @@ function showOrganisations() {
 	});
 }
 
+/* display P&L report */
+function showProfitAndLoss(startDate, endDate) {
+	showSpinner();
+	$.ajax({
+		url: '/test/reports/profitandloss/',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) {
+			displayResultsGeneric(xml, "Profit and Loss");
+		},
+		error: function(xml) {
+			displayResultsGeneric(xml, "Profit and Loss");
+		}
+	});
+}
+
+/* fetch html form from server to display */
 function getForm(object, action, title) {
 	$.ajax({
 		url: '/html/forms/' + object + '/' + action + '.html',
@@ -452,6 +477,7 @@ function getForm(object, action, title) {
 	});
 }
 
+/* display html form we've just fetched in new tab */
 function displayForm(object, action, title, html) {
 	var content = '';
 	$(html).find('div.' + object + '.action').each(function() {
@@ -619,21 +645,6 @@ function showChart() {
 	});
 }
 
-/* display P&L report */
-function showProfitAndLoss(startDate, endDate) {
-	showSpinner();
-	$.ajax({
-		url: '/test/reports/profitandloss/',
-		beforeSend: function (xhr) { setAuthHeader(xhr); },
-		success: function(xml) {
-			displayResultsGeneric(xml, "Profit and Loss");
-		},
-		error: function(xml) {
-			displayResultsGeneric(xml, "Profit and Loss");
-		}
-	});
-}
-
 /* set up journal form */
 function setupJournalForm(tab) {
 
@@ -687,6 +698,7 @@ function finishJournalForm(tab) {
 
 	/* display the form */
 	jf.fadeIn(300);
+	jf.find('p.journalstatus').fadeOut(5000);
 
 	/* set focus */
 	jf.find(".description").focus();
@@ -715,6 +727,7 @@ function validateJournalEntry(form) {
 				$(form).find('p.journalstatus').text(
 					"A description is required"
 				);
+				$(form).find('p.journalstatus').fadeIn(300);
 				xml = false;
 				return false;
 			}
@@ -754,6 +767,7 @@ function validateJournalEntry(form) {
 	/* quick check to ensure debits - credits = 0 */
 	if ((debits != credits) || (debits + credits == 0)) {
 		$(form).find('p.journalstatus').text("Transaction is unbalanced");
+		$(form).find('p.journalstatus').fadeIn(300);
 		xml = false;
 	}
 
@@ -782,6 +796,7 @@ function submitJournalEntry(event, form) {
 /* journal was posted successfully */
 function submitJournalEntrySuccess(xml) {
 	$('p.journalstatus').text("Journal posted");
+	$('p.journalstatus').fadeIn(300);
 	var activeForm = $('.tablet.active');
 	setupJournalForm(activeForm);
 	hideSpinner();
@@ -790,6 +805,7 @@ function submitJournalEntrySuccess(xml) {
 /* problem posting journal */
 function submitJournalEntryError(xml) {
 	$('p.journalstatus').text("Error posting journal");
+	$('p.journalstatus').fadeIn(300);
 	hideSpinner();
 }
 

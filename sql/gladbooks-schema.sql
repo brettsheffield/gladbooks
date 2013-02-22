@@ -1077,6 +1077,12 @@ SELECT
 FROM (
 	SELECT
 		0 as lineorder,
+		NULL as account,
+		text 'Revenue' as description,
+		NULL AS amount
+UNION
+	SELECT
+		1 as lineorder,
 		account,
 		description,
 		format_accounting(
@@ -1088,7 +1094,7 @@ FROM (
 	GROUP BY account, description
 UNION
 	SELECT
-		1 as lineorder,
+		2 as lineorder,
 		NULL as account,
 		text 'Total Revenue' as description,
 		format_accounting(
@@ -1098,7 +1104,13 @@ UNION
 	WHERE account BETWEEN 4000 AND 4999
 UNION
 	SELECT
-		2 as lineorder,
+		3 as lineorder,
+		NULL as account,
+		text 'Expenditure' as description,
+		NULL AS amount
+UNION
+	SELECT
+		4 as lineorder,
 		account,
 		description,
 		format_accounting(
@@ -1110,7 +1122,7 @@ UNION
 	GROUP BY account, description
 UNION
 	SELECT
-		3 as lineorder,
+		5 as lineorder,
 		NULL as account,
 		text 'Total Expenditure' as description,
 		format_accounting(
@@ -1120,7 +1132,7 @@ UNION
 	WHERE account BETWEEN 5000 AND 8999
 UNION
 	SELECT
-		4 as lineorder,
+		6 as lineorder,
 		NULL as account,
 		text 'Total Profit / (Loss)' as description,
 		format_accounting(
