@@ -425,7 +425,7 @@ function showContacts() {
 		url: '/test/contacts/',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
-			displayResultsGeneric(xml, "Contacts");
+			displayResultsGeneric(xml, "Contacts", true);
 		},
 		error: function(xml) {
 			displayResultsGeneric(xml, "Contacts");
@@ -440,7 +440,7 @@ function showOrganisations() {
 		url: '/test/organisations/',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
-			displayResultsGeneric(xml, "Organisations");
+			displayResultsGeneric(xml, "Organisations", true);
 		},
 		error: function(xml) {
 			displayResultsGeneric(xml, "Organisations");
