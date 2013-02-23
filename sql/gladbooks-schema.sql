@@ -1144,7 +1144,7 @@ ORDER BY lineorder, account ASC
 ) a
 ;
 
-CREATE VIEW contactlist AS
+CREATE OR REPLACE VIEW contactlist AS
 SELECT
 	contact as id,
 	name
@@ -1157,12 +1157,15 @@ WHERE id IN (
 ORDER BY contact ASC
 ;
 
-CREATE VIEW organisationlist AS
+CREATE OR REPLACE VIEW organisationlist AS
 SELECT
 	organisation as id,
+	orgcode,
 	name
-FROM organisationdetail
-WHERE id IN (
+FROM organisationdetail od
+INNER JOIN organisation o ON o.id = od.organisation
+WHERE od.id IN (
+
 	SELECT MAX(id)
 	FROM organisationdetail
 	GROUP BY organisation
