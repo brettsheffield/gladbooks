@@ -504,6 +504,22 @@ test("update organisation (vatreg)", function() {
 
 });
 
+test("get organisation", function() {
+	g_username='betty';
+	g_password='ie5a8P40';
+	var url = "/test/organisations/2";
+
+	stop();
+	$.ajax({
+		url: url,
+		type: 'GET',
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { ok(true); start(); },
+		error: function(xml) { ok(false); start(); },
+	});
+});
+
 
 /*
  * UUID()
