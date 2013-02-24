@@ -472,3 +472,20 @@ div.organisations {
 div.create {
 	padding: 0 2%;
 }
+
+/* form styling */
+.contact.form ul {
+	list-style-type: none;
+	list-style-position: outside;
+}
+
+.contact.form label {
+	display: inline-block;
+	float: left;
+	min-width: 25%;
+}
+.contact.form input {
+	width: 25%;
+}
+
+

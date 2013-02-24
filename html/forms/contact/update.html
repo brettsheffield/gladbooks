@@ -1,20 +1,62 @@
 <div class="contact update">
 	<h2>Edit Contact Details</h2>
-	<form method="post" action="/test/contacts/">
+	<form class="contact form" method="post" action="/test/contacts/">
 		<input type="hidden" name="id"/>
-		<input class="focus" type="text" name="name" placeholder="Contact Name"/>
-		<input class="line_1" type="text" name="line_1" placeholder="Address Line 1"/>
-		<input class="line_2" type="text" name="line_2" placeholder="Address Line 2"/>
-		<input class="line_3" type="text" name="line_3" placeholder="Address Line 3"/>
-		<input type="text" name="town" placeholder="Town"/>
-		<input type="text" name="county" placeholder="County"/>
-		<input type="text" name="country" placeholder="Country"/>
-		<input type="text" name="postcode" placeholder="Postcode"/>
-		<input type="email" name="email" placeholder="Email Address"/>
-		<input type="text" name="phone" placeholder="Telephone"/>
-		<input type="text" name="phonealt" placeholder="Telephone (Alternate)"/>
-		<input type="text" name="mobile" placeholder="Telephone (Mobile)"/>
-		<input type="text" name="fax" placeholder="Facsimile Number"/>
-		<button class="submit formsubmit">Save</button>
+		<ul>
+			<li>
+				<label for="name">Contact Name</label>
+				<input class="focus" type="text" name="name" placeholder="Contact Name"/>
+				<span class="form_hint">Name of the Contact (must not be blank)</span>
+			</li>
+			<li>
+				<label for="line_1">Address Line 1</label>
+				<input class="line_1" type="text" name="line_1" placeholder="Address Line 1"/>
+			</li>
+			<li>
+				<label for="line_2">Address Line 2</label>
+				<input class="line_2" type="text" name="line_2" placeholder="Address Line 2"/>
+			</li>
+			<li>
+				<label for="line_3">Address Line 3</label>
+				<input class="line_3" type="text" name="line_3" placeholder="Address Line 3"/>
+			</li>
+			<li>
+				<label for="town">Town</label>
+				<input type="text" name="town" placeholder="Town"/>
+			</li>
+			<li>
+				<label for="county">County</label>
+				<input type="text" name="county" placeholder="County"/>
+			</li>
+			<li>
+				<label for="country">Country</label>
+				<input type="text" name="country" placeholder="Country"/>
+			</li>
+			<li>
+				<label for="postcode">Postcode</label>
+				<input type="text" name="postcode" placeholder="Postcode"/>
+			</li>
+			<li>
+				<label for="email">Email Address</label>
+				<input type="email" name="email" placeholder="Email Address"/>
+			</li>
+			<li>
+				<label for="phone">Telephone (Primary)</label>
+				<input type="text" name="phone" placeholder="Telephone"/>
+			</li>
+			<li>
+				<label for="phonealt">Telephone (Alternate)</label>
+				<input type="text" name="phonealt" placeholder="Telephone (Alternate)"/>
+			</li>
+			<li>
+				<label for="mobile">Telephone (Mobile)</label>
+				<input type="text" name="mobile" placeholder="Telephone (Mobile)"/>
+			</li>
+			<li>
+				<label for="fax">Facsimile</label>
+				<input type="text" name="fax" placeholder="Facsimile Number"/>
+			</li>
+			<li><button class="submit formsubmit">Save</button></li>
+		</ul>
 	</form>
 </div>

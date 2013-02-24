@@ -481,13 +481,12 @@ function getForm(object, action, title, xml) {
 function displayForm(object, action, title, html, xml) {
 	var id = 0;
 	var content = '';
+
 	$(html).find('div.' + object + '.action').each(function() {
 		content += $(self).html();
 	});
 
 	addTab(title, html, true);
-
-	/* FIXME: make sure we're only writing to the active tab */
 
 	if (xml) {
 		/* we have some data, pre-populate form */
@@ -495,7 +494,9 @@ function displayForm(object, action, title, html, xml) {
 			if (this.tagName == 'id') {
 				id = $(this).text();
 			}
-			$("[name='" + this.tagName + "']").val($(this).text());
+			$("div.tablet.active").find(
+				"[name='" + this.tagName + "']"
+			).val($(this).text());
 		});
 	}
 	
