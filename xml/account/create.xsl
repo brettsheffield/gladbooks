@@ -5,6 +5,8 @@
         <xsl:variable name="authuser" select="request/authuser" />
         <xsl:variable name="clientip" select="request/clientip" />
 
+	<xsl:include href="../cleanQuote.xsl"/>
+
         <xsl:template match="request">
                 <xsl:apply-templates select="data/account"/>
         </xsl:template>
@@ -12,9 +14,20 @@
 	<xsl:template match="account">
 		<xsl:text>BEGIN;</xsl:text>
 		<xsl:text>INSERT INTO account (accounttype, description, authuser, clientip) VALUES ('</xsl:text>
-		<xsl:value-of select="@type"/>
+
+		<xsl:call-template name="cleanQuote">
+			<xsl:with-param name="string">
+				<xsl:value-of select="@type"/>
+			</xsl:with-param>
+		</xsl:call-template>
+
 		<xsl:text>','</xsl:text>
-		<xsl:value-of select="@description"/>
+		<xsl:call-template name="cleanQuote">
+			<xsl:with-param name="string">
+				<xsl:value-of select="@description"/>
+			</xsl:with-param>
+		</xsl:call-template>
+
 		<xsl:text>','</xsl:text>
 		<xsl:copy-of select="$authuser"/>
 		<xsl:text>','</xsl:text>
