@@ -20,7 +20,7 @@
 									<xs:element name="county" type="xs:string" minOccurs="0"/>
 									<xs:element name="country" type="xs:string" minOccurs="0"/>
 									<xs:element name="postcode" type="xs:string" minOccurs="0"/>
-									<xs:element name="email" type="email" minOccurs="0"/>
+									<xs:element name="email" type="xs:string" minOccurs="0"/>
 									<xs:element name="phone" type="xs:string" minOccurs="0"/>
 									<xs:element name="phonealt" type="xs:string" minOccurs="0"/>
 									<xs:element name="mobile" type="xs:string" minOccurs="0"/>
