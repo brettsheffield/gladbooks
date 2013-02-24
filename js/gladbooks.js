@@ -422,7 +422,7 @@ function showBalanceSheet() {
 function showContacts() {
 	showSpinner();
 	$.ajax({
-		url: '/test/contacts/',
+		url: '/test/contactlist/',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
 			displayResultsGeneric(xml, "Contacts", true);

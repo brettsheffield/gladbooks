@@ -42,11 +42,6 @@ div#tabs {
   padding-left: auto;
   padding-right: auto; }
 
-input,
-textarea,
-.uneditable-input {
-  width: 100%; }
-
 .navbar-search {
   border-radius: 25px;
   font-size: 14pt;

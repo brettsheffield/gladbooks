@@ -1144,6 +1144,33 @@ ORDER BY lineorder, account ASC
 ) a
 ;
 
+CREATE OR REPLACE VIEW contactdetailview AS
+SELECT
+	contact as id,
+	is_active,
+	is_deleted,
+	name,
+	line_1,
+	line_2,
+	line_3,
+	town,
+	county,
+	country,
+	postcode,
+	email,
+	phone,
+	phonealt,
+	mobile,
+	fax
+FROM contactdetail
+WHERE id IN (
+	SELECT MAX(id)
+	FROM contactdetail
+	GROUP BY contact
+)
+ORDER BY contact ASC
+;
+
 CREATE OR REPLACE VIEW contactlist AS
 SELECT
 	contact as id,
