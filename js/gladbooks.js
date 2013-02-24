@@ -501,7 +501,7 @@ function displayForm(object, action, title, html, xml) {
 	
 	hideSpinner(); /* wake user */
 
-	$('button.submit.formsubmit').on("click", function(event) {
+	$('form').submit(function(event) {
 		event.preventDefault();
 		if (id > 0) {
 			submitForm(object, action, id);
