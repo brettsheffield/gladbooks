@@ -5,6 +5,8 @@
         <xsl:variable name="authuser" select="request/authuser" />
 	<xsl:variable name="clientip" select="request/clientip" />
 
+	<xsl:include href="../cleanQuote.xsl"/>
+
 	<xsl:template match="request">
        		<xsl:apply-templates select="data/journal"/>
 	</xsl:template>
@@ -14,7 +16,13 @@
 		<xsl:text>INSERT INTO journal (transactdate, description, authuser, clientip) VALUES ('</xsl:text>
 		<xsl:value-of select="@transactdate"/>
 		<xsl:text>','</xsl:text>
-		<xsl:value-of select="@description"/>
+
+		<xsl:call-template name="cleanQuote">
+			<xsl:with-param name="string">
+				<xsl:value-of select="@description"/>
+			</xsl:with-param>
+		</xsl:call-template>
+
 		<xsl:text>','</xsl:text>
 		<xsl:copy-of select="$authuser"/>
 		<xsl:text>','</xsl:text>

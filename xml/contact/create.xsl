@@ -5,6 +5,8 @@
         <xsl:variable name="authuser" select="request/authuser" />
         <xsl:variable name="clientip" select="request/clientip" />
 
+	<xsl:include href="../cleanQuote.xsl"/>
+
         <xsl:template match="request">
                 <xsl:apply-templates select="data/contact"/>
         </xsl:template>
@@ -78,55 +80,109 @@
 			</xsl:otherwise>
 		</xsl:choose>
 
-		<xsl:value-of select="name"/>
+		<xsl:if test="name">
+			<xsl:call-template name="cleanQuote">
+				<xsl:with-param name="string">
+					<xsl:value-of select="name"/>
+				</xsl:with-param>
+			</xsl:call-template>
+		</xsl:if>
 		<xsl:text>','</xsl:text>
 
 		<xsl:if test="line_1">
-			<xsl:value-of select="line_1"/>
+			<xsl:call-template name="cleanQuote">
+				<xsl:with-param name="string">
+					<xsl:value-of select="line_1"/>
+				</xsl:with-param>
+			</xsl:call-template>
 			<xsl:text>','</xsl:text>
 		</xsl:if>
 		<xsl:if test="line_2">
-			<xsl:value-of select="line_2"/>
+			<xsl:call-template name="cleanQuote">
+				<xsl:with-param name="string">
+					<xsl:value-of select="line_2"/>
+				</xsl:with-param>
+			</xsl:call-template>
 			<xsl:text>','</xsl:text>
 		</xsl:if>
 		<xsl:if test="line_3">
-			<xsl:value-of select="line_3"/>
+			<xsl:call-template name="cleanQuote">
+				<xsl:with-param name="string">
+					<xsl:value-of select="line_3"/>
+				</xsl:with-param>
+			</xsl:call-template>
 			<xsl:text>','</xsl:text>
 		</xsl:if>
 		<xsl:if test="town">
-			<xsl:value-of select="town"/>
+			<xsl:call-template name="cleanQuote">
+				<xsl:with-param name="string">
+					<xsl:value-of select="town"/>
+				</xsl:with-param>
+			</xsl:call-template>
 			<xsl:text>','</xsl:text>
 		</xsl:if>
 		<xsl:if test="county">
-			<xsl:value-of select="county"/>
+			<xsl:call-template name="cleanQuote">
+				<xsl:with-param name="string">
+					<xsl:value-of select="county"/>
+				</xsl:with-param>
+			</xsl:call-template>
 			<xsl:text>','</xsl:text>
 		</xsl:if>
 		<xsl:if test="country">
-			<xsl:value-of select="country"/>
+			<xsl:call-template name="cleanQuote">
+				<xsl:with-param name="string">
+					<xsl:value-of select="country"/>
+				</xsl:with-param>
+			</xsl:call-template>
 			<xsl:text>','</xsl:text>
 		</xsl:if>
 		<xsl:if test="postcode">
-			<xsl:value-of select="postcode"/>
+			<xsl:call-template name="cleanQuote">
+				<xsl:with-param name="string">
+					<xsl:value-of select="postcode"/>
+				</xsl:with-param>
+			</xsl:call-template>
 			<xsl:text>','</xsl:text>
 		</xsl:if>
 		<xsl:if test="email">
-			<xsl:value-of select="email"/>
+			<xsl:call-template name="cleanQuote">
+				<xsl:with-param name="string">
+					<xsl:value-of select="email"/>
+				</xsl:with-param>
+			</xsl:call-template>
 			<xsl:text>','</xsl:text>
 		</xsl:if>
 		<xsl:if test="phone">
-			<xsl:value-of select="phone"/>
+			<xsl:call-template name="cleanQuote">
+				<xsl:with-param name="string">
+					<xsl:value-of select="phone"/>
+				</xsl:with-param>
+			</xsl:call-template>
 			<xsl:text>','</xsl:text>
 		</xsl:if>
 		<xsl:if test="phonealt">
-			<xsl:value-of select="phonealt"/>
+			<xsl:call-template name="cleanQuote">
+				<xsl:with-param name="string">
+					<xsl:value-of select="phonealt"/>
+				</xsl:with-param>
+			</xsl:call-template>
 			<xsl:text>','</xsl:text>
 		</xsl:if>
 		<xsl:if test="mobile">
-			<xsl:value-of select="mobile"/>
+			<xsl:call-template name="cleanQuote">
+				<xsl:with-param name="string">
+					<xsl:value-of select="mobile"/>
+				</xsl:with-param>
+			</xsl:call-template>
 			<xsl:text>','</xsl:text>
 		</xsl:if>
 		<xsl:if test="fax">
-			<xsl:value-of select="fax"/>
+			<xsl:call-template name="cleanQuote">
+				<xsl:with-param name="string">
+					<xsl:value-of select="fax"/>
+				</xsl:with-param>
+			</xsl:call-template>
 			<xsl:text>','</xsl:text>
 		</xsl:if>
 		<xsl:if test="is_active">

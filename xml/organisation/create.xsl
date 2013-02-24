@@ -5,6 +5,8 @@
         <xsl:variable name="authuser" select="request/authuser" />
         <xsl:variable name="clientip" select="request/clientip" />
 
+	<xsl:include href="../cleanQuote.xsl"/>
+
         <xsl:template match="request">
                 <xsl:apply-templates select="data/organisation"/>
         </xsl:template>
@@ -57,7 +59,11 @@
                 </xsl:choose>
 
 		<xsl:if test="name">
-			<xsl:value-of select="name"/>
+			<xsl:call-template name="cleanQuote">
+				<xsl:with-param name="string">
+					<xsl:value-of select="name"/>
+				</xsl:with-param>
+			</xsl:call-template>
 			<xsl:text>','</xsl:text>
 		</xsl:if>
 		<xsl:if test="terms">
@@ -81,7 +87,11 @@
 			<xsl:text>','</xsl:text>
 		</xsl:if>
 		<xsl:if test="vatnumber">
-			<xsl:value-of select="vatnumber"/>
+			<xsl:call-template name="cleanQuote">
+				<xsl:with-param name="string">
+					<xsl:value-of select="vatnumber"/>
+				</xsl:with-param>
+			</xsl:call-template>
 			<xsl:text>','</xsl:text>
 		</xsl:if>
 

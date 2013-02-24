@@ -5,6 +5,8 @@
         <xsl:variable name="authuser" select="request/authuser" />
         <xsl:variable name="clientip" select="request/clientip" />
 
+	<xsl:include href="../cleanQuote.xsl"/>
+
         <xsl:template match="request">
                 <xsl:apply-templates select="data/department"/>
         </xsl:template>
@@ -12,7 +14,13 @@
 	<xsl:template match="department">
 		<xsl:text>BEGIN;</xsl:text>
 		<xsl:text>INSERT INTO department (name, authuser, clientip) VALUES ('</xsl:text>
-		<xsl:value-of select="@name"/>
+
+		<xsl:call-template name="cleanQuote">
+			<xsl:with-param name="string">
+				<xsl:value-of select="@name"/>
+			</xsl:with-param>
+		</xsl:call-template>
+
 		<xsl:text>','</xsl:text>
 		<xsl:copy-of select="$authuser"/>
 		<xsl:text>','</xsl:text>
