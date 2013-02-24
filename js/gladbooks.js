@@ -464,12 +464,12 @@ function showProfitAndLoss(startDate, endDate) {
 }
 
 /* fetch html form from server to display */
-function getForm(object, action, title) {
+function getForm(object, action, title, xml) {
 	$.ajax({
 		url: '/html/forms/' + object + '/' + action + '.html',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(html) {
-			displayForm(object, action, title, html);
+			displayForm(object, action, title, html, xml);
 		},
 		error: function(html) {
 			displayForm(object, action, title, html);
@@ -478,20 +478,42 @@ function getForm(object, action, title) {
 }
 
 /* display html form we've just fetched in new tab */
-function displayForm(object, action, title, html) {
+function displayForm(object, action, title, html, xml) {
+	var id = 0;
 	var content = '';
 	$(html).find('div.' + object + '.action').each(function() {
 		content += $(self).html();
 	});
+
 	addTab(title, html, true);
+
+	/* FIXME: make sure we're only writing to the active tab */
+
+	if (xml) {
+		/* we have some data, pre-populate form */
+		$(xml).find('resources').find('row').children().each(function() {
+			if (this.tagName == 'id') {
+				id = $(this).text();
+			}
+			$("[name='" + this.tagName + "']").val($(this).text());
+		});
+	}
+	
+	hideSpinner(); /* wake user */
+
 	$('button.submit.formsubmit').on("click", function(event) {
 		event.preventDefault();
-		submitForm(object, action); 
+		if (id > 0) {
+			submitForm(object, action, id);
+		}
+		else {
+			submitForm(object, action);
+		}
 	});
 }
 
 /* build xml and submit form */
-function submitForm(object, action) {
+function submitForm(object, action, id) {
 	var xml = '<request><data>';
 	var url = '';
 
@@ -500,14 +522,23 @@ function submitForm(object, action) {
 	/* find out where to send this */
 	$('div.' + object + '.' + action).find('form').each(function() {
 		url = $(this).attr('action');
+		if (id) {
+			url += id;
+		}
 	});
 
 	/* build xml request */
-	xml += '<' + object + '>';
+	xml += '<' + object 
+	if (id > 0) {
+		xml += ' id="' + id + '"';
+	}
+	xml += '>';
 	$('div.' + object + '.' + action).find('input').each(function() {
-		xml += '<' + $(this).attr('name') + '>';
-		xml += $(this).val();
-		xml += '</' + $(this).attr('name') + '>';
+		if ($(this).attr('name') != 'id') {
+			xml += '<' + $(this).attr('name') + '>';
+			xml += $(this).val();
+			xml += '</' + $(this).attr('name') + '>';
+		}
 	});
 	xml += '</' + object + '>';
 	xml += '</data></request>';
@@ -524,6 +555,32 @@ function submitForm(object, action) {
         success: function(xml) { hideSpinner(); },
         error: function(xml) { hideSpinner(); },
     });
+}
+
+/* Fetch an individual element of a collection for display / editing */
+function displayElement(collection, id) {
+	if (collection == 'Contacts') {
+		url = '/test/contacts/' + id;
+		object = 'contact';
+		action = 'update';
+		title = 'Edit Contact ' + id;
+	}
+	else {
+		return;
+	}
+
+	showSpinner(); /* tell user to wait */
+
+	/* first, fetch xml data */
+	$.ajax({
+		url: url,
+		type: 'GET',
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { getForm(object, action, title, xml); },
+		error: function(xml) { hideSpinner(); },
+	});
+
 }
 
 /* display XML results as a sortable table */
@@ -573,7 +630,16 @@ function displayResultsGeneric(xml, title, sorted) {
 	if (! title) {
 		title = "Results";
 	}
-	addTab(title, $($t), true);
+
+	$t = $($t); /* htmlify */
+
+	/* attach click event */
+	$t.find('tr').click(function(event) {
+		event.preventDefault();
+		displayElement(title,$(this).find('td.xml-id').text());
+	});
+
+	addTab(title, $t, true);
 
 	/* make our table pretty and sortable */
 	/* FIXME: this will affect *all* .datatable, not just this one */
