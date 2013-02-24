@@ -137,7 +137,7 @@ function addTab(title, content, activate) {
 	});
 
 	/* set up tab navigation */
-	$(".tabs li").click(function(event) {
+	$(".tablist li").click(function(event) {
 		event.preventDefault();
 		var selected_tab = $(this).find("a").attr("href");
 		activateTab(selected_tab);
@@ -502,7 +502,7 @@ function displayForm(object, action, title, html, xml) {
 	
 	hideSpinner(); /* wake user */
 
-	$('form').submit(function(event) {
+	$("div.tablet.active").find('form').submit(function(event) {
 		event.preventDefault();
 		if (id > 0) {
 			submitForm(object, action, id);
@@ -521,7 +521,9 @@ function submitForm(object, action, id) {
 	console.log('Submitting form ' + object + ':' + action);
 
 	/* find out where to send this */
-	$('div.' + object + '.' + action).find('form').each(function() {
+	$("div.tablet.active").find(
+		'div.' + object + '.' + action
+	).find('form').each(function() {
 		url = $(this).attr('action');
 		if (id) {
 			url += id;
@@ -534,7 +536,9 @@ function submitForm(object, action, id) {
 		xml += ' id="' + id + '"';
 	}
 	xml += '>';
-	$('div.' + object + '.' + action).find('input').each(function() {
+	$("div.tablet.active").find(
+		'div.' + object + '.' + action
+	).find('input').each(function() {
 		if ($(this).attr('name') != 'id') {
 			xml += '<' + $(this).attr('name') + '>';
 			xml += $(this).val();
