@@ -762,7 +762,7 @@ BEGIN
 		WHERE orgcode = neworgcode;
 	WHILE conflicts != 0 OR char_length(neworgcode) < idlen LOOP
 		neworgcode = substr(neworgcode, 1, idlen - 1);
-		neworgcode = concat(neworgcode, chr(int4(random() * 25 + 65)));
+		neworgcode = neworgcode || chr(int4(random() * 25 + 65));
 		SELECT INTO conflicts COUNT(id) FROM organisation
 			WHERE orgcode LIKE CONCAT(neworgcode,'%');
 		IF conflicts > 25 THEN
@@ -1030,7 +1030,7 @@ BEGIN
 	pretty = replace(pretty, '>', ')');
 	IF amount > 0 THEN
 		-- add trailing space for positive numbers
-		pretty = concat(pretty, ' ');
+		pretty = pretty || ' ';
 	END IF;
 	RETURN pretty;
 END;
