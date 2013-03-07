@@ -474,18 +474,19 @@ div.create {
 }
 
 /* form styling */
-.contact.form ul {
+.contact.form ul,
+.organisation.form ul {
 	list-style-type: none;
 	list-style-position: outside;
 }
 
-.contact.form label {
+.contact.form label,
+.organisation.form label {
 	display: inline-block;
 	float: left;
 	min-width: 25%;
 }
-.contact.form input {
+.contact.form input,
+.organisation.form input {
 	width: 25%;
 }
-
-
