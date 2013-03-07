@@ -1,0 +1,8 @@
+<login>
+	<menu item="A" tooltip="Accounts" href="/gladbooks/penguinfactory/accounts/" />
+	<menu item="J" tooltip="Journal" href="#journal" />
+	<menu item="Receivables" tooltip="Accounts Receivable" href="#receivables" />
+	<menu item="Payables" tooltip="Accounts Payable" href="#payables" />
+	<menu item="Reports" tooltip="Reports" href="#reports" />
+	<menu item="Help" tooltip="Help" href="#help" />
+</login>
