@@ -570,6 +570,12 @@ function displayElement(collection, id) {
 		action = 'update';
 		title = 'Edit Contact ' + id;
 	}
+	else if (collection == 'Organisations') {
+		url = '/test/organisations/' + id;
+		object = 'organisation';
+		action = 'update';
+		title = 'Edit Organisation ' + id;
+	}
 	else {
 		return;
 	}
