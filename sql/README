@@ -1,0 +1,5 @@
+dropdb gladbooks
+createdb gladbooks
+psql gladbooks < gladbooks.db.sql 
+psql gladbooks < gladbooks.instance.sql
+psql gladbooks < gladbooks.business.sql

@@ -1,10 +1,26 @@
--- Create tables for new instance
+-- Create tables for new instance schema.
+
+SET search_path TO gladbooks;
+
+-- wrap instance creation in a function for convenience --
+CREATE OR REPLACE FUNCTION create_instance(instance TEXT)
+RETURNS TEXT AS
+$$
+
+BEGIN
+
+--
+
+INSERT INTO instance (id) VALUES (instance);
+EXECUTE 'CREATE SCHEMA ' || quote_ident(instance);
+
+EXECUTE 'SET search_path TO ' || quote_ident(instance) || ',gladbooks';
 
 -- a business represents a distinct set of accounting ledgers
 CREATE TABLE business (
-	id              SERIAL PRIMARY KEY,
+	id              VARCHAR(63) PRIMARY KEY,
 	name		TEXT UNIQUE NOT NULL,
-	schema          VARCHAR(63) UNIQUE NOT NULL,
+	instance	VARCHAR(63) references instance(id) ON DELETE RESTRICT,
 	entered         timestamp with time zone default now()
 );
 CREATE RULE nodel_business AS ON DELETE TO business DO NOTHING;
@@ -46,3 +62,116 @@ CREATE TABLE nominalcode (
 	entered         timestamp with time zone default now(),
 	CONSTRAINT nominalcode_pk PRIMARY KEY (chart, account)
 );
+
+CREATE TABLE contact (
+        id              SERIAL PRIMARY KEY,
+        updated         timestamp with time zone default now(),
+        authuser        TEXT,
+        clientip        TEXT
+);
+
+CREATE TABLE contactdetail (
+        id              SERIAL PRIMARY KEY,
+        contact         INT4 references contact(id) ON DELETE RESTRICT,
+        is_active       boolean DEFAULT true,
+        is_deleted      boolean DEFAULT false,
+        name            TEXT NOT NULL,
+        line_1          TEXT,
+        line_2          TEXT,
+        line_3          TEXT,
+        town            TEXT,
+        county          TEXT,
+        country         TEXT,
+        postcode        TEXT,
+        email           TEXT,
+        phone           TEXT,
+        phonealt        TEXT,
+        mobile          TEXT,
+        fax             TEXT,
+        updated         timestamp with time zone default now(),
+        authuser        TEXT,
+        clientip        TEXT
+);
+
+CREATE TABLE organisation (
+        id              SERIAL PRIMARY KEY,
+        orgcode         TEXT DEFAULT NULL,
+        purchaseorder   INT4 NOT NULL DEFAULT 0,
+        purchaseinvoice INT4 NOT NULL DEFAULT 0,
+        salesorder      INT4 NOT NULL DEFAULT 0,
+        salesinvoice    INT4 NOT NULL DEFAULT 0,
+        updated         timestamp with time zone default now(),
+        authuser        TEXT,
+        clientip        TEXT,
+        UNIQUE (orgcode)
+);
+
+CREATE TABLE organisationdetail (
+        id              SERIAL PRIMARY KEY,
+        organisation    INT4 references organisation(id)
+                        ON DELETE RESTRICT,
+        name            TEXT NOT NULL,
+        terms           INT4 NOT NULL,
+        billcontact     INT4 references contact(id) ON DELETE RESTRICT,
+        is_active       boolean NOT NULL,
+        is_suspended    boolean NOT NULL,
+        is_vatreg       boolean NOT NULL,
+        vatnumber       TEXT,
+        updated         timestamp with time zone default now(),
+        authuser        TEXT,
+        clientip        TEXT
+);
+
+CREATE TABLE organisation_contact (
+        id              SERIAL PRIMARY KEY,
+        organisation    INT4 references organisation(id)
+                        ON DELETE RESTRICT,
+        contact         INT4 references contact(id) ON DELETE RESTRICT,
+        is_billing      boolean DEFAULT false,
+        is_shipping     boolean DEFAULT false,
+        updated         timestamp with time zone default now(),
+        authuser        TEXT,
+        clientip        TEXT
+);
+
+CREATE TABLE product (
+        id              SERIAL PRIMARY KEY,
+        updated         timestamp with time zone default now(),
+        authuser        TEXT,
+        clientip        TEXT
+);
+
+CREATE TABLE productdetail (
+        id              SERIAL PRIMARY KEY,
+        product         INT4 references product(id) ON DELETE RESTRICT
+                        NOT NULL,
+        shortname       TEXT NOT NULL UNIQUE,
+        description     TEXT NOT NULL,
+        price_buy       NUMERIC,
+        price_sell      NUMERIC,
+        margin          NUMERIC,
+        markup          NUMERIC,
+        is_available    boolean DEFAULT true,
+        is_offered      boolean DEFAULT true,
+        updated         timestamp with time zone default now(),
+        authuser        TEXT,
+        clientip        TEXT
+);
+
+CREATE TABLE product_tax (
+        id              SERIAL PRIMARY KEY,
+        product         INT4 references product(id) ON DELETE RESTRICT
+                        NOT NULL,
+        tax             INT4 references tax(id) ON DELETE RESTRICT NOT NULL,
+        is_applicable   boolean DEFAULT true,
+        updated         timestamp with time zone default now(),
+        authuser        TEXT,
+        clientip        TEXT
+);
+
+RETURN instance;
+
+END;
+$$ LANGUAGE 'plpgsql';
+
+SELECT create_instance('gladbooks_default');
