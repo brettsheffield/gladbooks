@@ -4,6 +4,8 @@
 
         <xsl:variable name="authuser" select="request/authuser" />
         <xsl:variable name="clientip" select="request/clientip" />
+	<xsl:variable name="instance" select="request/instance" />
+	<xsl:variable name="business" select="request/business" />
 
 	<xsl:include href="../cleanQuote.xsl"/>
 
@@ -12,6 +14,13 @@
         </xsl:template>
 
 	<xsl:template match="contact">
+                <!-- Set postgres schema search_path -->
+                <xsl:text>SET search_path TO </xsl:text>
+                <xsl:copy-of select="$business"/>
+                <xsl:text>,</xsl:text>
+                <xsl:copy-of select="$instance"/>
+                <xsl:text>,gladbooks;</xsl:text>
+
 		<xsl:text>BEGIN;</xsl:text>
 
 		<xsl:if test="not(@id)">
