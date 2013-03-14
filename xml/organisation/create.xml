@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <request>
+  <instance>default</instance>
+  <business>default</business>	
 	<data>
 		<organisation is_active="true" is_suspended="false" is_vatreg="true">
 			<name>Name of Organisation</name>

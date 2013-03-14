@@ -3,7 +3,7 @@
 SET search_path TO gladbooks;
 
 -- wrap instance creation in a function for convenience --
-CREATE OR REPLACE FUNCTION create_instance(instance TEXT)
+CREATE OR REPLACE FUNCTION create_instance(instance VARCHAR(63))
 RETURNS TEXT AS
 $$
 
@@ -121,6 +121,9 @@ CREATE TABLE organisationdetail (
         authuser        TEXT,
         clientip        TEXT
 );
+
+CREATE TRIGGER organisationdetailupdate BEFORE INSERT ON organisationdetail
+FOR EACH ROW EXECUTE PROCEDURE organisationdetailupdate();
 
 CREATE TABLE organisation_contact (
         id              SERIAL PRIMARY KEY,
