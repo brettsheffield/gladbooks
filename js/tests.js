@@ -39,7 +39,8 @@ test("create account (asset)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/accounts/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="1000" description="Test ASSET account creation"/></data></request>';
+	var xml = createRequestXml();
+	xml += '<account type="1000" description="Test ASSET account creation"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -58,7 +59,8 @@ test("create account (liability)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/accounts/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="2000" description="Test LIABILITY account creation"/></data></request>';
+	var xml = createRequestXml();
+	xml += '<account type="2000" description="Test LIABILITY account creation"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -77,7 +79,8 @@ test("create account (capital)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/accounts/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="3000" description="Test CAPITAL account creation"/></data></request>';
+	var xml = createRequestXml();
+	xml += '<account type="3000" description="Test CAPITAL account creation"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -96,7 +99,8 @@ test("create account (revenue)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/accounts/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="4000" description="Test REVENUE account creation"/></data></request>';
+	var xml = createRequestXml();
+	xml += '<account type="4000" description="Test REVENUE account creation"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -115,7 +119,8 @@ test("create account (expenditure)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/accounts/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="5000" description="Test EXPENDITURE account creation"/></data></request>';
+	var xml = createRequestXml();
+	xml += '<account type="5000" description="Test EXPENDITURE account creation"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -134,7 +139,8 @@ test("create account (invalid type) - MUST be rejected", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/accounts/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="666" description="Test INVALID account creation is rejected"/></data></request>';
+	var xml = createRequestXml();
+	xml += '<account type="666" description="Test INVALID account creation is rejected"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -155,7 +161,8 @@ test("create contact", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/contacts/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><contact><name>Ms Contact Name</name><line_1>Line 1</line_1><line_2>Line 2</line_2><line_3>Line 3</line_3><town>Townsville</town><county>County</county><country>Grand Europia</country><postcode>EU01 23RO</postcode><email>someone@example.com</email><phone>01234 5678</phone><phonealt>0123 123</phonealt><mobile>333 3333</mobile><fax>456 4567</fax></contact></data></request>';
+	var xml = createRequestXml();
+	xml += '<contact><name>Ms Contact Name</name><line_1>Line 1</line_1><line_2>Line 2</line_2><line_3>Line 3</line_3><town>Townsville</town><county>County</county><country>Grand Europia</country><postcode>EU01 23RO</postcode><email>someone@example.com</email><phone>01234 5678</phone><phonealt>0123 123</phonealt><mobile>333 3333</mobile><fax>456 4567</fax></contact></data></request>';
 
 	stop();
 	$.ajax({
@@ -174,7 +181,8 @@ test("create billing contact for organisation", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/contacts/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><contact><name>Mr Bill Contact</name><organisation id="1" is_billing="true"/></contact></data></request>';
+	var xml = createRequestXml();
+	xml += '<contact><name>Mr Bill Contact</name><organisation id="1" is_billing="true"/></contact></data></request>';
 
 	stop();
 	$.ajax({
@@ -193,7 +201,8 @@ test("create shipping contact for organisation", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/contacts/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><contact><name>Mrs Shipping Address</name><organisation id="1" is_shipping="true"/></contact></data></request>';
+	var xml = createRequestXml();
+	xml += '<contact><name>Mrs Shipping Address</name><organisation id="1" is_shipping="true"/></contact></data></request>';
 
 	stop();
 	$.ajax({
@@ -212,7 +221,8 @@ test("update contact", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/contacts/1";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><contact id="1"><name>Mrs Corrected Name O\'Malley</name></contact></data></request>';
+	var xml = createRequestXml();
+	xml += '<contact id="1"><name>Mrs Corrected Name O\'Malley</name></contact></data></request>';
 
 	stop();
 	$.ajax({
@@ -233,7 +243,8 @@ test("create department", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/departments/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><department name="'+ UUID() +'"/></data></request>';
+	var xml = createRequestXml();
+	xml += '<department name="'+ UUID() +'"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -254,7 +265,8 @@ test("create division", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/divisions/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><division name="'+ UUID() +'"/></data></request>';
+	var xml = createRequestXml();
+	xml += '<division name="'+ UUID() +'"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -275,7 +287,8 @@ test("journal entry - valid xml", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/journals/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?> <request><data><journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="1100" amount="120.00" /> <credit account="2202" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
+	var xml = createRequestXml();
+	xml += '<journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="1100" amount="120.00" /> <credit account="2202" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
 
 	stop();
 	$.ajax({
@@ -294,7 +307,8 @@ test("journal entry - invalid credentials MUST be rejected", function() {
 	g_username='betty';
 	g_password='invalid_password';
 	var url = "/test/journals/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?> <request><data><journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="1100" amount="120.00" /> <credit account="2202" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
+	var xml = createRequestXml();
+	xml += '<journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="1100" amount="120.00" /> <credit account="2202" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
 
 	stop();
 	$.ajax({
@@ -314,7 +328,8 @@ test("journal entry - xml does not match schema", function() {
 	g_password='ie5a8P40';
 	var url = "/test/journals/";
 	/* xml does not have a <debit> tag */
-	var xml = '<?xml version="1.0" encoding="UTF-8"?> <request><data><journal transactdate="2013-01-01" description="My First Journal Entry"> <credit account="1100" amount="120.00" /> <credit account="2202" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
+	var xml = createRequestXml();
+	xml += '<journal transactdate="2013-01-01" description="My First Journal Entry"> <credit account="1100" amount="120.00" /> <credit account="2202" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
 
 	stop();
 	$.ajax({
@@ -334,7 +349,8 @@ test("journal entry - invalid account number MUST be rejected", function() {
 	g_password='ie5a8P40';
 	var url = "/test/journals/";
 	/* account 999 does not exist */
-	var xml = '<?xml version="1.0" encoding="UTF-8"?> <request><data><journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="999" amount="120.00" /> <credit account="2202" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
+	var xml = createRequestXml();
+	xml += '<journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="999" amount="120.00" /> <credit account="2202" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
 
 	stop();
 	$.ajax({
@@ -354,7 +370,8 @@ test("journal entry - unbalanced journal MUST be rejected", function() {
 	g_password='ie5a8P40';
 	var url = "/test/journals/";
 	/* amount of last credit is out by a penny */
-	var xml = '<?xml version="1.0" encoding="UTF-8"?> <request><data><journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="1100" amount="120.00" /> <credit account="2202" amount="20.00" /> <credit account="4000" amount="100.01" /> </journal></data></request>';
+	var xml = createRequestXml();
+	xml += '<journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="1100" amount="120.00" /> <credit account="2202" amount="20.00" /> <credit account="4000" amount="100.01" /> </journal></data></request>';
 
 	stop();
 	$.ajax({
@@ -375,7 +392,8 @@ test("create organisation", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/organisations/";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><organisation><name>My nifty new organisation</name></organisation></data></request>';
+	var xml = createRequestXml();
+	xml += '<organisation><name>My nifty new organisation</name></organisation></data></request>';
 
 	stop();
 	$.ajax({
@@ -394,7 +412,8 @@ test("update organisation (name)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/organisations/2";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><organisation id="2"><name>My nifty new organisation name to test updates</name></organisation></data></request>';
+	var xml = createRequestXml();
+	xml += '<organisation id="2"><name>My nifty new organisation name to test updates</name></organisation></data></request>';
 
 	stop();
 	$.ajax({
@@ -413,7 +432,8 @@ test("update organisation (terms)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/organisations/2";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><organisation id="2"><terms>14</terms></organisation></data></request>';
+	var xml = createRequestXml();
+	xml += '<organisation id="2"><terms>14</terms></organisation></data></request>';
 
 	stop();
 	$.ajax({
@@ -432,7 +452,8 @@ test("update organisation (is_active)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/organisations/2";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><organisation id="2" is_active="false"/></data></request>';
+	var xml = createRequestXml();
+	xml += '<organisation id="2" is_active="false"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -451,7 +472,8 @@ test("update organisation (is_suspended)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/organisations/2";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><organisation id="2" is_suspended="true"/></data></request>';
+	var xml = createRequestXml();
+	xml += '<organisation id="2" is_suspended="true"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -470,7 +492,8 @@ test("update organisation (is_vatreg)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/organisations/2";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><organisation id="2" is_vatreg="true"/></data></request>';
+	var xml = createRequestXml();
+	xml += '<organisation id="2" is_vatreg="true"/></data></request>';
 
 	stop();
 	$.ajax({
@@ -489,7 +512,8 @@ test("update organisation (vatreg)", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
 	var url = "/test/organisations/2";
-	var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><organisation id="2"><vatnumber>EU 123 45678</vatnumber></organisation></data></request>';
+	var xml = createRequestXml();
+	xml += '<organisation id="2"><vatnumber>EU 123 45678</vatnumber></organisation></data></request>';
 
 	stop();
 	$.ajax({
@@ -550,3 +574,11 @@ function UUID() {
         }
     };
 }
+
+/*
+module("Instance");
+
+test("create instance", function() {
+});
+
+*/

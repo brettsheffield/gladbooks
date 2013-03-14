@@ -39,6 +39,9 @@ CREATE TABLE account (
 	clientip	TEXT
 );
 
+CREATE TRIGGER set_account_id BEFORE INSERT ON account
+FOR EACH ROW EXECUTE PROCEDURE set_account_id();
+
 CREATE TABLE department (
 	id              SERIAL PRIMARY KEY,
 	name		TEXT UNIQUE,
