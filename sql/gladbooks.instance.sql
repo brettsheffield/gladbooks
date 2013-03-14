@@ -93,6 +93,9 @@ CREATE TABLE contactdetail (
         clientip        TEXT
 );
 
+CREATE TRIGGER contactdetailupdate BEFORE INSERT ON contactdetail
+FOR EACH ROW EXECUTE PROCEDURE contactdetailupdate();
+
 CREATE TABLE organisation (
         id              SERIAL PRIMARY KEY,
         orgcode         TEXT DEFAULT NULL,
@@ -121,6 +124,9 @@ CREATE TABLE organisationdetail (
         authuser        TEXT,
         clientip        TEXT
 );
+
+CREATE TRIGGER set_orgcode BEFORE INSERT ON organisationdetail
+FOR EACH ROW EXECUTE PROCEDURE set_orgcode();
 
 CREATE TRIGGER organisationdetailupdate BEFORE INSERT ON organisationdetail
 FOR EACH ROW EXECUTE PROCEDURE organisationdetailupdate();

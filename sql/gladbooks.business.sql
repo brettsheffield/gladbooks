@@ -388,6 +388,38 @@ CREATE TABLE salespayment (
 	clientip	TEXT
 );
 
+CREATE TRIGGER set_organisation_purchaseorder BEFORE INSERT ON purchaseorder
+FOR EACH ROW EXECUTE PROCEDURE set_organisation_purchaseorder();
+
+CREATE TRIGGER set_organisation_purchaseinvoice
+BEFORE INSERT ON purchaseinvoice
+FOR EACH ROW EXECUTE PROCEDURE set_organisation_purchaseinvoice();
+
+CREATE TRIGGER set_organisation_salesorder
+BEFORE INSERT ON salesorder
+FOR EACH ROW EXECUTE PROCEDURE set_organisation_salesorder();
+
+CREATE TRIGGER set_organisation_salesinvoice
+BEFORE INSERT ON salesinvoice
+FOR EACH ROW EXECUTE PROCEDURE set_organisation_salesinvoice();
+
+CREATE CONSTRAINT TRIGGER trig_check_ledger_balance
+        AFTER INSERT
+        ON ledger
+        DEFERRABLE INITIALLY DEFERRED
+        FOR EACH ROW
+        EXECUTE PROCEDURE check_ledger_balance()
+;
+
+CREATE CONSTRAINT TRIGGER trig_check_transaction_balance
+        AFTER INSERT
+        ON ledger
+        DEFERRABLE INITIALLY DEFERRED
+        FOR EACH ROW
+        EXECUTE PROCEDURE check_transaction_balance()
+;
+
+
 RETURN business;
 
 END;

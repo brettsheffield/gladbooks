@@ -1,4 +1,7 @@
+SET search_path TO gladbooks_default_default,gladbooks_default,gladbooks;
+
 BEGIN;
+
 INSERT INTO account (accounttype, description) VALUES ('1000', 'Current Account');
 INSERT INTO account (accounttype, description) VALUES ('1000', 'Savings Account');
 INSERT INTO account (accounttype, description) VALUES ('1000', 'Petty Cash');

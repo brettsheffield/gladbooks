@@ -268,6 +268,288 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
+-- when INSERTing into contactdetail, check for previous records
+-- for this contact, and use those values in place of any values
+-- not supplied.
+CREATE OR REPLACE FUNCTION contactdetailupdate()
+RETURNS TRIGGER AS
+$$
+DECLARE
+        priorentries    INT4;
+        ois_active      boolean;
+        ois_deleted     boolean;
+        oname           TEXT;
+        oline_1         TEXT;
+        oline_2         TEXT;
+        oline_3         TEXT;
+        otown           TEXT;
+        ocounty         TEXT;
+        ocountry        TEXT;
+        opostcode       TEXT;
+        oemail          TEXT;
+        ophone          TEXT;
+        ophonealt       TEXT;
+        omobile         TEXT;
+        ofax            TEXT;
+BEGIN
+        SELECT INTO priorentries COUNT(id) FROM contactdetail
+                WHERE contact = NEW.contact;
+        IF priorentries > 0 THEN
+                -- This isn't our first time, so use previous values 
+                SELECT INTO
+                        ois_active, ois_deleted, oname, oline_1, oline_2,
+                        oline_3, otown, ocounty, ocountry, opostcode, oemail,
+                        ophone, ophonealt, omobile, ofax
+
+                        is_active, is_deleted, name, line_1, line_2,
+                        line_3, town, county, country, postcode, email,
+                        phone, phonealt, mobile, fax
+
+                FROM contactdetail WHERE id IN (
+                        SELECT MAX(id)
+                        FROM contactdetail
+                        GROUP BY contact
+                )
+                AND contact = NEW.contact;
+
+                IF NEW.is_active IS NULL THEN
+                        NEW.is_active = ois_active;
+                END IF;
+                IF NEW.is_deleted IS NULL THEN
+                        NEW.is_deleted = ois_deleted;
+                END IF;
+                IF NEW.name IS NULL THEN
+                        NEW.name = oname;
+                END IF;
+                IF NEW.line_1 IS NULL THEN
+                        NEW.line_1 = oline_1;
+                END IF;
+                IF NEW.line_2 IS NULL THEN
+                        NEW.line_2 = oline_2;
+                END IF;
+                IF NEW.line_3 IS NULL THEN
+                        NEW.line_3 = oline_3;
+                END IF;
+                IF NEW.town IS NULL THEN
+                        NEW.town = otown;
+                END IF;
+                IF NEW.county IS NULL THEN
+                        NEW.county = ocounty;
+                END IF;
+                IF NEW.country IS NULL THEN
+                        NEW.country = ocountry;
+                END IF;
+                IF NEW.postcode IS NULL THEN
+                        NEW.postcode = opostcode;
+                END IF;
+                IF NEW.email IS NULL THEN
+                        NEW.email = oemail;
+                END IF;
+                IF NEW.phone IS NULL THEN
+                        NEW.phone = ophone;
+                END IF;
+                IF NEW.phonealt IS NULL THEN
+                        NEW.phonealt = ophonealt;
+                END IF;
+                IF NEW.mobile IS NULL THEN
+                        NEW.mobile = omobile;
+                END IF;
+                IF NEW.fax IS NULL THEN
+                        NEW.fax = ofax;
+                END IF;
+        ELSE
+                /* set defaults */
+                IF NEW.is_active IS NULL THEN
+                        NEW.is_active = 'true';
+                END IF;
+                IF NEW.is_deleted IS NULL THEN
+                        NEW.is_deleted = 'false';
+                END IF;
+        END IF;
+        RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+-- ---------------------------------------------------------------------------
+-- Gladbooks Default Org ID style 8+ char based on organisation name
+-- ---------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION organisation_orgcode(organisation_name TEXT)
+RETURNS TEXT AS
+$$
+DECLARE
+        neworgcode      TEXT;
+        conflicts       INT4;
+        idlen           INT4;
+BEGIN
+        idlen = 8;
+        neworgcode = regexp_replace(organisation_name, '[^a-zA-Z0-9]+','','g');
+        neworgcode = substr(neworgcode, 1, idlen);
+        neworgcode = upper(neworgcode);
+        SELECT INTO conflicts COUNT(id) FROM organisation
+                WHERE orgcode = neworgcode;
+        WHILE conflicts != 0 OR char_length(neworgcode) < idlen LOOP
+                neworgcode = substr(neworgcode, 1, idlen - 1);
+                neworgcode = concat(neworgcode, chr(int4(random() * 25 + 65)));
+                SELECT INTO conflicts COUNT(id) FROM organisation
+                        WHERE orgcode LIKE CONCAT(neworgcode,'%');
+                IF conflicts > 25 THEN
+                        idlen = idlen + 1;
+                END IF;
+        END LOOP;
+        RETURN neworgcode;
+END;
+$$ LANGUAGE 'plpgsql';
+
+-- the first time we write to organisationdetail with a new organisation
+-- we set the orgcode in organisation based on organisationdetail.name
+CREATE OR REPLACE FUNCTION set_orgcode()
+RETURNS TRIGGER AS
+$$
+BEGIN
+        UPDATE organisation SET orgcode = organisation_orgcode(NEW.name)
+                WHERE id = NEW.organisation AND orgcode IS NULL;
+        RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+-- ---------------------------------------------------------------------------
+-- each organisation has its own unique gapless sequences for orders, invoices
+-- etc.
+-- ---------------------------------------------------------------------------
+
+-- purchase order sequences
+
+CREATE OR REPLACE FUNCTION organisation_purchaseorder_next(organisation_id INT4)
+RETURNS INT4 AS
+$$
+DECLARE
+        next_pk INT4;
+BEGIN
+        UPDATE organisation SET purchaseorder = purchaseorder + 1
+                WHERE id = organisation_id;
+        SELECT INTO next_pk purchaseorder FROM organisation
+                WHERE id = organisation_id;
+        RETURN next_pk;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION set_organisation_purchaseorder()
+RETURNS TRIGGER AS
+$$
+BEGIN
+        NEW.ordernum = organisation_purchaseorder_next(NEW.organisation);
+        RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+-- purchase invoice sequences
+
+CREATE OR REPLACE FUNCTION organisation_purchaseinvoice_next(organisation_id INT4)
+RETURNS INT4 AS
+$$
+DECLARE
+        next_pk INT4;
+BEGIN
+        UPDATE organisation SET purchaseinvoice = purchaseinvoice + 1
+                WHERE id = organisation_id;
+        SELECT INTO next_pk purchaseinvoice FROM organisation
+                WHERE id = organisation_id;
+        RETURN next_pk;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION set_organisation_purchaseinvoice()
+RETURNS TRIGGER AS
+$$
+BEGIN
+        NEW.invoicenum = organisation_purchaseinvoice_next(NEW.organisation);
+        RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+-- salesorder sequences
+
+CREATE OR REPLACE FUNCTION organisation_salesorder_next(organisation_id INT4)
+RETURNS INT4 AS
+$$
+DECLARE
+        next_pk INT4;
+BEGIN
+        UPDATE organisation SET salesorder = salesorder + 1
+                WHERE id = organisation_id;
+        SELECT INTO next_pk salesorder FROM organisation
+                WHERE id = organisation_id;
+        RETURN next_pk;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION set_organisation_salesorder()
+RETURNS TRIGGER AS
+$$
+BEGIN
+        NEW.ordernum = organisation_salesorder_next(NEW.organisation);
+        RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+-- salesinvoice sequences
+
+CREATE OR REPLACE FUNCTION organisation_salesinvoice_next(organisation_id INT4)
+RETURNS INT4 AS
+$$
+DECLARE
+        next_pk INT4;
+BEGIN
+        UPDATE organisation SET salesinvoice = salesinvoice + 1
+                WHERE id = organisation_id;
+        SELECT INTO next_pk salesinvoice FROM organisation
+                WHERE id = organisation_id;
+        RETURN next_pk;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION set_organisation_salesinvoice()
+RETURNS TRIGGER AS
+$$
+BEGIN
+        NEW.invoicenum = organisation_salesinvoice_next(NEW.organisation);
+        RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+-- ensure ledger table debits and credits are in balance
+CREATE OR REPLACE FUNCTION check_ledger_balance()
+RETURNS trigger AS $check_ledger_balance$
+        DECLARE
+                balance NUMERIC;
+
+        BEGIN
+                SELECT SUM(debit) - SUM(credit) INTO balance FROM ledger;
+                IF balance <> 0 THEN
+                        RAISE EXCEPTION 'ledger does not balance';
+                END IF;
+                RETURN NEW;
+        END;
+$check_ledger_balance$ LANGUAGE plpgsql;
+
+-- ensure the ledger entries for a new journal balance
+CREATE OR REPLACE FUNCTION check_transaction_balance()
+RETURNS trigger AS $check_transaction_balance$
+        DECLARE
+                balance NUMERIC;
+
+        BEGIN
+                SELECT SUM(debit) - SUM(credit) INTO balance
+                FROM ledger
+                WHERE journal=currval(pg_get_serial_sequence('journal','id'));
+                IF balance <> 0 THEN
+                        RAISE EXCEPTION 'transaction does not balance';
+                END IF;
+                RETURN NEW;
+        END;
+$check_transaction_balance$ LANGUAGE plpgsql;
+
+
 
 -- Default data --
 INSERT INTO accounttype (id, name, range_min, range_max, next_id)
