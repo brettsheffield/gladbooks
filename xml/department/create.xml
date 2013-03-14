@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <request>
-	<data>
+  <instance>default</instance>
+	  <business>default</business>
+		<data>
 		<department name="Name of Department"/>
 	</data>
 </request>
