@@ -178,6 +178,64 @@ CREATE TABLE product_tax (
         clientip        TEXT
 );
 
+-- views --
+CREATE OR REPLACE VIEW contactdetailview AS
+SELECT
+        contact as id,
+        is_active,
+        is_deleted,
+        name,
+        line_1,
+        line_2,
+        line_3,
+        town,
+        county,
+        country,
+        postcode,
+        email,
+        phone,
+        phonealt,
+        mobile,
+        fax
+FROM contactdetail
+WHERE id IN (
+        SELECT MAX(id)
+        FROM contactdetail
+        GROUP BY contact
+)
+ORDER BY contact ASC
+;
+
+CREATE OR REPLACE VIEW contactlist AS
+SELECT
+        contact as id,
+        name
+FROM contactdetail
+WHERE id IN (
+        SELECT MAX(id)
+        FROM contactdetail
+        GROUP BY contact
+)
+ORDER BY contact ASC
+;
+
+CREATE OR REPLACE VIEW organisationlist AS
+SELECT
+        organisation as id,
+        orgcode,
+        name
+FROM organisationdetail od
+INNER JOIN organisation o ON o.id = od.organisation
+WHERE od.id IN (
+
+        SELECT MAX(id)
+        FROM organisationdetail
+        GROUP BY organisation
+)
+ORDER BY organisation ASC
+;
+
+
 RETURN instance;
 
 END;

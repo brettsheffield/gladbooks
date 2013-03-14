@@ -549,7 +549,23 @@ RETURNS trigger AS $check_transaction_balance$
         END;
 $check_transaction_balance$ LANGUAGE plpgsql;
 
-
+CREATE OR REPLACE FUNCTION format_accounting(amount NUMERIC)
+RETURNS TEXT AS
+$$
+DECLARE
+        pretty  TEXT;
+BEGIN
+        SELECT INTO pretty to_char(amount, '9,999,999,990.00PR');
+        -- Angle brackets?  Seriously?  Why?
+        pretty = replace(pretty, '<', '(');
+        pretty = replace(pretty, '>', ')');
+        IF amount > 0 THEN
+                -- add trailing space for positive numbers
+                pretty = concat(pretty, ' ');
+        END IF;
+        RETURN pretty;
+END;
+$$ LANGUAGE 'plpgsql';
 
 -- Default data --
 INSERT INTO accounttype (id, name, range_min, range_max, next_id)

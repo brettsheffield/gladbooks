@@ -419,6 +419,115 @@ CREATE CONSTRAINT TRIGGER trig_check_transaction_balance
         EXECUTE PROCEDURE check_transaction_balance()
 ;
 
+-- views --
+
+CREATE VIEW accountlist AS
+SELECT
+        a.id as nominalcode,
+        a.description as account,
+        at.name as type
+FROM account a
+INNER JOIN accounttype at ON at.id = a.accounttype
+ORDER by a.id ASC
+;
+
+CREATE OR REPLACE VIEW balancesheet AS
+        SELECT
+                account,
+                description,
+                format_accounting(sum(debit)) AS debit,
+                format_accounting(sum(credit)) AS credit,
+                format_accounting(sum(coalesce(debit,0)) - sum(coalesce(credit,0))) AS total
+        FROM ledger l
+        INNER JOIN account a ON a.id=l.account
+        GROUP BY account, description, division, department
+UNION
+        SELECT
+                NULL as account,
+                text 'TOTAL' AS description,
+                format_accounting(sum(debit)) AS debit,
+                format_accounting(sum(credit)) AS credit,
+                format_accounting(sum(coalesce(debit,0)) - sum(coalesce(credit,0))) AS total
+        FROM ledger l
+        ORDER BY account ASC
+;
+
+CREATE OR REPLACE VIEW profitandloss AS
+SELECT
+        account,
+        description,
+        amount
+FROM (
+        SELECT
+                0 as lineorder,
+                NULL as account,
+                text 'Revenue' as description,
+                NULL AS amount
+UNION
+        SELECT
+                1 as lineorder,
+                account,
+                description,
+                format_accounting(
+                        coalesce(sum(credit),0) - coalesce(sum(debit),0))
+                AS amount
+        FROM ledger l
+        INNER JOIN account a ON a.id=l.account
+        WHERE account BETWEEN 4000 AND 4999
+        GROUP BY account, description
+UNION
+        SELECT
+                2 as lineorder,
+                NULL as account,
+                text 'Total Revenue' as description,
+                format_accounting(
+                        coalesce(sum(credit),0) - coalesce(sum(debit),0))
+                AS amount
+        FROM ledger
+        WHERE account BETWEEN 4000 AND 4999
+UNION
+        SELECT
+                3 as lineorder,
+                NULL as account,
+                text 'Expenditure' as description,
+                NULL AS amount
+UNION
+        SELECT
+                4 as lineorder,
+                account,
+                description,
+                format_accounting(
+                        coalesce(sum(debit),0) - coalesce(sum(credit),0))
+                AS amount
+        FROM ledger l
+        INNER JOIN account a ON a.id=l.account
+        WHERE account BETWEEN 5000 AND 8999
+        GROUP BY account, description
+UNION
+        SELECT
+                5 as lineorder,
+                NULL as account,
+                text 'Total Expenditure' as description,
+                format_accounting(
+                        coalesce(sum(debit),0) - coalesce(sum(credit),0))
+                AS amount
+        FROM ledger
+        WHERE account BETWEEN 5000 AND 8999
+UNION
+        SELECT
+                6 as lineorder,
+                NULL as account,
+                text 'Total Profit / (Loss)' as description,
+                format_accounting(
+                        coalesce(sum(credit),0) - coalesce(sum(debit),0))
+                AS amount
+        FROM ledger
+        WHERE account BETWEEN 4000 AND 8999
+ORDER BY lineorder, account ASC
+) a
+;
+
+
 
 RETURN business;
 
