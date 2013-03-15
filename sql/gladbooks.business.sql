@@ -13,9 +13,9 @@ BEGIN
 
 INSERT INTO business (id, name, instance)
 	VALUES (business, business, instance);
-EXECUTE 'CREATE SCHEMA gladbooks_' || instance || '_' || business;
+EXECUTE 'CREATE SCHEMA ' || quote_ident('gladbooks_' || instance || '_' || business);
 
-EXECUTE 'SET search_path TO gladbooks_' || instance || '_' || business || ',gladbooks_' || instance || ',gladbooks';
+EXECUTE 'SET search_path TO ' || quote_ident('gladbooks_' || instance || '_' || business) || ',' || quote_ident('gladbooks_' || instance) || ',gladbooks';
 
 --
 

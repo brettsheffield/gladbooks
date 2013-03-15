@@ -14,7 +14,7 @@
 
 	<xsl:template match="business">
                 <!-- Set postgres schema search_path -->
-                <xsl:text>SET search_path TO </xsl:text>
+                <xsl:text>SET search_path TO gladbooks_</xsl:text>
                 <xsl:copy-of select="$instance"/>
                 <xsl:text>,gladbooks;</xsl:text>
 
