@@ -586,6 +586,22 @@ test("create instance", function() {
 	});
 });
 
+test("get instance list", function() {
+	g_username='betty';
+	g_password='ie5a8P40';
+
+	stop();
+	$.ajax({
+		url: collection_url('instances'),
+		type: 'GET',
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { ok(true); start(); },
+		error: function(xml) { ok(false); start(); },
+	});
+});
+
+
 module("Business");
 
 test("create business", function() {
@@ -606,3 +622,19 @@ test("create business", function() {
 		error: function(xml) { ok(false); start(); },
 	});
 });
+
+test("get business list", function() {
+	g_username='betty';
+	g_password='ie5a8P40';
+
+	stop();
+	$.ajax({
+		url: collection_url('businesses'),
+		type: 'GET',
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { ok(true); start(); },
+		error: function(xml) { ok(false); start(); },
+	});
+});
+
