@@ -565,10 +565,30 @@ function UUID() {
     };
 }
 
-/*
 module("Instance");
 
 test("create instance", function() {
 });
 
-*/
+module("Business");
+
+test("create business", function() {
+	g_username='betty';
+	g_password='ie5a8P40';
+
+	var xml = createRequestXml();
+	var name;
+	businessname = UUID();
+	xml += '<business name="' + businessname +'"/></data></request>';
+
+	stop();
+	$.ajax({
+		url: collection_url('businesses'),
+		type: 'POST',
+		data: xml,
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { ok(true); start(); },
+		error: function(xml) { ok(false); start(); },
+	});
+});

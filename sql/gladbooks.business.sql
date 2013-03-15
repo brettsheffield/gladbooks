@@ -12,10 +12,11 @@ BEGIN
 --
 
 INSERT INTO business (id, name, instance)
-	VALUES (business, business, instance);
+	VALUES (quote_ident(business), business, instance);
 EXECUTE 'CREATE SCHEMA ' || quote_ident(business);
 
-EXECUTE 'SET search_path TO ' || business || ',' || instance || ',gladbooks';
+EXECUTE 'SET search_path TO ' || quote_ident(business) || ',' || 
+	quote_ident(instance) || ',gladbooks';
 
 --
 
