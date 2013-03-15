@@ -944,7 +944,8 @@ function populateAccountTypeDDowns(xml, form) {
 }
 
 function validateChartAdd(form) {
-    var xml = '<?xml version="1.0" encoding="UTF-8"?><request><data><account type="';
+	var xml = createRequestXml();
+    xml += '<account type="';
 	xml += $(form).find('select.accounttype').val();
     xml += '" description="';
 	xml += $(form).find('input.description').val();
