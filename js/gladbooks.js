@@ -409,7 +409,8 @@ function clickMenu(event) {
 function showBalanceSheet() {
 	showSpinner();
 	$.ajax({
-		url: '/test/reports/balancesheet/',
+		url: '/gladbooks_' + g_instance + '/gladbooks_' + g_instance + '_'
+			+ g_business + '/reports/balancesheet/',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
 			displayResultsGeneric(xml, "Balance Sheet");
@@ -424,7 +425,8 @@ function showBalanceSheet() {
 function showContacts() {
 	showSpinner();
 	$.ajax({
-		url: '/test/contactlist/',
+		url: '/gladbooks_' + g_instance + '/gladbooks_' + g_instance + '_'
+			+ g_business + '/contactlist/',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
 			displayResultsGeneric(xml, "Contacts", true);
@@ -439,7 +441,8 @@ function showContacts() {
 function showOrganisations() {
 	showSpinner();
 	$.ajax({
-		url: '/test/organisations/',
+		url: '/gladbooks_' + g_instance + '/gladbooks_' + g_instance + '_'
+			+ g_business + '/organisations/',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
 			displayResultsGeneric(xml, "Organisations", true);
@@ -454,7 +457,8 @@ function showOrganisations() {
 function showProfitAndLoss(startDate, endDate) {
 	showSpinner();
 	$.ajax({
-		url: '/test/reports/profitandloss/',
+		url: '/gladbooks_' + g_instance + '/gladbooks_' + g_instance + '_'
+			+ g_business + '/reports/profitandloss/',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
 			displayResultsGeneric(xml, "Profit and Loss");
@@ -517,7 +521,7 @@ function displayForm(object, action, title, html, xml) {
 
 /* build xml and submit form */
 function submitForm(object, action, id) {
-	var xml = '<request><data>';
+	var xml = createRequestXml();
 	var url = '';
 
 	console.log('Submitting form ' + object + ':' + action);
@@ -567,13 +571,15 @@ function submitForm(object, action, id) {
 /* Fetch an individual element of a collection for display / editing */
 function displayElement(collection, id) {
 	if (collection == 'Contacts') {
-		url = '/test/contacts/' + id;
+		url = '/gladbooks_' + g_instance + '/gladbooks_' + g_instance + '_'
+			+ g_business + '/contacts/' + id;
 		object = 'contact';
 		action = 'update';
 		title = 'Edit Contact ' + id;
 	}
 	else if (collection == 'Organisations') {
-		url = '/test/organisations/' + id;
+		url = '/gladbooks_' + g_instance + '/gladbooks_' + g_instance + '_'
+			+ g_business + '/organisations/' + id;
 		object = 'organisation';
 		action = 'update';
 		title = 'Edit Organisation ' + id;
@@ -730,7 +736,8 @@ function setupJournalForm(tab) {
 
 	/* load dropdown contents */
 	$.ajax({
-		url: '/test/accounts/',
+		url: '/gladbooks_' + g_instance + '/gladbooks_' + g_instance + '_'
+			+ g_business + '/accounts/',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function (xml) {
 			populateAccountsDDowns(xml, tab);
@@ -790,7 +797,7 @@ function finishJournalForm(tab) {
 
 /* validate journal entry form and return xml to submit */
 function validateJournalEntry(form) {
-	var xml = '<request/>';
+	var xml = createRequestXml();
 	var account;
 	var type;
 	var amount;
@@ -811,7 +818,8 @@ function validateJournalEntry(form) {
 				xml = false;
 				return false;
 			}
-			xml = '<request><data><journal ';
+			xml = createRequestXml();
+			xml += '<journal ';
 			xml += 'transactdate="' + $(form).find('.transactdate').val()
 				+ '" ';
 			xml += 'description="'+ $(this).val().trim() +'">';
@@ -911,7 +919,8 @@ function showChartAddForm(tab) {
 
     /* load dropdown contents */
     $.ajax({
-        url: '/test/accounttypes/',
+		url: '/gladbooks_' + g_instance + '/gladbooks_' + g_instance + '_'
+			+ g_business + '/accounttypes/',
         beforeSend: function (xhr) { setAuthHeader(xhr); },
         success: function (xml) {
             populateAccountTypeDDowns(xml, newform);

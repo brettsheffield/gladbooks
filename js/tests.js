@@ -237,6 +237,22 @@ test("update contact", function() {
 
 });
 
+test("get contactlist", function() {
+	g_username='betty';
+	g_password='ie5a8P40';
+	var url = "/gladbooks_default/gladbooks_default_default/contactlist/";
+
+	stop();
+	$.ajax({
+		url: url,
+		type: 'GET',
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { ok(true); start(); },
+		error: function(xml) { ok(false); start(); },
+	});
+});
+
 module("Department");
 
 test("create department", function() {
@@ -531,7 +547,7 @@ test("update organisation (vatreg)", function() {
 test("get organisation", function() {
 	g_username='betty';
 	g_password='ie5a8P40';
-	var url = "/test/organisations/2";
+	var url = "/gladbooks_default/gladbooks_default_default/organisations/2";
 
 	stop();
 	$.ajax({
