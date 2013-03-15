@@ -409,8 +409,7 @@ function clickMenu(event) {
 function showBalanceSheet() {
 	showSpinner();
 	$.ajax({
-		url: '/gladbooks_' + g_instance + '/gladbooks_' + g_instance + '_'
-			+ g_business + '/reports/balancesheet/',
+		url: collection_url('reports/balancesheet'),
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
 			displayResultsGeneric(xml, "Balance Sheet");
@@ -425,8 +424,7 @@ function showBalanceSheet() {
 function showContacts() {
 	showSpinner();
 	$.ajax({
-		url: '/gladbooks_' + g_instance + '/gladbooks_' + g_instance + '_'
-			+ g_business + '/contactlist/',
+		url: collection_url('contactlist'),
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
 			displayResultsGeneric(xml, "Contacts", true);
@@ -441,8 +439,7 @@ function showContacts() {
 function showOrganisations() {
 	showSpinner();
 	$.ajax({
-		url: '/gladbooks_' + g_instance + '/gladbooks_' + g_instance + '_'
-			+ g_business + '/organisations/',
+		url: collection_url('organisations'),
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
 			displayResultsGeneric(xml, "Organisations", true);
@@ -457,8 +454,7 @@ function showOrganisations() {
 function showProfitAndLoss(startDate, endDate) {
 	showSpinner();
 	$.ajax({
-		url: '/gladbooks_' + g_instance + '/gladbooks_' + g_instance + '_'
-			+ g_business + '/reports/profitandloss/',
+		url: collection_url('reports/profitandloss'),
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
 			displayResultsGeneric(xml, "Profit and Loss");
@@ -530,7 +526,7 @@ function submitForm(object, action, id) {
 	$("div.tablet.active").find(
 		'div.' + object + '.' + action
 	).find('form').each(function() {
-		url = $(this).attr('action');
+		url = collection_url($(this).attr('action'));
 		if (id) {
 			url += id;
 		}
@@ -571,15 +567,13 @@ function submitForm(object, action, id) {
 /* Fetch an individual element of a collection for display / editing */
 function displayElement(collection, id) {
 	if (collection == 'Contacts') {
-		url = '/gladbooks_' + g_instance + '/gladbooks_' + g_instance + '_'
-			+ g_business + '/contacts/' + id;
+		url = collection_url('contacts') + id;
 		object = 'contact';
 		action = 'update';
 		title = 'Edit Contact ' + id;
 	}
 	else if (collection == 'Organisations') {
-		url = '/gladbooks_' + g_instance + '/gladbooks_' + g_instance + '_'
-			+ g_business + '/organisations/' + id;
+		url = collection_url('organisations') + id;
 		object = 'organisation';
 		action = 'update';
 		title = 'Edit Organisation ' + id;
@@ -719,8 +713,7 @@ function populateDebitCreditDDowns() {
 function showChart() {
 	showSpinner();
 	$.ajax({
-		url: '/gladbooks_' + g_instance + '/gladbooks_' + g_instance + '_'
-			+ g_business + '/accounts/',
+		url: collection_url('accounts'),
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
 			displayResultsGeneric(xml, "Chart of Accounts", true);
@@ -731,13 +724,21 @@ function showChart() {
 	});
 }
 
+/* return url for collection */
+function collection_url(collection) {
+	var url;
+	url =  '/gladbooks_' + g_instance; 
+	url += '/gladbooks_' + g_instance + '_';
+	url += g_business + '/' + collection + '/';
+	return url;
+}
+
 /* set up journal form */
 function setupJournalForm(tab) {
 
 	/* load dropdown contents */
 	$.ajax({
-		url: '/gladbooks_' + g_instance + '/gladbooks_' + g_instance + '_'
-			+ g_business + '/accounts/',
+		url: collection_url('accounts'),
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function (xml) {
 			populateAccountsDDowns(xml, tab);
@@ -871,7 +872,7 @@ function submitJournalEntry(event, form) {
 
 	showSpinner();
     $.ajax({
-        url: '/test/journals/',
+		url: collection_url('journals'),
         type: 'POST',
         data: xml,
         contentType: 'text/xml',
@@ -919,8 +920,7 @@ function showChartAddForm(tab) {
 
     /* load dropdown contents */
     $.ajax({
-		url: '/gladbooks_' + g_instance + '/gladbooks_' + g_instance + '_'
-			+ g_business + '/accounttypes/',
+		url: collection_url('accounttypes'),
         beforeSend: function (xhr) { setAuthHeader(xhr); },
         success: function (xml) {
             populateAccountTypeDDowns(xml, newform);
@@ -962,7 +962,7 @@ function submitChartAdd(event, form) {
 
 	showSpinner();
     $.ajax({
-        url: '/test/accounts/',
+		url: collection_url('accounts'),
         type: 'POST',
         data: xml,
         contentType: 'text/xml',
