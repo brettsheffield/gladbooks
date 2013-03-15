@@ -713,7 +713,8 @@ function populateDebitCreditDDowns() {
 function showChart() {
 	showSpinner();
 	$.ajax({
-		url: '/test/accounts/',
+		url: '/gladbooks_' + g_instance + '/gladbooks_' + g_instance + '_'
+			+ g_business + '/accounts/',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
 			displayResultsGeneric(xml, "Chart of Accounts", true);
