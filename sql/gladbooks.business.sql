@@ -12,11 +12,10 @@ BEGIN
 --
 
 INSERT INTO business (id, name, instance)
-	VALUES (quote_ident(business), business, instance);
-EXECUTE 'CREATE SCHEMA ' || quote_ident(business);
+	VALUES (business, business, instance);
+EXECUTE 'CREATE SCHEMA gladbooks_' || instance || '_' || business;
 
-EXECUTE 'SET search_path TO ' || quote_ident(business) || ',' || 
-	quote_ident(instance) || ',gladbooks';
+EXECUTE 'SET search_path TO gladbooks_' || instance || '_' || business || ',gladbooks_' || instance || ',gladbooks';
 
 --
 
@@ -537,4 +536,4 @@ $$ LANGUAGE 'plpgsql';
 
 SET search_path=gladbooks_default,gladbooks;
 
-SELECT create_business('gladbooks_default', 'gladbooks_default_default');
+SELECT create_business('default', 'default');

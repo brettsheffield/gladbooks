@@ -12,9 +12,9 @@ BEGIN
 --
 
 INSERT INTO instance (id) VALUES (instance);
-EXECUTE 'CREATE SCHEMA ' || quote_ident(instance);
+EXECUTE 'CREATE SCHEMA gladbooks_' || instance;
 
-EXECUTE 'SET search_path TO ' || quote_ident(instance) || ',gladbooks';
+EXECUTE 'SET search_path TO gladbooks_' || instance || ',gladbooks';
 
 -- a business represents a distinct set of accounting ledgers
 CREATE TABLE business (
@@ -241,4 +241,4 @@ RETURN instance;
 END;
 $$ LANGUAGE 'plpgsql';
 
-SELECT create_instance('gladbooks_default');
+SELECT create_instance('default');

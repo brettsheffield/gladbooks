@@ -8,18 +8,14 @@
         <xsl:variable name="business" select="request/business" />
 
 	<xsl:include href="../cleanQuote.xsl"/>
+	<xsl:include href="../setSearchPath.xsl"/>
 
         <xsl:template match="request">
                 <xsl:apply-templates select="data/account"/>
         </xsl:template>
 
 	<xsl:template match="account">
-		<!-- Set postgres schema search_path -->
-		<xsl:text>SET search_path TO </xsl:text>
-		<xsl:copy-of select="$business"/>
-		<xsl:text>,</xsl:text>
-		<xsl:copy-of select="$instance"/>
-		<xsl:text>,gladbooks;</xsl:text>
+		<xsl:call-template name="setSearchPath"/>
 
 		<xsl:text>BEGIN;</xsl:text>
 		<xsl:text>INSERT INTO account (accounttype, description, authuser, clientip) VALUES ('</xsl:text>

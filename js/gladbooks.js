@@ -369,6 +369,9 @@ function clickMenu(event) {
 	if ($(this).attr("href") == '#journal') {
 		setupJournalForm();
 	} 
+	else if ($(this).attr("href") == '#businessview') {
+		showBusinesses();
+	}
 	else if ($(this).attr("href") == '#chartview') {
 		showChart();
 	}
@@ -416,6 +419,21 @@ function showBalanceSheet() {
 		},
 		error: function(xml) {
 			displayResultsGeneric(xml, "Balance Sheet");
+		}
+	});
+}
+
+/* Display Business list */
+function showBusinesses() {
+	showSpinner();
+	$.ajax({
+		url: collection_url('businesses'),
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) {
+			displayResultsGeneric(xml, "Businesses", true);
+		},
+		error: function(xml) {
+			displayResultsGeneric(xml, "Businesses");
 		}
 	});
 }
@@ -578,6 +596,11 @@ function displayElement(collection, id) {
 		action = 'update';
 		title = 'Edit Organisation ' + id;
 	}
+	else if (collection == 'Businesses') {
+		g_business = id;
+		alert("You have selected business: " + id);
+		return;
+	}
 	else {
 		return;
 	}
@@ -727,9 +750,7 @@ function showChart() {
 /* return url for collection */
 function collection_url(collection) {
 	var url;
-	url =  '/gladbooks_' + g_instance; 
-	url += '/gladbooks_' + g_instance + '_';
-	url += g_business + '/' + collection + '/';
+	url =  '/' + g_instance + '/' + g_business + '/' + collection + '/';
 	return url;
 }
 
@@ -975,9 +996,8 @@ function submitChartAdd(event, form) {
 
 function createRequestXml() {
 	var xml = '<?xml version="1.0" encoding="UTF-8"?><request>';
-	xml += '<instance>gladbooks_' + g_instance + '</instance>';
-	xml += '<business>gladbooks_' + g_instance + '_' + g_business;
-	xml += '</business>';
+	xml += '<instance>' + g_instance + '</instance>';
+	xml += '<business>' + g_business + '</business>';
 	xml += '<data>';
 	return xml;
 }
