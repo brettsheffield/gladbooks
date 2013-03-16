@@ -995,6 +995,7 @@ function submitChartAdd(event, form) {
     });
 }
 
+/* Start building an xml request */
 function createRequestXml() {
 	var xml = '<?xml version="1.0" encoding="UTF-8"?><request>';
 	xml += '<instance>' + g_instance + '</instance>';
@@ -1018,6 +1019,7 @@ function prepBusinessSelector() {
 	});
 }
 
+/* Display combo for switching between businesses */
 function showBusinessSelector(xml) {
 	$('select.businessselect').remove();
 	select = $('<select class="businessselect"></select>');
@@ -1036,6 +1038,7 @@ function showBusinessSelector(xml) {
 	$('select.businessselect').val(g_business);
 }
 
+/* Switch to the selected business */
 function switchBusiness(business) {
 	/* hide content of active tab */
 	$('.tablet.active').addClass('hidden');
