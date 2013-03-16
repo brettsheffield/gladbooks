@@ -29,7 +29,7 @@
 		<xsl:text>','</xsl:text>
 		<xsl:call-template name="cleanQuote">
 			<xsl:with-param name="string">
-				<xsl:value-of select="@name"/>
+				<xsl:value-of select="name"/>
 			</xsl:with-param>
 		</xsl:call-template>
 		<xsl:text>');</xsl:text>
@@ -43,7 +43,7 @@
 		<xsl:text>','</xsl:text>
 		<xsl:call-template name="cleanQuote">
 			<xsl:with-param name="string">
-				<xsl:value-of select="@name"/>
+				<xsl:value-of select="name"/>
 			</xsl:with-param>
 		</xsl:call-template>
 		<xsl:text>');</xsl:text>

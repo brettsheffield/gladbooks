@@ -372,6 +372,9 @@ function clickMenu(event) {
 	else if ($(this).attr("href") == '#businessview') {
 		showBusinesses();
 	}
+	else if ($(this).attr("href") == '#business.create') {
+		getForm('business', 'create', 'Add New Business');
+	}
 	else if ($(this).attr("href") == '#chartview') {
 		showChart();
 	}

@@ -525,7 +525,7 @@ module("Instance");
 
 test("create instance", function() {
 	var xml = createRequestXml();
-	xml += '<instance name="' + UUID() +'"/></data></request>';
+	xml += '<instance><name>' + UUID() +'</name></instance></data></request>';
 
 	stop();
 	$.ajax({
@@ -556,7 +556,7 @@ module("Business");
 
 test("create business", function() {
 	var xml = createRequestXml();
-	xml += '<business name="' + UUID() +'"/></data></request>';
+	xml += '<business><name>' + UUID() +'</name></business></data></request>';
 
 	stop();
 	$.ajax({
