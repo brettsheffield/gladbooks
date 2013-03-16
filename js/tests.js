@@ -228,7 +228,7 @@ module("Department");
 
 test("create department", function() {
 	var xml = createRequestXml();
-	xml += '<department name="'+ UUID() +'"/></data></request>';
+	xml += '<department><name>'+ UUID() +'</name></department></data></request>';
 
 	stop();
 	$.ajax({
@@ -247,7 +247,7 @@ module("Division");
 
 test("create division", function() {
 	var xml = createRequestXml();
-	xml += '<division name="'+ UUID() +'"/></data></request>';
+	xml += '<division><name>'+ UUID() +'</name></division></data></request>';
 
 	stop();
 	$.ajax({

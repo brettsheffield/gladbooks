@@ -393,6 +393,18 @@ function clickMenu(event) {
 	else if ($(this).attr("href") == '#contact.create') {
 		getForm('contact', 'create', 'Add New Contact');
 	}
+	else if ($(this).attr("href") == '#departments.create') {
+		getForm('department', 'create', 'Add New Department');
+	}
+	else if ($(this).attr("href") == '#divisions.create') {
+		getForm('division', 'create', 'Add New Division');
+	}
+	else if ($(this).attr("href") == '#departments.view') {
+		showQuery('departments', 'Departments', true);
+	}
+	else if ($(this).attr("href") == '#divisions.view') {
+		showQuery('divisions', 'Divisions', true);
+	}
 	else if ($(this).attr("href") == '#organisations') {
 		showQuery('organisations', 'Organisations', true);
 	}

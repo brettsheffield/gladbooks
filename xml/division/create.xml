@@ -3,6 +3,8 @@
   <instance>default</instance>
   <business>default</business>
 	<data>
-		<division name="Name of Division"/>
+		<division>
+			<name>Name of Division</name>
+		</division>
 	</data>
 </request>

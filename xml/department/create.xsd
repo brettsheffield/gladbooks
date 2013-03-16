@@ -12,7 +12,9 @@
 
 						<xs:element name="department" maxOccurs="1">
 							<xs:complexType>
-								<xs:attribute name="name" type="xs:string" use="required"/>
+          			<xs:sequence>
+									<xs:element name="name" type="xs:string"/>
+          			</xs:sequence>
 							</xs:complexType>
 						</xs:element><!--department-->
 
