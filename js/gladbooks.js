@@ -372,8 +372,8 @@ function clickMenu(event) {
 	if ($(this).attr("href") == '#journal') {
 		setupJournalForm();
 	} 
-	else if ($(this).attr("href") == '#journalview') {
-		showQuery('journals', 'Journal', true);
+	else if ($(this).attr("href") == '#ledger') {
+		showQuery('ledgers', 'General Ledger', true);
 	} 
 	else if ($(this).attr("href") == '#businessview') {
 		showQuery('businesses', 'Businesses', true);
