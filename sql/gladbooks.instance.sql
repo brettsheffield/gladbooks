@@ -6,19 +6,19 @@ SET search_path TO gladbooks;
 CREATE OR REPLACE FUNCTION create_instance(instance VARCHAR(63))
 RETURNS TEXT AS
 $$
-
 BEGIN
 
 --
 
 INSERT INTO instance (id) VALUES (instance);
+
 EXECUTE 'CREATE SCHEMA ' || quote_ident('gladbooks_' || instance);
 
 EXECUTE 'SET search_path TO ' || quote_ident('gladbooks_' || instance) || ',gladbooks';
 
 -- a business represents a distinct set of accounting ledgers
 CREATE TABLE business (
-	id              VARCHAR(63) PRIMARY KEY,
+	id              SERIAL PRIMARY KEY,
 	name		TEXT UNIQUE NOT NULL,
 	instance	VARCHAR(63) references instance(id) ON DELETE RESTRICT,
 	entered         timestamp with time zone default now()

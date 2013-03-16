@@ -23,7 +23,7 @@
 g_username='betty';
 g_password='ie5a8P40';
 g_instance='test';
-g_business='test';
+g_business='1';
 
 module("Login");
 

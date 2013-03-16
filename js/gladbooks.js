@@ -27,7 +27,7 @@ var g_password = '';
 var g_username = 'betty';    /* temp */
 var g_password = 'ie5a8P40'; /* temp */
 var g_instance = 'default';
-var g_business = 'default';
+var g_business = '1';
 var g_loggedin = false;
 var g_max_ledgers_per_journal=3;
 var g_frmLedger;

@@ -1,12 +1,12 @@
 SET search_path TO gladbooks;
 
-CREATE OR REPLACE FUNCTION default_data(instance VARCHAR(63), business VARCHAR(63))
+CREATE OR REPLACE FUNCTION default_data(instance VARCHAR(63), business INT4)
 RETURNS void AS
 $$
 
 BEGIN
 
-EXECUTE 'SET search_path TO ' || quote_ident('gladbooks_' || instance || '_' || business) || ',' || quote_ident('gladbooks_' || instance) || ',gladbooks';
+EXECUTE 'SET search_path TO gladbooks_' || instance || '_' || business || ',gladbooks_' || instance || ',gladbooks';
 --
 
 -- Default data --

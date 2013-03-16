@@ -6,16 +6,18 @@ SET search_path TO gladbooks;
 CREATE OR REPLACE FUNCTION create_business(instance VARCHAR(63), business VARCHAR(63))
 RETURNS TEXT AS
 $$
-
+DECLARE
+	business_id INT4;
 BEGIN
 
 --
 
-INSERT INTO business (id, name, instance)
-	VALUES (business, business, instance);
-EXECUTE 'CREATE SCHEMA ' || quote_ident('gladbooks_' || instance || '_' || business);
+INSERT INTO business (name, instance) VALUES (business, instance);
+SELECT INTO business_id currval(pg_get_serial_sequence('business', 'id'));
 
-EXECUTE 'SET search_path TO ' || quote_ident('gladbooks_' || instance || '_' || business) || ',' || quote_ident('gladbooks_' || instance) || ',gladbooks';
+EXECUTE 'CREATE SCHEMA gladbooks_' || instance || '_' || business_id;
+
+EXECUTE 'SET search_path TO gladbooks_' || instance || '_' || business_id || ',gladbooks_' || instance || ',gladbooks';
 
 --
 
@@ -527,6 +529,7 @@ ORDER BY lineorder, account ASC
 ) a
 ;
 
+EXECUTE 'SELECT default_data(''' || instance || ''',''' || business_id || ''')';
 
 RETURN business;
 
