@@ -372,35 +372,38 @@ function clickMenu(event) {
 	if ($(this).attr("href") == '#journal') {
 		setupJournalForm();
 	} 
+	else if ($(this).attr("href") == '#journalview') {
+		showQuery('journals', 'Journal', true);
+	} 
 	else if ($(this).attr("href") == '#businessview') {
-		showBusinesses();
+		showQuery('businesses', 'Businesses', true);
 	}
 	else if ($(this).attr("href") == '#business.create') {
 		getForm('business', 'create', 'Add New Business');
 	}
 	else if ($(this).attr("href") == '#chartview') {
-		showChart();
+		showQuery('accounts', 'Chart of Accounts', true);
 	}
 	else if ($(this).attr("href") == '#chartadd') {
 		showChartAddForm();
 	}
 	else if ($(this).attr("href") == '#contacts') {
-		showContacts();
+		showQuery('contactlist', 'Contacts', true);
 	}
 	else if ($(this).attr("href") == '#contact.create') {
 		getForm('contact', 'create', 'Add New Contact');
 	}
 	else if ($(this).attr("href") == '#organisations') {
-		showOrganisations();
+		showQuery('organisations', 'Organisations', true);
 	}
 	else if ($(this).attr("href") == '#organisation.create') {
 		getForm('organisation', 'create', 'Add New Organisation');
 	}
 	else if ($(this).attr("href") == '#rpt_balancesheet') {
-		showBalanceSheet();
+		showQuery('reports/balancesheet', 'Balance Sheet', false);
 	}
 	else if ($(this).attr("href") == '#rpt_profitandloss') {
-		showProfitAndLoss();
+		showQuery('reports/profitandloss', 'Profit and Loss', false);
 	}
 	else if ($(this).attr("href") == '#help') {
 		addTab("Help", "<h2>Help</h2>", true);
@@ -414,77 +417,17 @@ function clickMenu(event) {
 	}
 }
 
-/* Display Balance Sheet Report */
-function showBalanceSheet() {
+/* Display query results as list */
+function showQuery(collection, title, sort) {
 	showSpinner();
 	$.ajax({
-		url: collection_url('reports/balancesheet'),
+		url: collection_url(collection),
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
-			displayResultsGeneric(xml, "Balance Sheet");
+			displayResultsGeneric(xml, title, sort);
 		},
 		error: function(xml) {
-			displayResultsGeneric(xml, "Balance Sheet");
-		}
-	});
-}
-
-/* Display Business list */
-function showBusinesses() {
-	showSpinner();
-	$.ajax({
-		url: collection_url('businesses'),
-		beforeSend: function (xhr) { setAuthHeader(xhr); },
-		success: function(xml) {
-			displayResultsGeneric(xml, "Businesses", true);
-		},
-		error: function(xml) {
-			displayResultsGeneric(xml, "Businesses");
-		}
-	});
-}
-
-/* Display Contact list */
-function showContacts() {
-	showSpinner();
-	$.ajax({
-		url: collection_url('contactlist'),
-		beforeSend: function (xhr) { setAuthHeader(xhr); },
-		success: function(xml) {
-			displayResultsGeneric(xml, "Contacts", true);
-		},
-		error: function(xml) {
-			displayResultsGeneric(xml, "Contacts");
-		}
-	});
-}
-
-/* Display Organisation list */
-function showOrganisations() {
-	showSpinner();
-	$.ajax({
-		url: collection_url('organisations'),
-		beforeSend: function (xhr) { setAuthHeader(xhr); },
-		success: function(xml) {
-			displayResultsGeneric(xml, "Organisations", true);
-		},
-		error: function(xml) {
-			displayResultsGeneric(xml, "Organisations");
-		}
-	});
-}
-
-/* display P&L report */
-function showProfitAndLoss(startDate, endDate) {
-	showSpinner();
-	$.ajax({
-		url: collection_url('reports/profitandloss'),
-		beforeSend: function (xhr) { setAuthHeader(xhr); },
-		success: function(xml) {
-			displayResultsGeneric(xml, "Profit and Loss");
-		},
-		error: function(xml) {
-			displayResultsGeneric(xml, "Profit and Loss");
+			displayResultsGeneric(xml, title);
 		}
 	});
 }
@@ -690,9 +633,8 @@ function displayResultsGeneric(xml, title, sorted) {
 	addTab(title, $t, true);
 
 	/* make our table pretty and sortable */
-	/* FIXME: this will affect *all* .datatable, not just this one */
 	if (sorted) {
-		$(".datatable").tablesorter({
+		$('.tablet.active').find(".datatable").tablesorter({
 			sortList: [[0,0], [1,0]], 
 			widgets: ['zebra'] 
 		});
@@ -742,21 +684,6 @@ function populateDebitCreditDDowns() {
 		$("<option />").val('credit').text('credit')
 	);
 	$('select.type:not(.populated)').addClass('populated');
-}
-
-/* fetch chart of accounts */
-function showChart() {
-	showSpinner();
-	$.ajax({
-		url: collection_url('accounts'),
-		beforeSend: function (xhr) { setAuthHeader(xhr); },
-		success: function(xml) {
-			displayResultsGeneric(xml, "Chart of Accounts", true);
-		},
-		error: function(xml) {
-			displayResultsGeneric(xml, "Chart of Accounts");
-		}
-	});
 }
 
 /* return url for collection */
@@ -1024,6 +951,7 @@ function prepBusinessSelector() {
 		},
 		error: function(xml) {
 			/* TODO: dialog to create first business */
+			getForm('business', 'create', 'Add New Business');
 		}
 	});
 }
@@ -1042,7 +970,7 @@ function showBusinessSelector(xml) {
 		switchBusiness($(this).val());
 	});
 
-	$('ul.nav').prepend(select);
+	$('form.navbar-search').append(select);
 	$('select.businessselect').val(g_business);
 }
 
