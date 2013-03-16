@@ -4,7 +4,6 @@ psql gladbooks < gladbooks.db.sql
 psql gladbooks < gladbooks.instance.sql
 psql gladbooks < gladbooks.business.sql
 psql gladbooks < gladbooks.business.data.sql
-psql gladbooks -c "SET search_path=gladbooks_default_default,gladbooks_default,gladbooks;SELECT default_data('gladbooks_default', 'gladbooks_default_default')"
 
 # for test db only
 psql gladbooks < gladbooks-testdata.sql

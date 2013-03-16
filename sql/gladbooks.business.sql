@@ -535,5 +535,4 @@ END;
 $$ LANGUAGE 'plpgsql';
 
 SET search_path=gladbooks_default,gladbooks;
-
 SELECT create_business('default', 'default');

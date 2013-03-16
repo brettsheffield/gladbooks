@@ -103,3 +103,6 @@ INSERT INTO taxratedetail (taxrate, tax, rate, valid_from, valid_to) VALUES (cur
 --
 END;
 $$ LANGUAGE 'plpgsql';
+
+SET search_path=gladbooks_default_default,gladbooks_default,gladbooks;
+SELECT default_data('gladbooks_default', 'gladbooks_default_default');
