@@ -124,7 +124,7 @@ function addTab(title, content, activate) {
 
 	/* add tab and closer */
 	$('ul.tablist').append('<li id="tabli' + tabid
-		+ '" class="tablet' + tabid + '">'
+		+ '" class="tabhead tablet' + tabid + ' business' + g_business + '">'
 		+ '<a href="' + tabid + '">' + title + '</a>'
 		+ '<a id="tabcloser' + tabid + '" class="tabcloser" href="'
 		+ tabid  + '">'
@@ -132,7 +132,7 @@ function addTab(title, content, activate) {
 
 	/* add content */
 	$('div.tabcontent').append('<div id="tab' + tabid + '" class="tablet '
-		+ 'tablet' + tabid + '">');
+		+ 'tablet' + tabid + ' business' + g_business + '">');
 	$('div#tab' + tabid).append(content);
 
 	/* add closer event */
@@ -159,9 +159,9 @@ function addTab(title, content, activate) {
 
 function activateTab(tabid) {
 		console.log("activating tab " + tabid);
-        /* remove "active" styling from all tabs */
-        $(".tabheaders li").removeClass('active');
-        $(".tablet").removeClass('active');
+        /* remove "active" styling from all tabs for this business */
+        $(".tabhead.business" + g_business).removeClass('active');
+        $(".tablet.business" + g_business).removeClass('active');
 
         /* mark selected tab as active */
         $(".tablet" + tabid).addClass("active");
@@ -1037,6 +1037,22 @@ function showBusinessSelector(xml) {
 }
 
 function switchBusiness(business) {
-	removeAllTabs();
+	/* hide content of active tab */
+	$('.tablet.active').addClass('hidden');
+
+	/* hide all tabheads for this business */
+	$('.tabhead.business' + g_business).each(function() {
+		$(this).addClass('hidden');
+	});
+
+	/* switch business */
 	g_business = business;
+
+	/* unhide tabs for new business */
+	$('.tabhead.business' + g_business).each(function() {
+		$(this).removeClass('hidden');
+	});
+	$('.tablet.business' + g_business).each(function() {
+		$(this).removeClass('hidden');
+	});
 }
