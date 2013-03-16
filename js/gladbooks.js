@@ -38,6 +38,9 @@ $(document).ready(function() {
 	/* no password, display login dialog */
 	if (g_password == '') { displayLoginBox(); }
 
+	/* load business combo */
+	prepBusinessSelector();
+
 	/* prepare tabbed workarea */
 	deployTabs();
 
@@ -1003,4 +1006,38 @@ function createRequestXml() {
 	xml += '<business>' + g_business + '</business>';
 	xml += '<data>';
 	return xml;
+}
+
+/* create business selector combo */
+function prepBusinessSelector() {
+	$.ajax({
+		url: collection_url('businesses'),
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) {
+			showBusinessSelector(xml);
+		},
+		error: function(xml) {
+			/* TODO: dialog to create first business */
+		}
+	});
+}
+
+function showBusinessSelector(xml) {
+	select = $('<select class="businessselect"></select>');
+
+	$(xml).find('row').each(function() {
+		var id = $(this).find('id').text();
+		var name = $(this).find('name').text();
+		select.append($("<option />").val(id).text(name));
+	});
+	select.change(function() {
+		switchBusiness($(this).val());
+	});
+
+	$('form.navbar-search').append(select);
+}
+
+function switchBusiness(business) {
+	removeAllTabs();
+	g_business = business;
 }
