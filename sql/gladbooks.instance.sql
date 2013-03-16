@@ -242,3 +242,4 @@ END;
 $$ LANGUAGE 'plpgsql';
 
 SELECT create_instance('default');
+SELECT create_instance('test');

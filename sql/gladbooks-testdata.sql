@@ -1,8 +1,8 @@
-SET search_path TO gladbooks_default,gladbooks;
-SELECT create_business('default', 'default');
+SET search_path TO gladbooks_test,gladbooks;
+SELECT create_business('test', 'test');
 
-SET search_path TO gladbooks_default_default,gladbooks_default,gladbooks;
-SELECT default_data('default', 'default');
+SET search_path TO gladbooks_test_test,gladbooks_test,gladbooks;
+SELECT default_data('test', 'test');
 
 BEGIN;
 

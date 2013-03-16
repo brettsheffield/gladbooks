@@ -20,6 +20,11 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
+g_username='betty';
+g_password='ie5a8P40';
+g_instance='test';
+g_business='test';
+
 module("Login");
 
 test("build authentication hash", function() {
@@ -36,8 +41,6 @@ test("build authentication hash", function() {
 module("Account");
 
 test("create account (asset)", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	var xml = createRequestXml();
 	xml += '<account type="1000" description="Test ASSET account creation"/></data></request>';
 
@@ -55,8 +58,6 @@ test("create account (asset)", function() {
 });
 
 test("create account (liability)", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	var xml = createRequestXml();
 	xml += '<account type="2000" description="Test LIABILITY account creation"/></data></request>';
 
@@ -74,8 +75,6 @@ test("create account (liability)", function() {
 });
 
 test("create account (capital)", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	var xml = createRequestXml();
 	xml += '<account type="3000" description="Test CAPITAL account creation"/></data></request>';
 
@@ -93,8 +92,6 @@ test("create account (capital)", function() {
 });
 
 test("create account (revenue)", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	var xml = createRequestXml();
 	xml += '<account type="4000" description="Test REVENUE account creation"/></data></request>';
 
@@ -112,8 +109,6 @@ test("create account (revenue)", function() {
 });
 
 test("create account (expenditure)", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	var xml = createRequestXml();
 	xml += '<account type="5000" description="Test EXPENDITURE account creation"/></data></request>';
 
@@ -131,8 +126,6 @@ test("create account (expenditure)", function() {
 });
 
 test("create account (invalid type) - MUST be rejected", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	var xml = createRequestXml();
 	xml += '<account type="666" description="Test INVALID account creation is rejected"/></data></request>';
 
@@ -152,8 +145,6 @@ test("create account (invalid type) - MUST be rejected", function() {
 module("Contacts");
 
 test("create contact", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	var xml = createRequestXml();
 	xml += '<contact><name>Ms Contact Name</name><line_1>Line 1</line_1><line_2>Line 2</line_2><line_3>Line 3</line_3><town>Townsville</town><county>County</county><country>Grand Europia</country><postcode>EU01 23RO</postcode><email>someone@example.com</email><phone>01234 5678</phone><phonealt>0123 123</phonealt><mobile>333 3333</mobile><fax>456 4567</fax></contact></data></request>';
 
@@ -171,8 +162,6 @@ test("create contact", function() {
 });
 
 test("create billing contact for organisation", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	var xml = createRequestXml();
 	xml += '<contact><name>Mr Bill Contact</name><organisation id="1" is_billing="true"/></contact></data></request>';
 
@@ -190,8 +179,6 @@ test("create billing contact for organisation", function() {
 });
 
 test("create shipping contact for organisation", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	var xml = createRequestXml();
 	xml += '<contact><name>Mrs Shipping Address</name><organisation id="1" is_shipping="true"/></contact></data></request>';
 
@@ -209,8 +196,6 @@ test("create shipping contact for organisation", function() {
 });
 
 test("update contact", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	var xml = createRequestXml();
 	xml += '<contact id="1"><name>Mrs Corrected Name O\'Malley</name></contact></data></request>';
 
@@ -228,9 +213,6 @@ test("update contact", function() {
 });
 
 test("get contactlist", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
-
 	stop();
 	$.ajax({
 		url: collection_url('contactlist'),
@@ -245,8 +227,6 @@ test("get contactlist", function() {
 module("Department");
 
 test("create department", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	var xml = createRequestXml();
 	xml += '<department name="'+ UUID() +'"/></data></request>';
 
@@ -266,8 +246,6 @@ test("create department", function() {
 module("Division");
 
 test("create division", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	var xml = createRequestXml();
 	xml += '<division name="'+ UUID() +'"/></data></request>';
 
@@ -287,8 +265,6 @@ test("create division", function() {
 module("Journal");
 
 test("journal entry - valid xml", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	var xml = createRequestXml();
 	xml += '<journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="1100" amount="120.00" /> <credit account="2202" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
 
@@ -306,7 +282,7 @@ test("journal entry - valid xml", function() {
 });
 
 test("journal entry - invalid credentials MUST be rejected", function() {
-	g_username='betty';
+	var tmppass = g_password;
 	g_password='invalid_password';
 	var xml = createRequestXml();
 	xml += '<journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="1100" amount="120.00" /> <credit account="2202" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
@@ -321,12 +297,12 @@ test("journal entry - invalid credentials MUST be rejected", function() {
 		success: function(xml) { ok(false); start(); },
 		error: function(xml) { ok(true); start(); },
 	});
+
+	g_password=tmppass;
 	
 });
 
 test("journal entry - xml does not match schema", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	/* xml does not have a <debit> tag */
 	var xml = createRequestXml();
 	xml += '<journal transactdate="2013-01-01" description="My First Journal Entry"> <credit account="1100" amount="120.00" /> <credit account="2202" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
@@ -345,8 +321,6 @@ test("journal entry - xml does not match schema", function() {
 });
 
 test("journal entry - invalid account number MUST be rejected", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	/* account 999 does not exist */
 	var xml = createRequestXml();
 	xml += '<journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="999" amount="120.00" /> <credit account="2202" amount="20.00" /> <credit account="4000" amount="100.00" /> </journal></data></request>';
@@ -365,8 +339,6 @@ test("journal entry - invalid account number MUST be rejected", function() {
 });
 
 test("journal entry - unbalanced journal MUST be rejected", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	/* amount of last credit is out by a penny */
 	var xml = createRequestXml();
 	xml += '<journal transactdate="2013-01-01" description="My First Journal Entry"> <debit account="1100" amount="120.00" /> <credit account="2202" amount="20.00" /> <credit account="4000" amount="100.01" /> </journal></data></request>';
@@ -387,8 +359,6 @@ test("journal entry - unbalanced journal MUST be rejected", function() {
 module("Organisation");
 
 test("create organisation", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	var xml = createRequestXml();
 	xml += '<organisation><name>My nifty new organisation</name></organisation></data></request>';
 
@@ -406,8 +376,6 @@ test("create organisation", function() {
 });
 
 test("update organisation (name)", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	var xml = createRequestXml();
 	xml += '<organisation id="2"><name>My nifty new organisation name to test updates</name></organisation></data></request>';
 
@@ -425,8 +393,6 @@ test("update organisation (name)", function() {
 });
 
 test("update organisation (terms)", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	var xml = createRequestXml();
 	xml += '<organisation id="2"><terms>14</terms></organisation></data></request>';
 
@@ -444,8 +410,6 @@ test("update organisation (terms)", function() {
 });
 
 test("update organisation (is_active)", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	var xml = createRequestXml();
 	xml += '<organisation id="2" is_active="false"/></data></request>';
 
@@ -463,8 +427,6 @@ test("update organisation (is_active)", function() {
 });
 
 test("update organisation (is_suspended)", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	var xml = createRequestXml();
 	xml += '<organisation id="2" is_suspended="true"/></data></request>';
 
@@ -482,8 +444,6 @@ test("update organisation (is_suspended)", function() {
 });
 
 test("update organisation (is_vatreg)", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	var xml = createRequestXml();
 	xml += '<organisation id="2" is_vatreg="true"/></data></request>';
 
@@ -501,8 +461,6 @@ test("update organisation (is_vatreg)", function() {
 });
 
 test("update organisation (vatreg)", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 	var xml = createRequestXml();
 	xml += '<organisation id="2"><vatnumber>EU 123 45678</vatnumber></organisation></data></request>';
 
@@ -520,8 +478,6 @@ test("update organisation (vatreg)", function() {
 });
 
 test("get organisation", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
 
 	stop();
 	$.ajax({
@@ -568,9 +524,6 @@ function UUID() {
 module("Instance");
 
 test("create instance", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
-
 	var xml = createRequestXml();
 	xml += '<instance name="' + UUID() +'"/></data></request>';
 
@@ -587,9 +540,6 @@ test("create instance", function() {
 });
 
 test("get instance list", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
-
 	stop();
 	$.ajax({
 		url: collection_url('instances'),
@@ -605,9 +555,6 @@ test("get instance list", function() {
 module("Business");
 
 test("create business", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
-
 	var xml = createRequestXml();
 	xml += '<business name="' + UUID() +'"/></data></request>';
 
@@ -624,9 +571,6 @@ test("create business", function() {
 });
 
 test("get business list", function() {
-	g_username='betty';
-	g_password='ie5a8P40';
-
 	stop();
 	$.ajax({
 		url: collection_url('businesses'),
