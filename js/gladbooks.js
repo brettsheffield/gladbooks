@@ -646,7 +646,7 @@ function displayResultsGeneric(xml, title, sorted) {
 
 	/* make our table pretty and sortable */
 	if (sorted) {
-		$('.tablet.active').find(".datatable").tablesorter({
+		$('.tablet.active.business' + g_business).find(".datatable").tablesorter({
 			sortList: [[0,0], [1,0]], 
 			widgets: ['zebra'] 
 		});
