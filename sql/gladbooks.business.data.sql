@@ -6,7 +6,7 @@ $$
 
 BEGIN
 
-EXECUTE 'SET search_path TO ' || business || ',' || instance || ',gladbooks';
+EXECUTE 'SET search_path TO ' || quote_ident('gladbooks_' || instance || '_' || business) || ',' || quote_ident('gladbooks_' || instance) || ',gladbooks';
 --
 
 -- Default data --
@@ -87,7 +87,6 @@ INSERT INTO taxratedetail (taxrate, tax, rate, valid_from, valid_to) VALUES (cur
 INSERT INTO taxrate VALUES (DEFAULT);
 INSERT INTO taxratedetail (taxrate, tax, rate, valid_from, valid_to) VALUES (currval(pg_get_serial_sequence('taxrate', 'id')),currval(pg_get_serial_sequence('tax', 'id')),'20.0', '2011-01-01', NULL);
 
-
 -- Reduced Rate VAT
 INSERT INTO tax VALUES (DEFAULT);
 INSERT INTO taxdetail (tax, account, name) VALUES (currval(pg_get_serial_sequence('tax', 'id')), '2202', 'Reduced Rate VAT');
@@ -103,6 +102,3 @@ INSERT INTO taxratedetail (taxrate, tax, rate, valid_from, valid_to) VALUES (cur
 --
 END;
 $$ LANGUAGE 'plpgsql';
-
-SET search_path=gladbooks_default_default,gladbooks_default,gladbooks;
-SELECT default_data('gladbooks_default', 'gladbooks_default_default');

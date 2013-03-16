@@ -19,6 +19,7 @@
                 <xsl:text>,gladbooks;</xsl:text>
 
 		<xsl:text>BEGIN;</xsl:text>
+
 		<xsl:text>SELECT create_business('</xsl:text>
 		<xsl:call-template name="cleanQuote">
 			<xsl:with-param name="string">
@@ -32,6 +33,21 @@
 			</xsl:with-param>
 		</xsl:call-template>
 		<xsl:text>');</xsl:text>
+
+		<xsl:text>SELECT default_data('</xsl:text>
+		<xsl:call-template name="cleanQuote">
+			<xsl:with-param name="string">
+				<xsl:value-of select="$instance"/>
+			</xsl:with-param>
+		</xsl:call-template>
+		<xsl:text>','</xsl:text>
+		<xsl:call-template name="cleanQuote">
+			<xsl:with-param name="string">
+				<xsl:value-of select="@name"/>
+			</xsl:with-param>
+		</xsl:call-template>
+		<xsl:text>');</xsl:text>
+
 		<xsl:text>COMMIT;</xsl:text>
 	</xsl:template>
 
