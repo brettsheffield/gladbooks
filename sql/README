@@ -1,3 +1,4 @@
+# To setup/reset a fresh gladbooks database:
 dropdb gladbooks
 createdb gladbooks
 psql gladbooks < gladbooks.db.sql 
