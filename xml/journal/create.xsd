@@ -17,6 +17,8 @@
 						      <xs:element name="debit" maxOccurs="unbounded">
 										<xs:complexType>
 										  <xs:attribute name="account" type="xs:positiveInteger" use="required"/>
+										  <xs:attribute name="division" type="xs:nonNegativeInteger"/>
+										  <xs:attribute name="department" type="xs:nonNegativeInteger"/>
 										  <xs:attribute name="amount" type="xs:decimal" use="required"/>
 										</xs:complexType>
 						      </xs:element><!--debit-->
@@ -24,6 +26,8 @@
 						      <xs:element name="credit" maxOccurs="unbounded">
 										<xs:complexType>
 										  <xs:attribute name="account" type="xs:positiveInteger" use="required"/>
+										  <xs:attribute name="division" type="xs:nonNegativeInteger"/>
+										  <xs:attribute name="department" type="xs:nonNegativeInteger"/>
 										  <xs:attribute name="amount" type="xs:decimal" use="required"/>
 										</xs:complexType>
 						      </xs:element><!--credit-->

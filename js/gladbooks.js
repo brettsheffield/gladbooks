@@ -667,8 +667,8 @@ function hideSpinner() {
 
 /* Populate Accounts Drop-Downs with XML Data */
 function populateAccountsDDowns(xml, tab) {
-	$('select.account:not(.populated)').empty();
-	$('select.account:not(.populated)').append(
+	$('select.account').empty();
+	$('select.account').append(
 		$("<option />").val(0).text('<select account>')
 	);
 	$(xml).find('row').each(function() {
@@ -677,13 +677,34 @@ function populateAccountsDDowns(xml, tab) {
 		var accountdesc = accountid + " - " +
 		$(this).find('account').text();
 
-		$('select.account:not(.populated)').append(
+		$('select.account').append(
 			$("<option />").val(accountid).text(accountdesc)
 		);
 	});
-	$('select.account:not(.populated)').addClass('populated');
 
 	finishJournalForm(tab);
+}
+
+function populateDepartmentsDDowns(xml, tab) {
+	$('select.department').empty();
+	$(xml).find('row').each(function() {
+		var id = $(this).find('id').text();
+		var name = $(this).find('name').text();
+		$('select.department').append(
+			$("<option />").val(id).text(name)
+		);
+	});
+}
+
+function populateDivisionsDDowns(xml, tab) {
+	$('select.division').empty();
+	$(xml).find('row').each(function() {
+		var id = $(this).find('id').text();
+		var name = $(this).find('name').text();
+		$('select.division').append(
+			$("<option />").val(id).text(name)
+		);
+	});
 }
 
 /* debits and credits */
@@ -710,12 +731,29 @@ function setupJournalForm(tab) {
 
 	/* load dropdown contents */
 	$.ajax({
+		url: collection_url('divisions'),
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function (xml) {
+			populateDivisionsDDowns(xml, tab);
+		}
+	});
+
+	$.ajax({
+		url: collection_url('departments'),
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function (xml) {
+			populateDepartmentsDDowns(xml, tab);
+		}
+	});
+
+	$.ajax({
 		url: collection_url('accounts'),
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function (xml) {
 			populateAccountsDDowns(xml, tab);
 		}
 	});
+
 	populateDebitCreditDDowns();
 }
 
@@ -772,6 +810,8 @@ function finishJournalForm(tab) {
 function validateJournalEntry(form) {
 	var xml = createRequestXml();
 	var account;
+	var division = 0;
+	var department = 0;
 	var type;
 	var amount;
 	var debits = 0;
@@ -800,6 +840,12 @@ function validateJournalEntry(form) {
 		else if ($(this).hasClass('account')) {
 			account = $(this).val();
 		}
+		else if ($(this).hasClass('division')) {
+			division = $(this).val();
+		}
+		else if ($(this).hasClass('department')) {
+			department = $(this).val();
+		}
 		else if ($(this).hasClass('type')) {
 			type = $(this).val();
 		}
@@ -808,13 +854,17 @@ function validateJournalEntry(form) {
 			if ((amount > 0) && (account > 0)) {
 				if (type == 'debit') {
 					debits += Number(amount);
-					debitxml += '<' + type + ' account="' + account
-						+ '" amount="' + amount + '"/>'
+					debitxml += '<' + type + ' account="' + account;
+					debitxml += '" division="' + division;
+					debitxml += '" department="' + department;
+					debitxml += '" amount="' + amount + '"/>';
 				}
 				else if (type == 'credit') {
 					credits += Number(amount);
-					creditxml += '<' + type + ' account="' + account
-						+ '" amount="' + amount + '"/>'
+					creditxml += '<' + type + ' account="' + account;
+					creditxml += '" division="' + division;
+					creditxml += '" department="' + department;
+					creditxml += '" amount="' + amount + '"/>';
 				}
 			}
 		}

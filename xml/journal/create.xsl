@@ -40,18 +40,52 @@
 		<xsl:text>COMMIT;</xsl:text>
 	</xsl:template>
 	<xsl:template match="debit">
-		<xsl:text>INSERT INTO ledger (journal, account, debit) VALUES (journal_id_last(),'</xsl:text>
+		<xsl:text>INSERT INTO ledger (journal, account, </xsl:text>
+		<xsl:if test="@division">
+			<xsl:text>division, </xsl:text>
+		</xsl:if>
+		<xsl:if test="@department">
+			<xsl:text>department, </xsl:text>
+		</xsl:if>
+		<xsl:text>debit, authuser, clientip) VALUES (journal_id_last(),'</xsl:text>
 		<xsl:value-of select="@account"/>
 		<xsl:text>&apos;,&apos;</xsl:text>
+		<xsl:if test="@division">
+			<xsl:value-of select="@division"/>
+			<xsl:text>&apos;,&apos;</xsl:text>
+		</xsl:if>
+		<xsl:if test="@department">
+			<xsl:value-of select="@department"/>
+			<xsl:text>&apos;,&apos;</xsl:text>
+		</xsl:if>
 		<xsl:value-of select="@amount"/>
+		<xsl:text>','</xsl:text>
+		<xsl:copy-of select="$authuser"/>
+		<xsl:text>','</xsl:text>
+		<xsl:copy-of select="$clientip"/>
 		<xsl:text>&apos;);</xsl:text><br/>       
 	</xsl:template>
 	<xsl:template match="credit">
-		<xsl:text>INSERT INTO ledger (journal, account, credit, authuser, clientip) VALUES (journal_id_last(),'</xsl:text>
+		<xsl:text>INSERT INTO ledger (journal, account, </xsl:text>
+		<xsl:if test="@division">
+			<xsl:text>division, </xsl:text>
+		</xsl:if>
+		<xsl:if test="@department">
+			<xsl:text>department, </xsl:text>
+		</xsl:if>
+		<xsl:text>credit, authuser, clientip) VALUES (journal_id_last(),'</xsl:text>
 		<xsl:value-of select="@account"/>
-		<xsl:text>&apos;,&apos;</xsl:text>
-		<xsl:value-of select="@amount"/>
 		<xsl:text>','</xsl:text>
+		<xsl:if test="@division">
+			<xsl:value-of select="@division"/>
+			<xsl:text>&apos;,&apos;</xsl:text>
+		</xsl:if>
+		<xsl:if test="@department">
+			<xsl:value-of select="@department"/>
+			<xsl:text>&apos;,&apos;</xsl:text>
+		</xsl:if>
+		<xsl:value-of select="@amount"/>
+		<xsl:text>&apos;,&apos;</xsl:text>
 		<xsl:copy-of select="$authuser"/>
 		<xsl:text>','</xsl:text>
 		<xsl:copy-of select="$clientip"/>
