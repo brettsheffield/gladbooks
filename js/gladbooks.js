@@ -583,9 +583,20 @@ function submitForm(object, action, id) {
         data: xml,
         contentType: 'text/xml',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
-        success: function(xml) { hideSpinner(); },
-        error: function(xml) { hideSpinner(); },
+        success: function(xml) { submitFormSuccess(object, action, id); },
+        error: function(xml) { submitFormError(object, action, id); },
     });
+}
+
+function submitFormSuccess(object, action, id) {
+	hideSpinner();
+	if (object == 'business') {
+		prepBusinessSelector();
+	}
+}
+
+function submitFormError(object, action, id) {
+	hideSpinner();
 }
 
 /* Fetch an individual element of a collection for display / editing */
@@ -601,11 +612,6 @@ function displayElement(collection, id) {
 		object = 'organisation';
 		action = 'update';
 		title = 'Edit Organisation ' + id;
-	}
-	else if (collection == 'Businesses') {
-		g_business = id;
-		alert("You have selected business: " + id);
-		return;
 	}
 	else {
 		return;
@@ -1023,6 +1029,7 @@ function prepBusinessSelector() {
 }
 
 function showBusinessSelector(xml) {
+	$('select.businessselect').remove();
 	select = $('<select class="businessselect"></select>');
 
 	$(xml).find('row').each(function() {
@@ -1030,11 +1037,13 @@ function showBusinessSelector(xml) {
 		var name = $(this).find('name').text();
 		select.append($("<option />").val(id).text(name));
 	});
+	
 	select.change(function() {
 		switchBusiness($(this).val());
 	});
 
-	$('form.navbar-search').append(select);
+	$('ul.nav').prepend(select);
+	$('select.businessselect').val(g_business);
 }
 
 function switchBusiness(business) {
