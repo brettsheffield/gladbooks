@@ -186,8 +186,10 @@ function activateNextTab(tabid) {
 	while (trytab < g_tabid) {
 		console.log("Trying tab " + trytab);
 		if ($('.tablet' + trytab).length != 0) {
-			activateTab(trytab);
-			return true;
+			if ($('.tablet' + trytab).hasClass('business' + g_business)) {
+				activateTab(trytab);
+				return true;
+			}
 		}
 		trytab++;
 	}
@@ -196,8 +198,10 @@ function activateNextTab(tabid) {
 	while (trytab >= 0) {
 		console.log("Trying tab " + trytab);
 		if ($('.tablet' + trytab).length != 0) {
-			activateTab(trytab);
-			return true;
+			if ($('.tablet' + trytab).hasClass('business' + g_business)) {
+				activateTab(trytab);
+				return true;
+			}
 		}
 		trytab--;
 	}
