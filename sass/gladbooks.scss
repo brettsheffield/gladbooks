@@ -491,6 +491,10 @@ div.organisation_contacts th {
 	background-color: $color-dark;
 }
 
+div.organisation_contacts tr:not(:first-child) {
+	background-color: white;
+}
+
 button.addrow {
 	float: right;
 	margin-right: 1em;

@@ -432,6 +432,9 @@ div.organisation_contacts table {
 div.organisation_contacts th {
   background-color: #6e89a5; }
 
+div.organisation_contacts tr:not(:first-child) {
+  background-color: white; }
+
 button.addrow {
   float: right;
   margin-right: 1em; }
