@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+  <instance>default</instance>
+  <business>default</business>	
+	<data>
+		<organisation>1</organisation>
+		<contact>1</contact>
+	</data>
+</request>

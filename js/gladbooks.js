@@ -545,6 +545,8 @@ function displaySubformData(view, parentid, xml) {
 	console.log("Displaying subform " + view + " data");
 	var datatable = $('div.' + view).find('table.datatable');
 	var row = '';
+	datatable.find('tbody').empty();
+
 	$(xml).find('resources').find('row').each(function() {
 		if (i % 2 == 0) {
 			row = '<tr class="even">';
@@ -570,11 +572,15 @@ function displaySubformData(view, parentid, xml) {
 		$(row).appendTo(datatable);
 		i++;
 	});
-	datatable.fadeIn(300);
+	datatable.find('tbody').fadeIn(300);
+
+	/* attach click event to add rows to subform */
+
 
 	/* attach click event to remove rows from subform */
 	datatable.find('button.removerow').click(function() {
-		var id = $(this).parent().find('input[name="id"]').val();
+		var trow = $(this).parent();
+		var id = trow.find('input[name="id"]').val();
 		console.log('Delete sub id + ' + id + ' from parent ' + parentid);
 		var url = collection_url(view) + parentid + '/' + id + '/';
 		console.log('DELETE ' + url);
@@ -582,8 +588,10 @@ function displaySubformData(view, parentid, xml) {
 			url: url,
 			type: 'DELETE',
 			beforeSend: function (xhr) { setAuthHeader(xhr); },
-			success: function(xml) { console.log('DELETE succeeded'); },
-			error: function(xml) { console.log('DELETE failed'); },
+			complete: function(xml) {
+				console.log('DELETE succeeded');
+				trow.parent().fadeOut();
+			},
 		});
 
 	});
