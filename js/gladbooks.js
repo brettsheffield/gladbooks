@@ -485,6 +485,7 @@ function displayForm(object, action, title, html, xml) {
 		content += $(self).html();
 	});
 
+
 	addTab(title, html, true);
 
 	if (xml) {
@@ -498,7 +499,32 @@ function displayForm(object, action, title, html, xml) {
 			).val($(this).text());
 		});
 	}
-	
+
+	$(html).find('form.subform').each(function() {
+		/* this form has subforms - load their data */
+		var view = $(this).attr("action");
+		console.log('Loading subform with data ' + view);
+		url = collection_url(view);
+		if (id) {
+			url += id
+			if (view == 'organisation_contacts') {
+				/* this view needs a trailing slash */
+				url += '/';
+			}
+		}
+		$.ajax({
+			url: url,
+			beforeSend: function (xhr) { setAuthHeader(xhr); },
+			success: function(xml) {
+				console.log("Loaded subform data.  Hoorah.");
+				displaySubformData(view, xml);
+			},
+			error: function(xml) {
+				console.log('Error loading subform data');
+			}
+		});
+	});
+
 	hideSpinner(); /* wake user */
 
 	$("div.tablet.active").find('form').submit(function(event) {
@@ -510,6 +536,41 @@ function displayForm(object, action, title, html, xml) {
 			submitForm(object, action);
 		}
 	});
+}
+
+/* We've loaded data for a subform; display it */
+function displaySubformData(view, xml) {
+	var i = 0;
+	console.log("Displaying subform " + view + " data");
+	var datatable = $('div.' + view).find('table.datatable');
+	var row = '';
+	$(xml).find('resources').find('row').each(function() {
+		if (i % 2 == 0) {
+			row = '<tr class="even">';
+		} else {
+			row = '<tr class="odd">';
+		}
+
+		$(this).children().each(function() {
+			row += '<td>' + $(this).text() + '</td>';
+		});
+
+		/* append remove "X" button */
+		row += '<td class="removerow">X</td>';
+
+		row += '</tr>';
+		$(row).appendTo(datatable);
+		i++;
+	});
+	datatable.fadeIn(300);
+
+	/* make any datatables sortable */
+	$('.tablet.active.business' + g_business).find(".datatable").tablesorter({
+            sortList: [[0,0], [1,0]],
+            widgets: ['zebra']
+	});
+
+	console.log('Found ' + i + ' row(s)');
 }
 
 /* build xml and submit form */

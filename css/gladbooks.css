@@ -418,6 +418,25 @@ div.organisations {
 div.create {
   padding: 0 2%; }
 
+div.update {
+  padding: 0 2%; }
+
+div.organisation_contacts {
+  min-height: 100px;
+  width: 100%; }
+
+div.organisation_contacts table {
+  border: 1px solid black;
+  display: none;
+  width: 100%; }
+
+div.organisation_contacts th {
+  background-color: #6e89a5; }
+
+td.removerow {
+  float: right;
+  margin-right: 1em; }
+
 /* form styling */
 .contact.form ul,
 .organisation.form ul {
