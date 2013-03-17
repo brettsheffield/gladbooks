@@ -46,8 +46,7 @@ CREATE TABLE instance (
 );
 
 CREATE TABLE username (
-        id              SERIAL PRIMARY KEY,
-        username        TEXT UNIQUE NOT NULL,
+        id              VARCHAR(63) PRIMARY KEY,
 	instance	VARCHAR(63) references instance(id) ON DELETE RESTRICT,
         entered         timestamp with time zone default now()
 );
@@ -61,7 +60,7 @@ CREATE TABLE groupname (
 CREATE RULE nodel_groupname AS ON DELETE TO groupname DO NOTHING;
 
 CREATE TABLE membership (
-        username        INT4 references username(id) ON DELETE RESTRICT,
+        username        VARCHAR(63) references username(id) ON DELETE RESTRICT,
         groupname       INT4 references groupname(id) ON DELETE RESTRICT,
         entered         timestamp with time zone default now(),
         CONSTRAINT membership_pk PRIMARY KEY (username, groupname)

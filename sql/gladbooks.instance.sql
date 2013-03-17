@@ -222,3 +222,5 @@ $$ LANGUAGE 'plpgsql';
 
 SELECT create_instance('default');
 SELECT create_instance('test');
+SELECT create_instance('bacs');
+SELECT create_instance('shandydann');

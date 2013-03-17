@@ -24,9 +24,9 @@ var g_authurl = '/auth/';
 var g_resourcedefaultsurl = '/defaults/';
 var g_username = '';
 var g_password = '';
-var g_username = 'betty';    /* temp */
-var g_password = 'ie5a8P40'; /* temp */
-var g_instance = 'default';
+//var g_username = 'betty';    /* temp */
+//var g_password = 'ie5a8P40'; /* temp */
+var g_instance = '';
 var g_business = '1';
 var g_loggedin = false;
 var g_max_ledgers_per_journal=3;
@@ -37,9 +37,6 @@ $(document).ready(function() {
 
 	/* no password, display login dialog */
 	if (g_password == '') { displayLoginBox(); }
-
-	/* load business combo */
-	prepBusinessSelector();
 
 	/* prepare tabbed workarea */
 	deployTabs();
@@ -96,7 +93,7 @@ $(document).ready(function() {
 function auth_check()
 {
 	$.ajax({
-		url: g_authurl + g_username + '.xml',
+		url: g_authurl + g_username,
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(data) { loginok(data); },
 		error: function(data) { loginfailed(); },
@@ -240,10 +237,22 @@ function setAuthHeader(xhr) {
 }
 
 /* login successful, do successful things */
-function loginok(data) {
-	g_loggedin = true;
-	hideLoginBox();
-	getMenu();
+function loginok(xml) {
+	g_instance = '';
+	$(xml).find('instance').each(function() {
+		g_loggedin = true;
+		g_instance = $(this).text();
+		alert('You are in instance ' + g_instance);
+	});
+	if (g_instance == '') {
+		/* couldn't find instance for user - treat as failed login */
+		loginfailed();
+	}
+	else {
+		/* have instance, hide login dialog and get list of businesses */
+		hideLoginBox();
+		prepBusinessSelector();
+	}
 }
 
 /* Login failed - inform user */
@@ -1017,7 +1026,6 @@ function prepBusinessSelector() {
 			showBusinessSelector(xml);
 		},
 		error: function(xml) {
-			/* TODO: dialog to create first business */
 			getForm('business', 'create', 'Add New Business');
 		}
 	});
@@ -1025,6 +1033,12 @@ function prepBusinessSelector() {
 
 /* Display combo for switching between businesses */
 function showBusinessSelector(xml) {
+	if ($(xml).find('row').length == 0) {
+		/* No businesses found */
+		getForm('business', 'create', 'Add New Business');
+		return;
+	}
+
 	select = $('select.businessselect');
 	select.empty();
 
