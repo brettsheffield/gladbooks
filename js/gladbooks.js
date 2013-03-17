@@ -1021,8 +1021,8 @@ function prepBusinessSelector() {
 
 /* Display combo for switching between businesses */
 function showBusinessSelector(xml) {
-	$('select.businessselect').remove();
-	select = $('<select class="businessselect"></select>');
+	select = $('select.businessselect');
+	select.empty();
 
 	$(xml).find('row').each(function() {
 		var id = $(this).find('id').text();
@@ -1034,7 +1034,6 @@ function showBusinessSelector(xml) {
 		switchBusiness($(this).val());
 	});
 
-	$('form.navbar-search').append(select);
 	$('select.businessselect').val(g_business);
 }
 
