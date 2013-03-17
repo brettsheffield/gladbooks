@@ -477,6 +477,23 @@ test("update organisation (vatreg)", function() {
 
 });
 
+test("link organisation and contact", function() {
+	var xml = createRequestXml();
+	xml += '<organisation>1</organisation><contact>1</contact></data></request>';
+
+	stop();
+	$.ajax({
+		url: collection_url('organisation_contacts'),
+		type: 'POST',
+		data: xml,
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { ok(true); start(); },
+		error: function(xml) { ok(false); start(); },
+	});
+
+});
+
 test("get organisation", function() {
 
 	stop();
