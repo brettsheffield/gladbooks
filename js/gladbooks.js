@@ -494,7 +494,7 @@ function displayForm(object, action, title, html, xml) {
 			if (this.tagName == 'id') {
 				id = $(this).text();
 			}
-			$("div.tablet.active").find(
+			$("div.tablet.active").find('form.' + object).find(
 				"[name='" + this.tagName + "']"
 			).val($(this).text());
 		});
