@@ -45,6 +45,28 @@ CREATE TABLE instance (
 	entered		timestamp with time zone default now()
 );
 
+CREATE TABLE username (
+        id              SERIAL PRIMARY KEY,
+        username        TEXT UNIQUE NOT NULL,
+	instance	VARCHAR(63) references instance(id) ON DELETE RESTRICT,
+        entered         timestamp with time zone default now()
+);
+CREATE RULE nodel_username AS ON DELETE TO username DO NOTHING;
+
+CREATE TABLE groupname (
+        id              SERIAL PRIMARY KEY,
+        groupname       TEXT UNIQUE NOT NULL,
+        entered         timestamp with time zone default now()
+);
+CREATE RULE nodel_groupname AS ON DELETE TO groupname DO NOTHING;
+
+CREATE TABLE membership (
+        username        INT4 references username(id) ON DELETE RESTRICT,
+        groupname       INT4 references groupname(id) ON DELETE RESTRICT,
+        entered         timestamp with time zone default now(),
+        CONSTRAINT membership_pk PRIMARY KEY (username, groupname)
+);
+
 CREATE TABLE cycle (    
         id              SERIAL PRIMARY KEY,
         cyclename       TEXT NOT NULL,

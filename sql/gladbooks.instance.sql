@@ -25,27 +25,6 @@ CREATE TABLE business (
 );
 CREATE RULE nodel_business AS ON DELETE TO business DO NOTHING;
 
-CREATE TABLE username (
-	id              SERIAL PRIMARY KEY,
-	username        TEXT UNIQUE NOT NULL,
-	entered         timestamp with time zone default now()
-);
-CREATE RULE nodel_username AS ON DELETE TO username DO NOTHING;
-
-CREATE TABLE groupname (
-	id              SERIAL PRIMARY KEY,
-	groupname	TEXT UNIQUE NOT NULL,
-	entered         timestamp with time zone default now()
-);
-CREATE RULE nodel_groupname AS ON DELETE TO groupname DO NOTHING;
-
-CREATE TABLE membership (
-	username	INT4 references username(id) ON DELETE RESTRICT,
-	groupname	INT4 references groupname(id) ON DELETE RESTRICT,
-	entered         timestamp with time zone default now(),
-	CONSTRAINT membership_pk PRIMARY KEY (username, groupname)
-);
-
 -- each instance can create and modify its own default charts which 
 -- are used when creating businesses for this instance
 CREATE TABLE chart (
