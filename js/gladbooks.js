@@ -607,10 +607,20 @@ function displayElement(collection, id) {
 /* display XML results as a sortable table */
 function displayResultsGeneric(xml, title, sorted) {
 	if ($(xml).find('resources').children().length == 0) {
+		/* No results found */
 		hideSpinner();
-		addTab(title, "<p>Nothing found</p>", true);
+		if (title == 'Contacts') {
+			getForm('contact', 'create', 'Add New Contact');
+		}
+		else if (title == 'Organisations') {
+			getForm('organisation', 'create', 'Add New Organisation');
+		}
+		else {
+			addTab(title, "<p>Nothing found</p>", true);
+		}
 		return;
 	}
+
 	$t = '<table class="datatable">';
 	$t += "<thead>";
 	$t += "<tr>";
