@@ -242,7 +242,7 @@ function loginok(xml) {
 	$(xml).find('instance').each(function() {
 		g_loggedin = true;
 		g_instance = $(this).text();
-		alert('You are in instance ' + g_instance);
+		console.log('Instance selected: ' + g_instance);
 	});
 	if (g_instance == '') {
 		/* couldn't find instance for user - treat as failed login */
@@ -268,6 +268,11 @@ function logout()
 {
 	/* remove user menus */
 	dropMenu();
+
+	/* clear business selector */
+	select = $('select.businessselect');
+	select.empty();
+	select.append('<option>&lt;select business&gt;</option>');
 
 	/* clear working area */
 	removeAllTabs();
