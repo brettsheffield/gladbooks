@@ -433,7 +433,11 @@ div.organisation_contacts table {
 div.organisation_contacts th {
   background-color: #6e89a5; }
 
-td.removerow {
+button.addrow {
+  float: right;
+  margin-right: 1em; }
+
+button.removerow {
   float: right;
   margin-right: 1em; }
 

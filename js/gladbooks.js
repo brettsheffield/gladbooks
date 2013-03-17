@@ -517,7 +517,7 @@ function displayForm(object, action, title, html, xml) {
 			beforeSend: function (xhr) { setAuthHeader(xhr); },
 			success: function(xml) {
 				console.log("Loaded subform data.  Hoorah.");
-				displaySubformData(view, xml);
+				displaySubformData(view, id, xml);
 			},
 			error: function(xml) {
 				console.log('Error loading subform data');
@@ -539,8 +539,9 @@ function displayForm(object, action, title, html, xml) {
 }
 
 /* We've loaded data for a subform; display it */
-function displaySubformData(view, xml) {
+function displaySubformData(view, parentid, xml) {
 	var i = 0;
+	var id = 0;
 	console.log("Displaying subform " + view + " data");
 	var datatable = $('div.' + view).find('table.datatable');
 	var row = '';
@@ -552,17 +553,40 @@ function displaySubformData(view, xml) {
 		}
 
 		$(this).children().each(function() {
-			row += '<td>' + $(this).text() + '</td>';
+			if (this.tagName == 'id') {
+				id = $(this).text();
+			}
+			else {
+				row += '<td>' + $(this).text() + '</td>';
+			}
 		});
 
 		/* append remove "X" button */
-		row += '<td class="removerow">X</td>';
+		row += '<td class="removerow">';
+		row += '<input type="hidden" name="id" value="' + id + '"/>';
+		row += '<button class="removerow">X</button></td>';
 
 		row += '</tr>';
 		$(row).appendTo(datatable);
 		i++;
 	});
 	datatable.fadeIn(300);
+
+	/* attach click event to remove rows from subform */
+	datatable.find('button.removerow').click(function() {
+		var id = $(this).parent().find('input[name="id"]').val();
+		console.log('Delete sub id + ' + id + ' from parent ' + parentid);
+		var url = collection_url(view) + parentid + '/' + id + '/';
+		console.log('DELETE ' + url);
+		$.ajax({
+			url: url,
+			type: 'DELETE',
+			beforeSend: function (xhr) { setAuthHeader(xhr); },
+			success: function(xml) { console.log('DELETE succeeded'); },
+			error: function(xml) { console.log('DELETE failed'); },
+		});
+
+	});
 
 	/* make any datatables sortable */
 	$('.tablet.active.business' + g_business).find(".datatable").tablesorter({
