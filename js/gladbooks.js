@@ -501,7 +501,12 @@ function displayForm(object, action, title, html, xml) {
 	}
 
 	$(html).find('form.subform').each(function() {
-		loadSubformData($(this).attr("action"), id);
+		var view = $(this).attr("action");
+		var datatable = $('div.' + view).find('table.datatable');
+		datatable.find('button.addrow').click(function(){
+			addSubformEvent($(this), view, id);
+		});
+		loadSubformData(view, id);
 	});
 
 	hideSpinner(); /* wake user */
@@ -535,6 +540,51 @@ function loadSubformData(view, id) {
 				console.log('Error loading subform data');
 			}
 		});
+}
+
+function addSubformEvent(object, view, parentid) {
+	/* attach click event to add rows to subform */
+	console.log('Adding row to subform parent ' + parentid);
+
+	/* the part before the underscore is the parent collection */
+	var parent_collection = view.split('_')[0];
+	var subform_collection = view.split('_')[1];
+
+	var url = collection_url(subform_collection);
+	var xml = createRequestXml();
+
+	/* open xml element for the subform object */
+	xml += '<' + subform_collection.slice(0,-1) + '>';
+
+	/* find inputs */
+	object.parent().parent().find('input').each(function() {
+		xml += '<' + $(this).attr('name') + '>';
+		xml += $(this).val();
+		xml += '</' + $(this).attr('name') + '>';
+	});
+
+	/* add element for parent */
+	xml += '<' + parent_collection + ' id="' + parentid + '"/>';
+
+	/* close subform object element */
+	xml += '</' + subform_collection.slice(0,-1) + '>';
+
+	xml += '</data></request>';
+
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: xml,
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) {
+			console.log('SUCCESS: added row to subform');
+			loadSubformData(view, parentid);
+		},
+		error: function(xml) {
+			console.log('ERROR adding row to subform');
+		},
+	});
 }
 
 /* We've loaded data for a subform; display it */
@@ -579,52 +629,6 @@ function displaySubformData(view, parentid, xml) {
 	});
 	datatable.find('input[type=email]').each(function() {
 		$(this).val('');
-	});
-
-	/* attach click event to add rows to subform */
-	datatable.find('button.addrow:not(.primed)').click(function() {
-		$(this).addClass('primed'); /* prevent duplicate events */
-		console.log('Adding row to subform parent ' + parentid);
-
-		/* the part before the underscore is the parent collection */
-		var parent_collection = view.split('_')[0];
-		var subform_collection = view.split('_')[1];
-
-		var url = collection_url(subform_collection);
-		var xml = createRequestXml();
-
-		/* open xml element for the subform object */
-		xml += '<' + subform_collection.slice(0,-1) + '>';
-
-		/* find inputs */
-		$(this).parent().parent().find('input').each(function() {
-			xml += '<' + $(this).attr('name') + '>';
-			xml += $(this).val();
-			xml += '</' + $(this).attr('name') + '>';
-		});
-
-		/* add element for parent */
-		xml += '<' + parent_collection + ' id="' + parentid + '"/>';
-
-		/* close subform object element */
-		xml += '</' + subform_collection.slice(0,-1) + '>';
-
-		xml += '</data></request>';
-
-		$.ajax({
-			url: url,
-			type: 'POST',
-			data: xml,
-			contentType: 'text/xml',
-			beforeSend: function (xhr) { setAuthHeader(xhr); },
-			success: function(xml) {
-				console.log('SUCCESS: added row to subform');
-				loadSubformData(view, parentid);
-			},
-			error: function(xml) {
-				console.log('ERROR adding row to subform');
-			},
-		});
 	});
 
 	/* attach click event to remove rows from subform */
