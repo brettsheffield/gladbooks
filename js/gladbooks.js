@@ -501,8 +501,24 @@ function displayForm(object, action, title, html, xml) {
 	}
 
 	$(html).find('form.subform').each(function() {
-		/* this form has subforms - load their data */
-		var view = $(this).attr("action");
+		loadSubformData($(this).attr("action"), id);
+	});
+
+	hideSpinner(); /* wake user */
+
+	$("div.tablet.active").find('form').submit(function(event) {
+		event.preventDefault();
+		if (id > 0) {
+			submitForm(object, action, id);
+		}
+		else {
+			submitForm(object, action);
+		}
+	});
+}
+
+/* Fetch data for a subform */
+function loadSubformData(view, id) {
 		console.log('Loading subform with data ' + view);
 		url = collection_url(view);
 		if (id) {
@@ -519,19 +535,6 @@ function displayForm(object, action, title, html, xml) {
 				console.log('Error loading subform data');
 			}
 		});
-	});
-
-	hideSpinner(); /* wake user */
-
-	$("div.tablet.active").find('form').submit(function(event) {
-		event.preventDefault();
-		if (id > 0) {
-			submitForm(object, action, id);
-		}
-		else {
-			submitForm(object, action);
-		}
-	});
 }
 
 /* We've loaded data for a subform; display it */
@@ -571,7 +574,8 @@ function displaySubformData(view, parentid, xml) {
 	datatable.find('tbody').fadeIn(300);
 
 	/* attach click event to add rows to subform */
-	datatable.find('button.addrow').click(function() {
+	datatable.find('button.addrow:not(.primed)').click(function() {
+		$(this).addClass('primed'); /* prevent duplicate events */
 		console.log('Adding row to subform parent ' + parentid);
 
 		/* the part before the underscore is the parent collection */
@@ -607,6 +611,7 @@ function displaySubformData(view, parentid, xml) {
 			beforeSend: function (xhr) { setAuthHeader(xhr); },
 			success: function(xml) {
 				console.log('SUCCESS: added row to subform');
+				loadSubformData(view, parentid);
 			},
 			error: function(xml) {
 				console.log('ERROR adding row to subform');
@@ -626,16 +631,10 @@ function displaySubformData(view, parentid, xml) {
 			type: 'DELETE',
 			beforeSend: function (xhr) { setAuthHeader(xhr); },
 			complete: function(xml) {
-				trow.parent().fadeOut();
+				trow.parent().remove();
 			},
 		});
 
-	});
-
-	/* make any datatables sortable */
-	$('.tablet.active.business' + g_business).find(".datatable").tablesorter({
-            sortList: [[0,0], [1,0]],
-            widgets: ['zebra']
 	});
 
 	console.log('Found ' + i + ' row(s)');
