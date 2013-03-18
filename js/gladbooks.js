@@ -499,7 +499,8 @@ function displayForm(object, action, title, html, xml) {
 			).val($(this).text());
 		});
 	}
-
+	
+	/* deal with subforms */
 	$(html).find('form.subform').each(function() {
 		var view = $(this).attr("action");
 		var datatable = $('div.' + view).find('table.datatable');
@@ -618,7 +619,17 @@ function displaySubformData(view, parentid, xml) {
 		row += '<button class="removerow">X</button></td>';
 
 		row += '</tr>';
-		$(row).appendTo(datatable);
+
+		var newrow = $(row);
+
+		/* attach click event to edit elements of subform */
+		newrow.find('td:not(.removerow)').click(function() {
+			var id = $(this).parent().find('input[name="id"]').val();
+			collection = view.split('_')[1];
+			displayElement(collection, id);
+		});
+
+		newrow.appendTo(datatable);
 		i++;
 	});
 	datatable.find('tbody').fadeIn(300);
@@ -715,13 +726,13 @@ function submitFormError(object, action, id) {
 
 /* Fetch an individual element of a collection for display / editing */
 function displayElement(collection, id) {
-	if (collection == 'Contacts') {
+	if (collection.toLowerCase() == 'contacts') {
 		url = collection_url('contacts') + id;
 		object = 'contact';
 		action = 'update';
 		title = 'Edit Contact ' + id;
 	}
-	else if (collection == 'Organisations') {
+	else if (collection.toLowerCase() == 'organisations') {
 		url = collection_url('organisations') + id;
 		object = 'organisation';
 		action = 'update';
