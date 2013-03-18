@@ -61,4 +61,9 @@
     width: 75%; }
 
   select.account {
-    max-width: 78%; } }
+    max-width: 78%; }
+
+  /* map */
+  .map-canvas {
+    height: 200px;
+    width: 200px; } }

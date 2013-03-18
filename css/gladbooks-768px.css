@@ -17,4 +17,9 @@
     min-height: 400px; }
 
   ul li a {
-    padding: 10px 15px; } }
+    padding: 10px 15px; }
+
+  /* map */
+  .map-canvas {
+    height: 350px;
+    width: 350px; } }

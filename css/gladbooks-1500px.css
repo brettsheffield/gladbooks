@@ -4,4 +4,9 @@
     min-height: 750px; }
 
   .tablet {
-    min-height: 720px; } }
+    min-height: 720px; }
+
+  /* map */
+  .map-canvas {
+    height: 600px;
+    width: 600px; } }

@@ -480,6 +480,7 @@ function getForm(object, action, title, xml) {
 function displayForm(object, action, title, html, xml) {
 	var id = 0;
 	var content = '';
+	var locString = '';
 
 	$(html).find('div.' + object + '.action').each(function() {
 		content += $(self).html();
@@ -497,7 +498,22 @@ function displayForm(object, action, title, html, xml) {
 			$("div.tablet.active").find('form.' + object).find(
 				"[name='" + this.tagName + "']"
 			).val($(this).text());
+
+			if ((this.tagName == 'town') || (this.tagName == 'postcode')) {
+				/* grab whatever location data we can, giving preference to 
+				 * postcode */
+				if ($(this).text().length > 0) {
+					locString = $(this).text();
+				}
+			}
+
 		});
+
+		/* load map */
+		if (locString.length > 0) {
+			console.log('locString:' + locString);
+			loadMap(locString);
+		}
 	}
 	
 	/* deal with subforms */
@@ -1242,4 +1258,42 @@ function switchBusiness(business) {
 	$('.tablet.business' + g_business).each(function() {
 		$(this).removeClass('hidden');
 	});
+}
+
+function loadMap(locationString) {
+	var canvas;
+	var map;
+	var geocoder = new google.maps.Geocoder();
+
+	var mapOptions = {
+	    zoom: 15,
+		mapTypeId: google.maps.MapTypeId.ROADMAP
+	}
+
+	var activeTablet = $('.tablet.active.business' + g_business);
+	activeTablet.find('.map-canvas').each(function() {
+		console.log('found a map-canvas');
+		canvas = this;
+		$(canvas).fadeIn(300);
+		map = new google.maps.Map(canvas, mapOptions);
+	});
+
+	if (!(map)) {
+		console.log('No map-canvas found');
+		return;
+	}
+
+	geocoder.geocode( { 'address': locationString}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			map.setCenter(results[0].geometry.location);
+			var marker = new google.maps.Marker({
+				map: map,
+				position: results[0].geometry.location
+			});
+		} else {
+			console.log("Geocode was not successful for the following reason: "
+				+ status);
+		}
+	});
+
 }
