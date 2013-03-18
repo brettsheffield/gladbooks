@@ -223,4 +223,8 @@ $$ LANGUAGE 'plpgsql';
 SELECT create_instance('default');
 SELECT create_instance('test');
 SELECT create_instance('bacs');
+SELECT create_instance('richardf');
 SELECT create_instance('shandydann');
+SELECT create_instance('robertmc');
+SELECT create_instance('ghouston');
+SELECT create_instance('trinityf');

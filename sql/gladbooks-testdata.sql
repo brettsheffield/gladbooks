@@ -28,5 +28,10 @@ INSERT INTO contactdetail (contact,name,line_1,line_2,line_3,town,county,country
 INSERT INTO username (id, instance) VALUES ('betty', 'test');
 INSERT INTO username (id, instance) VALUES ('bacs', 'bacs');
 INSERT INTO username (id, instance) VALUES ('shandydann', 'shandydann');
+INSERT INTO username (id, instance) VALUES ('richardf', 'richardf');
+INSERT INTO username (id, instance) VALUES ('ghouston', 'ghouston');
+INSERT INTO username (id, instance) VALUES ('robertmc', 'robertmc');
+INSERT INTO username (id, instance) VALUES ('aboyd', 'trinityf');
+INSERT INTO username (id, instance) VALUES ('jross', 'trinityf');
 
 COMMIT;
