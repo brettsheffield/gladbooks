@@ -397,10 +397,10 @@ td {
   font-family: Courier, monospace;
   font-weight: normal; }
 
-.even {
+.even, tr.even > td {
   background-color: #eeeeff; }
 
-.odd {
+.odd, tr.odd > td {
   background-color: white; }
 
 .xml-debit,
@@ -431,6 +431,12 @@ div.organisation_contacts table {
 
 div.organisation_contacts th {
   background-color: #6e89a5; }
+
+div.organisation_contacts td {
+  width: 20%; }
+
+div.organisation_contacts td > input {
+  width: 100%; }
 
 div.organisation_contacts tr:not(:first-child) {
   background-color: white; }

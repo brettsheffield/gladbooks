@@ -573,6 +573,14 @@ function displaySubformData(view, parentid, xml) {
 	});
 	datatable.find('tbody').fadeIn(300);
 
+	/* clear form */
+	datatable.find('input[type=text]').each(function() {
+		$(this).val('');
+	});
+	datatable.find('input[type=email]').each(function() {
+		$(this).val('');
+	});
+
 	/* attach click event to add rows to subform */
 	datatable.find('button.addrow:not(.primed)').click(function() {
 		$(this).addClass('primed'); /* prevent duplicate events */
@@ -632,6 +640,7 @@ function displaySubformData(view, parentid, xml) {
 			beforeSend: function (xhr) { setAuthHeader(xhr); },
 			complete: function(xml) {
 				trow.parent().remove();
+				loadSubformData(view, parentid);
 			},
 		});
 
