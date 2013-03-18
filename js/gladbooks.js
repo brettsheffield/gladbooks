@@ -506,11 +506,7 @@ function displayForm(object, action, title, html, xml) {
 		console.log('Loading subform with data ' + view);
 		url = collection_url(view);
 		if (id) {
-			url += id
-			if (view == 'organisation_contacts') {
-				/* this view needs a trailing slash */
-				url += '/';
-			}
+			url += id + '/';
 		}
 		$.ajax({
 			url: url,
@@ -575,7 +571,48 @@ function displaySubformData(view, parentid, xml) {
 	datatable.find('tbody').fadeIn(300);
 
 	/* attach click event to add rows to subform */
+	datatable.find('button.addrow').click(function() {
+		console.log('Adding row to subform parent ' + parentid);
 
+		/* the part before the underscore is the parent collection */
+		var parent_collection = view.split('_')[0];
+		var subform_collection = view.split('_')[1];
+
+		var url = collection_url(subform_collection);
+		var xml = createRequestXml();
+
+		/* open xml element for the subform object */
+		xml += '<' + subform_collection.slice(0,-1) + '>';
+
+		/* find inputs */
+		$(this).parent().parent().find('input').each(function() {
+			xml += '<' + $(this).attr('name') + '>';
+			xml += $(this).val();
+			xml += '</' + $(this).attr('name') + '>';
+		});
+
+		/* add element for parent */
+		xml += '<' + parent_collection + ' id="' + parentid + '"/>';
+
+		/* close subform object element */
+		xml += '</' + subform_collection.slice(0,-1) + '>';
+
+		xml += '</data></request>';
+
+		$.ajax({
+			url: url,
+			type: 'POST',
+			data: xml,
+			contentType: 'text/xml',
+			beforeSend: function (xhr) { setAuthHeader(xhr); },
+			success: function(xml) {
+				console.log('SUCCESS: added row to subform');
+			},
+			error: function(xml) {
+				console.log('ERROR adding row to subform');
+			},
+		});
+	});
 
 	/* attach click event to remove rows from subform */
 	datatable.find('button.removerow').click(function() {
@@ -589,7 +626,6 @@ function displaySubformData(view, parentid, xml) {
 			type: 'DELETE',
 			beforeSend: function (xhr) { setAuthHeader(xhr); },
 			complete: function(xml) {
-				console.log('DELETE succeeded');
 				trow.parent().fadeOut();
 			},
 		});
