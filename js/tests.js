@@ -609,7 +609,6 @@ test("add two decimals", function() {
 	sum = decimalAdd(term1, term2);
 
 	equal(sum, total, term1 + '+' + term2 + '!=' + sum);
-	strictEqual(sum, total, term1 + '+' + term2 + '!=' + sum);
 });
 
 test("add two decimals with an uneven number of places", function() {
@@ -620,6 +619,25 @@ test("add two decimals with an uneven number of places", function() {
 	sum = decimalAdd(term1, term2);
 
 	equal(sum, total, term1 + '+' + term2 + '!=' + sum);
-	strictEqual(sum, total, term1 + '+' + term2 + '!=' + sum);
+});
+
+test("add a decimal and an integer", function() {
+    total = '149.5';
+	term1 = '26.5';
+	term2 = '123';
+
+	sum = decimalAdd(term1, term2);
+
+	equal(sum, total, term1 + '+' + term2 + '!=' + sum);
+});
+
+test("add two integers", function() {
+    total = '101';
+	term1 = '93';
+	term2 = '8';
+
+	sum = decimalAdd(term1, term2);
+
+	equal(sum, total, term1 + '+' + term2 + '!=' + sum);
 });
 

@@ -25,9 +25,9 @@ var g_resourcedefaultsurl = '/defaults/';
 var g_username = '';
 var g_password = '';
 var g_instance = '';
-//var g_username = 'betty';    /* temp */
-//var g_password = 'ie5a8P40'; /* temp */
-//var g_instance = 'bacs';	 /* temp */
+var g_username = 'betty';    /* temp */
+var g_password = 'ie5a8P40'; /* temp */
+var g_instance = 'bacs';	 /* temp */
 var g_business = '1';
 var g_loggedin = false;
 var g_max_ledgers_per_journal=3;
@@ -1091,33 +1091,40 @@ function validateJournalEntry(form) {
 
 /* Javascript has no decimal type, so we need to teach it how to add up */
 function decimalAdd(x, y) {
+	var xplaces = 0;
+	var yplaces = 0;
 
-	/* first, check we have only one decimal point */
-	var m = String(x).match(/\./g);
-	if (m) {
-		points = m.length;
+	/* first, check we have only one decimal point, if any, */
+	/* and make a note of how many decimal places each term has */	
+	var dpx = String(x).match(/\./g);
+	if (dpx) {
+		points = dpx.length;
 		if ((points != 0) && (points != 1)) {
 			throw "First argument to decimalAdd() is not a decimal";
 		}
+		xplaces = String(x).length - String(x).indexOf('.') - 1;
 	}
-	m = String(y).match(/\./g);
-	if (m) {
-		points = m.length;
+	var dpy = String(y).match(/\./g);
+	if (dpy) {
+		points = dpy.length;
 		if ((points != 0) && (points != 1)) {
 			throw "Second argument to decimalAdd() is not a decimal";
 		}
+		yplaces = String(y).length - String(y).indexOf('.') - 1;
 	}
-	
-	/* make a note of how many decimal places each term has */	
-	xplaces = String(x).length - String(x).indexOf('.') - 1;
-	yplaces = String(y).length - String(y).indexOf('.') - 1;
 
 	/* make number of decimal places even by adding zeros to the end */
 	if (xplaces < yplaces) {
+		if (xplaces == 0) {
+			xplaces = 1; /* leave space for decimal point */
+		}
 		x = String(x) + '0' * (yplaces - xplaces);
 		xplaces = yplaces;
 	}
 	if (yplaces < xplaces) {
+		if (yplaces == 0) {
+			yplaces = 1; /* leave space for decimal point */
+		}
 		y = String(y) + '0' * (xplaces - yplaces);
 		yplaces = xplaces;
 	}
@@ -1129,9 +1136,11 @@ function decimalAdd(x, y) {
 	/* add two integers - even javascript can manage that */
 	sum = Number(x) + Number(y);
 
-	/* put back the decimal point in the correct position */
-	sum = String(sum).substring(0,String(sum).length-xplaces) + '.'
-		+ String(sum).substring(String(sum).length-xplaces);
+	if (xplaces > 0) {
+		/* put back the decimal point in the correct position */
+		sum = String(sum).substring(0,String(sum).length-xplaces) + '.'
+			+ String(sum).substring(String(sum).length-xplaces);
+	}
 
 	return sum;
 }
