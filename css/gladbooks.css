@@ -479,3 +479,6 @@ button.removerow {
   float: right;
   height: 300px;
   width: 300px; }
+
+.map-canvas img {
+  max-width: none; }
