@@ -599,3 +599,27 @@ test("get business list", function() {
 	});
 });
 
+module("Mathematics");
+
+test("add two decimals", function() {
+	total = '214.58';
+	term1 = '35.76';
+	term2 = '178.82';
+
+	sum = decimalAdd(term1, term2);
+
+	equal(sum, total, term1 + '+' + term2 + '!=' + sum);
+	strictEqual(sum, total, term1 + '+' + term2 + '!=' + sum);
+});
+
+test("add two decimals with an uneven number of places", function() {
+    total = '214.580';
+	term1 = '35.760';
+	term2 = '178.82';
+
+	sum = decimalAdd(term1, term2);
+
+	equal(sum, total, term1 + '+' + term2 + '!=' + sum);
+	strictEqual(sum, total, term1 + '+' + term2 + '!=' + sum);
+});
+

@@ -24,9 +24,10 @@ var g_authurl = '/auth/';
 var g_resourcedefaultsurl = '/defaults/';
 var g_username = '';
 var g_password = '';
+var g_instance = '';
 //var g_username = 'betty';    /* temp */
 //var g_password = 'ie5a8P40'; /* temp */
-var g_instance = '';
+//var g_instance = 'bacs';	 /* temp */
 var g_business = '1';
 var g_loggedin = false;
 var g_max_ledgers_per_journal=3;
@@ -1049,14 +1050,14 @@ function validateJournalEntry(form) {
 			amount = $(this).val();
 			if ((amount > 0) && (account > 0)) {
 				if (type == 'debit') {
-					debits += Number(amount);
+					debits = decimalAdd(debits, amount);
 					debitxml += '<' + type + ' account="' + account;
 					debitxml += '" division="' + division;
 					debitxml += '" department="' + department;
 					debitxml += '" amount="' + amount + '"/>';
 				}
 				else if (type == 'credit') {
-					credits += Number(amount);
+					credits = decimalAdd(credits, amount);
 					creditxml += '<' + type + ' account="' + account;
 					creditxml += '" division="' + division;
 					creditxml += '" department="' + department;
@@ -1072,13 +1073,67 @@ function validateJournalEntry(form) {
 	}
 
 	/* quick check to ensure debits - credits = 0 */
-	if ((debits != credits) || (debits + credits == 0)) {
+	console.log('debits=' + debits);
+	console.log('credits=' + credits);
+	if (debits != credits) {
 		$(form).find('p.journalstatus').text("Transaction is unbalanced");
+		$(form).find('p.journalstatus').fadeIn(300);
+		xml = false;
+	}
+	if (debits + credits == 0) {
+		$(form).find('p.journalstatus').text("Transaction is zero");
 		$(form).find('p.journalstatus').fadeIn(300);
 		xml = false;
 	}
 
 	return xml;
+}
+
+/* Javascript has no decimal type, so we need to teach it how to add up */
+function decimalAdd(x, y) {
+
+	/* first, check we have only one decimal point */
+	var m = String(x).match(/\./g);
+	if (m) {
+		points = m.length;
+		if ((points != 0) && (points != 1)) {
+			throw "First argument to decimalAdd() is not a decimal";
+		}
+	}
+	m = String(y).match(/\./g);
+	if (m) {
+		points = m.length;
+		if ((points != 0) && (points != 1)) {
+			throw "Second argument to decimalAdd() is not a decimal";
+		}
+	}
+	
+	/* make a note of how many decimal places each term has */	
+	xplaces = String(x).length - String(x).indexOf('.') - 1;
+	yplaces = String(y).length - String(y).indexOf('.') - 1;
+
+	/* make number of decimal places even by adding zeros to the end */
+	if (xplaces < yplaces) {
+		x = String(x) + '0' * (yplaces - xplaces);
+		xplaces = yplaces;
+	}
+	if (yplaces < xplaces) {
+		y = String(y) + '0' * (xplaces - yplaces);
+		yplaces = xplaces;
+	}
+
+	/* remove the decimal point from the string */
+	x = x.replace('.', '');
+	y = y.replace('.', '');
+
+	/* add two integers - even javascript can manage that */
+	sum = Number(x) + Number(y);
+
+	/* put back the decimal point in the correct position */
+	sum = String(sum).substring(0,String(sum).length-xplaces) + '.'
+		+ String(sum).substring(String(sum).length-xplaces);
+
+	return sum;
 }
 
 function submitJournalEntry(event, form) {
