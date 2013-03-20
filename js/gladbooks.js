@@ -1130,8 +1130,8 @@ function decimalAdd(x, y) {
 	}
 
 	/* remove the decimal point from the string */
-	x = x.replace('.', '');
-	y = y.replace('.', '');
+	x = String(x).replace('.', '');
+	y = String(y).replace('.', '');
 
 	/* add two integers - even javascript can manage that */
 	sum = Number(x) + Number(y);
@@ -1142,7 +1142,7 @@ function decimalAdd(x, y) {
 			+ String(sum).substring(String(sum).length-xplaces);
 	}
 
-	return sum;
+	return String(sum);
 }
 
 function submitJournalEntry(event, form) {
@@ -1156,7 +1156,7 @@ function submitJournalEntry(event, form) {
     $.ajax({
 		url: collection_url('journals'),
         type: 'POST',
-        data: xml,
+		data: xml,
         contentType: 'text/xml',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
         success: function(xml) { submitJournalEntrySuccess(xml); },
