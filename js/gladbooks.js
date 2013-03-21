@@ -1170,6 +1170,10 @@ function decimalEqual(term1, term2) {
 /* Return string representation of decimal padded to at least <digits> 
  * decimal places */
 function decimalPad(decimal, digits) {
+	/* if decimal is blank, or NaN, make it zero */
+	if ((isNaN(decimal)) || (decimal == '')) {
+		decimal = '0';
+	}
 
 	/* first, convert to a number and back to a string - this strips any 
 	 * useless leading and trailing zeros. We'll put back the ones we need. */

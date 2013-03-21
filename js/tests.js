@@ -707,6 +707,10 @@ test("decimalPad() - pad a decimal out to two decimal places", function() {
 	equal(decimalPad('397.00', 2), '397.00', "397.00 => 397.00");
 	equal(decimalPad('397.0010', 2), '397.001', "397.0010 => 397.001");
 	equal(decimalPad('397.000', 2), '397.00', "397.000 => 397.00");
+	equal(decimalPad('0397.000', 2), '397.00', "0397.000 => 397.00");
+	equal(decimalPad('.100', 2), '0.10', ".100 => 0.10");
+	equal(decimalPad('', 2), '0.00', "<blank> => 0.00");
+	equal(decimalPad('.', 2), '0.00', "'.' => 0.00");
 });
 
 module("Strings");
