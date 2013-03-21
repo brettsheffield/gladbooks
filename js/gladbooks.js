@@ -1008,6 +1008,15 @@ function finishJournalForm(tab) {
 		submitJournalEntry(event, jf);
 	});
 
+	/* set up blur() events */
+	$('div.tablet.active.business'
+						+ g_business).find('input.amount').each(function() {
+		$(this).blur(function() {
+			/* pad amounts to two decimal places */
+			$(this).val(decimalPad($(this).val(), 2));
+		});
+	});
+
 	/* display the form */
 	jf.fadeIn(300);
 	jf.find('p.journalstatus').fadeOut(5000);
