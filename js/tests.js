@@ -681,6 +681,26 @@ test("add two numeric terms", function() {
 	equal(sum, total, term1 + '+' + term2 + '==' + sum);
 });
 
+test("decimalEqual() - uneven decimal places", function() {
+	total = '397.3';
+	term1 = '331.08';
+	term2 = '66.22';
+
+	sum = decimalAdd(term1, term2);
+
+	ok(decimalEqual(sum, total));
+});
+
+test("decimalEqual() - check for float problems", function() {
+	total = '214.58';
+	term1 = '35.76';
+	term2 = '178.82';
+
+	sum = decimalAdd(term1, term2);
+
+	ok(decimalEqual(sum, total));
+});
+
 module("Strings");
 
 test("escapeHTML()", function() {

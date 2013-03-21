@@ -1092,12 +1092,12 @@ function validateJournalEntry(form) {
 	/* quick check to ensure debits - credits = 0 */
 	console.log('debits=' + debits);
 	console.log('credits=' + credits);
-	if (debits != credits) {
+	if (!(decimalEqual(debits, credits))) {
 		$(form).find('p.journalstatus').text("Transaction is unbalanced");
 		$(form).find('p.journalstatus').fadeIn(300);
 		xml = false;
 	}
-	if (debits + credits == 0) {
+	if (decimalEqual(decimalAdd(debits, credits), 0)) {
 		$(form).find('p.journalstatus').text("Transaction is zero");
 		$(form).find('p.journalstatus').fadeIn(300);
 		xml = false;
@@ -1160,6 +1160,11 @@ function decimalAdd(x, y) {
 	}
 
 	return String(sum);
+}
+
+/* Compare two string representations of decimals numerically */
+function decimalEqual(term1, term2) {
+	return (Number(term1) == Number(term2));
 }
 
 function submitJournalEntry(event, form) {
