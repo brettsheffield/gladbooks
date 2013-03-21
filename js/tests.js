@@ -652,7 +652,7 @@ test("add two integers", function() {
 });
 
 test("add two numeric terms", function() {
-    total = 101;
+    total = '101';
 	term1 = 93;
 	term2 = 8;
 
