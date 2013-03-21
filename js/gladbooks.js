@@ -1167,6 +1167,30 @@ function decimalEqual(term1, term2) {
 	return (Number(term1) == Number(term2));
 }
 
+/* Return string representation of decimal padded to at least <digits> 
+ * decimal places */
+function decimalPad(decimal, digits) {
+
+	/* first, convert to a number and back to a string - this strips any 
+	 * useless leading and trailing zeros. We'll put back the ones we need. */
+	decimal = String(Number(decimal));
+
+	var point = String(decimal).match(/\./g);
+
+	if (point) {
+		pindex = String(decimal).indexOf('.');
+		places = String(decimal).length - pindex - 1;
+		console.log(decimal + ' has ' + places + ' places');
+		if (places < digits) {
+			decimal = String(decimal) + '0' * (digits - places);
+		}
+	}
+	else {
+		decimal = String(decimal) + '.00';
+	}
+	return decimal;
+}
+
 function submitJournalEntry(event, form) {
 	event.preventDefault();
 	xml = validateJournalEntry(form);
