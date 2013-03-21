@@ -1127,74 +1127,12 @@ function validateJournalEntry(form) {
 
 /* Javascript has no decimal type, so we need to teach it how to add up */
 function decimalAdd(x, y) {
-	var xi = '';
-	var yi = '';
-	var xd = '';
-	var yd = '';
-	var one = 0;
-	var sum;
-	var places = 0;
 
-	/* clean up leading and trailing zeros before we begin */
-	x = String(Number(x));
-	y = String(Number(y));
+	x = new Big(x);
+	y = new Big(y);
 
-	/* How many decimal places do we have? */
-	xindex = String(x).indexOf('.');
-	if (xindex > 0) {
-		xplaces = String(x).length - xindex - 1;
-	}
-	else {
-		xplaces = 0;
-	}
-	yindex = String(y).indexOf('.');
-	if (yindex > 0) {
-		yplaces = String(y).length - yindex - 1;
-	}
-	else {
-		yplaces = 0;
-	}
+	return x.plus(y);
 
-	if (yplaces > xplaces) {
-		places = yplaces;
-	}
-	else {
-		places = xplaces;
-	}
-
-	/* Pad decimal places to be the same */
-	x = decimalPad(x, places);
-	y = decimalPad(y, places);
-
-	/* Split integer from decimal part */
-	X = String(x).split('.');
-	Y = String(y).split('.');
-
-	/* No decimal places, sir?  No problem. */
-	if (X.length == 1) {
-		X[1] = '0';
-	}
-	if (Y.length == 1) {
-		Y[1] = '0';
-	}
-
-	decibits = String(Number(X[1]) + Number(Y[1]));
-
-	if ((decibits.length > X[1].length) || (decibits.length > Y[1].length)) {
-		/* carry the one */
-		one = 1;
-		decibits = decibits.substring(1);
-	}
-
-	if (decibits.length < places) {
-		/* pad with leading zeros */
-		decibits = (places - decibits.length) * '0' + decibits;
-	}
-	sum = String(Number(X[0]) + Number(Y[0]) + one) + '.' + decibits;
-
-	sum = decimalPad(sum, 0);
-
-	return sum;
 }
 
 /* Compare two string representations of decimals numerically */

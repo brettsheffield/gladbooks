@@ -711,6 +711,16 @@ test("add uneven fractions of a penny", function() {
 	equal(sum, total, term1 + '+' + term2 + '=' + total);
 });
 
+test("add uneven fractions of a penny again", function() {
+	total = '0.005';
+	term1 = '0';
+	term2 = '0.005';
+
+	sum = decimalAdd(term1, term2);
+
+	equal(sum, total, term1 + '+' + term2 + '=' + total);
+});
+
 test("decimalEqual() - uneven decimal places", function() {
 	total = '397.3';
 	term1 = '331.08';
