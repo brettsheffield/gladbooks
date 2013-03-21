@@ -681,6 +681,27 @@ test("add two numeric terms", function() {
 	equal(sum, total, term1 + '+' + term2 + '==' + sum);
 });
 
+test("add fractions of a penny - with pounds", function() {
+	total = '2.010';
+	term1 = '1.005';
+	term2 = '1.005';
+
+	sum = decimalAdd(term1, term2);
+
+	equal(sum, total, term1 + '+' + term2 + '==' + sum);
+});
+
+test("add fractions of a penny - pennies only", function() {
+	total = '0.010';
+	term1 = '0.005';
+	term2 = '0.005';
+
+	sum = decimalAdd(term1, term2);
+
+	equal(sum, total, term1 + '+' + term2 + '==' + sum);
+});
+
+
 test("decimalEqual() - uneven decimal places", function() {
 	total = '397.3';
 	term1 = '331.08';
@@ -695,6 +716,16 @@ test("decimalEqual() - check for float problems", function() {
 	total = '214.58';
 	term1 = '35.76';
 	term2 = '178.82';
+
+	sum = decimalAdd(term1, term2);
+
+	ok(decimalEqual(sum, total));
+});
+
+test("decimalEqual() - add fractions of a penny", function() {
+	total = '0.01';
+	term1 = '0.005';
+	term2 = '0.005';
 
 	sum = decimalAdd(term1, term2);
 

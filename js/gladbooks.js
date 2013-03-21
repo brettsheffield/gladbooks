@@ -1126,6 +1126,14 @@ function validateJournalEntry(form) {
 function decimalAdd(x, y) {
 	var xplaces = 0;
 	var yplaces = 0;
+	var bSmall = false;
+
+	/* If both terms are less than one, we need to pad one out so we don't
+	 * lose zeros.  This is seriously ugly, but it works. */
+	if ((Number(y) < 1) && (Number(x) < 1)) {
+		bSmall = true;
+		x = '1.' + String(x).substring(2);
+	}
 
 	/* first, check we have only one decimal point, if any, */
 	/* and make a note of how many decimal places each term has */	
@@ -1169,7 +1177,11 @@ function decimalAdd(x, y) {
 	/* add two integers - even javascript can manage that */
 	sum = Number(x) + Number(y);
 
-	if (xplaces > 0) {
+	/* Both x and y were less than zero, so put back their leading zeros */
+	if (bSmall) {
+		sum = '0.' + '0' * (String(sum).length - xplaces) + String(sum).substring(2);
+	}
+	else if (xplaces > 0) {
 		/* put back the decimal point in the correct position */
 		sum = String(sum).substring(0,String(sum).length-xplaces) + '.'
 			+ String(sum).substring(String(sum).length-xplaces);
