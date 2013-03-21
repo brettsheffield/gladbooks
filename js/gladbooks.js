@@ -1013,7 +1013,14 @@ function finishJournalForm(tab) {
 						+ g_business).find('input.amount').each(function() {
 		$(this).blur(function() {
 			/* pad amounts to two decimal places */
-			$(this).val(decimalPad($(this).val(), 2));
+			var newamount = decimalPad($(this).val(), 2);
+			if (newamount == '0.00') {
+				/* blank out zeros */
+				$(this).val('');
+			}
+			else {
+				$(this).val(newamount);
+			}
 		});
 	});
 
