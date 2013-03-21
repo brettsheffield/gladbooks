@@ -243,6 +243,26 @@ test("create department", function() {
 
 });
 
+test("create department with ampersand in name", function() {
+	var xml = createRequestXml();
+	var name = UUID() + ' & ' + UUID();
+	var escaped_name = escapeHTML(name);
+
+	xml += '<department><name>'+ escaped_name +'</name></department></data></request>';
+
+	stop();
+	$.ajax({
+		url: collection_url('departments'),
+		type: 'POST',
+		data: xml,
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { ok(true); start(); },
+		error: function(xml) { ok(false); start(); },
+	});
+
+});
+
 module("Division");
 
 test("create division", function() {
@@ -661,3 +681,12 @@ test("add two numeric terms", function() {
 	equal(sum, total, term1 + '+' + term2 + '==' + sum);
 });
 
+module("Strings");
+
+test("escapeHTML()", function() {
+	var rawstring = '<Pots> & "Pans" & <Stuff>';
+	var cookedstr = '&lt;Pots&gt; &amp; &quot;Pans&quot; &amp; &lt;Stuff&gt;';
+
+	equal(escapeHTML(rawstring), cookedstr, "Escape HTML special characters");
+
+});

@@ -4,7 +4,7 @@
 	  <business>default</business>
 		<data>
 		<department>
-			<name>Name of Department</name>
+			<name>Name of Department &amp; Ampersand</name>
 		</department>
 	</data>
 </request>

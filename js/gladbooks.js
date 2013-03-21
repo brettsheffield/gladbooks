@@ -577,7 +577,7 @@ function addSubformEvent(object, view, parentid) {
 	/* find inputs */
 	object.parent().parent().find('input').each(function() {
 		xml += '<' + $(this).attr('name') + '>';
-		xml += $(this).val();
+		xml += escapeHTML($(this).val());
 		xml += '</' + $(this).attr('name') + '>';
 	});
 
@@ -709,7 +709,7 @@ function submitForm(object, action, id) {
 	).find('input').each(function() {
 		if ($(this).attr('name') != 'id') {
 			xml += '<' + $(this).attr('name') + '>';
-			xml += $(this).val();
+			xml += escapeHTML($(this).val());
 			xml += '</' + $(this).attr('name') + '>';
 		}
 	});
@@ -728,6 +728,23 @@ function submitForm(object, action, id) {
         success: function(xml) { submitFormSuccess(object, action, id); },
         error: function(xml) { submitFormError(object, action, id); },
     });
+}
+
+/* Replace HTML Special Characters */
+function escapeHTML(html) {
+	var x;
+	var hchars = {
+		'&': '&amp;',
+		'<': '&lt;',
+		'>': '&gt;',
+		'"': '&quot;',
+	};
+
+	for (x in hchars) {
+		html = html.replace(new RegExp(x, 'g'), hchars[x]);
+	}
+
+	return html;
 }
 
 function submitFormSuccess(object, action, id) {
@@ -1032,7 +1049,7 @@ function validateJournalEntry(form) {
 			xml += '<journal ';
 			xml += 'transactdate="' + $(form).find('.transactdate').val()
 				+ '" ';
-			xml += 'description="'+ $(this).val().trim() +'">';
+			xml += 'description="'+ escapeHTML($(this).val().trim()) +'">';
 		}
 		else if ($(this).hasClass('account')) {
 			account = $(this).val();
@@ -1230,7 +1247,7 @@ function validateChartAdd(form) {
     xml += '<account type="';
 	xml += $(form).find('select.accounttype').val();
     xml += '" description="';
-	xml += $(form).find('input.description').val();
+	xml += escapeHTML($(form).find('input.description').val());
     xml += '"/></data></request>';
 
 	return xml;
