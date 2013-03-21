@@ -632,7 +632,7 @@ test("add two decimals", function() {
 });
 
 test("add two decimals with an uneven number of places", function() {
-    total = '214.580';
+    total = '214.58';
 	term1 = '35.760';
 	term2 = '178.82';
 
@@ -682,7 +682,7 @@ test("add two numeric terms", function() {
 });
 
 test("add fractions of a penny - with pounds", function() {
-	total = '2.010';
+	total = '2.01';
 	term1 = '1.005';
 	term2 = '1.005';
 
@@ -692,7 +692,7 @@ test("add fractions of a penny - with pounds", function() {
 });
 
 test("add fractions of a penny - pennies only", function() {
-	total = '0.010';
+	total = '0.01';
 	term1 = '0.005';
 	term2 = '0.005';
 
@@ -701,6 +701,15 @@ test("add fractions of a penny - pennies only", function() {
 	equal(sum, total, term1 + '+' + term2 + '==' + sum);
 });
 
+test("add uneven fractions of a penny", function() {
+	total = '0.05';
+	term1 = '0';
+	term2 = '0.05';
+
+	sum = decimalAdd(term1, term2);
+
+	equal(sum, total, term1 + '+' + term2 + '=' + total);
+});
 
 test("decimalEqual() - uneven decimal places", function() {
 	total = '397.3';
@@ -742,6 +751,11 @@ test("decimalPad() - pad a decimal out to two decimal places", function() {
 	equal(decimalPad('.100', 2), '0.10', ".100 => 0.10");
 	equal(decimalPad('', 2), '0.00', "<blank> => 0.00");
 	equal(decimalPad('.', 2), '0.00', "'.' => 0.00");
+});
+
+test("decimalPad() - pad a decimal out to zero decimal places", function() {
+	equal(decimalPad('397', 0), '397', "397 => 397"); /* noop */
+	equal(decimalPad('397.0', 0), '397', "397.0 => 397");
 });
 
 module("Strings");

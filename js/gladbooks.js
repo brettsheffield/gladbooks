@@ -1081,7 +1081,8 @@ function validateJournalEntry(form) {
 		}
 		else if ($(this).hasClass('amount')) {
 			amount = $(this).val();
-			if ((amount > 0) && (account > 0)) {
+			console.log('amount: ' + amount);
+			if ((Number(amount) > 0) && (Number(account) >= 0)) {
 				if (type == 'debit') {
 					debits = decimalAdd(debits, amount);
 					debitxml += '<' + type + ' account="' + account;
@@ -1097,6 +1098,8 @@ function validateJournalEntry(form) {
 					creditxml += '" amount="' + amount + '"/>';
 				}
 			}
+			console.log('debits: ' + debits);
+			console.log('credits: ' + credits);
 		}
 	});
 	if (xml) {
@@ -1124,70 +1127,74 @@ function validateJournalEntry(form) {
 
 /* Javascript has no decimal type, so we need to teach it how to add up */
 function decimalAdd(x, y) {
-	var xplaces = 0;
-	var yplaces = 0;
-	var bSmall = false;
+	var xi = '';
+	var yi = '';
+	var xd = '';
+	var yd = '';
+	var one = 0;
+	var sum;
+	var places = 0;
 
-	/* If both terms are less than one, we need to pad one out so we don't
-	 * lose zeros.  This is seriously ugly, but it works. */
-	if ((Number(y) < 1) && (Number(x) < 1)) {
-		bSmall = true;
-		x = '1.' + String(x).substring(2);
+	/* clean up leading and trailing zeros before we begin */
+	x = String(Number(x));
+	y = String(Number(y));
+
+	/* How many decimal places do we have? */
+	xindex = String(x).indexOf('.');
+	if (xindex > 0) {
+		xplaces = String(x).length - xindex - 1;
+	}
+	else {
+		xplaces = 0;
+	}
+	yindex = String(y).indexOf('.');
+	if (yindex > 0) {
+		yplaces = String(y).length - yindex - 1;
+	}
+	else {
+		yplaces = 0;
 	}
 
-	/* first, check we have only one decimal point, if any, */
-	/* and make a note of how many decimal places each term has */	
-	var dpx = String(x).match(/\./g);
-	if (dpx) {
-		points = dpx.length;
-		if ((points != 0) && (points != 1)) {
-			throw "First argument to decimalAdd() is not a decimal";
-		}
-		xplaces = String(x).length - String(x).indexOf('.') - 1;
+	if (yplaces > xplaces) {
+		places = yplaces;
 	}
-	var dpy = String(y).match(/\./g);
-	if (dpy) {
-		points = dpy.length;
-		if ((points != 0) && (points != 1)) {
-			throw "Second argument to decimalAdd() is not a decimal";
-		}
-		yplaces = String(y).length - String(y).indexOf('.') - 1;
+	else {
+		places = xplaces;
 	}
 
-	/* make number of decimal places even by adding zeros to the end */
-	if (xplaces < yplaces) {
-		if (xplaces == 0) {
-			xplaces = 1; /* leave space for decimal point */
-		}
-		x = String(x) + '0' * (yplaces - xplaces);
-		xplaces = yplaces;
-	}
-	if (yplaces < xplaces) {
-		if (yplaces == 0) {
-			yplaces = 1; /* leave space for decimal point */
-		}
-		y = String(y) + '0' * (xplaces - yplaces);
-		yplaces = xplaces;
-	}
+	/* Pad decimal places to be the same */
+	x = decimalPad(x, places);
+	y = decimalPad(y, places);
 
-	/* remove the decimal point from the string */
-	x = String(x).replace('.', '');
-	y = String(y).replace('.', '');
+	/* Split integer from decimal part */
+	X = String(x).split('.');
+	Y = String(y).split('.');
 
-	/* add two integers - even javascript can manage that */
-	sum = Number(x) + Number(y);
-
-	/* Both x and y were less than zero, so put back their leading zeros */
-	if (bSmall) {
-		sum = '0.' + '0' * (String(sum).length - xplaces) + String(sum).substring(2);
+	/* No decimal places, sir?  No problem. */
+	if (X.length == 1) {
+		X[1] = '0';
 	}
-	else if (xplaces > 0) {
-		/* put back the decimal point in the correct position */
-		sum = String(sum).substring(0,String(sum).length-xplaces) + '.'
-			+ String(sum).substring(String(sum).length-xplaces);
+	if (Y.length == 1) {
+		Y[1] = '0';
 	}
 
-	return String(sum);
+	decibits = String(Number(X[1]) + Number(Y[1]));
+
+	if ((decibits.length > X[1].length) || (decibits.length > Y[1].length)) {
+		/* carry the one */
+		one = 1;
+		decibits = decibits.substring(1);
+	}
+
+	if (decibits.length < places) {
+		/* pad with leading zeros */
+		decibits = (places - decibits.length) * '0' + decibits;
+	}
+	sum = String(Number(X[0]) + Number(Y[0]) + one) + '.' + decibits;
+
+	sum = decimalPad(sum, 0);
+
+	return sum;
 }
 
 /* Compare two string representations of decimals numerically */
@@ -1212,13 +1219,15 @@ function decimalPad(decimal, digits) {
 	if (point) {
 		pindex = String(decimal).indexOf('.');
 		places = String(decimal).length - pindex - 1;
-		console.log(decimal + ' has ' + places + ' places');
 		if (places < digits) {
-			decimal = String(decimal) + '0' * (digits - places);
+			decimal = String(decimal) + Array(digits).join('0');
 		}
 	}
-	else {
-		decimal = String(decimal) + '.00';
+	else if (digits == 0) {
+		decimal = String(decimal);
+	}
+	else if (digits > 0) {
+		decimal = String(decimal) + '.' + Array(digits + 1).join('0');
 	}
 	return decimal;
 }
