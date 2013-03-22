@@ -452,10 +452,10 @@ function showQuery(collection, title, sort) {
 		url: collection_url(collection),
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
-			displayResultsGeneric(xml, title, sort);
+			displayResultsGeneric(xml, collection, title, sort);
 		},
 		error: function(xml) {
-			displayResultsGeneric(xml, title);
+			displayResultsGeneric(xml, collection, title);
 		}
 	});
 }
@@ -788,14 +788,14 @@ function displayElement(collection, id) {
 }
 
 /* display XML results as a sortable table */
-function displayResultsGeneric(xml, title, sorted) {
+function displayResultsGeneric(xml, collection, title, sorted) {
 	if ($(xml).find('resources').children().length == 0) {
 		/* No results found */
 		hideSpinner();
-		if (title == 'Contacts') {
+		if (collection == 'contacts') {
 			getForm('contact', 'create', 'Add New Contact');
 		}
-		else if (title == 'Organisations') {
+		else if (collection == 'organisations') {
 			getForm('organisation', 'create', 'Add New Organisation');
 		}
 		else {
@@ -804,7 +804,7 @@ function displayResultsGeneric(xml, title, sorted) {
 		return;
 	}
 
-	$t = '<table class="datatable">';
+	$t = '<table class="datatable ' + collection + '">';
 	$t += "<thead>";
 	$t += "<tr>";
 	var row = 0;
