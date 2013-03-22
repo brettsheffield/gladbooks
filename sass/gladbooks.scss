@@ -464,6 +464,14 @@ td {
 	width: 10em;
 }
 
+table.datatable td.xml-id {
+	width: 3em;
+}
+
+table.datatable.organisations td.xml-orgcode {
+	width: 10em;
+}
+
 /* organisations page */
 div.organisations {
 	padding: 0 2%;
