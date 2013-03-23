@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <request>
   <instance>default</instance>
-  <business>default</business>
+  <business>1</business>
 	<data>
 		<journal transactdate="2013-02-11" description="My First Journal Entry">
 			<debit account="1001" amount="120.00" />

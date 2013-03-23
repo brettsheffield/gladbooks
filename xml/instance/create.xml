@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <request>
   <instance>(optional)</instance>
-  <business>(optional)</business>
+  <business>1</business>
 	<data>
-		<instance name="Name of Instance"/>
+		<instance>
+			<name>Name of Instance</name>
+		</instance>
 	</data>
 </request>

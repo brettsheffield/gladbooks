@@ -5,7 +5,7 @@
   <xs:complexType>
     <xs:sequence>
       <xs:element name="instance" type="xs:string"/>
-      <xs:element name="business" type="xs:string" minOccurs="0"/>
+      <xs:element name="business" type="xs:positiveInteger" minOccurs="0"/>
       <xs:element name="data">
         <xs:complexType>
           <xs:sequence>

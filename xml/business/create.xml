@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <request>
   <instance>default</instance>
-  <business>(optional)</business>
+  <business>1</business>
 	<data>
-		<business name="Name of Business"/>
+		<business>
+			<name>Name of Business"</name>
+		</business>
 	</data>
 </request>
