@@ -464,11 +464,31 @@ td {
 	width: 10em;
 }
 
-table.datatable td.xml-id {
+td.xml-authuser {
+	width: 8em;
+}
+
+td.xml-clientip {
+	width: 20em;
+}
+
+td.xml-entered {
+	width: 20em;
+}
+
+td.xml-instance {
+	width: 8em;
+}
+
+td.xml-nominalcode, td.xml-account {
 	width: 3em;
 }
 
-table.datatable.organisations td.xml-orgcode {
+td.xml-id, td.xml-journal {
+	width: 3em;
+}
+
+td.xml-orgcode {
 	width: 10em;
 }
 
