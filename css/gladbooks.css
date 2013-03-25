@@ -423,7 +423,7 @@ td.xml-entered {
 td.xml-instance {
   width: 8em; }
 
-td.xml-nominalcode, td.xml-account {
+td.xml-nominalcode {
   width: 3em; }
 
 td.xml-id, td.xml-journal {
@@ -469,6 +469,9 @@ button.addrow {
 button.removerow {
   float: right;
   margin-right: 1em; }
+
+select.relationship {
+  width: 10em; }
 
 /* form styling */
 .contact.form ul,

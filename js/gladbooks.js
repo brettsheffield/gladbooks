@@ -527,6 +527,20 @@ function displayForm(object, action, title, html, xml) {
 		loadSubformData(view, id);
 	});
 
+	/* populate combos */
+	console.log('populating combos');
+
+	$('table.datatable').find('select.populate').each(function() {
+		console.log('I have found a thing');
+		var combo = $(this);
+		$(this).parent().find('a.datasource').each(function() {
+			datasource = $(this).attr('href');
+			console.log('datasource: ' + datasource );
+			loadCombo(datasource, combo);
+		});
+	});
+
+
 	hideSpinner(); /* wake user */
 
 	$("div.tablet.active").find('form').submit(function(event) {
@@ -540,24 +554,49 @@ function displayForm(object, action, title, html, xml) {
 	});
 }
 
+function loadCombo(datasource, combo) {
+	url = collection_url(datasource);
+	console.log('I am populating a combo from datasource: ' + url);
+
+	$.ajax({
+		url: url,
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) {
+			populateCombo(xml, combo);
+		},
+		error: function(xml) {
+			console.log('Error loading combo data');
+		}
+	});
+}
+
+function populateCombo(xml, combo) {
+	console.log('Combo data loaded');
+	$(xml).find('row').each(function() {
+   		var id = $(this).find('id').text();
+		var name = $(this).find('name').text();
+		combo.append($("<option />").val(id).text(name));
+	});
+}
+
 /* Fetch data for a subform */
 function loadSubformData(view, id) {
-		console.log('Loading subform with data ' + view);
-		url = collection_url(view);
-		if (id) {
-			url += id + '/';
+	console.log('Loading subform with data ' + view);
+	url = collection_url(view);
+	if (id) {
+		url += id + '/';
+	}
+	$.ajax({
+		url: url,
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) {
+			console.log("Loaded subform data.  Hoorah.");
+			displaySubformData(view, id, xml);
+		},
+		error: function(xml) {
+			console.log('Error loading subform data');
 		}
-		$.ajax({
-			url: url,
-			beforeSend: function (xhr) { setAuthHeader(xhr); },
-			success: function(xml) {
-				console.log("Loaded subform data.  Hoorah.");
-				displaySubformData(view, id, xml);
-			},
-			error: function(xml) {
-				console.log('Error loading subform data');
-			}
-		});
+	});
 }
 
 function addSubformEvent(object, view, parentid) {

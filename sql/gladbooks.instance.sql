@@ -110,16 +110,36 @@ FOR EACH ROW EXECUTE PROCEDURE set_orgcode();
 CREATE TRIGGER organisationdetailupdate BEFORE INSERT ON organisationdetail
 FOR EACH ROW EXECUTE PROCEDURE organisationdetailupdate();
 
-CREATE TABLE organisation_contact (
-        id              SERIAL PRIMARY KEY,
-        organisation    INT4 references organisation(id)
-                        ON DELETE RESTRICT,
-        contact         INT4 references contact(id) ON DELETE RESTRICT,
-        is_billing      boolean DEFAULT false,
-        is_shipping     boolean DEFAULT false,
+CREATE TABLE relationship (
+	id		SERIAL PRIMARY KEY,
+	name		TEXT NOT NULL UNIQUE,
         updated         timestamp with time zone default now(),
         authuser        TEXT,
         clientip        TEXT
+);
+
+CREATE TABLE organisation_contact (
+        organisation    INT4 references organisation(id) ON DELETE RESTRICT,
+        contact         INT4 references contact(id) ON DELETE RESTRICT,
+        relationship    INT4 references relationship(id) ON DELETE RESTRICT,
+	datefrom	timestamp with time zone,
+	dateto		timestamp with time zone,
+        updated         timestamp with time zone default now(),
+        authuser        TEXT,
+        clientip        TEXT,
+	PRIMARY KEY (organisation, contact, relationship)
+);
+
+CREATE TABLE organisation_organisation (
+        organisation    INT4 references organisation(id) ON DELETE RESTRICT,
+        related         INT4 references organisation(id) ON DELETE RESTRICT,
+        relationship    INT4 references relationship(id) ON DELETE RESTRICT,
+	datefrom	timestamp with time zone,
+	dateto		timestamp with time zone,
+        updated         timestamp with time zone default now(),
+        authuser        TEXT,
+        clientip        TEXT,
+	PRIMARY KEY (organisation, related, relationship)
 );
 
 CREATE TABLE product (
