@@ -480,7 +480,7 @@ td.xml-instance {
 	width: 8em;
 }
 
-td.xml-nominalcode, td.xml-account {
+td.xml-nominalcode {
 	width: 3em;
 }
 
@@ -539,6 +539,10 @@ button.addrow {
 button.removerow {
 	float: right;
 	margin-right: 1em;
+}
+
+select.relationship {
+	width: 10em;
 }
 
 /* form styling */

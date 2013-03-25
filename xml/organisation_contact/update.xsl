@@ -13,13 +13,13 @@
 
 	<xsl:template match="data">
 		<xsl:text>BEGIN;</xsl:text>
-		<xsl:text>INSERT INTO gladbooks_</xsl:text>
+		<xsl:text>UPDATE gladbooks_</xsl:text>
 		<xsl:copy-of select="$instance"/>
-		<xsl:text>.organisation_contact (organisation, contact, relationship, authuser, clientip) VALUES ('</xsl:text>
+		<xsl:text>.organisation_contact (organisation, contact, relationship, authuser, clientip) WHERE organisation='</xsl:text>
 		<xsl:copy-of select="organisation"/>
-		<xsl:text>','</xsl:text>
+		<xsl:text>' AND contact='</xsl:text>
 		<xsl:copy-of select="contact"/>
-		<xsl:text>','</xsl:text>
+		<xsl:text>' AND relationship='</xsl:text>
 		<xsl:copy-of select="relationship"/>
 		<xsl:text>','</xsl:text>
        		<xsl:copy-of select="$authuser"/>
