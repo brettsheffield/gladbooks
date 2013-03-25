@@ -526,7 +526,6 @@ function displayForm(object, action, title, html, xml) {
 
 	/* populate combos */
 	console.log('populating combos');
-
 	$('table.datatable').find('select.populate').each(function() {
 		console.log('I have found a thing');
 		var combo = $(this);
@@ -536,7 +535,6 @@ function displayForm(object, action, title, html, xml) {
 			loadCombo(datasource, combo);
 		});
 	});
-
 
 	hideSpinner(); /* wake user */
 
@@ -553,7 +551,7 @@ function displayForm(object, action, title, html, xml) {
 
 function loadCombo(datasource, combo) {
 	url = collection_url(datasource);
-	console.log('I am populating a combo from datasource: ' + url);
+	console.log('populating a combo from datasource: ' + url);
 
 	$.ajax({
 		url: url,
