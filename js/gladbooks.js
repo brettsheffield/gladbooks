@@ -530,7 +530,6 @@ function displayForm(object, action, title, html, xml) {
 	/* populate combos */
 	console.log('populating combos');
 	$('table.datatable').find('select.populate').each(function() {
-		console.log('I have found a thing');
 		var combo = $(this);
 		$(this).parent().find('a.datasource').each(function() {
 			datasource = $(this).attr('href');
@@ -614,9 +613,25 @@ function addSubformEvent(object, view, parentid) {
 
 	/* find inputs */
 	object.parent().parent().find('input').each(function() {
-		xml += '<' + $(this).attr('name') + '>';
-		xml += escapeHTML($(this).val());
-		xml += '</' + $(this).attr('name') + '>';
+		var input_name = $(this).attr('name');
+		if (input_name) {
+			xml += '<' + input_name + '>';
+			xml += escapeHTML($(this).val());
+			xml += '</' + input_name + '>';
+		}
+	});
+
+	/* deal with select(s) */
+	object.parent().parent().find('select').each(function() {
+		var input_name = $(this).attr('name');
+		if (input_name) {
+			console.log('I have <select> with name: ' + input_name);
+			$(this).find('option:selected').each(function() {
+				xml += '<' + input_name + '>';
+				xml += escapeHTML($(this).val());
+				xml += '</' + input_name + '>';
+			});
+		}
 	});
 
 	/* add element for parent */
