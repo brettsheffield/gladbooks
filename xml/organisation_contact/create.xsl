@@ -19,14 +19,33 @@
 		<xsl:copy-of select="organisation"/>
 		<xsl:text>','</xsl:text>
 		<xsl:copy-of select="contact"/>
+		<xsl:text>','1','</xsl:text> <!-- add contact of default 1 = "contact" type -->
+       		<xsl:copy-of select="$authuser"/>
 		<xsl:text>','</xsl:text>
-		<xsl:copy-of select="relationship"/>
+		<xsl:copy-of select="$clientip"/>
+		<xsl:text>');</xsl:text>
+
+		<xsl:for-each select="relationship">
+			<xsl:call-template name="relationship"/>
+		</xsl:for-each>
+
+		<xsl:text>COMMIT;</xsl:text>
+	</xsl:template>
+
+	<xsl:template name="relationship">
+		<xsl:text>INSERT INTO gladbooks_</xsl:text>
+		<xsl:copy-of select="$instance"/>
+		<xsl:text>.organisation_contact (organisation, contact, relationship, authuser, clientip) VALUES ('</xsl:text>
+		<xsl:copy-of select="../organisation"/>
+		<xsl:text>','</xsl:text>
+		<xsl:copy-of select="../contact"/>
+		<xsl:text>','</xsl:text>
+		<xsl:value-of select="@id"/>
 		<xsl:text>','</xsl:text>
        		<xsl:copy-of select="$authuser"/>
 		<xsl:text>','</xsl:text>
 		<xsl:copy-of select="$clientip"/>
 		<xsl:text>');</xsl:text>
-		<xsl:text>COMMIT;</xsl:text>
 	</xsl:template>
 
 </xsl:stylesheet>

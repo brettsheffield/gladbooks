@@ -12,9 +12,13 @@
 
 						<xs:element name="organisation" maxOccurs="1" type="xs:positiveInteger"/>
 						<xs:element name="contact" maxOccurs="1" type="xs:positiveInteger"/>
-						<xs:element name="relationship" maxOccurs="1" type="xs:positiveInteger"/>
-						<xs:element name="datefrom" minOccurs="0" maxOccurs="1" type="xs:date"/>
-						<xs:element name="dateto" minOccurs="0" maxOccurs="1" type="xs:date"/>
+						<xs:element name="relationship" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="id" type="xs:positiveInteger" use="required"/>
+								<xs:attribute name="datefrom" type="xs:date"/>
+								<xs:attribute name="dateto" type="xs:date"/>
+							</xs:complexType>
+      			</xs:element><!--relationship-->
 
           </xs:sequence>
         </xs:complexType>
