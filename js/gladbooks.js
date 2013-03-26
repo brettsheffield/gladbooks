@@ -575,6 +575,7 @@ function populateCombo(xml, combo) {
 		var name = $(this).find('name').text();
 		combo.append($("<option />").val(id).text(name));
 	});
+	combo.chosen();
 }
 
 /* Fetch data for a subform */
