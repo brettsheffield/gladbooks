@@ -627,9 +627,9 @@ function addSubformEvent(object, view, parentid) {
 		if (input_name) {
 			console.log('I have <select> with name: ' + input_name);
 			$(this).find('option:selected').each(function() {
-				xml += '<' + input_name + '>';
+				xml += '<' + input_name + 'id="';
 				xml += escapeHTML($(this).val());
-				xml += '</' + input_name + '>';
+				xml += '"/>';
 			});
 		}
 	});
