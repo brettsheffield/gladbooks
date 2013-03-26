@@ -615,9 +615,16 @@ function addSubformEvent(object, view, parentid) {
 	object.parent().parent().find('input').each(function() {
 		var input_name = $(this).attr('name');
 		if (input_name) {
-			xml += '<' + input_name + '>';
-			xml += escapeHTML($(this).val());
-			xml += '</' + input_name + '>';
+			if (input_name == subform_collection) {
+				xml += '<' + input_name + ' id="';
+				xml += escapeHTML($(this).val());
+				xml += '"/>';
+			}
+			else {
+				xml += '<' + input_name + '>';
+				xml += escapeHTML($(this).val());
+				xml += '</' + input_name + '>';
+			}
 		}
 	});
 
@@ -626,16 +633,15 @@ function addSubformEvent(object, view, parentid) {
 		var input_name = $(this).attr('name');
 		if (input_name) {
 			console.log('I have <select> with name: ' + input_name);
+
 			$(this).find('option:selected').each(function() {
-				xml += '<' + input_name + 'id="';
-				xml += escapeHTML($(this).val());
+				xml += '<' + input_name;
+				xml += ' ' + parent_collection + '="' + parentid + '"';
+				xml += ' type="' + escapeHTML($(this).val())
 				xml += '"/>';
 			});
 		}
 	});
-
-	/* add element for parent */
-	xml += '<' + parent_collection + ' id="' + parentid + '"/>';
 
 	/* close subform object element */
 	xml += '</' + subform_collection.slice(0,-1) + '>';

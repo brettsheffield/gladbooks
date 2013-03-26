@@ -17,6 +17,8 @@
 			<phonealt>01234 5678</phonealt>
 			<mobile>01234 5678</mobile>
 			<fax>01234 5678</fax>
+			<relationship organisation="1" type="1" />
+			<relationship organisation="1" type="2" />
 		</contact>
 	</data>
 </request>

@@ -10,8 +10,18 @@
         <xs:complexType>
           <xs:sequence>
 
-						<xs:element name="organisation" maxOccurs="1" type="xs:positiveInteger"/>
-						<xs:element name="contact" maxOccurs="1" type="xs:positiveInteger"/>
+						<xs:element name="organisation" maxOccurs="1"> 
+							<xs:complexType>
+								<xs:attribute name="id" type="xs:positiveInteger" use="required"/>
+							</xs:complexType>
+      			</xs:element><!--organisation-->
+
+						<xs:element name="contact" maxOccurs="1"> 
+							<xs:complexType>
+								<xs:attribute name="id" type="xs:positiveInteger" use="required"/>
+							</xs:complexType>
+      			</xs:element><!--contact-->
+
 						<xs:element name="relationship" maxOccurs="unbounded">
 							<xs:complexType>
 								<xs:attribute name="id" type="xs:positiveInteger" use="required"/>
