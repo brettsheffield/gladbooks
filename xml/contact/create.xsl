@@ -204,33 +204,25 @@
 		<xsl:copy-of select="$clientip"/>
 		<xsl:text>');</xsl:text>
 
-		<xsl:if test="organisation">
-			<xsl:text>INSERT INTO organisation_contact </xsl:text>
-			<xsl:text>(organisation,contact</xsl:text>
-			<xsl:if test="organisation/@is_billing">
-				<xsl:text>,is_billing</xsl:text>
-			</xsl:if>
-			<xsl:if test="organisation/@is_shipping">
-				<xsl:text>,is_shipping</xsl:text>
-			</xsl:if>
-			<xsl:text>) </xsl:text>
-			<xsl:text>VALUES ('</xsl:text>
-			<xsl:value-of select="organisation/@id"/>
-			<xsl:text>',currval(pg_get_serial_sequence('contact','id'))</xsl:text>
-			<xsl:if test="organisation/@is_billing">
-				<xsl:text>,'</xsl:text>
-				<xsl:value-of select="organisation/@is_billing"/>
-				<xsl:text>'</xsl:text>
-			</xsl:if>
-			<xsl:if test="organisation/@is_shipping">
-				<xsl:text>,'</xsl:text>
-				<xsl:value-of select="organisation/@is_shipping"/>
-				<xsl:text>'</xsl:text>
-			</xsl:if>
-			<xsl:text>);</xsl:text>
-		</xsl:if>
+                <xsl:for-each select="relationship">
+			<xsl:call-template name="relationship"/>
+		</xsl:for-each>
 
 		<xsl:text>COMMIT;</xsl:text>
 	</xsl:template>
+
+        <xsl:template name="relationship">
+                <xsl:text>INSERT INTO gladbooks_</xsl:text>
+                <xsl:copy-of select="$instance"/>
+                <xsl:text>.organisation_contact (organisation, contact, relationship, authuser, clientip) VALUES ('</xsl:text>
+                <xsl:value-of select="@organisation"/>
+                <xsl:text>',currval(pg_get_serial_sequence('contact','id')),'</xsl:text>
+                <xsl:value-of select="@type"/>
+                <xsl:text>','</xsl:text>
+                <xsl:copy-of select="$authuser"/>
+                <xsl:text>','</xsl:text>
+                <xsl:copy-of select="$clientip"/>
+                <xsl:text>');</xsl:text>
+        </xsl:template>
 
 </xsl:stylesheet>
