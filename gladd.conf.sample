@@ -28,7 +28,7 @@ xmlpath         /usr/local/gladbooks/gladbooks-ui/xml/
 
 ###############################################################################
 ## databases
-db      gb		pg	pg.gladserv.com       	 gladbooks
+db      gb		pg	localhost       	 gladbooks
 db      ldap1       	ldap    ldap://ldap.gladserv.com dc=gladserv,dc=com
 
 ###############################################################################
