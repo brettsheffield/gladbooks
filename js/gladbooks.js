@@ -27,7 +27,7 @@ var g_password = '';
 var g_instance = '';
 var g_business = '1';
 var g_loggedin = false;
-var g_max_ledgers_per_journal=3;
+var g_max_ledgers_per_journal=7;
 var g_frmLedger;
 var g_tabid = 0;
 
