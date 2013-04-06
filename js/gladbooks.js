@@ -25,9 +25,12 @@ var g_resourcedefaultsurl = '/defaults/';
 var g_username = '';
 var g_password = '';
 var g_instance = '';
+var g_username = 'betty';    /* temp */
+var g_password = 'ie5a8P40'; /* temp */
+var g_instance = 'bacs';	 /* temp */
 var g_business = '1';
 var g_loggedin = false;
-var g_max_ledgers_per_journal=7;
+var g_max_ledgers_per_journal=3;
 var g_frmLedger;
 var g_tabid = 0;
 
@@ -524,16 +527,7 @@ function displayForm(object, action, title, html, xml) {
 		loadSubformData(view, id);
 	});
 
-	/* populate combos */
-	console.log('populating combos');
-	$('table.datatable').find('select.populate').each(function() {
-		var combo = $(this);
-		$(this).parent().find('a.datasource').each(function() {
-			datasource = $(this).attr('href');
-			console.log('datasource: ' + datasource );
-			loadCombo(datasource, combo);
-		});
-	});
+	//populateCombos(); /* populate combos */
 
 	hideSpinner(); /* wake user */
 
@@ -545,6 +539,19 @@ function displayForm(object, action, title, html, xml) {
 		else {
 			submitForm(object, action);
 		}
+	});
+}
+
+function populateCombos() {
+	/* populate combos */
+	console.log('populating combos');
+	$('table.datatable').find('select.populate').each(function() {
+		var combo = $(this);
+		$(this).parent().find('a.datasource').each(function() {
+			datasource = $(this).attr('href');
+			console.log('datasource: ' + datasource );
+			loadCombo(datasource, combo);
+		});
 	});
 }
 
@@ -566,12 +573,27 @@ function loadCombo(datasource, combo) {
 
 function populateCombo(xml, combo) {
 	console.log('Combo data loaded');
+
+	var selections = [];
+
+	/* first, preserve selections */
+	console.log(combo[0].options);
+	for (var x=0; x < combo[0].options.length; x++) {
+		selections[combo[0].options[x].text] = combo[0].options[x].selected;
+	}
+
+	combo.empty();
+
+	/* now, repopulate and reselect options */
 	$(xml).find('row').each(function() {
    		var id = $(this).find('id').text();
 		var name = $(this).find('name').text();
 		combo.append($("<option />").val(id).text(name));
+		combo[0].options[id].selected = selections[id];
 	});
 	combo.chosen();
+
+	combo.trigger("liszt:updated");
 }
 
 /* Fetch data for a subform */
@@ -668,6 +690,7 @@ function displaySubformData(view, parentid, xml) {
 	console.log("Displaying subform " + view + " data");
 	var datatable = $('div.' + view).find('table.datatable');
 	var row = '';
+	var types = [];
 	datatable.find('tbody').empty();
 
 	$(xml).find('resources').find('row').each(function() {
@@ -681,13 +704,31 @@ function displaySubformData(view, parentid, xml) {
 			if (this.tagName == 'id') {
 				id = $(this).text();
 			}
+			else if (this.tagName == 'type') {
+				row += '<td class="noclick">';
+				row += '<a class="datasource" href="relationships"/>';
+				row += '<select name="relationship" multiple class="relationship populate chosify type' + i + '" data-placeholder="Select type(s)">';
+
+				/* mark our selections - NB: combo hasn't been populated fully at this stage */
+				if ($(this).text()) {
+					types = $(this).text().split(',');
+					if (types.length > 0) {
+						for (var j=0; j < types.length; j++) {
+							row += '<option value="' + types[j] + '" selected>' + types[j] + '</option>';
+						}
+					}
+				}
+
+				row += '</select>';
+				row += '</td>';
+			}
 			else {
 				row += '<td>' + $(this).text() + '</td>';
 			}
 		});
 
 		/* append remove "X" button */
-		row += '<td class="removerow">';
+		row += '<td class="removerow noclick">';
 		row += '<input type="hidden" name="id" value="' + id + '"/>';
 		row += '<button class="removerow">X</button></td>';
 
@@ -696,7 +737,7 @@ function displaySubformData(view, parentid, xml) {
 		var newrow = $(row);
 
 		/* attach click event to edit elements of subform */
-		newrow.find('td:not(.removerow)').click(function() {
+		newrow.find('td').not('.noclick').click(function() {
 			var id = $(this).parent().find('input[name="id"]').val();
 			collection = view.split('_')[1];
 			displayElement(collection, id);
@@ -705,6 +746,9 @@ function displaySubformData(view, parentid, xml) {
 		newrow.appendTo(datatable);
 		i++;
 	});
+
+	populateCombos(); /* populate combos */
+
 	datatable.find('tbody').fadeIn(300);
 
 	/* clear form */
