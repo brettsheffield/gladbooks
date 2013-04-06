@@ -593,6 +593,11 @@ function populateCombo(xml, combo) {
 	});
 	combo.chosen();
 
+	combo.change(function() {
+		console.log('I believe I can fly');
+		/* TODO: HTTP POST the changes */
+	});
+
 	combo.trigger("liszt:updated");
 }
 
@@ -772,7 +777,7 @@ function displaySubformData(view, parentid, xml) {
 			beforeSend: function (xhr) { setAuthHeader(xhr); },
 			complete: function(xml) {
 				trow.parent().remove();
-				loadSubformData(view, parentid);
+				//loadSubformData(view, parentid);
 			},
 		});
 
