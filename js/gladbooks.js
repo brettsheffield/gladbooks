@@ -117,20 +117,29 @@ function deployTabs() {
 }
 
 /* add a new tab with content, optionally activating it */
-function addTab(title, content, activate) {
+function addTab(title, content, activate, collection, refresh) {
 	var tabid = g_tabid++;
+	var tabClasses = 'tabhead tablet' + tabid + ' business' + g_business;
+	var tabContentClasses = 'tablet tablet' + tabid + ' business' + g_business;
+
+	if (collection) {
+		tabContentClasses += ' ' + collection;
+	}
+	if (refresh) {
+		tabContentClasses += ' refresh';
+	}
 
 	/* add tab and closer */
 	$('ul.tablist').append('<li id="tabli' + tabid
-		+ '" class="tabhead tablet' + tabid + ' business' + g_business + '">'
+		+ '" class="' + tabClasses + '">'
 		+ '<a href="' + tabid + '">' + title + '</a>'
 		+ '<a id="tabcloser' + tabid + '" class="tabcloser" href="'
 		+ tabid  + '">'
 		+ 'X</a></li>');
 
 	/* add content */
-	$('div.tabcontent').append('<div id="tab' + tabid + '" class="tablet '
-		+ 'tablet' + tabid + ' business' + g_business + '">');
+	$('div.tabcontent').append('<div id="tab' + tabid + '" '
+		+ 'class="' + tabContentClasses + '">');
 	$('div#tab' + tabid).append(content);
 
 	/* add closer event */
@@ -486,7 +495,6 @@ function displayForm(object, action, title, html, xml) {
 	$(html).find('div.' + object + '.action').each(function() {
 		content += $(self).html();
 	});
-
 
 	addTab(title, html, true);
 
@@ -934,6 +942,15 @@ function displayElement(collection, id) {
 
 /* display XML results as a sortable table */
 function displayResultsGeneric(xml, collection, title, sorted) {
+	var refresh = false;
+
+	if (collection == 'contacts') {
+		refresh = true;
+	}
+	else if (collection == 'organisations') {
+		refresh = true;
+	}
+
 	if ($(xml).find('resources').children().length == 0) {
 		/* No results found */
 		hideSpinner();
@@ -998,7 +1015,7 @@ function displayResultsGeneric(xml, collection, title, sorted) {
 		displayElement(title,$(this).find('td.xml-id').text());
 	});
 
-	addTab(title, $t, true);
+	addTab(title, $t, true, collection, refresh);
 
 	/* make our table pretty and sortable */
 	if (sorted) {
