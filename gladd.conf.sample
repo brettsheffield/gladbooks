@@ -43,8 +43,7 @@ url	sqlview GET  /*/*/accounts/*   			gb accountlist
 url	sqlview GET  /*/*/accounttypes/  		gb accounttype
 url     sqlview GET  /auth/*				gb auth
 url	sqlview GET  /*/*/businesses/* 			gb businesses
-url	sqlview GET  /*/*/contactlist/ 			gb contactlist
-url	sqlview GET  /*/*/contacts/* 			gb contactdetail
+url	sqlview GET  /*/*/contacts/* 			gb contactlist
 url	sqlview GET  /*/*/departments/*			gb department
 url	sqlview GET  /*/*/divisions/*			gb division
 url	sqlview GET  /*/*/instances/* 			gb instances

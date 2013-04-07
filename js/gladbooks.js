@@ -164,6 +164,11 @@ function addTab(title, content, activate, collection, refresh) {
 	$('div.tabs').fadeIn(300);
 }
 
+function updateTab(tab, content) {
+	tab.empty();
+	tab.append(content);
+}
+
 function activateTab(tabid) {
 		console.log("activating tab " + tabid);
         /* remove "active" styling from all tabs for this business */
@@ -416,7 +421,7 @@ function clickMenu(event) {
 		showChartAddForm();
 	}
 	else if ($(this).attr("href") == '#contacts') {
-		showQuery('contactlist', 'Contacts', true);
+		showQuery('contacts', 'Contacts', true);
 	}
 	else if ($(this).attr("href") == '#contact.create') {
 		getForm('contact', 'create', 'Add New Contact');
@@ -458,13 +463,13 @@ function clickMenu(event) {
 }
 
 /* Display query results as list */
-function showQuery(collection, title, sort) {
+function showQuery(collection, title, sort, tab) {
 	showSpinner();
 	$.ajax({
 		url: collection_url(collection),
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
-			displayResultsGeneric(xml, collection, title, sort);
+			displayResultsGeneric(xml, collection, title, sort, tab);
 		},
 		error: function(xml) {
 			displayResultsGeneric(xml, collection, title);
@@ -835,6 +840,7 @@ function displaySubformData(view, parentid, xml) {
 function submitForm(object, action, id) {
 	var xml = createRequestXml();
 	var url = '';
+	var collection = '';
 
 	console.log('Submitting form ' + object + ':' + action);
 
@@ -842,7 +848,8 @@ function submitForm(object, action, id) {
 	$("div.tablet.active").find(
 		'div.' + object + '.' + action
 	).find('form').each(function() {
-		url = collection_url($(this).attr('action'));
+		collection = $(this).attr('action');
+		url = collection_url(collection);
 		if (id) {
 			url += id;
 		}
@@ -875,7 +882,7 @@ function submitForm(object, action, id) {
         data: xml,
         contentType: 'text/xml',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
-        success: function(xml) { submitFormSuccess(object, action, id); },
+        success: function(xml) { submitFormSuccess(object, action, id, collection); },
         error: function(xml) { submitFormError(object, action, id); },
     });
 }
@@ -897,11 +904,16 @@ function escapeHTML(html) {
 	return html;
 }
 
-function submitFormSuccess(object, action, id) {
+function submitFormSuccess(object, action, id, collection) {
 	hideSpinner();
 	if (object == 'business') {
 		prepBusinessSelector();
 	}
+
+	// lets check for tabs that will need refreshing
+	$('div.refresh.' + collection).each(function() {
+		showQuery(collection, '', false, $(this));
+	});
 }
 
 function submitFormError(object, action, id) {
@@ -941,7 +953,7 @@ function displayElement(collection, id) {
 }
 
 /* display XML results as a sortable table */
-function displayResultsGeneric(xml, collection, title, sorted) {
+function displayResultsGeneric(xml, collection, title, sorted, tab) {
 	var refresh = false;
 
 	if (collection == 'contacts') {
@@ -966,7 +978,8 @@ function displayResultsGeneric(xml, collection, title, sorted) {
 		return;
 	}
 
-	$t = '<table class="datatable ' + collection + '">';
+	$t = '<a class="source" href="' + collection_url(collection) + '"/>';
+	$t += '<table class="datatable ' + collection + '">';
 	$t += "<thead>";
 	$t += "<tr>";
 	var row = 0;
@@ -1015,7 +1028,13 @@ function displayResultsGeneric(xml, collection, title, sorted) {
 		displayElement(title,$(this).find('td.xml-id').text());
 	});
 
-	addTab(title, $t, true, collection, refresh);
+	if (tab) {
+		/* refreshing existing tab */
+		updateTab(tab, $t);
+	}
+	else {
+		addTab(title, $t, true, collection, refresh);
+	}
 
 	/* make our table pretty and sortable */
 	if (sorted) {
