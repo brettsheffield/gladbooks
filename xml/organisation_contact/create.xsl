@@ -13,17 +13,14 @@
 
 	<xsl:template match="data">
 		<xsl:text>BEGIN;</xsl:text>
-		<xsl:text>INSERT INTO gladbooks_</xsl:text>
+
+		<xsl:text>DELETE FROM gladbooks_</xsl:text>
 		<xsl:copy-of select="$instance"/>
-		<xsl:text>.organisation_contact (organisation, contact, relationship, authuser, clientip) VALUES ('</xsl:text>
-		<xsl:copy-of select="organisation"/>
-		<xsl:text>','</xsl:text>
-		<xsl:copy-of select="contact"/>
-		<xsl:text>','1','</xsl:text> <!-- add contact of default 1 = "contact" type -->
-       		<xsl:copy-of select="$authuser"/>
-		<xsl:text>','</xsl:text>
-		<xsl:copy-of select="$clientip"/>
-		<xsl:text>');</xsl:text>
+		<xsl:text>.organisation_contact WHERE organisation='</xsl:text>
+		<xsl:value-of select="organisation/@id"/>
+		<xsl:text>' AND contact ='</xsl:text>
+		<xsl:value-of select="contact/@id"/>
+		<xsl:text>';</xsl:text>
 
 		<xsl:for-each select="relationship">
 			<xsl:call-template name="relationship"/>
@@ -36,9 +33,9 @@
 		<xsl:text>INSERT INTO gladbooks_</xsl:text>
 		<xsl:copy-of select="$instance"/>
 		<xsl:text>.organisation_contact (organisation, contact, relationship, authuser, clientip) VALUES ('</xsl:text>
-		<xsl:copy-of select="../organisation"/>
+		<xsl:value-of select="../organisation/@id"/>
 		<xsl:text>','</xsl:text>
-		<xsl:copy-of select="../contact"/>
+		<xsl:value-of select="../contact/@id"/>
 		<xsl:text>','</xsl:text>
 		<xsl:value-of select="@id"/>
 		<xsl:text>','</xsl:text>

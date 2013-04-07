@@ -542,7 +542,7 @@ function displayForm(object, action, title, html, xml) {
 	});
 }
 
-function populateCombos() {
+function populateCombos(view, parentid) {
 	/* populate combos */
 	console.log('populating combos');
 	$('table.datatable').find('select.populate').each(function() {
@@ -550,12 +550,12 @@ function populateCombos() {
 		$(this).parent().find('a.datasource').each(function() {
 			datasource = $(this).attr('href');
 			console.log('datasource: ' + datasource );
-			loadCombo(datasource, combo);
+			loadCombo(datasource, combo, view, parentid);
 		});
 	});
 }
 
-function loadCombo(datasource, combo) {
+function loadCombo(datasource, combo, view, parentid) {
 	url = collection_url(datasource);
 	console.log('populating a combo from datasource: ' + url);
 
@@ -563,7 +563,7 @@ function loadCombo(datasource, combo) {
 		url: url,
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
-			populateCombo(xml, combo);
+			populateCombo(xml, combo, view, parentid);
 		},
 		error: function(xml) {
 			console.log('Error loading combo data');
@@ -571,7 +571,7 @@ function loadCombo(datasource, combo) {
 	});
 }
 
-function populateCombo(xml, combo) {
+function populateCombo(xml, combo, view, parentid) {
 	console.log('Combo data loaded');
 
 	var selections = [];
@@ -594,11 +594,48 @@ function populateCombo(xml, combo) {
 	combo.chosen();
 
 	combo.change(function() {
-		console.log('I believe I can fly');
-		/* TODO: HTTP POST the changes */
+		if (combo.hasClass('relationship')) {
+			relationshipUpdate(combo, view, parentid);
+		}
 	});
 
 	combo.trigger("liszt:updated");
+}
+
+function relationshipUpdate(combo, view, parentid) {
+	console.log('Updating relationship');
+	var xml = createRequestXml();
+	var trow = combo.parent();
+	var id = trow.find('input[name="id"]').val();
+
+	console.log(view + ':' + parentid + ',' + id);
+
+    xml += '<organisation id="' + parentid + '"/>';
+    xml += '<contact id="' + id + '"/>';
+
+	for (var x=0; x < combo[0].options.length; x++) {
+		if (combo[0].options[x].selected) {
+    		xml += '<relationship id="' + x + '"/>';
+		}
+	}
+
+	xml += '</data></request>';
+
+	console.log(xml);
+
+	var url = collection_url(view) + parentid + '/' + id + '/';
+	console.log('POST ' + url);
+	$.ajax({
+		url: url,
+		data: xml,
+		contentType: 'text/xml',
+		type: 'POST',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		complete: function(xml) {
+			console.log('relationship updated');
+		},
+	});
+
 }
 
 /* Fetch data for a subform */
@@ -711,6 +748,7 @@ function displaySubformData(view, parentid, xml) {
 			}
 			else if (this.tagName == 'type') {
 				row += '<td class="noclick">';
+				row += '<input type="hidden" name="id" value="' + id + '"/>';
 				row += '<a class="datasource" href="relationships"/>';
 				row += '<select name="relationship" multiple class="relationship populate chosify type' + i + '" data-placeholder="Select type(s)">';
 
@@ -752,7 +790,7 @@ function displaySubformData(view, parentid, xml) {
 		i++;
 	});
 
-	populateCombos(); /* populate combos */
+	populateCombos(view, parentid); /* populate combos */
 
 	datatable.find('tbody').fadeIn(300);
 
@@ -780,7 +818,6 @@ function displaySubformData(view, parentid, xml) {
 				//loadSubformData(view, parentid);
 			},
 		});
-
 	});
 
 	console.log('Found ' + i + ' row(s)');
