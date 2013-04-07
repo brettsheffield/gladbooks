@@ -730,7 +730,7 @@ function displaySubformData(view, parentid, xml) {
 	var i = 0;
 	var id = 0;
 	console.log("Displaying subform " + view + " data");
-	var datatable = $('div.' + view).find('table.datatable');
+	var datatable = $('div.tablet.active').find('div.' + view).find('table.datatable');
 	var row = '';
 	var types = [];
 	datatable.find('tbody').empty();
