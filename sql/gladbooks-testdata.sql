@@ -1,8 +1,51 @@
+SET search_path TO gladbooks;
+
+-- Oh!  What a horrible way to do this!
+-- But for the time to fix this properly
+-- You belong in the create_instance() function, not here
+
+SELECT create_instance('default');
+INSERT INTO gladbooks_default.relationship (id, name) VALUES (0, 'contact');
+INSERT INTO gladbooks_default.relationship (name) VALUES ('billing');
+INSERT INTO gladbooks_default.relationship (name) VALUES ('shipping');
+SELECT create_instance('test');
+INSERT INTO gladbooks_test.relationship (id, name) VALUES (0, 'contact');
+INSERT INTO gladbooks_test.relationship (name) VALUES ('billing');
+INSERT INTO gladbooks_test.relationship (name) VALUES ('shipping');
+SELECT create_instance('bacs');
+INSERT INTO gladbooks_bacs.relationship (id, name) VALUES (0, 'contact');
+INSERT INTO gladbooks_bacs.relationship (name) VALUES ('billing');
+INSERT INTO gladbooks_bacs.relationship (name) VALUES ('shipping');
+SELECT create_instance('richardf');
+INSERT INTO gladbooks_richardf.relationship (id, name) VALUES (0, 'contact');
+INSERT INTO gladbooks_richardf.relationship (name) VALUES ('billing');
+INSERT INTO gladbooks_richardf.relationship (name) VALUES ('shipping');
+SELECT create_instance('shandydann');
+INSERT INTO gladbooks_shandydann.relationship (id, name) VALUES (0, 'contact');
+INSERT INTO gladbooks_shandydann.relationship (name) VALUES ('billing');
+INSERT INTO gladbooks_shandydann.relationship (name) VALUES ('shipping');
+SELECT create_instance('robertmc');
+INSERT INTO gladbooks_robertmc.relationship (id, name) VALUES (0, 'contact');
+INSERT INTO gladbooks_robertmc.relationship (name) VALUES ('billing');
+INSERT INTO gladbooks_robertmc.relationship (name) VALUES ('shipping');
+SELECT create_instance('ghouston');
+INSERT INTO gladbooks_ghouston.relationship (id, name) VALUES (0, 'contact');
+INSERT INTO gladbooks_ghouston.relationship (name) VALUES ('billing');
+INSERT INTO gladbooks_ghouston.relationship (name) VALUES ('shipping');
+SELECT create_instance('trinityf');
+INSERT INTO gladbooks_trinityf.relationship (id, name) VALUES (0, 'contact');
+INSERT INTO gladbooks_trinityf.relationship (name) VALUES ('billing');
+INSERT INTO gladbooks_trinityf.relationship (name) VALUES ('shipping');
+
 SET search_path TO gladbooks_test,gladbooks;
+
+BEGIN;
+
 SELECT create_business('test', 'test');
 
+END;
+
 SET search_path TO gladbooks_test_1,gladbooks_test,gladbooks;
---SELECT default_data('test', '1');
 
 BEGIN;
 

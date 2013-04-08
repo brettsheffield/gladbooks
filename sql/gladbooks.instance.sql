@@ -118,6 +118,12 @@ CREATE TABLE relationship (
         clientip        TEXT
 );
 
+--INSERT INTO relationship (id, name) VALUES (0, 'contact');
+--INSERT INTO relationship (name) VALUES ('billing');
+--INSERT INTO relationship (name) VALUES ('shipping');
+
+--CREATE TABLE relationship AS SELECT * FROM gladbooks.relationship;
+
 CREATE TABLE organisation_contact (
         organisation    INT4 references organisation(id) ON DELETE RESTRICT,
         contact         INT4 references contact(id) ON DELETE RESTRICT,
@@ -239,12 +245,3 @@ RETURN instance;
 
 END;
 $$ LANGUAGE 'plpgsql';
-
-SELECT create_instance('default');
-SELECT create_instance('test');
-SELECT create_instance('bacs');
-SELECT create_instance('richardf');
-SELECT create_instance('shandydann');
-SELECT create_instance('robertmc');
-SELECT create_instance('ghouston');
-SELECT create_instance('trinityf');

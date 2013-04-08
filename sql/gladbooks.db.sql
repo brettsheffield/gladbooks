@@ -78,6 +78,14 @@ CREATE TABLE cycle (
         clientip        TEXT
 );
 
+CREATE TABLE relationship (
+        id              SERIAL PRIMARY KEY,
+        name            TEXT NOT NULL UNIQUE,
+        updated         timestamp with time zone default now(),
+        authuser        TEXT,
+        clientip        TEXT
+);
+
 CREATE TABLE tax (
         id              SERIAL PRIMARY KEY,
         updated         timestamp with time zone default now(),
@@ -679,3 +687,7 @@ INSERT INTO taxdetail (tax, account, name) VALUES (currval(pg_get_serial_sequenc
 INSERT INTO taxrate VALUES (DEFAULT);
 INSERT INTO taxratedetail (taxrate, tax, rate, valid_from, valid_to) VALUES (currval(pg_get_serial_sequence('taxrate', 'id')),currval(pg_get_serial_sequence('tax', 'id')),'0.0', NULL, NULL);
 
+-- Relationships
+INSERT INTO relationship (id, name) VALUES (0, 'contact');
+INSERT INTO relationship (name) VALUES ('billing');
+INSERT INTO relationship (name) VALUES ('shipping');

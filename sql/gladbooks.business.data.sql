@@ -36,9 +36,9 @@ INSERT INTO accounttype (id, name, range_min, range_max, next_id)
 INSERT INTO department (id, name) VALUES (0, 'default');
 INSERT INTO division (id, name) VALUES (0, 'default');
 
-INSERT INTO relationship (id, name) VALUES (0, 'contact');
-INSERT INTO relationship (name) VALUES ('billing');
-INSERT INTO relationship (name) VALUES ('shipping');
+--INSERT INTO relationship (id, name) VALUES (0, 'contact');
+--INSERT INTO relationship (name) VALUES ('billing');
+--INSERT INTO relationship (name) VALUES ('shipping');
 
 --INSERT INTO cycle (id,cyclename,days,months,years) VALUES (0,'never',0,0,0);
 --INSERT INTO cycle (cyclename) VALUES ('once');
