@@ -163,7 +163,7 @@ test("create contact", function() {
 
 test("create billing contact for organisation", function() {
 	var xml = createRequestXml();
-	xml += '<contact><name>Mr Bill Contact</name><organisation id="1" is_billing="true"/></contact></data></request>';
+	xml += '<contact><name>Mr Bill Contact</name><relationship organisation="1" type="1"/></contact></data></request>';
 
 	stop();
 	$.ajax({
