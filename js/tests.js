@@ -791,7 +791,7 @@ module("Sales Orders");
 
 test("create sales order", function() {
     var xml = createRequestXml();
-    xml += '<salesorder><organisation>1</organisation></salesorder></data></request>';
+    xml += '<salesorder><organisation>1</organisation><salesorderitem><product>1</product></salesorderitem></salesorder></data></request>';
 
     stop();
     $.ajax({
