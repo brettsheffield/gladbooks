@@ -180,7 +180,7 @@ test("create billing contact for organisation", function() {
 
 test("create shipping contact for organisation", function() {
 	var xml = createRequestXml();
-	xml += '<contact><name>Mrs Shipping Address</name><organisation id="1" is_shipping="true"/></contact></data></request>';
+	xml += '<contact><name>Mrs Shipping Address</name><relationship organisation="1" type="2"/></contact></data></request>';
 
 	stop();
 	$.ajax({
@@ -212,10 +212,10 @@ test("update contact", function() {
 
 });
 
-test("get contactlist", function() {
+test("get contacts", function() {
 	stop();
 	$.ajax({
-		url: collection_url('contactlist'),
+		url: collection_url('contacts'),
 		type: 'GET',
 		contentType: 'text/xml',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
@@ -499,7 +499,7 @@ test("update organisation (vatreg)", function() {
 
 test("link organisation and contact", function() {
 	var xml = createRequestXml();
-	xml += '<organisation>1</organisation><contact>1</contact></data></request>';
+	xml += '<organisation id="1"/><contact id="1"/><relationship id="0"/></data></request>';
 
 	stop();
 	$.ajax({
