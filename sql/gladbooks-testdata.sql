@@ -8,10 +8,14 @@ SELECT create_instance('default');
 INSERT INTO gladbooks_default.relationship (id, name) VALUES (0, 'contact');
 INSERT INTO gladbooks_default.relationship (name) VALUES ('billing');
 INSERT INTO gladbooks_default.relationship (name) VALUES ('shipping');
+
 SELECT create_instance('test');
 INSERT INTO gladbooks_test.relationship (id, name) VALUES (0, 'contact');
 INSERT INTO gladbooks_test.relationship (name) VALUES ('billing');
 INSERT INTO gladbooks_test.relationship (name) VALUES ('shipping');
+INSERT INTO gladbooks_test.product DEFAULT VALUES;
+INSERT INTO gladbooks_test.productdetail (product, shortname, description) VALUES (currval(pg_get_serial_sequence('product','id')),'Test Product', 'Description of Test Product');
+
 SELECT create_instance('bacs');
 INSERT INTO gladbooks_bacs.relationship (id, name) VALUES (0, 'contact');
 INSERT INTO gladbooks_bacs.relationship (name) VALUES ('billing');

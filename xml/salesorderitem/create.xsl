@@ -13,7 +13,7 @@
 
         <xsl:template match="request">
 		<xsl:text>BEGIN;</xsl:text>
-                <xsl:call-template name="salesorderitem"/>
+		<xsl:call-template name="salesorderitem"/>
 		<xsl:text>COMMIT;</xsl:text>
         </xsl:template>
 

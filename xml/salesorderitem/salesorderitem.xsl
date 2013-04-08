@@ -14,12 +14,14 @@
                 </xsl:if>
 
 		<xsl:text>INSERT INTO salesorderitemdetail (salesorderitem,</xsl:text>
-		<xsl:if test="salesorder">
+		<xsl:if test="not(@id) or salesorder">
 			<xsl:text>salesorder,</xsl:text>
 		</xsl:if>
+
 		<xsl:if test="product">
 			<xsl:text>product,</xsl:text>
 		</xsl:if>
+
 		<xsl:if test="linetext">
 			<xsl:text>linetext,</xsl:text>
 		</xsl:if>
@@ -42,7 +44,8 @@
                                 <xsl:text>','</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>
-                                <xsl:text>currval(pg_get_serial_sequence('salesorderitem','id')),'</xsl:text>
+                                <xsl:text>currval(pg_get_serial_sequence('salesorderitem','id')),</xsl:text>
+				<xsl:text>currval(pg_get_serial_sequence('salesorder','id')),'</xsl:text>
                         </xsl:otherwise>
                 </xsl:choose>
 

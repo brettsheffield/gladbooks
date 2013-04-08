@@ -124,8 +124,10 @@
 		<xsl:text>');</xsl:text>
 
 		<!-- add any salesorderitems -->
-		<xsl:call-template name="salesorderitem"/>
-
+		<xsl:for-each select="salesorderitem">
+			<xsl:call-template name="salesorderitem"/>
+		</xsl:for-each>
+		
 		<xsl:text>COMMIT;</xsl:text>
 	</xsl:template>
 
