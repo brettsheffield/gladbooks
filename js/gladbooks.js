@@ -444,6 +444,12 @@ function clickMenu(event) {
 	else if ($(this).attr("href") == '#organisation.create') {
 		getForm('organisation', 'create', 'Add New Organisation');
 	}
+	else if ($(this).attr("href") == '#products') {
+		showQuery('products', 'Products', true);
+	}
+	else if ($(this).attr("href") == '#product.create') {
+		getForm('product', 'create', 'Add New Product');
+	}
 	else if ($(this).attr("href") == '#rpt_balancesheet') {
 		showQuery('reports/balancesheet', 'Balance Sheet', false);
 	}

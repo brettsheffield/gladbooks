@@ -240,6 +240,21 @@ WHERE od.id IN (
 ORDER BY organisation ASC
 ;
 
+CREATE OR REPLACE VIEW productlist AS
+SELECT
+        product as id,
+        shortname,
+	description
+FROM productdetail
+WHERE id IN (
+        SELECT MAX(id)
+        FROM productdetail
+        GROUP BY product
+)
+ORDER BY product ASC
+;
+
+
 
 RETURN instance;
 
