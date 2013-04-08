@@ -9,6 +9,7 @@
 
 	<xsl:include href="../cleanQuote.xsl"/>
 	<xsl:include href="../setSearchPath.xsl"/>
+	<xsl:include href="../salesorderitem/salesorderitem.xsl"/>
 
         <xsl:template match="request">
                 <xsl:apply-templates select="data/salesorder"/>
@@ -121,6 +122,10 @@
 		<xsl:text>','</xsl:text>
 		<xsl:copy-of select="$clientip"/>
 		<xsl:text>');</xsl:text>
+
+		<!-- add any salesorderitems -->
+		<xsl:call-template name="salesorderitem"/>
+
 		<xsl:text>COMMIT;</xsl:text>
 	</xsl:template>
 

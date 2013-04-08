@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+  <instance>default</instance>
+  <business>1</business>	
+	<data>
+		<salesorderitem is_deleted="0">
+			<salesorder>1</salesorder>
+			<product>1</product>
+			<linetext>Once Upon a Product</linetext>
+			<discount>23.45</discount>
+			<price>123.45</price>
+		</salesorderitem>
+	</data>
+</request>
