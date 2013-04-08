@@ -1,6 +1,7 @@
 <div class="salesorder create">
 	<h2>New Sales Order</h2>
-	<form method="post" action="salesorders">
+	<form class="salesorder form" method="post" action="salesorders">
+		<input type="hidden" name="id"/>
 
 		<table>
 			<thead>
@@ -12,21 +13,41 @@
 			<tbody>
 				<tr>
 					<td>
-						<a class="datasource" href="organisations"/><select name="organisation" class="organisations populate focus" data-placeholder="Select Customer"></select>
+						<a class="datasource" href="organisations"></a><select name="organisation" class="organisations populate focus" data-placeholder="Select Customer"></select>
 					</td>
 					<td>
-						<a class="datasource" href="cycles"/><select name="cycle" class="cycle populate focus" data-placeholder="Frequency"></select>
+						<a class="datasource" href="cycles"></a><select name="cycle" class="cycle populate focus" data-placeholder="Frequency"></select>
 					</td>
 					<td>
-						<input name="start_date" class="datefield" autocomplete="off" required/>
+						<input name="start_date" class="datefield" autocomplete="off"/>
 					</td>
 					<td>
-						<input name="end_date" class="datefield" autocomplete="off" required/>
+						<input name="end_date" class="datefield" autocomplete="off"/>
 					</td>
 				</tr>
 			</tbody>
 		</table>
-		<button class="submit formsubmit">Save</button>
-		<button class="cancel formsubmit">Cancel</button>
 	</form>
+
+		<div class="salesorderitems">
+			<form class="subform" action="salesorderitems"/>
+			<table class="datatable">
+				<thead>
+					<tr>
+						<th>Product</th>
+						<th>Line Text</th>
+						<th>Price</th>
+					</tr>
+					<tr>
+						<td><a class="datasource" href="products"></a><select name="product" class="product populate" data-placeholder="Select product"></select></td>
+						<td class="linetext"><input name="linetext" type="text" placeholder="Line Text"/></td>
+						<td class="price"><input name="price" type="text" placeholder="0.00"/></td>
+						<td><button class="addrow">Add</button></td>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+
 </div>

@@ -541,14 +541,22 @@ function displayForm(object, action, title, html, xml) {
 			loadMap(locString);
 		}
 	}
-	
+
 	/* deal with subforms */
 	$(html).find('form.subform').each(function() {
 		var view = $(this).attr("action");
+		var parentdiv = $(this).parent();
 		var datatable = $('div.' + view).find('table.datatable');
-		datatable.find('button.addrow').click(function(){
-			addSubformEvent($(this), view, id);
+		var btnAdd = datatable.find('button.addrow:not(.btnAdd)');
+		btnAdd.click(function(){
+			if (view == 'salesorderitems') {
+				salesorderAddProduct(datatable);
+			}
+			else {
+				addSubformEvent($(this), view, id);
+			}
 		});
+		btnAdd.addClass('btnAdd');
 		loadSubformData(view, id);
 	});
 
@@ -571,6 +579,32 @@ function displayForm(object, action, title, html, xml) {
 			submitForm(object, action);
 		}
 	});
+}
+
+function salesorderAddProduct(datatable) {
+	var product = datatable.find('select.product').val();
+	var linetext = datatable.find('input[name$="linetext"]').val();
+	var price = datatable.find('input[name$="price"]').val();
+	var row = $('<tr class="even"></tr>');
+	console.log('Adding product ' + product + ' to salesorder');
+
+	/* We're not saving anything yet - just building up a salesorder on the
+	 * screen until the user clicks "save" */
+
+	row.append('<td class="xml-product">' + product + '</td>');
+	row.append('<td class="xml-linetext">' + linetext + '</td>');
+	row.append('<td class="xml-amount">' + price + '</td>');
+	row.append('<td></td>');
+
+	row.append('<td class="removerow"><button class="removerow">X</button></td>');
+
+	/* add handler to remove row */
+	row.find('button.removerow').click(function () {
+		$(this).parent().parent().fadeOut(300);
+	});
+
+	datatable.append(row);
+
 }
 
 function populateCombos(view, parentid) {
@@ -620,6 +654,9 @@ function populateCombo(xml, combo, view, parentid) {
    		var id = $(this).find('id').text();
 		if (combo.attr('name') == 'cycle') {
 			var name = $(this).find('cyclename').text();
+		}
+		else if (combo.attr('name') == 'product') {
+			var name = $(this).find('shortname').text();
 		}
 		else {
 			var name = $(this).find('name').text();
@@ -699,6 +736,10 @@ function loadSubformData(view, id) {
 function addSubformEvent(object, view, parentid) {
 	/* attach click event to add rows to subform */
 	console.log('Adding row to subform parent ' + parentid);
+
+	console.log('object:' + object);
+	console.log('view:' + view);
+	console.log('parentid:' + parentid);
 
 	/* the part before the underscore is the parent collection */
 	var parent_collection = view.split('_')[0];

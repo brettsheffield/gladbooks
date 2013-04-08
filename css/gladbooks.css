@@ -483,6 +483,9 @@ select.cycle {
 select.organisations {
   width: 20em; }
 
+select.product {
+  width: 20em; }
+
 /* form styling */
 .contact.form ul,
 .organisation.form ul {
