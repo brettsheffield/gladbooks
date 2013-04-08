@@ -968,6 +968,9 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 	else if (collection == 'organisations') {
 		refresh = true;
 	}
+	else if (collection == 'products') {
+		refresh = true;
+	}
 
 	if ($(xml).find('resources').children().length == 0) {
 		/* No results found */
