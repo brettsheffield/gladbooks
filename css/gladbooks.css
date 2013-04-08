@@ -403,6 +403,7 @@ td {
 .odd, tr.odd > td {
   background-color: white; }
 
+.price,
 .xml-debit,
 .xml-credit,
 .xml-amount,
@@ -431,6 +432,12 @@ td.xml-id, td.xml-journal {
 
 td.xml-orgcode {
   width: 10em; }
+
+td.linetext {
+  width: 50%; }
+
+input.linetext {
+  width: 90%; }
 
 .chzn-container {
   margin: 7px; }

@@ -164,6 +164,10 @@ function addTab(title, content, activate, collection, refresh) {
 	$('div.tabs').fadeIn(300);
 }
 
+function activeTabId() {
+	return $('li.tabhead.active').find('a.tabcloser').attr('href');
+}
+
 function updateTab(tab, content) {
 	tab.empty();
 	tab.append(content);
@@ -223,6 +227,11 @@ function activateNextTab(tabid) {
 /* remove a tab */
 function closeTab(tabid) {
 	var tabcount = $('div#tabs').find('div').size();
+
+	if (! tabid) {
+		/* close the active tab by default */
+		var tabid = activeTabId();
+	}
 
 	/* if tab is active, activate another */
 	if ($('.tablet' + tabid).hasClass('active')) {
@@ -570,7 +579,37 @@ function displayForm(object, action, title, html, xml) {
 
 	hideSpinner(); /* wake user */
 
-	$("div.tablet.active").find('form').submit(function(event) {
+    /* set up blur() events */
+    $('div.tablet.active.business'
+				+ g_business).find('input.price').each(function() {
+        $(this).blur(function() {
+            /* pad amounts to two decimal places */
+            var newamount = decimalPad($(this).val(), 2);
+            if (newamount == '0.00') {
+                /* blank out zeros */
+                $(this).val('');
+            }
+            else {
+                $(this).val(newamount);
+            }
+        });
+    });
+
+
+	/* make submit button do the needful */
+	$('div.tablet.active.business'
+						+ g_business).find('button.save').click(function() {
+		$("div.tablet.active.business" + g_business).find('form').submit();
+	});
+
+	/* Cancel button closes tab */
+	$('div.tablet.active.business'
+						+ g_business).find('button.cancel').click(function() {
+		closeTab();
+	});
+
+	$("div.tablet.active.business"
+						+ g_business).find('form').submit(function(event) {
 		event.preventDefault();
 		if (id > 0) {
 			submitForm(object, action, id);
