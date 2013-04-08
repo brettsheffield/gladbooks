@@ -456,6 +456,12 @@ function clickMenu(event) {
 	else if ($(this).attr("href") == '#rpt_profitandloss') {
 		showQuery('reports/profitandloss', 'Profit and Loss', false);
 	}
+	else if ($(this).attr("href") == '#salesorders') {
+		showQuery('salesorders', 'Sales Orders', true);
+	}
+	else if ($(this).attr("href") == '#salesorder.create') {
+		getForm('salesorder', 'create', 'New Sales Order');
+	}
 	else if ($(this).attr("href") == '#help') {
 		addTab("Help", "<h2>Help</h2>", true);
 	}
@@ -546,7 +552,7 @@ function displayForm(object, action, title, html, xml) {
 		loadSubformData(view, id);
 	});
 
-	//populateCombos(); /* populate combos */
+	populateCombos(); /* populate combos */
 
 	hideSpinner(); /* wake user */
 
@@ -564,7 +570,7 @@ function displayForm(object, action, title, html, xml) {
 function populateCombos(view, parentid) {
 	/* populate combos */
 	console.log('populating combos');
-	$('table.datatable').find('select.populate').each(function() {
+	$('select.populate').each(function() {
 		var combo = $(this);
 		$(this).parent().find('a.datasource').each(function() {
 			datasource = $(this).attr('href');

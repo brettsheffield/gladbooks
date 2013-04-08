@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:element name="request">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="instance" type="xs:string"/>
+      <xs:element name="business" type="xs:positiveInteger"/>
+      <xs:element name="data">
+        <xs:complexType>
+          <xs:sequence>
+
+						<xs:element name="salesorder" maxOccurs="1">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="organisation" type="xs:positiveInteger" minOccurs="0"/>
+									<xs:element name="quotenumber" type="xs:string"/>
+									<xs:element name="ponumber" type="xs:string"/>
+									<xs:element name="description" type="xs:string" minOccurs="0"/>
+									<xs:element name="cycle" type="xs:nonNegativeInteger" minOccurs="0"/>
+									<xs:element name="start_date" type="xs:date"/>
+									<xs:element name="end_date" type="xs:date"/>
+								</xs:sequence>
+								<xs:attribute name="is_open" type="xs:boolean"/>
+								<xs:attribute name="is_deleted" type="xs:boolean"/>
+							</xs:complexType>
+						</xs:element><!--salesorder-->
+
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element><!--data-->
+
+    </xs:sequence>
+  </xs:complexType>
+</xs:element><!--request-->
+
+</xs:schema>

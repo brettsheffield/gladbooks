@@ -1,7 +1,7 @@
 <div class="salesorder create">
 	<h2>New Sales Order</h2>
 	<form method="post" action="salesorders">
-		<input class="focus" type="text" name="organisation" placeholder="Customer"/>
+		<a class="datasource" href="organisations"/><select name="organisation" class="organisations populate focus" data-placeholder="Select Customer"></select>
 		<!-- select terms from db -->
 		<button class="submit formsubmit">Save</button>
 	</form>
