@@ -14,12 +14,12 @@
 							<xs:complexType>
 								<xs:sequence>
 									<xs:element name="organisation" type="xs:positiveInteger" minOccurs="0"/>
-									<xs:element name="quotenumber" type="xs:string"/>
-									<xs:element name="ponumber" type="xs:string"/>
+									<xs:element name="quotenumber" type="xs:string" minOccurs="0"/>
+									<xs:element name="ponumber" type="xs:string" minOccurs="0"/>
 									<xs:element name="description" type="xs:string" minOccurs="0"/>
 									<xs:element name="cycle" type="xs:nonNegativeInteger" minOccurs="0"/>
-									<xs:element name="start_date" type="xs:date"/>
-									<xs:element name="end_date" type="xs:date"/>
+									<xs:element name="start_date" type="xs:date" minOccurs="0"/>
+									<xs:element name="end_date" type="xs:date" minOccurs="0"/>
 								</xs:sequence>
 								<xs:attribute name="is_open" type="xs:boolean"/>
 								<xs:attribute name="is_deleted" type="xs:boolean"/>

@@ -20,7 +20,9 @@
 		<xsl:text>BEGIN;</xsl:text>
 
                 <xsl:if test="not(@id)">
-                        <xsl:text>INSERT INTO salesorder (authuser, clientip) VALUES ('</xsl:text>
+                        <xsl:text>INSERT INTO salesorder (organisation, authuser, clientip) VALUES ('</xsl:text>
+			<xsl:value-of select="organisation"/>
+			<xsl:text>','</xsl:text>
                         <xsl:copy-of select="$authuser"/>
                         <xsl:text>','</xsl:text>
                         <xsl:copy-of select="$clientip"/>
@@ -28,9 +30,6 @@
                 </xsl:if>
 
 		<xsl:text>INSERT INTO salesorderdetail (salesorder,</xsl:text>
-		<xsl:if test="organisation">
-			<xsl:text>organisation,</xsl:text>
-		</xsl:if>
 		<xsl:if test="quotenumber">
 			<xsl:text>quotenumber,</xsl:text>
 		</xsl:if>
@@ -68,11 +67,6 @@
                                 <xsl:text>currval(pg_get_serial_sequence('salesorder','id')),'</xsl:text>
                         </xsl:otherwise>
                 </xsl:choose>
-
-		<xsl:if test="organisation">
-			<xsl:value-of select="organisation"/>
-			<xsl:text>','</xsl:text>
-		</xsl:if>
 
 		<xsl:if test="quotenumber">
 			<xsl:call-template name="cleanQuote">
