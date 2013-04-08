@@ -1,8 +1,32 @@
 <div class="salesorder create">
 	<h2>New Sales Order</h2>
 	<form method="post" action="salesorders">
-		<a class="datasource" href="organisations"/><select name="organisation" class="organisations populate focus" data-placeholder="Select Customer"></select>
-		<!-- select terms from db -->
+
+		<table>
+			<thead>
+				<td>Customer</td>
+				<td>Cycle</td>
+				<td>Start Date</td>
+				<td>End Date</td>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<a class="datasource" href="organisations"/><select name="organisation" class="organisations populate focus" data-placeholder="Select Customer"></select>
+					</td>
+					<td>
+						<a class="datasource" href="cycles"/><select name="cycle" class="cycle populate focus" data-placeholder="Frequency"></select>
+					</td>
+					<td>
+						<input name="start_date" class="datefield" autocomplete="off" required/>
+					</td>
+					<td>
+						<input name="end_date" class="datefield" autocomplete="off" required/>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 		<button class="submit formsubmit">Save</button>
+		<button class="cancel formsubmit">Cancel</button>
 	</form>
 </div>

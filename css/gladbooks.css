@@ -477,6 +477,12 @@ select.relationship {
   opacity: 0.0;
   width: 20em; }
 
+select.cycle {
+  width: 10em; }
+
+select.organisations {
+  width: 20em; }
+
 /* form styling */
 .contact.form ul,
 .organisation.form ul {

@@ -554,6 +554,12 @@ function displayForm(object, action, title, html, xml) {
 
 	populateCombos(); /* populate combos */
 
+	/* date pickers */
+	$('div.active').find('.datefield').datepicker({
+	   	dateFormat: "yy-mm-dd",
+		constrainInput: true
+	});
+
 	hideSpinner(); /* wake user */
 
 	$("div.tablet.active").find('form').submit(function(event) {
@@ -597,7 +603,7 @@ function loadCombo(datasource, combo, view, parentid) {
 }
 
 function populateCombo(xml, combo, view, parentid) {
-	console.log('Combo data loaded');
+	console.log('Combo data loaded for ' + combo.attr('name'));
 
 	var selections = [];
 
@@ -612,9 +618,16 @@ function populateCombo(xml, combo, view, parentid) {
 	/* now, repopulate and reselect options */
 	$(xml).find('row').each(function() {
    		var id = $(this).find('id').text();
-		var name = $(this).find('name').text();
+		if (combo.attr('name') == 'cycle') {
+			var name = $(this).find('cyclename').text();
+		}
+		else {
+			var name = $(this).find('name').text();
+		}
 		combo.append($("<option />").val(id).text(name));
-		combo[0].options[id].selected = selections[id];
+		if (selections[id]) {
+			combo[0].options[id].selected = selections[id];
+		}
 	});
 	combo.chosen();
 
@@ -815,7 +828,7 @@ function displaySubformData(view, parentid, xml) {
 		i++;
 	});
 
-	populateCombos(view, parentid); /* populate combos */
+	//populateCombos(view, parentid); /* populate combos */
 
 	datatable.find('tbody').fadeIn(300);
 
