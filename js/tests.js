@@ -768,6 +768,25 @@ test("decimalPad() - pad a decimal out to zero decimal places", function() {
 	equal(decimalPad('397.0', 0), '397', "397.0 => 397");
 });
 
+module("Products");
+
+test("create product", function() {
+    var xml = createRequestXml();
+    xml += '<product><shortname>My Test Product</shortname><description>This is a test product</description></product></data></request>';
+
+    stop();
+    $.ajax({
+        url: collection_url('products'),
+        type: 'POST',
+        data: xml,
+        contentType: 'text/xml',
+        beforeSend: function (xhr) { setAuthHeader(xhr); },
+        success: function(xml) { ok(true); start(); },
+        error: function(xml) { ok(false); start(); },
+    });
+
+});
+
 module("Strings");
 
 test("escapeHTML()", function() {

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+  <instance>default</instance>
+  <business>1</business>
+	<data>
+		<product>
+			<shortname>Name of Product</shortname>
+			<description>Name of Product</description>
+		</product>
+	</data>
+</request>
