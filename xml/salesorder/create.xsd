@@ -20,6 +20,19 @@
 									<xs:element name="cycle" type="xs:nonNegativeInteger" minOccurs="0"/>
 									<xs:element name="start_date" type="xs:date" minOccurs="0"/>
 									<xs:element name="end_date" type="xs:date" minOccurs="0"/>
+
+									<xs:element name="salesorderitem" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="product" type="xs:positiveInteger" minOccurs="0"/>
+												<xs:element name="linetext" type="xs:string" minOccurs="0"/>
+												<xs:element name="discount" type="xs:decimal" minOccurs="0"/>
+												<xs:element name="price" type="xs:decimal" minOccurs="0"/>
+												
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element><!--salesorderitem-->
+
 								</xs:sequence>
 								<xs:attribute name="is_open" type="xs:boolean"/>
 								<xs:attribute name="is_deleted" type="xs:boolean"/>
