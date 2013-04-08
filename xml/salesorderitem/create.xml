@@ -10,5 +10,12 @@
 			<discount>23.45</discount>
 			<price>123.45</price>
 		</salesorderitem>
+		<salesorderitem is_deleted="0">
+			<salesorder>1</salesorder>
+			<product>1</product>
+			<linetext>Another One Of Those Please</linetext>
+			<discount>0.00</discount>
+			<price>123.45</price>
+		</salesorderitem>
 	</data>
 </request>

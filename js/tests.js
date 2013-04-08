@@ -806,6 +806,23 @@ test("create sales order", function() {
 
 });
 
+test("create sales order (two products)", function() {
+    var xml = createRequestXml();
+    xml += '<salesorder><organisation>1</organisation><salesorderitem><product>1</product></salesorderitem><salesorderitem><product>1</product></salesorderitem></salesorder></data></request>';
+
+    stop();
+    $.ajax({
+        url: collection_url('salesorders'),
+        type: 'POST',
+        data: xml,
+        contentType: 'text/xml',
+        beforeSend: function (xhr) { setAuthHeader(xhr); },
+        success: function(xml) { ok(true); start(); },
+        error: function(xml) { ok(false); start(); },
+    });
+
+});
+
 module("Strings");
 
 test("escapeHTML()", function() {
