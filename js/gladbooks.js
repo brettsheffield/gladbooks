@@ -25,12 +25,12 @@ var g_resourcedefaultsurl = '/defaults/';
 var g_username = '';
 var g_password = '';
 var g_instance = '';
-var g_username = 'betty';    /* temp */
-var g_password = 'ie5a8P40'; /* temp */
-var g_instance = 'bacs';	 /* temp */
+//var g_username = 'betty';    /* temp */
+//var g_password = 'ie5a8P40'; /* temp */
+//var g_instance = 'bacs';	 /* temp */
 var g_business = '1';
 var g_loggedin = false;
-var g_max_ledgers_per_journal=3;
+var g_max_ledgers_per_journal=7;
 var g_frmLedger;
 var g_tabid = 0;
 
