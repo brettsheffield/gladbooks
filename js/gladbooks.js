@@ -168,7 +168,9 @@ function activeTabId() {
 	return $('li.tabhead.active').find('a.tabcloser').attr('href');
 }
 
-function updateTab(tab, content) {
+function updateTab(tabid, content) {
+	console.log('updating tab ' + tabid);
+	var tab = $('#tab' + tabid);
 	tab.empty();
 	tab.append(content);
 }
@@ -499,21 +501,22 @@ function showQuery(collection, title, sort, tab) {
 }
 
 /* fetch html form from server to display */
-function getForm(object, action, title, xml) {
+function getForm(object, action, title, xml, tab) {
+	showSpinner();
 	$.ajax({
 		url: '/html/forms/' + object + '/' + action + '.html',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(html) {
-			displayForm(object, action, title, html, xml);
+			displayForm(object, action, title, html, xml, tab);
 		},
 		error: function(html) {
-			displayForm(object, action, title, html);
+			displayForm(object, action, title, html, null, tab);
 		}
 	});
 }
 
 /* display html form we've just fetched in new tab */
-function displayForm(object, action, title, html, xml) {
+function displayForm(object, action, title, html, xml, tab) {
 	var id = 0;
 	var content = '';
 	var locString = '';
@@ -522,7 +525,12 @@ function displayForm(object, action, title, html, xml) {
 		content += $(self).html();
 	});
 
-	addTab(title, html, true);
+	if (tab) {
+		updateTab(tab, html);
+	}
+	else {
+		addTab(title, html, true);
+	}
 
 	if (xml) {
 		/* we have some data, pre-populate form */
@@ -553,9 +561,10 @@ function displayForm(object, action, title, html, xml) {
 
 	/* deal with subforms */
 	$(html).find('form.subform').each(function() {
+		var mytab = $('div.tablet.active.business' + g_business);
 		var view = $(this).attr("action");
 		var parentdiv = $(this).parent();
-		var datatable = $('div.' + view).find('table.datatable');
+		var datatable = mytab.find('div.' + view).find('table.datatable');
 		var btnAdd = datatable.find('button.addrow:not(.btnAdd)');
 		btnAdd.click(function(){
 			if (view == 'salesorderitems') {
@@ -629,9 +638,10 @@ function displayForm(object, action, title, html, xml) {
 }
 
 function salesorderAddProduct(datatable) {
-	var product = datatable.find('select.product.nosubmit').val();
-	var linetext = datatable.find('input[name$="linetext"]').val();
-	var price = datatable.find('input[name$="price"]').val();
+	var mytab = $('div.tablet.active.business' + g_business);
+	var product = mytab.find('select.product.nosubmit').val();
+	var linetext = mytab.find('input[name$="linetext"]').val();
+	var price = mytab.find('input[name$="price"]').val();
 	var row = $('<tr class="even"></tr>');
 	console.log('Adding product ' + product + ' to salesorder');
 
@@ -640,7 +650,7 @@ function salesorderAddProduct(datatable) {
 
 	/* copy the product combo and prepare for chosen() */
 	var productBox = $('<td class="xml-product"></td>');
-	var productCombo = datatable.find('select.product.nosubmit').clone();
+	var productCombo = mytab.find('select.product.nosubmit').clone();
 	productCombo.removeAttr("id");
 	productCombo.css({display: "inline-block"});
 	productCombo.removeClass('chzn-done nosubmit');
@@ -656,7 +666,7 @@ function salesorderAddProduct(datatable) {
 		+ '</td>');
 
 	/* clone price input and events */
-	var priceBox = $('input.price.nosubmit').parent().clone(true);
+	var priceBox = mytab.find('input.price.nosubmit').parent().clone(true);
 	priceBox.addClass('xml-amount');
 	priceBox.find('input.price.nosubmit').each(function() {
 		$(this).removeClass('nosubmit');
@@ -664,7 +674,7 @@ function salesorderAddProduct(datatable) {
 	row.append(priceBox);
 
 	/* clone qty input and events */
-	var qtyBox = $('input.qty.nosubmit').parent().clone(true);
+	var qtyBox = mytab.find('input.qty.nosubmit').parent().clone(true);
 	qtyBox.addClass('xml-qty');
 	qtyBox.find('input.qty.nosubmit').each(function() {
 		$(this).removeClass('nosubmit');
@@ -673,7 +683,7 @@ function salesorderAddProduct(datatable) {
 	row.append(qtyBox);
 
 	/* clone total input and events */
-	var totalBox = $('input.total.clone').parent().clone(true);
+	var totalBox = mytab.find('input.total.clone').parent().clone(true);
 	totalBox.addClass('xml-total');
 	totalBox.find('input.total.clone').each(function() {
 		$(this).removeClass('clone');
@@ -1083,15 +1093,22 @@ function escapeHTML(html) {
 }
 
 function submitFormSuccess(object, action, id, collection) {
-	hideSpinner();
 	if (object == 'business') {
 		prepBusinessSelector();
 	}
 
 	// lets check for tabs that will need refreshing
 	$('div.refresh.' + collection).each(function() {
-		showQuery(collection, '', false, $(this));
+		var tabid = $(this).attr('id').substr(3);
+		showQuery(collection, '', false, tabid);
 	});
+
+	/* clear form ready for more data entry */
+	var mytab = $('div.tablet.active.business' + g_business);
+	var myform = mytab.find('div.' + object + '.' + action);
+	var tab = activeTabId();
+
+	getForm(object, action, null, null, tab);
 }
 
 function submitFormError(object, action, id) {
