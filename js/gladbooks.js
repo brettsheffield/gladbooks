@@ -643,7 +643,7 @@ function salesorderAddProduct(datatable) {
 
 	/* TODO: add on blur() event to check value and normalise decimal places */
 	row.append('<td class="xml-amount">'
-		+ '<input class="price" name="price" type="text" '
+		+ '<input class="price endsub" name="price" type="text" '
 		+ 'value="' + price + '"/>' 
 		+ '</td>');
 
@@ -996,10 +996,12 @@ function submitForm(object, action, id) {
 					/* this is a subform entry, so add extra xml tag */
 					xml += '<' + subobject + '>';
 				}
-				xml += '<' + $(this).attr('name') + '>';
-				xml += escapeHTML($(this).val());
-				xml += '</' + $(this).attr('name') + '>';
-				if ($(this).hasClass('sub')) {
+				if ($(this).val().length > 0) { /* skip blanks */
+					xml += '<' + $(this).attr('name') + '>';
+					xml += escapeHTML($(this).val());
+					xml += '</' + $(this).attr('name') + '>';
+				}
+				if ($(this).hasClass('endsub')) {
 					/* this is a subform entry, so close extra xml tag */
 					xml += '</' + subobject + '>';
 				}
