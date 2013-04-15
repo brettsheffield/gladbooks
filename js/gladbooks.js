@@ -971,7 +971,7 @@ function submitForm(object, action, id) {
 	xml += '>';
 	$("div.tablet.active").find(
 		'div.' + object + '.' + action
-	).find('input').each(function() {
+	).find('input,select').each(function() {
 		if ($(this).attr('name')) {
 			if ($(this).attr('name') != 'id') {
 				xml += '<' + $(this).attr('name') + '>';
