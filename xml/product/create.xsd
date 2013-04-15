@@ -13,8 +13,11 @@
 						<xs:element name="product" maxOccurs="1">
 							<xs:complexType>
           			<xs:sequence>
+									<xs:element name="account" type="xs:nonNegativeInteger"/>
 									<xs:element name="shortname" type="xs:string"/>
 									<xs:element name="description" type="xs:string"/>
+									<xs:element name="price_buy" type="xs:decimal" minOccurs="0"/>
+									<xs:element name="price_sell" type="xs:decimal" minOccurs="0"/>
           			</xs:sequence>
 							</xs:complexType>
 						</xs:element><!--product-->

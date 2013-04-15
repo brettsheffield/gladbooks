@@ -28,11 +28,20 @@
                 </xsl:if>
 
 		<xsl:text>INSERT INTO productdetail (product,</xsl:text>
+		<xsl:if test="account">
+			<xsl:text>account,</xsl:text>
+		</xsl:if>
 		<xsl:if test="shortname">
 			<xsl:text>shortname,</xsl:text>
 		</xsl:if>
 		<xsl:if test="description">
 			<xsl:text>description,</xsl:text>
+		</xsl:if>
+		<xsl:if test="price_buy">
+			<xsl:text>price_buy,</xsl:text>
+		</xsl:if>
+		<xsl:if test="price_sell">
+			<xsl:text>price_sell,</xsl:text>
 		</xsl:if>
 
 		<xsl:text>authuser,clientip) VALUES (</xsl:text>
@@ -48,6 +57,10 @@
                         </xsl:otherwise>
                 </xsl:choose>
 
+		<xsl:if test="account">
+			<xsl:value-of select="account"/>
+			<xsl:text>','</xsl:text>
+		</xsl:if>
 		<xsl:if test="shortname">
 			<xsl:call-template name="cleanQuote">
 				<xsl:with-param name="string">
@@ -57,7 +70,19 @@
 			<xsl:text>','</xsl:text>
 		</xsl:if>
 		<xsl:if test="description">
-			<xsl:value-of select="description"/>
+			<xsl:call-template name="cleanQuote">
+				<xsl:with-param name="string">
+					<xsl:value-of select="description"/>
+				</xsl:with-param>
+			</xsl:call-template>
+			<xsl:text>','</xsl:text>
+		</xsl:if>
+		<xsl:if test="price_buy">
+			<xsl:value-of select="price_buy"/>
+			<xsl:text>','</xsl:text>
+		</xsl:if>
+		<xsl:if test="price_sell">
+			<xsl:value-of select="price_sell"/>
 			<xsl:text>','</xsl:text>
 		</xsl:if>
 

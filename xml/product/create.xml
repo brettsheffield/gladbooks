@@ -4,8 +4,11 @@
   <business>1</business>
 	<data>
 		<product>
+		  <account>4000</account>
 			<shortname>Name of Product</shortname>
 			<description>Name of Product</description>
+			<price_buy>99.95</price_buy>
+			<price_sell>123.45</price_sell>
 		</product>
 	</data>
 </request>
