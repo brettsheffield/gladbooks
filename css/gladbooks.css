@@ -404,6 +404,7 @@ td {
   background-color: white; }
 
 .price,
+.total,
 .xml-debit,
 .xml-credit,
 .xml-amount,
@@ -438,6 +439,9 @@ td.linetext {
 
 input.linetext {
   width: 90%; }
+
+input.qty {
+  width: 2em; }
 
 .chzn-container {
   margin: 7px; }
