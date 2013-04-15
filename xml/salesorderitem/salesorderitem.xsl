@@ -31,6 +31,9 @@
 		<xsl:if test="price">
 			<xsl:text>price,</xsl:text>
 		</xsl:if>
+		<xsl:if test="qty">
+			<xsl:text>qty,</xsl:text>
+		</xsl:if>
 		<xsl:if test="@is_deleted">
 			<xsl:text>is_deleted,</xsl:text>
 		</xsl:if>
@@ -75,6 +78,11 @@
 
 		<xsl:if test="price">
 			<xsl:value-of select="price"/>
+			<xsl:text>','</xsl:text>
+		</xsl:if>
+
+		<xsl:if test="qty">
+			<xsl:value-of select="qty"/>
 			<xsl:text>','</xsl:text>
 		</xsl:if>
 

@@ -302,6 +302,7 @@ CREATE TABLE salesorderitemdetail (
 	linetext	TEXT,
 	discount	NUMERIC,
 	price		NUMERIC,
+	qty		NUMERIC DEFAULT '1',
 	is_deleted	boolean DEFAULT false,
 	updated		timestamp with time zone default now(),
 	authuser	TEXT,
