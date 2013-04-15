@@ -280,6 +280,9 @@ button#journalsubmit {
 .datefield {
   width: 6em; }
 
+input.shortname {
+  width: 8em; }
+
 input.description {
   max-width: 95%; }
 
