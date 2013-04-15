@@ -466,6 +466,10 @@ td {
 	width: 10em;
 }
 
+.qty {
+	text-align: right;
+}
+
 td.xml-authuser {
 	width: 8em;
 }
@@ -506,7 +510,7 @@ input.linetext {
 }
 
 input.qty {
-	width: 2em;
+	width: 4em;
 }
 
 .chzn-container {
