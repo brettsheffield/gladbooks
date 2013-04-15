@@ -677,7 +677,6 @@ function salesorderAddProduct(datatable) {
 	totalBox.addClass('xml-total');
 	totalBox.find('input.total.clone').each(function() {
 		$(this).removeClass('clone');
-		$(this).addClass('endsub');
 	});
 	row.append(totalBox);
 
