@@ -148,41 +148,6 @@ CREATE TABLE organisation_organisation (
 	PRIMARY KEY (organisation, related, relationship)
 );
 
-CREATE TABLE product (
-        id              SERIAL PRIMARY KEY,
-        updated         timestamp with time zone default now(),
-        authuser        TEXT,
-        clientip        TEXT
-);
-
-CREATE TABLE productdetail (
-        id              SERIAL PRIMARY KEY,
-        product         INT4 references product(id) ON DELETE RESTRICT
-                        NOT NULL,
-        shortname       TEXT NOT NULL UNIQUE,
-        description     TEXT NOT NULL,
-        price_buy       NUMERIC,
-        price_sell      NUMERIC,
-        margin          NUMERIC,
-        markup          NUMERIC,
-        is_available    boolean DEFAULT true,
-        is_offered      boolean DEFAULT true,
-        updated         timestamp with time zone default now(),
-        authuser        TEXT,
-        clientip        TEXT
-);
-
-CREATE TABLE product_tax (
-        id              SERIAL PRIMARY KEY,
-        product         INT4 references product(id) ON DELETE RESTRICT
-                        NOT NULL,
-        tax             INT4 references tax(id) ON DELETE RESTRICT NOT NULL,
-        is_applicable   boolean DEFAULT true,
-        updated         timestamp with time zone default now(),
-        authuser        TEXT,
-        clientip        TEXT
-);
-
 -- views --
 CREATE OR REPLACE VIEW contactdetailview AS
 SELECT
@@ -239,21 +204,6 @@ WHERE od.id IN (
 )
 ORDER BY organisation ASC
 ;
-
-CREATE OR REPLACE VIEW productlist AS
-SELECT
-        product as id,
-        shortname,
-	description
-FROM productdetail
-WHERE id IN (
-        SELECT MAX(id)
-        FROM productdetail
-        GROUP BY product
-)
-ORDER BY product ASC
-;
-
 
 
 RETURN instance;

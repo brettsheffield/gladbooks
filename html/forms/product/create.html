@@ -1,13 +1,25 @@
 <div class="product create">
 	<h2>Create New Product</h2>
 	<form method="post" action="products">
-	  <table>
-		<tr>
-		<td><a class="datasource" href="accounts"></a><select name="account" class="product populate" data-placeholder="Select account"></select></td>
-		<td><input class="shortname focus" type="text" name="shortname" placeholder="Short Name"/></td>
-		<td><input class="" type="text" name="description" placeholder="Product Description"/></td>
-		<td><input class="price" type="text" name="price" placeholder="0.00"/></td>
-		</tr>
+	  <table class="datatable">
+			<thead>
+				<tr>
+					<th>Nominal Code</th>
+					<th>Short Name</th>
+					<th>Description (Line Text)</th>
+					<th>Price (buy)</th>
+					<th>Price (sell)</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><a class="datasource" href="accounts"></a><select name="account" class="product populate" data-placeholder="Select account"></select></td>
+					<td><input class="shortname focus" type="text" name="shortname" placeholder="Short Name"/></td>
+					<td><input class="" type="text" name="description" placeholder="Product Description"/></td>
+					<td><input class="price" type="text" name="price_buy" placeholder="0.00"/></td>
+					<td><input class="price" type="text" name="price_sell" placeholder="0.00"/></td>
+				</tr>
+			</tbody>
 	  </table>
 		<button class="submit formsubmit">Save</button>
 	</form>

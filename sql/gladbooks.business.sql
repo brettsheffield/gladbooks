@@ -188,6 +188,43 @@ CREATE TABLE emailrecipient (
 	clientip	TEXT
 );
 
+CREATE TABLE product (
+        id              SERIAL PRIMARY KEY,
+        updated         timestamp with time zone default now(),
+        authuser        TEXT,
+        clientip        TEXT
+);
+
+CREATE TABLE productdetail (
+        id              SERIAL PRIMARY KEY,
+        product         INT4 references product(id) ON DELETE RESTRICT
+                        NOT NULL,
+        account         INT4 references account(id) ON DELETE RESTRICT
+                        NOT NULL,
+        shortname       TEXT NOT NULL UNIQUE,
+        description     TEXT NOT NULL,
+        price_buy       NUMERIC,
+        price_sell      NUMERIC,
+        margin          NUMERIC,
+        markup          NUMERIC,
+        is_available    boolean DEFAULT true,
+        is_offered      boolean DEFAULT true,
+        updated         timestamp with time zone default now(),
+        authuser        TEXT,
+        clientip        TEXT
+);
+
+CREATE TABLE product_tax (
+        id              SERIAL PRIMARY KEY,
+        product         INT4 references product(id) ON DELETE RESTRICT
+                        NOT NULL,
+        tax             INT4 references tax(id) ON DELETE RESTRICT NOT NULL,
+        is_applicable   boolean DEFAULT true,
+        updated         timestamp with time zone default now(),
+        authuser        TEXT,
+        clientip        TEXT
+);
+
 CREATE TABLE purchaseinvoice (
 	id		SERIAL PRIMARY KEY,
 	organisation	INT4 references organisation(id) NOT NULL,
@@ -529,6 +566,22 @@ UNION
 ORDER BY lineorder, account ASC
 ) a
 ;
+
+CREATE OR REPLACE VIEW productlist AS
+SELECT
+        product as id,
+        shortname,
+        description
+FROM productdetail
+WHERE id IN (
+        SELECT MAX(id)
+        FROM productdetail
+        GROUP BY product
+)
+ORDER BY product ASC
+;
+
+
 
 EXECUTE 'SELECT default_data(''' || instance || ''',''' || business_id || ''')';
 
