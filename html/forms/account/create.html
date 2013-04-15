@@ -1,0 +1,21 @@
+<div class="account create">
+	<h2>Add Chart Account</h2>
+	<form method="post" action="accounts">
+		<table>
+			<thead>
+				<tr>
+					<th>Account Type</th>
+					<th>Nominal Code</th>
+					<th>Account Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><a class="datasource" href="accounttypes"></a><select name="type" class="type populate" data-placeholder="Select account type"></select></td>
+					<td><input class="id" type="text" name="description" placeholder="auto"/></td>
+					<td><input class="description focus" type="text" name="description" placeholder="Account Description"/></td>
+			</tbody>
+		</table>
+		<button class="submit formsubmit">Save</button>
+	</form>
+</div>

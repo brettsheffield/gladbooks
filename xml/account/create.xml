@@ -3,6 +3,10 @@
 	<instance>default</instance>
 	<business>1</business>
 	<data>
-		<account type="a" description="Description of account"/>
+		<account>
+			<id>1234</id>
+			<type>a</type>
+			<description>Description of account</description>
+		</account>
 	</data>
 </request>

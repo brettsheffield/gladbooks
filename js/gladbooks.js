@@ -427,7 +427,8 @@ function clickMenu(event) {
 		showQuery('accounts', 'Chart of Accounts', true);
 	}
 	else if ($(this).attr("href") == '#chartadd') {
-		showChartAddForm();
+		//showChartAddForm();
+		getForm('account', 'create', 'Add New Account');
 	}
 	else if ($(this).attr("href") == '#contacts') {
 		showQuery('contacts', 'Contacts', true);

@@ -18,18 +18,27 @@
 		<xsl:call-template name="setSearchPath"/>
 
 		<xsl:text>BEGIN;</xsl:text>
-		<xsl:text>INSERT INTO account (accounttype, description, authuser, clientip) VALUES ('</xsl:text>
+		<xsl:text>INSERT INTO account (</xsl:text>
+		<xsl:if test="id">
+			<xsl:text>id,</xsl:text>
+		</xsl:if>
+		<xsl:text>accounttype,description,</xsl:text>
+		<xsl:text>authuser, clientip) VALUES ('</xsl:text>
 
+		<xsl:if test="id">
+			<xsl:copy-of select="id"/>
+			<xsl:text>','</xsl:text>
+		</xsl:if>
 		<xsl:call-template name="cleanQuote">
 			<xsl:with-param name="string">
-				<xsl:value-of select="@type"/>
+				<xsl:value-of select="type"/>
 			</xsl:with-param>
 		</xsl:call-template>
 
 		<xsl:text>','</xsl:text>
 		<xsl:call-template name="cleanQuote">
 			<xsl:with-param name="string">
-				<xsl:value-of select="@description"/>
+				<xsl:value-of select="description"/>
 			</xsl:with-param>
 		</xsl:call-template>
 
