@@ -772,7 +772,9 @@ module("Products");
 
 test("create product", function() {
     var xml = createRequestXml();
-    xml += '<product><shortname>My Test Product</shortname><description>This is a test product</description></product></data></request>';
+    xml += '<product><account>4000</account><shortname>';
+	xml += UUID();
+	xml += '</shortname><description>This is a test product</description></product></data></request>';
 
     stop();
     $.ajax({
