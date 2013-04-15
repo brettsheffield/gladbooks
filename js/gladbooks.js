@@ -744,6 +744,10 @@ function populateCombo(xml, combo, view, parentid) {
 		if (combo.attr('name') == 'cycle') {
 			var name = $(this).find('cyclename').text();
 		}
+		else if (combo.attr('name') == 'account') {
+   			var id = $(this).find('nominalcode').text();
+			var name = id + " - " + $(this).find('account').text();
+		}
 		else if (combo.attr('name') == 'product') {
 			var name = $(this).find('shortname').text();
 		}
