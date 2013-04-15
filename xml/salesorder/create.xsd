@@ -27,8 +27,8 @@
 												<xs:element name="product" type="xs:positiveInteger"/>
 												<xs:element name="linetext" type="xs:string" minOccurs="0"/>
 												<xs:element name="discount" type="xs:decimal" minOccurs="0"/>
-												<xs:element name="qty" type="xs:decimal" minOccurs="0"/>
 												<xs:element name="price" type="xs:decimal" minOccurs="0"/>
+												<xs:element name="qty" type="xs:decimal" minOccurs="0"/>
 												
 											</xs:sequence>
 										</xs:complexType>

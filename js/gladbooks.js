@@ -660,7 +660,6 @@ function salesorderAddProduct(datatable) {
 	priceBox.addClass('xml-amount');
 	priceBox.find('input.price.nosubmit').each(function() {
 		$(this).removeClass('nosubmit');
-		$(this).addClass('endsub');
 	});
 	row.append(priceBox);
 
@@ -674,10 +673,10 @@ function salesorderAddProduct(datatable) {
 	row.append(qtyBox);
 
 	/* clone total input and events */
-	var totalBox = $('input.total.nosubmit').parent().clone(true);
+	var totalBox = $('input.total.clone').parent().clone(true);
 	totalBox.addClass('xml-total');
-	totalBox.find('input.total.nosubmit').each(function() {
-		$(this).removeClass('nosubmit');
+	totalBox.find('input.total.clone').each(function() {
+		$(this).removeClass('clone');
 		$(this).addClass('endsub');
 	});
 	row.append(totalBox);
