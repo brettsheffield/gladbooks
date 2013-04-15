@@ -631,9 +631,22 @@ function salesorderAddProduct(datatable) {
 	/* We're not saving anything yet - just building up a salesorder on the
 	 * screen until the user clicks "save" */
 
-	row.append('<td class="xml-product">' + product + '</td>');
-	row.append('<td class="xml-linetext">' + linetext + '</td>');
-	row.append('<td class="xml-amount">' + price + '</td>');
+	/* TODO: insert copy of product dropdown */
+	row.append('<td class="xml-product">' 
+		+ '<input class="product sub" name="product" type="text" '
+		+ 'value="' + product + '"/>' 
+		+ '</td>');
+	row.append('<td class="xml-linetext">' 
+		+ '<input class="linetext" name="linetext" type="text" '
+		+ 'value="' + linetext + '"/>' 
+		+ '</td>');
+
+	/* TODO: add on blur() event to check value and normalise decimal places */
+	row.append('<td class="xml-amount">'
+		+ '<input class="price" name="price" type="text" '
+		+ 'value="' + price + '"/>' 
+		+ '</td>');
+
 	row.append('<td></td>');
 
 	row.append('<td class="removerow"><button class="removerow">X</button></td>');
@@ -948,6 +961,11 @@ function submitForm(object, action, id) {
 	var url = '';
 	var collection = '';
 
+	/* if object has subforms, which xml tag do we wrap them in? */
+	if (object == 'salesorder') {
+		var subobject = 'salesorderitem';
+	}
+
 	console.log('Submitting form ' + object + ':' + action);
 
 	/* find out where to send this */
@@ -971,12 +989,20 @@ function submitForm(object, action, id) {
 	xml += '>';
 	$("div.tablet.active").find(
 		'div.' + object + '.' + action
-	).find('input,select').each(function() {
+	).find('input:not(.nosubmit),select:not(.nosubmit)').each(function() {
 		if ($(this).attr('name')) {
 			if ($(this).attr('name') != 'id') {
+				if ($(this).hasClass('sub')) {
+					/* this is a subform entry, so add extra xml tag */
+					xml += '<' + subobject + '>';
+				}
 				xml += '<' + $(this).attr('name') + '>';
 				xml += escapeHTML($(this).val());
 				xml += '</' + $(this).attr('name') + '>';
+				if ($(this).hasClass('sub')) {
+					/* this is a subform entry, so close extra xml tag */
+					xml += '</' + subobject + '>';
+				}
 			}
 		}
 	});
