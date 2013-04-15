@@ -585,13 +585,7 @@ function displayForm(object, action, title, html, xml) {
         $(this).blur(function() {
             /* pad amounts to two decimal places */
             var newamount = decimalPad($(this).val(), 2);
-            if (newamount == '0.00') {
-                /* blank out zeros */
-                $(this).val('');
-            }
-            else {
-                $(this).val(newamount);
-            }
+        	$(this).val(newamount);
         });
     });
 
@@ -631,7 +625,7 @@ function salesorderAddProduct(datatable) {
 	/* We're not saving anything yet - just building up a salesorder on the
 	 * screen until the user clicks "save" */
 
-	/* TODO: insert copy of product dropdown */
+	/* copy the product combo and prepare for chosen() */
 	var productBox = $('<td class="xml-product"></td>');
 	var productCombo = datatable.find('select.product.nosubmit').clone();
 	productCombo.removeAttr("id");
@@ -641,19 +635,21 @@ function salesorderAddProduct(datatable) {
 	productCombo.val(product);
 	productCombo.appendTo(productBox);
 	row.append(productBox);
-	
+
+	/* append linetext input */
 	row.append('<td class="xml-linetext">' 
 		+ '<input class="linetext" name="linetext" type="text" '
 		+ 'value="' + linetext + '"/>' 
 		+ '</td>');
 
-	/* TODO: add on blur() event to check value and normalise decimal places */
-	row.append('<td class="xml-amount">'
-		+ '<input class="price endsub" name="price" type="text" '
-		+ 'value="' + price + '"/>' 
-		+ '</td>');
-
-	row.append('<td></td>');
+	/* clone price input and events */
+	var priceBox = $('input.price.nosubmit').parent().clone(true);
+	priceBox.addClass('xml-amount');
+	priceBox.find('input.price.nosubmit').each(function() {
+		$(this).removeClass('nosubmit');
+		$(this).addClass('endsub');
+	});
+	row.append(priceBox);
 
 	row.append('<td class="removerow"><button class="removerow">X</button></td>');
 
