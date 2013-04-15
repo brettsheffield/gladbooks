@@ -622,7 +622,7 @@ function displayForm(object, action, title, html, xml) {
 }
 
 function salesorderAddProduct(datatable) {
-	var product = datatable.find('select.product').val();
+	var product = datatable.find('select.product.nosubmit').val();
 	var linetext = datatable.find('input[name$="linetext"]').val();
 	var price = datatable.find('input[name$="price"]').val();
 	var row = $('<tr class="even"></tr>');
@@ -632,10 +632,16 @@ function salesorderAddProduct(datatable) {
 	 * screen until the user clicks "save" */
 
 	/* TODO: insert copy of product dropdown */
-	row.append('<td class="xml-product">' 
-		+ '<input class="product sub" name="product" type="text" '
-		+ 'value="' + product + '"/>' 
-		+ '</td>');
+	var productBox = $('<td class="xml-product"></td>');
+	var productCombo = datatable.find('select.product.nosubmit').clone();
+	productCombo.removeAttr("id");
+	productCombo.css({display: "inline-block"});
+	productCombo.removeClass('chzn-done nosubmit');
+	productCombo.addClass('chosify sub');
+	productCombo.val(product);
+	productCombo.appendTo(productBox);
+	row.append(productBox);
+	
 	row.append('<td class="xml-linetext">' 
 		+ '<input class="linetext" name="linetext" type="text" '
 		+ 'value="' + linetext + '"/>' 
@@ -658,6 +664,11 @@ function salesorderAddProduct(datatable) {
 
 	datatable.append(row);
 
+	/* prettify the chosen() combos */
+	datatable.find('select.chosify').each(function() {
+		$(this).chosen();
+		$(this).removeClass('chosify');
+	});
 }
 
 function populateCombos(view, parentid) {
