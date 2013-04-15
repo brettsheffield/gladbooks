@@ -588,6 +588,19 @@ function displayForm(object, action, title, html, xml) {
         	$(this).val(newamount);
         });
     });
+    $('div.tablet.active.business'
+				+ g_business).find('input.price, input.qty').each(function() {
+        $(this).blur(function() {
+			/* recalculate line total */
+			var p = $(this).parent().parent().find('input.price').val();
+			var q = $(this).parent().parent().find('input.qty').val();
+			p = new Big(p);
+			q = new Big(q);
+			var t = p.times(q);
+			t = decimalPad(t, 2);
+			$(this).parent().parent().find('input.total').val(t);
+		});
+	});
 
 
 	/* make submit button do the needful */
@@ -650,6 +663,24 @@ function salesorderAddProduct(datatable) {
 		$(this).addClass('endsub');
 	});
 	row.append(priceBox);
+
+	/* clone qty input and events */
+	var qtyBox = $('input.qty.nosubmit').parent().clone(true);
+	qtyBox.addClass('xml-qty');
+	qtyBox.find('input.qty.nosubmit').each(function() {
+		$(this).removeClass('nosubmit');
+		$(this).addClass('endsub');
+	});
+	row.append(qtyBox);
+
+	/* clone total input and events */
+	var totalBox = $('input.total.nosubmit').parent().clone(true);
+	totalBox.addClass('xml-total');
+	totalBox.find('input.total.nosubmit').each(function() {
+		$(this).removeClass('nosubmit');
+		$(this).addClass('endsub');
+	});
+	row.append(totalBox);
 
 	row.append('<td class="removerow"><button class="removerow">X</button></td>');
 
