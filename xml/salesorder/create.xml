@@ -13,6 +13,8 @@
 			<end_date>2014-03-31</end_date>
 			<salesorderitem>
 				<product>1</product>
+				<linetext>Override Default Product Description</linetext>
+				<price>123.45</price>
 			</salesorderitem>
 			<salesorderitem>
 				<product>2</product>

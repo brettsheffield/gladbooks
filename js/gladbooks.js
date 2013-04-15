@@ -25,9 +25,9 @@ var g_resourcedefaultsurl = '/defaults/';
 var g_username = '';
 var g_password = '';
 var g_instance = '';
-//var g_username = 'betty';    /* temp */
-//var g_password = 'ie5a8P40'; /* temp */
-//var g_instance = 'bacs';	 /* temp */
+var g_username = 'betty';    /* temp */
+var g_password = 'ie5a8P40'; /* temp */
+var g_instance = 'bacs';	 /* temp */
 var g_business = '1';
 var g_loggedin = false;
 var g_max_ledgers_per_journal=7;
@@ -599,7 +599,8 @@ function displayForm(object, action, title, html, xml) {
 	/* make submit button do the needful */
 	$('div.tablet.active.business'
 						+ g_business).find('button.save').click(function() {
-		$("div.tablet.active.business" + g_business).find('form').submit();
+		$("div.tablet.active.business"
+			+ g_business).find('form:not(.subform)').submit();
 	});
 
 	/* Cancel button closes tab */
@@ -609,7 +610,7 @@ function displayForm(object, action, title, html, xml) {
 	});
 
 	$("div.tablet.active.business"
-						+ g_business).find('form').submit(function(event) {
+		+ g_business).find('form:not(.subform)').submit(function(event) {
 		event.preventDefault();
 		if (id > 0) {
 			submitForm(object, action, id);
@@ -952,13 +953,15 @@ function submitForm(object, action, id) {
 	/* find out where to send this */
 	$("div.tablet.active").find(
 		'div.' + object + '.' + action
-	).find('form').each(function() {
+	).find('form:not(.subform)').each(function() {
 		collection = $(this).attr('action');
 		url = collection_url(collection);
 		if (id) {
 			url += id;
 		}
 	});
+
+	console.log('submitting to url: ' + url);
 
 	/* build xml request */
 	xml += '<' + object 
@@ -969,10 +972,12 @@ function submitForm(object, action, id) {
 	$("div.tablet.active").find(
 		'div.' + object + '.' + action
 	).find('input').each(function() {
-		if ($(this).attr('name') != 'id') {
-			xml += '<' + $(this).attr('name') + '>';
-			xml += escapeHTML($(this).val());
-			xml += '</' + $(this).attr('name') + '>';
+		if ($(this).attr('name')) {
+			if ($(this).attr('name') != 'id') {
+				xml += '<' + $(this).attr('name') + '>';
+				xml += escapeHTML($(this).val());
+				xml += '</' + $(this).attr('name') + '>';
+			}
 		}
 	});
 	xml += '</' + object + '>';
