@@ -13,8 +13,8 @@
 						<xs:element name="account" maxOccurs="1">
 							<xs:complexType>
           			<xs:sequence>
-									<xs:element name="id" type="xs:nonNegativeInteger" minOccurs="0"/>
-									<xs:element name="type" type="xs:string"/>
+									<xs:element name="nominalcode" type="xs:nonNegativeInteger" minOccurs="0"/>
+									<xs:element name="type" type="xs:nonNegativeInteger"/>
 									<xs:element name="description" type="xs:string"/>
           			</xs:sequence>
 							</xs:complexType>

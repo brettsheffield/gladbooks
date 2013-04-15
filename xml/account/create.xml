@@ -4,8 +4,8 @@
 	<business>1</business>
 	<data>
 		<account>
-			<id>1234</id>
-			<type>a</type>
+			<nominalcode>1234</nominalcode>
+			<type>1000</type>
 			<description>Description of account</description>
 		</account>
 	</data>

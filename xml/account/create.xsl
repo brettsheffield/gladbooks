@@ -19,14 +19,14 @@
 
 		<xsl:text>BEGIN;</xsl:text>
 		<xsl:text>INSERT INTO account (</xsl:text>
-		<xsl:if test="id">
+		<xsl:if test="nominalcode">
 			<xsl:text>id,</xsl:text>
 		</xsl:if>
 		<xsl:text>accounttype,description,</xsl:text>
 		<xsl:text>authuser, clientip) VALUES ('</xsl:text>
 
-		<xsl:if test="id">
-			<xsl:copy-of select="id"/>
+		<xsl:if test="nominalcode">
+			<xsl:copy-of select="nominalcode"/>
 			<xsl:text>','</xsl:text>
 		</xsl:if>
 		<xsl:call-template name="cleanQuote">
