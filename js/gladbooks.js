@@ -427,7 +427,6 @@ function clickMenu(event) {
 		showQuery('accounts', 'Chart of Accounts', true);
 	}
 	else if ($(this).attr("href") == '#chartadd') {
-		//showChartAddForm();
 		getForm('account', 'create', 'Add New Account');
 	}
 	else if ($(this).attr("href") == '#contacts') {
@@ -1563,81 +1562,6 @@ function submitJournalEntryError(xml) {
 	$('p.journalstatus').text("Error posting journal");
 	$('p.journalstatus').fadeIn(300);
 	hideSpinner();
-}
-
-/* display form to add new chart accounts */
-function showChartAddForm(tab) {
-	form = '<div class="dataformdiv">';
-	form += '<h2 class="formtitle">Add Chart Account</h2>';
-	form += '<form class="chartadd">';
-	form += '<input class="description" type="text" ';
-	form += 'placeholder="Chart Description"/>';
-	form += '<button class="submit">Save</button>';
-	form += '<button class="cancel">Cancel</button>';
-	form += '</form>';
-	form += '</div>';
-
-	newform = $(form);
-	
-	addTab("Add Chart Account", newform, true);
-
-	$('form.chartadd').find('button.submit').click(function(event) {
-		submitChartAdd(event, newform);
-	});
-
-    /* load dropdown contents */
-    $.ajax({
-		url: collection_url('accounttypes'),
-        beforeSend: function (xhr) { setAuthHeader(xhr); },
-        success: function (xml) {
-            populateAccountTypeDDowns(xml, newform);
-        }
-    });
-}
-
-function populateAccountTypeDDowns(xml, form) {
-	select = $('<select class="accounttype"></select>');
-	select.append($("<option />").val(0).text('<select account type>'));
-
-	$(xml).find('row').each(function() {
-		var id = $(this).find('id').text();
-		var name = $(this).find('name').text();
-		select.append($("<option />").val(id).text(name));
-	});
-
-	form.find('form.chartadd').prepend(select);
-	form.fadeIn(300);
-
-}
-
-function validateChartAdd(form) {
-	var xml = createRequestXml();
-    xml += '<account type="';
-	xml += $(form).find('select.accounttype').val();
-    xml += '" description="';
-	xml += escapeHTML($(form).find('input.description').val());
-    xml += '"/></data></request>';
-
-	return xml;
-}
-
-function submitChartAdd(event, form) {
-	event.preventDefault();
-	xml = validateChartAdd(form);
-	if (!xml) {
-		return;
-	}
-
-	showSpinner();
-    $.ajax({
-		url: collection_url('accounts'),
-        type: 'POST',
-        data: xml,
-        contentType: 'text/xml',
-		beforeSend: function (xhr) { setAuthHeader(xhr); },
-        success: function(xml) { hideSpinner(); },
-        error: function(xml) { hideSpinner(); },
-    });
 }
 
 /* Start building an xml request */
