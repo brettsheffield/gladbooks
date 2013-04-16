@@ -618,21 +618,23 @@ function displayForm(object, action, title, html, xml, tab) {
 
 	/* make submit button do the needful */
 	$('div.tablet.active.business'
-						+ g_business).find('button.save').click(function() {
+	+ g_business).find('button.save').click(function() 
+	{
 		$("div.tablet.active.business"
 			+ g_business).find('form:not(.subform)').get(0).submit();
 	});
 
 	/* Cancel button closes tab */
 	$('div.tablet.active.business'
-						+ g_business).find('button.cancel').click(function() {
+	+ g_business).find('button.cancel').click(function()
+	{
 		closeTab();
 	});
 
 	/* Reset button resets form */
-	/* TODO */
 	$('div.tablet.active.business'
-					+ g_business).find('button.reset').click(function(event) {
+	+ g_business).find('button.reset').click(function(event)
+	{
 		event.preventDefault();
 		$("div.tablet.active.business"
 			+ g_business).find('form:not(.subform)').get(0).reset();
