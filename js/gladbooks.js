@@ -515,6 +515,11 @@ function getForm(object, action, title, xml, tab) {
 	});
 }
 
+/* return active tab as jquery object */
+function activeTab() {
+	return $('div.tablet.active.business' + g_business);
+}
+
 /* display html form we've just fetched in new tab */
 function displayForm(object, action, title, html, xml, tab) {
 	var id = 0;
@@ -531,6 +536,8 @@ function displayForm(object, action, title, html, xml, tab) {
 	else {
 		addTab(title, html, true);
 	}
+
+	var mytab = activeTab();
 
 	if (xml) {
 		/* we have some data, pre-populate form */
@@ -561,7 +568,6 @@ function displayForm(object, action, title, html, xml, tab) {
 
 	/* deal with subforms */
 	$(html).find('form.subform').each(function() {
-		var mytab = $('div.tablet.active.business' + g_business);
 		var view = $(this).attr("action");
 		var parentdiv = $(this).parent();
 		var datatable = mytab.find('div.' + view).find('table.datatable');
@@ -589,16 +595,14 @@ function displayForm(object, action, title, html, xml, tab) {
 	hideSpinner(); /* wake user */
 
     /* set up blur() events */
-    $('div.tablet.active.business'
-				+ g_business).find('input.price').each(function() {
+    mytab.find('input.price').each(function() {
         $(this).blur(function() {
             /* pad amounts to two decimal places */
             var newamount = decimalPad($(this).val(), 2);
         	$(this).val(newamount);
         });
     });
-    $('div.tablet.active.business'
-				+ g_business).find('input.price, input.qty').each(function() {
+	mytab.find('input.price, input.qty').each(function() {
         $(this).blur(function() {
 			/* recalculate line total */
 			var p = $(this).parent().parent().find('input.price').val();
@@ -617,31 +621,26 @@ function displayForm(object, action, title, html, xml, tab) {
 	});
 
 	/* save button click handler */
-	$('div.tablet.active.business'
-	+ g_business).find('button.save').click(function() 
+	mytab.find('button.save').click(function() 
 	{
 		doFormSubmit(object, action, id);
 	});
 
 	/* Cancel button closes tab */
-	$('div.tablet.active.business'
-	+ g_business).find('button.cancel').click(function()
+	mytab.find('button.cancel').click(function()
 	{
 		closeTab();
 	});
 
 	/* Reset button resets form */
-	$('div.tablet.active.business'
-	+ g_business).find('button.reset').click(function(event)
+	mytab.find('button.reset').click(function(event)
 	{
 		event.preventDefault();
-		$("div.tablet.active.business"
-			+ g_business).find('form:not(.subform)').get(0).reset();
+		mytab.find('form:not(.subform)').get(0).reset();
 	});
 
 	/* deal with submit event */
-	$("div.tablet.active.business"
-	+ g_business).find('form:not(.subform)').submit(function(event)
+	mytab.find('form:not(.subform)').submit(function(event)
 	{
 		event.preventDefault();
 		doFormSubmit(object, action, id);
