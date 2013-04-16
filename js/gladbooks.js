@@ -607,7 +607,12 @@ function displayForm(object, action, title, html, xml, tab) {
 			q = new Big(q);
 			var t = p.times(q);
 			t = decimalPad(roundHalfEven(t, 2), 2);
-			$(this).parent().parent().find('input.total').val(t);
+			var inputtotal = $(this).parent().parent().find('input.total');
+			var oldval = inputtotal.val();
+			inputtotal.val(t);
+			if (oldval != t) {
+				updateSalesOrderTotals();
+			}
 		});
 	});
 
@@ -644,6 +649,29 @@ function displayForm(object, action, title, html, xml, tab) {
 			submitForm(object, action);
 		}
 	});
+}
+
+function updateSalesOrderTotals() {
+	console.log('Updating salesorder totals');
+
+	var subtotal = Big('0.00');
+
+	$('div.tablet.active.business'
+	+ g_business).find('input.total:not(.clone)').each(function() 
+	{
+		console.log('I add things');
+		subtotal = subtotal.plus(Big($(this).val()));
+	});
+
+	subtotal = decimalPad(subtotal, 2);
+
+	$('div.tablet.active.business' 
+	+ g_business).find('table.totals').find('td.subtotal').each(function() 
+	{
+		console.log('I update things');
+		$(this).text(subtotal);
+	});
+
 }
 
 function salesorderAddProduct(datatable) {

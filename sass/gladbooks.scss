@@ -592,6 +592,31 @@ select.product {
 	width: 20em;
 }
 
+/* totals table (salesorder form) */
+table.totals {
+        font-family: monospace;
+	font-size: 1.2em;
+	background-color: $color-dark;
+	border: 1px solid white;
+	text-color: black;
+	width: 100%;
+}
+
+table.totals > tbody > tr > td {
+        color: white;
+	text-align: right;
+	text-transform: capitalize;
+}
+
+td.subtotal {
+	width: 8em;
+}
+
+td.totalspacer {
+	width: 3.4em;
+}
+
+
 /* form styling */
 .contact.form ul,
 .organisation.form ul {
