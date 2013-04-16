@@ -834,3 +834,12 @@ test("escapeHTML()", function() {
 	equal(escapeHTML(rawstring), cookedstr, "Escape HTML special characters");
 
 });
+
+test("padString() - add leading zeros", function() {
+	var rawstring = '0';
+	var cookedstring = '0000';
+
+
+	equal(padString(rawstring, 4), cookedstring, "Pad string with leading zeros");
+
+});

@@ -766,6 +766,7 @@ function populateCombo(xml, combo, view, parentid) {
 		}
 		else if (combo.attr('name') == 'account') {
    			var id = $(this).find('nominalcode').text();
+			id = padString(id, 4);  /* pad nominal code to 4 digits */
 			var name = id + " - " + $(this).find('account').text();
 		}
 		else if (combo.attr('name') == 'product') {
@@ -1273,6 +1274,7 @@ function populateAccountsDDowns(xml, tab) {
 	);
 	$(xml).find('row').each(function() {
 		var accountid = $(this).find('nominalcode').text();
+		accountid = padString(accountid, 4); /* pad code with leading zeros */
 		var accounttype = $(this).find('type').text();
 		var accountdesc = accountid + " - " +
 		$(this).find('account').text();
@@ -1554,6 +1556,11 @@ function decimalPad(decimal, digits) {
 		decimal = String(decimal) + '.' + Array(digits + 1).join('0');
 	}
 	return decimal;
+}
+
+/* pad out a string with leading zeros */
+function padString(str, max) {
+	return str.length < max ? padString("0" + str, max) : str;
 }
 
 function submitJournalEntry(event, form) {
