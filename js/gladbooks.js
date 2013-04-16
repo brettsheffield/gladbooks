@@ -604,20 +604,7 @@ function displayForm(object, action, title, html, xml, tab) {
     });
 	mytab.find('input.price, input.qty').each(function() {
         $(this).blur(function() {
-			/* recalculate line total */
-			var parentrow = $(this).parent().parent();
-			var p = parentrow.find('input.price').val();
-			var q = parentrow.find('input.qty').val();
-			p = new Big(p);
-			q = new Big(q);
-			var t = p.times(q);
-			t = decimalPad(roundHalfEven(t, 2), 2);
-			var inputtotal = parentrow.find('input.total');
-			var oldval = inputtotal.val();
-			inputtotal.val(t);
-			if (oldval != t) {
-				updateSalesOrderTotals();
-			}
+			recalculateLineTotal($(this).parent().parent());
 		});
 	});
 
@@ -646,6 +633,22 @@ function displayForm(object, action, title, html, xml, tab) {
 		event.preventDefault();
 		doFormSubmit(object, action, id);
 	});
+}
+
+/* recalculate line total */
+function recalculateLineTotal(parentrow) {
+	var p = parentrow.find('input.price').val();
+	var q = parentrow.find('input.qty').val();
+	p = new Big(p);
+	q = new Big(q);
+	var t = p.times(q);
+	t = decimalPad(roundHalfEven(t, 2), 2);
+	var inputtotal = parentrow.find('input.total');
+	var oldval = inputtotal.val();
+	inputtotal.val(t);
+	if (oldval != t) {
+		updateSalesOrderTotals();
+	}
 }
 
 function doFormSubmit(object, action, id) {
