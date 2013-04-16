@@ -598,8 +598,10 @@ function displayForm(object, action, title, html, xml, tab) {
     mytab.find('input.price').each(function() {
         $(this).blur(function() {
             /* pad amounts to two decimal places */
-            var newamount = decimalPad($(this).val(), 2);
-        	$(this).val(newamount);
+			if ($(this).val().length > 0) {
+	            var newamount = decimalPad($(this).val(), 2);
+        		$(this).val(newamount);
+			}
         });
     });
 	mytab.find('input.price, input.qty').each(function() {
