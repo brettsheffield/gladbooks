@@ -642,7 +642,8 @@ function displayForm(object, action, title, html, xml, tab) {
 
 	/* deal with submit event */
 	$("div.tablet.active.business"
-		+ g_business).find('form:not(.subform)').submit(function(event) {
+	+ g_business).find('form:not(.subform)').submit(function(event)
+	{
 		event.preventDefault();
 		if (id > 0) {
 			submitForm(object, action, id);
