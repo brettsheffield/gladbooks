@@ -741,7 +741,10 @@ function salesorderAddProduct(datatable) {
 
 	/* add handler to remove row */
 	row.find('button.removerow').click(function () {
-		$(this).parent().parent().fadeOut(300);
+		$(this).parent().parent().fadeOut(300, function() {
+			$(this).remove();
+			updateSalesOrderTotals();
+		});
 	});
 
 	datatable.append(row);
