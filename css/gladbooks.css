@@ -293,9 +293,15 @@ input.amount {
   text-align: right;
   width: 5em; }
 
+button.cancel,
+button.reset,
+button.save,
 button.submit {
   border-radius: 25px; }
 
+button.cancel:hover,
+button.reset:hover,
+button.save:hover,
 button.submit:hover {
   opacity: .85;
   cursor: pointer; }

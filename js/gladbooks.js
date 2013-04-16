@@ -616,7 +616,7 @@ function displayForm(object, action, title, html, xml, tab) {
 	$('div.tablet.active.business'
 						+ g_business).find('button.save').click(function() {
 		$("div.tablet.active.business"
-			+ g_business).find('form:not(.subform)').submit();
+			+ g_business).find('form:not(.subform)').get(0).submit();
 	});
 
 	/* Cancel button closes tab */
@@ -625,6 +625,16 @@ function displayForm(object, action, title, html, xml, tab) {
 		closeTab();
 	});
 
+	/* Reset button resets form */
+	/* TODO */
+	$('div.tablet.active.business'
+					+ g_business).find('button.reset').click(function(event) {
+		event.preventDefault();
+		$("div.tablet.active.business"
+			+ g_business).find('form:not(.subform)').get(0).reset();
+	});
+
+	/* deal with submit event */
 	$("div.tablet.active.business"
 		+ g_business).find('form:not(.subform)').submit(function(event) {
 		event.preventDefault();
