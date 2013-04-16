@@ -768,6 +768,25 @@ test("decimalPad() - pad a decimal out to zero decimal places", function() {
 	equal(decimalPad('397.0', 0), '397', "397.0 => 397");
 });
 
+test("roundHalfEven() - bankers rounding", function() {
+
+	equal(roundHalfEven('123.456', 2), '123.46', "123.456 => 123.46");
+	equal(roundHalfEven('123.455', 2), '123.46', "123.455 => 123.46");
+	equal(roundHalfEven('123.445', 2), '123.44', "123.445 => 123.44");
+
+	equal(roundHalfEven('123.456', 0), '123', "123.456 => 123");
+	equal(roundHalfEven('123.556', 0), '124', "123.556 => 124");
+
+	equal(roundHalfEven('0.005', 2), '0', "0.005 => 0");
+	equal(roundHalfEven('0.025', 2), '0.02', "0.025 => 0.02");
+	equal(roundHalfEven('0.035', 2), '0.04', "0.035 => 0.03");
+
+	/* no-op */
+	equal(roundHalfEven('0.02', 2), '0.02', "0.02 => 0.02 (no-op)");
+	equal(roundHalfEven('0.03', 2), '0.03', "0.03 => 0.03 (no-op)");
+
+});
+
 module("Products");
 
 test("create product", function() {

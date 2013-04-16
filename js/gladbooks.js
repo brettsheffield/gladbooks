@@ -606,11 +606,10 @@ function displayForm(object, action, title, html, xml, tab) {
 			p = new Big(p);
 			q = new Big(q);
 			var t = p.times(q);
-			t = decimalPad(t, 2);
+			t = decimalPad(roundHalfEven(t, 2), 2);
 			$(this).parent().parent().find('input.total').val(t);
 		});
 	});
-
 
 	/* make submit button do the needful */
 	$('div.tablet.active.business'
@@ -1561,6 +1560,11 @@ function decimalPad(decimal, digits) {
 /* pad out a string with leading zeros */
 function padString(str, max) {
 	return str.length < max ? padString("0" + str, max) : str;
+}
+
+function roundHalfEven(n, dp) {
+	var x = Big(n);
+	return x.round(dp, 2);
 }
 
 function submitJournalEntry(event, form) {
