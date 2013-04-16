@@ -605,13 +605,14 @@ function displayForm(object, action, title, html, xml, tab) {
 	mytab.find('input.price, input.qty').each(function() {
         $(this).blur(function() {
 			/* recalculate line total */
-			var p = $(this).parent().parent().find('input.price').val();
-			var q = $(this).parent().parent().find('input.qty').val();
+			var parentrow = $(this).parent().parent();
+			var p = parentrow.find('input.price').val();
+			var q = parentrow.find('input.qty').val();
 			p = new Big(p);
 			q = new Big(q);
 			var t = p.times(q);
 			t = decimalPad(roundHalfEven(t, 2), 2);
-			var inputtotal = $(this).parent().parent().find('input.total');
+			var inputtotal = parentrow.find('input.total');
 			var oldval = inputtotal.val();
 			inputtotal.val(t);
 			if (oldval != t) {
