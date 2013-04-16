@@ -655,21 +655,31 @@ function updateSalesOrderTotals() {
 	console.log('Updating salesorder totals');
 
 	var subtotal = Big('0.00');
+	var taxes = Big('0.00');
+	var gtotal = Big('0.00');
 
 	$('div.tablet.active.business'
 	+ g_business).find('input.total:not(.clone)').each(function() 
 	{
-		console.log('I add things');
 		subtotal = subtotal.plus(Big($(this).val()));
 	});
 
-	subtotal = decimalPad(subtotal, 2);
+	gtotal = subtotal.plus(taxes);
 
+	/* update sub total */
+	subtotal = decimalPad(subtotal, 2);
 	$('div.tablet.active.business' 
 	+ g_business).find('table.totals').find('td.subtotal').each(function() 
 	{
-		console.log('I update things');
 		$(this).text(subtotal);
+	});
+
+	/* update grand total */
+	gtotal = decimalPad(gtotal, 2);
+	$('div.tablet.active.business' 
+	+ g_business).find('table.totals').find('td.gtotal').each(function() 
+	{
+		$(this).text(gtotal);
 	});
 
 }
@@ -741,6 +751,8 @@ function salesorderAddProduct(datatable) {
 		$(this).chosen();
 		$(this).removeClass('chosify');
 	});
+
+	updateSalesOrderTotals();
 }
 
 function populateCombos(view, parentid) {
