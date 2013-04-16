@@ -616,12 +616,11 @@ function displayForm(object, action, title, html, xml, tab) {
 		});
 	});
 
-	/* make submit button do the needful */
+	/* save button click handler */
 	$('div.tablet.active.business'
 	+ g_business).find('button.save').click(function() 
 	{
-		$("div.tablet.active.business"
-			+ g_business).find('form:not(.subform)').get(0).submit();
+		doFormSubmit(object, action, id);
 	});
 
 	/* Cancel button closes tab */
@@ -645,13 +644,17 @@ function displayForm(object, action, title, html, xml, tab) {
 	+ g_business).find('form:not(.subform)').submit(function(event)
 	{
 		event.preventDefault();
-		if (id > 0) {
-			submitForm(object, action, id);
-		}
-		else {
-			submitForm(object, action);
-		}
+		doFormSubmit(object, action, id);
 	});
+}
+
+function doFormSubmit(object, action, id) {
+	if (id > 0) {
+		submitForm(object, action, id);
+	}
+	else {
+		submitForm(object, action);
+	}
 }
 
 function updateSalesOrderTotals() {
