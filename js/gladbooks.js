@@ -724,10 +724,12 @@ function salesorderAddProduct(datatable) {
 	row.append(productBox);
 
 	/* append linetext input */
-	row.append('<td class="xml-linetext">' 
-		+ '<input class="linetext" name="linetext" type="text" '
-		+ 'value="' + linetext + '"/>' 
-		+ '</td>');
+	var linetext = mytab.find('input.linetext.nosubmit').parent().clone(true);
+	linetext.addClass('xml-linetext');
+	linetext.find('input.linetext.nosubmit').each(function() {
+		$(this).removeClass('nosubmit');
+	});
+	row.append(linetext);
 
 	/* clone price input and events */
 	var priceBox = mytab.find('input.price.nosubmit').parent().clone(true);
@@ -866,6 +868,7 @@ function comboChange(combo, xml) {
 			var parentrow = combo.parent().parent();
 			parentrow.find('input.linetext').attr('placeholder', desc);
 			parentrow.find('input.price').attr('placeholder', price);
+			recalculateLineTotal(parentrow);
 		}
 	});
 	
