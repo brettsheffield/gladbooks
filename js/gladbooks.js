@@ -685,12 +685,35 @@ function validateForm(object, action, id) {
 	console.log('validating form ' + object + '.' + action);
 	statusHide(); /* remove any prior status */
 
+	if (object == 'account') {
+		return validateFormAccount(action, id);
+	}
 	if (object == 'product') {
 		return validateFormProduct(action, id);
 	}
 	else if (object == 'salesorder') {
 		return validateFormSalesOrder(action, id);
 	}
+	return true;
+}
+
+function validateFormAccount(action, id) {
+	var mytab = activeTab();
+
+	var type = mytab.find('select.type');
+	if (type.val() < 0) {
+		statusMessage('Please select an Account Type', STATUS_WARN);
+		type.focus();
+		return false;
+	}
+
+	var description = mytab.find('input.description');
+	if (description.val().length < 1) {
+		statusMessage('Please enter a Description', STATUS_WARN);
+		description.focus();
+		return false;
+	}
+
 	return true;
 }
 
