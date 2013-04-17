@@ -985,7 +985,61 @@ function populateCombo(xml, combo, view, parentid) {
 		comboChange($(this), xml);
 	});
 
+	if (combo.attr('name') == 'type') {
+		/* add change() event to nominal code input box */
+		activeTab().find('input.nominalcode').change(function() {
+			return validateNominalCode($(this).val(), combo.val(), xml);
+		});
+	}
+
 	combo.trigger("liszt:updated");
+}
+
+/* return true iff nominal code is in range for type */
+function validateNominalCode(code, type, xml) {
+
+	if (type < 0) { /* type not selected yet */
+		console.log('type not selected');
+		return true;
+	}
+	
+	/* find row that refers to this type */
+	var row = $(xml).find('id').filter(function() {
+		return $(this).parent().find('id').text() == type;
+	}).parent();
+
+	var min = row.find('range_min').text();
+	var max = row.find('range_max').text();
+	var typename = row.find('name').text();
+	var ret = false;
+
+	statusHide();
+
+	console.log('code: ' + code);
+	console.log('min: ' + min);
+	console.log('max: ' + max);
+	console.log('typename: ' + typename);
+
+	if (code.length == 0) { /* blank is okay */
+		console.log('nominal code is blank');
+		return true;
+	}
+	else if (isNaN(code)) { /* must be a number */
+		console.log('nominal code not a number');
+		statusMessage('Nominal Code must be a number', STATUS_WARN);
+		return false;
+	}
+	else {
+		if ((code < min) || (code > max)) { /* must be in defined range */
+			console.log('nominal code out of range');
+			statusMessage('Nominal Codes for ' + typename 
+				+ ' must lie between ' + min + ' and ' + max, STATUS_WARN);
+			return false;
+		}
+	}
+	console.log('Nominal code is within acceptable range');
+
+	return true;
 }
 
 /* handle actions required when combo value changes */
@@ -995,6 +1049,13 @@ function comboChange(combo, xml) {
 
 	console.log('Value of ' + id + ' combo has changed to ' + newval);
 
+	/* deal with chart form type combo */
+	if (combo.attr('name') == 'type') {
+		console.log('As easy as falling off a logarithm');
+		var code = activeTab().find('input.nominalcode').val();
+		return validateNominalCode(code, newval, xml);
+	}
+	
 	$(xml).find('row').find('id').each(function() {
 		if ($(this).text() == newval) {
 			/* in the salesorder form, dynamically set placeholders
