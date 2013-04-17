@@ -284,6 +284,7 @@ input.shortname {
   width: 12em; }
 
 input.description {
+  min-width: 20em;
   max-width: 95%; }
 
 input.amount {
