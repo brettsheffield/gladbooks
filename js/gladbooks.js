@@ -818,6 +818,13 @@ function populateCombo(xml, combo, view, parentid) {
 
 	combo.empty();
 
+	/* add placeholder */
+	if ((combo.attr('data-placeholder')) && (combo.attr('multiple') != true)) {
+		console.log('combo has placeholder');
+		var placeholder = combo.attr('data-placeholder');
+		combo.append($("<option />").val(-1).text(placeholder));
+	}
+
 	/* now, repopulate and reselect options */
 	$(xml).find('row').each(function() {
    		var id = $(this).find('id').text();
@@ -840,6 +847,7 @@ function populateCombo(xml, combo, view, parentid) {
 			combo[0].options[id].selected = selections[id];
 		}
 	});
+
 	combo.chosen();
 
 	combo.change(function() {
