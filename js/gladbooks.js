@@ -978,6 +978,7 @@ function comboChange(combo, xml) {
 			 * to show defaults */
 			var desc = $(this).parent().find('description').text();
 			var price = $(this).parent().find('price_sell').text();
+			price = decimalPad(price, 2);
 			var parentrow = combo.parent().parent();
 			parentrow.find('input.linetext').attr('placeholder', desc);
 			parentrow.find('input.price').attr('placeholder', price);
