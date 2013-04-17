@@ -683,15 +683,18 @@ function doFormSubmit(object, action, id) {
 
 function validateForm(object, action, id) {
 	console.log('validating form ' + object + '.' + action);
+	statusHide(); /* remove any prior status */
+
 	if (object == 'product') {
 		return validateFormProduct(action, id);
+	}
+	else if (object == 'salesorder') {
+		return validateFormSalesOrder(action, id);
 	}
 	return true;
 }
 
 function validateFormProduct(action, id) {
-	statusHide(); /* remove any prior status */
-
 	var mytab = activeTab();
 
 	var account = mytab.find('select.account');
@@ -710,6 +713,24 @@ function validateFormProduct(action, id) {
 	if (description.val().length < 1) {
 		statusMessage('Please enter a Description', STATUS_WARN);
 		description.focus();
+		return false;
+	}
+
+	return true;
+}
+
+function validateFormSalesOrder(action, id) {
+	var mytab = activeTab();
+
+	var customer = mytab.find('select.organisations');
+	if (customer.val() < 0) {
+		statusMessage('Please select a Customer', STATUS_WARN);
+		customer.focus();
+		return false;
+	}
+	var products = mytab.find('td.xml-product');
+	if (products.length < 1) {
+		statusMessage('Please add a Product to the Sales Order', STATUS_WARN);
 		return false;
 	}
 
@@ -785,6 +806,13 @@ function salesorderAddProduct(datatable) {
 	var row = $('<tr class="even"></tr>');
 	console.log('Adding product ' + product + ' to salesorder');
 
+	statusHide();
+
+	if (product == -1) {
+		statusMessage('Please select a Product', STATUS_WARN);
+		return; /* must select a product */
+	}
+
 	/* We're not saving anything yet - just building up a salesorder on the
 	 * screen until the user clicks "save" */
 
@@ -796,6 +824,7 @@ function salesorderAddProduct(datatable) {
 	productCombo.removeClass('chzn-done nosubmit');
 	productCombo.addClass('chosify sub');
 	productCombo.val(product);
+	productCombo.find('option[value=-1]').remove();
 	productCombo.appendTo(productBox);
 	row.append(productBox);
 
