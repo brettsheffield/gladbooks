@@ -202,7 +202,7 @@ WHERE od.id IN (
         FROM organisationdetail
         GROUP BY organisation
 )
-ORDER BY organisation ASC
+ORDER BY name ASC
 ;
 
 

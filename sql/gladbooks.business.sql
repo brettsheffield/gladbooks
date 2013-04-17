@@ -578,7 +578,7 @@ WHERE id IN (
         FROM productdetail
         GROUP BY product
 )
-ORDER BY product ASC
+ORDER BY shortname ASC
 ;
 
 
