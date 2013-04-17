@@ -7,6 +7,8 @@
 		<table class="datatable">
 			<thead>
 				<th>Customer</th>
+				<th>Purchase Order</th>
+				<th>Comment</th>
 				<th>Cycle</th>
 				<th>Start Date</th>
 				<th>End Date</th>
@@ -15,6 +17,12 @@
 				<tr>
 					<td>
 						<a class="datasource" href="organisations"></a><select name="organisation" class="organisations populate focus" data-placeholder=" - Select Customer - "></select>
+					</td>
+					<td>
+						<input name="ponumber" class="ponumber" autocomplete="off" placeholder="Customer Ref"/>
+					</td>
+					<td>
+						<input name="description" class="description" autocomplete="off" placeholder="Comments"/>
 					</td>
 					<td>
 						<a class="datasource" href="cycles"></a><select name="cycle" class="cycle populate focus"></select>
