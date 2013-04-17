@@ -326,10 +326,6 @@ input.description {
 	max-width: 95%;
 }
 
-select.account {
-	max-width: 95%;
-}
-
 input.amount {
         text-align: right;
         width: 5em;
@@ -589,6 +585,7 @@ select.organisations {
 	width: 20em;
 }
 
+select.account,
 select.product {
 	width: 20em;
 }

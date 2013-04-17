@@ -690,8 +690,35 @@ function validateForm(object, action, id) {
 }
 
 function validateFormProduct(action, id) {
-	statusMessage('saving product...', STATUS_INFO);
+	statusHide(); /* remove any prior status */
+
+	var mytab = activeTab();
+
+	var account = mytab.find('select.account');
+	if (account.val() < 0) {
+		statusMessage('Please select an Account', STATUS_WARN);
+		account.focus();
+		return false;
+	}
+	var shortname = mytab.find('input.shortname');
+	if (shortname.val().length < 1) {
+		statusMessage('Please enter a Short Name ', STATUS_WARN);
+		shortname.focus();
+		return false;
+	}
+	var description = mytab.find('input.description');
+	if (description.val().length < 1) {
+		statusMessage('Please enter a Description', STATUS_WARN);
+		description.focus();
+		return false;
+	}
+
 	return true;
+}
+
+function statusHide() {
+	var statusmsg = activeTab().find('div.statusmsg');
+	statusmsg.hide();
 }
 
 function statusMessage(message, severity, fade) {
