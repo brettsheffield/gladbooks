@@ -175,8 +175,15 @@ function activeTabId() {
 function updateTab(tabid, content) {
 	console.log('updating tab ' + tabid);
 	var tab = $('#tab' + tabid);
+
+	/* preserve status message */
+	var statusmsg = tab.find('.statusmsg').detach();
+
 	tab.empty();
 	tab.append(content);
+	if (statusmsg) {
+		tab.find('.statusmsg').replaceWith(statusmsg);
+	}
 }
 
 function activateTab(tabid) {
@@ -683,7 +690,7 @@ function validateForm(object, action, id) {
 }
 
 function validateFormProduct(action, id) {
-	statusMessage('validating product form', STATUS_WARN);
+	statusMessage('saving product...', STATUS_INFO);
 	return true;
 }
 
@@ -1205,7 +1212,7 @@ function submitForm(object, action, id) {
 	xml += '</' + object + '>';
 	xml += '</data></request>';
 
-	showSpinner(); /* tell user to wait */
+	showSpinner('Saving ' + object + '...'); /* tell user to wait */
 
 	/* send request */
     $.ajax({
@@ -1237,6 +1244,8 @@ function escapeHTML(html) {
 }
 
 function submitFormSuccess(object, action, id, collection) {
+	statusMessage(object + ' saved', STATUS_INFO, 5000);
+
 	if (object == 'business') {
 		prepBusinessSelector();
 	}
@@ -1257,6 +1266,7 @@ function submitFormSuccess(object, action, id, collection) {
 
 function submitFormError(object, action, id) {
 	hideSpinner();
+	statusMessage('Error saving ' + object, STATUS_CRIT);
 }
 
 /* Fetch an individual element of a collection for display / editing */
@@ -1390,7 +1400,13 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 }
 
 /* hide please wait dialog */
-function showSpinner() {
+function showSpinner(message) {
+	if (message) {
+		$('.spinwaittxt').text(message);
+	}
+	else {
+		$('.spinwaittxt').text('Please wait...');
+	}
 	$("#loading-div-background").show();
 }
 

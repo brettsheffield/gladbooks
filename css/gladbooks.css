@@ -360,7 +360,8 @@ button.submit:hover {
   position: absolute;
   text-align: center;
   top: 33%;
-  width: 300px; }
+  width: 300px;
+  z-index: 999; }
 
 img.spinner {
   height: 32px;

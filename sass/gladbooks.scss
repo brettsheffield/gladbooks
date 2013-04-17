@@ -392,19 +392,20 @@ $placeholder-opacity: .33;
         width: 100%;
 }
 #loading-div {
-        box-shadow: 0px 0px 20px #6e89a5; /* CSS3 */
-        -moz-box-shadow: 0px 0px 20px #6e89a5; /* Firefox */
-        -webkit-box-shadow: 0px 0px 20px #6e89a5; /* Safari, Chrome */
-        background-color: white;
-        border-radius:4px 4px 4px 4px;
-        height: 180px;
-        left: 50%;
-        margin-left:-150px;
-        margin-top: -100px;
-        position:absolute;
-        text-align:center;
-        top: 33%;
-        width: 300px;
+	box-shadow: 0px 0px 20px #6e89a5; /* CSS3 */
+	-moz-box-shadow: 0px 0px 20px #6e89a5; /* Firefox */
+	-webkit-box-shadow: 0px 0px 20px #6e89a5; /* Safari, Chrome */
+	background-color: white;
+	border-radius:4px 4px 4px 4px;
+	height: 180px;
+	left: 50%;
+	margin-left:-150px;
+	margin-top: -100px;
+	position:absolute;
+	text-align:center;
+	top: 33%;
+	width: 300px;
+	z-index: 999;
 }
 img.spinner {
         height: 32px;
