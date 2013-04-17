@@ -1029,13 +1029,14 @@ function validateNominalCode(code, type, xml) {
 		statusMessage('Nominal Code must be a number', STATUS_WARN);
 		return false;
 	}
-	else {
-		if ((code < min) || (code > max)) { /* must be in defined range */
-			console.log('nominal code out of range');
-			statusMessage('Nominal Codes for ' + typename 
-				+ ' must lie between ' + min + ' and ' + max, STATUS_WARN);
-			return false;
-		}
+	else if ((code < min) || (code > max)) { /* must be in defined range */
+		console.log('nominal code out of range');
+		statusMessage('Nominal Codes for ' + typename 
+			+ ' must lie between ' + min + ' and ' + max, STATUS_WARN);
+		return false;
+	}
+	else { /* ensure code hasn't been used */
+		/* TODO */
 	}
 	console.log('Nominal code is within acceptable range');
 
