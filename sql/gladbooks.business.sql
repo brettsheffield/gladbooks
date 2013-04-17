@@ -571,7 +571,9 @@ CREATE OR REPLACE VIEW productlist AS
 SELECT
         product as id,
         shortname,
-        description
+        description,
+	price_buy,
+	price_sell
 FROM productdetail
 WHERE id IN (
         SELECT MAX(id)

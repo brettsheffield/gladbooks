@@ -804,7 +804,6 @@ function populateCombo(xml, combo, view, parentid) {
 	var selections = [];
 
 	/* first, preserve selections */
-	console.log(combo[0].options);
 	for (var x=0; x < combo[0].options.length; x++) {
 		selections[combo[0].options[x].text] = combo[0].options[x].selected;
 	}
@@ -839,9 +838,31 @@ function populateCombo(xml, combo, view, parentid) {
 		if (combo.hasClass('relationship')) {
 			relationshipUpdate(combo, view, parentid);
 		}
+		comboChange(combo, xml);
 	});
 
 	combo.trigger("liszt:updated");
+}
+
+/* handle actions required when combo value changes */
+function comboChange(combo, xml) {
+	var id = combo.attr('id');
+	var newval = combo.val();
+
+	console.log('Value of ' + id + ' combo has changed to ' + newval);
+
+	$(xml).find('row').find('id').each(function() {
+		if ($(this).text() == newval) {
+			/* in the salesorder form, dynamically set placeholders
+			 * to show defaults */
+			var desc = $(this).parent().find('description').text();
+			var price = $(this).parent().find('price_sell').text();
+			var parentrow = combo.parent().parent();
+			parentrow.find('input.linetext').attr('placeholder', desc);
+			parentrow.find('input.price').attr('placeholder', price);
+		}
+	});
+	
 }
 
 function relationshipUpdate(combo, view, parentid) {
