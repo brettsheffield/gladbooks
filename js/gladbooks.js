@@ -641,6 +641,12 @@ function displayForm(object, action, title, html, xml, tab) {
 function recalculateLineTotal(parentrow) {
 	var p = parentrow.find('input.price').val();
 	var q = parentrow.find('input.qty').val();
+
+	/* if price is blank, use placeholder value */
+	if (!p) {
+		p = parentrow.find('input.price').attr('placeholder');
+	}
+
 	p = new Big(p);
 	q = new Big(q);
 	var t = p.times(q);
@@ -708,7 +714,7 @@ function salesorderAddProduct(datatable) {
 
 	/* copy the product combo and prepare for chosen() */
 	var productBox = $('<td class="xml-product"></td>');
-	var productCombo = mytab.find('select.product.nosubmit').clone();
+	var productCombo = mytab.find('select.product.nosubmit').clone(true);
 	productCombo.removeAttr("id");
 	productCombo.css({display: "inline-block"});
 	productCombo.removeClass('chzn-done nosubmit');
@@ -838,7 +844,7 @@ function populateCombo(xml, combo, view, parentid) {
 		if (combo.hasClass('relationship')) {
 			relationshipUpdate(combo, view, parentid);
 		}
-		comboChange(combo, xml);
+		comboChange($(this), xml);
 	});
 
 	combo.trigger("liszt:updated");
