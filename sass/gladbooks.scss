@@ -658,3 +658,25 @@ div.tablewrapper {
 .map-canvas img {
 	max-width: none;
 }
+
+/* status msg boxes */
+div.statusmsg {
+	float: right;
+	padding: 1em 2em;
+	margin-right: 1px;
+}
+
+.info {
+	background-color: white;
+	color: $color-light;
+}
+.warn {
+	background-color: orange;
+	color: black;
+	font-weight: bold;
+}
+.crit {
+	background-color: red;
+	color: black;
+	font-weight: bold;
+}

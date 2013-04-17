@@ -34,6 +34,10 @@ var g_max_ledgers_per_journal=7;
 var g_frmLedger;
 var g_tabid = 0;
 
+var STATUS_INFO = 1;
+var STATUS_WARN = 2;
+var STATUS_CRIT = 4;
+
 $(document).ready(function() {
 
 	/* no password, display login dialog */
@@ -660,11 +664,49 @@ function recalculateLineTotal(parentrow) {
 }
 
 function doFormSubmit(object, action, id) {
-	if (id > 0) {
-		submitForm(object, action, id);
+	if (validateForm(object, action, id)) {
+		if (id > 0) {
+			submitForm(object, action, id);
+		}
+		else {
+			submitForm(object, action);
+		}
 	}
-	else {
-		submitForm(object, action);
+}
+
+function validateForm(object, action, id) {
+	console.log('validating form ' + object + '.' + action);
+	if (object == 'product') {
+		return validateFormProduct(action, id);
+	}
+	return true;
+}
+
+function validateFormProduct(action, id) {
+	statusMessage('validating product form', STATUS_CRIT, 5000);
+	return true;
+}
+
+function statusMessage(message, severity, fade) {
+	var statusmsg = activeTab().find('div.statusmsg');
+
+	statusmsg.removeClass('info warn crit');
+
+	if (severity == STATUS_INFO) {
+		statusmsg.addClass('info');
+	}
+	else if (severity == STATUS_WARN) {
+		statusmsg.addClass('warn');
+	}
+	else if (severity == STATUS_CRIT) {
+		statusmsg.addClass('crit');
+	}
+	
+	statusmsg.text(message);
+	statusmsg.show();
+
+	if (fade) {
+		statusmsg.fadeOut(fade);
 	}
 }
 
