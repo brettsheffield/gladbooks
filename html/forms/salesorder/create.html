@@ -1,14 +1,15 @@
 <div class="salesorder create">
 	<h2>New Sales Order</h2>
+	<div class="tablewrapper">
 	<form class="salesorder form" method="post" action="salesorders">
 		<input type="hidden" name="id"/>
 
-		<table>
+		<table class="datatable">
 			<thead>
-				<td>Customer</td>
-				<td>Cycle</td>
-				<td>Start Date</td>
-				<td>End Date</td>
+				<th>Customer</th>
+				<th>Cycle</th>
+				<th>Start Date</th>
+				<th>End Date</th>
 			</thead>
 			<tbody>
 				<tr>
@@ -72,6 +73,7 @@
 				</tbody>
 			</table>
 		</div>
+		</div> <!-- tablewrapper -->
 		<button class="save">Save</button>
 		<button class="cancel">Cancel</button>
 

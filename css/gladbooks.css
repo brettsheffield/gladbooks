@@ -529,6 +529,10 @@ td.subtotal {
 td.totalspacer {
   width: 3.4em; }
 
+div.tablewrapper {
+  border: solid 1px #6e89a5;
+  padding: 1px; }
+
 /* form styling */
 .contact.form ul,
 .organisation.form ul {
