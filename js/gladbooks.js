@@ -683,7 +683,7 @@ function validateForm(object, action, id) {
 }
 
 function validateFormProduct(action, id) {
-	statusMessage('validating product form', STATUS_CRIT, 5000);
+	statusMessage('validating product form', STATUS_WARN);
 	return true;
 }
 

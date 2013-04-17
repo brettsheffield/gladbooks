@@ -570,19 +570,21 @@ div.tablewrapper {
 /* status msg boxes */
 div.statusmsg {
   float: right;
-  padding: 1em 2em;
+  padding: 0.5em 2em;
+  width: 33%;
   margin-right: 1px; }
 
 .info {
   background-color: white;
-  color: #b2cde0; }
+  border: 1px solid #6e89a5;
+  color: #6e89a5; }
 
 .warn {
-  background-color: orange;
+  border: 2px solid orange;
   color: black;
   font-weight: bold; }
 
 .crit {
-  background-color: red;
+  border: 2px solid red;
   color: black;
   font-weight: bold; }
