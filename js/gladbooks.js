@@ -1085,7 +1085,8 @@ function displaySubformData(view, parentid, xml) {
 				row += '<a class="datasource" href="relationships"/>';
 				row += '<select name="relationship" multiple class="relationship populate chosify type' + i + '" data-placeholder="Select type(s)">';
 
-				/* mark our selections - NB: combo hasn't been populated fully at this stage */
+				/* mark our selections 
+				 * NB: combo hasn't been populated fully at this stage */
 				if ($(this).text()) {
 					types = $(this).text().split(',');
 					if (types.length > 0) {
