@@ -659,12 +659,22 @@ function displayForm(object, action, title, html, xml, tab) {
 		mytab.find('form:not(.subform)').get(0).reset();
 	});
 
+	/* Find Contact button on organisation form */
+	mytab.find('button.contactsearchsubmit').click(function(event)
+	{
+		contactSearch(mytab.find('input.contactsearch').val());
+	});
+
 	/* deal with submit event */
 	mytab.find('form:not(.subform)').submit(function(event)
 	{
 		event.preventDefault();
 		doFormSubmit(object, action, id);
 	});
+}
+
+function contactSearch(searchString) {
+	console.log('searching for contacts like "' + searchString + '"');
 }
 
 /* a radio button value has changed */
