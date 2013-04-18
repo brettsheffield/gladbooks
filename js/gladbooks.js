@@ -659,10 +659,11 @@ function displayForm(object, action, title, html, xml, tab) {
 		mytab.find('form:not(.subform)').get(0).reset();
 	});
 
-	/* Find Contact button on organisation form */
-	mytab.find('button.contactsearchsubmit').click(function(event)
+	/* contact search on organisation form */
+	mytab.find('input.contactsearch').change(function(event)
 	{
-		contactSearch(mytab.find('input.contactsearch').val());
+		//contactSearch(mytab.find('input.contactsearch').val());
+		contactSearch($(this).val());
 	});
 
 	/* deal with submit event */
@@ -675,6 +676,38 @@ function displayForm(object, action, title, html, xml, tab) {
 
 function contactSearch(searchString) {
 	console.log('searching for contacts like "' + searchString + '"');
+	searchQuery('contacts', searchString);
+}
+
+function searchQuery(view, query) {
+    console.log('Loading subform with data ' + view);
+    url = collection_url('search/' + view);
+    if (query) {
+        url += query + '/'
+    }
+    $.ajax({
+        url: url,
+        beforeSend: function (xhr) { setAuthHeader(xhr); },
+        success: function(xml) {
+            displaySearchResults(view, query, xml);
+        },
+        error: function(xml) {
+            console.log('Error searching.');
+        }
+    });
+}
+
+function displaySearchResults(view, query, xml) {
+	console.log("Search results are in.");
+	var results = new Array();
+	$(xml).find('row').each(function() {
+		var id = $(this).find('id').text();
+		var name = $(this).find('name').text();
+		results.push(name);
+	});
+	activeTab().find('input.contactsearch').autocomplete(
+		{ source: results }
+	);
 }
 
 /* a radio button value has changed */
