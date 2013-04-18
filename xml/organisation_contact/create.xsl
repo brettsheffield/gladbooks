@@ -22,6 +22,22 @@
 		<xsl:value-of select="contact/@id"/>
 		<xsl:text>';</xsl:text>
 
+		<!-- INSERT default "contact" relationship to form the basic link -->
+		<!--
+		<xsl:text>INSERT INTO gladbooks_</xsl:text>
+		<xsl:copy-of select="$instance"/>
+		<xsl:text>.organisation_contact (organisation, contact, relationship, authuser, clientip) VALUES ('</xsl:text>
+		<xsl:value-of select="../organisation/@id"/>
+		<xsl:text>','</xsl:text>
+		<xsl:value-of select="../contact/@id"/>
+		<xsl:text>','0','</xsl:text>
+       		<xsl:copy-of select="$authuser"/>
+		<xsl:text>','</xsl:text>
+		<xsl:copy-of select="$clientip"/>
+		<xsl:text>');</xsl:text>
+		-->
+
+		<!-- now add any other relationship types -->
 		<xsl:for-each select="relationship">
 			<xsl:call-template name="relationship"/>
 		</xsl:for-each>

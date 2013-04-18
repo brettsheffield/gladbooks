@@ -1202,6 +1202,10 @@ function addSubformEvent(object, view, parentid) {
 	/* deal with select(s) */
 	object.parent().parent().find('select').each(function() {
 		var input_name = $(this).attr('name');
+		if (input_name == 'relationship') {
+			xml += '<relationship organisation="'
+			xml += parentid + '" type="0" />';
+		}
 		if (input_name) {
 			console.log('I have <select> with name: ' + input_name);
 
@@ -1339,6 +1343,7 @@ function submitForm(object, action, id) {
 	var xml = createRequestXml();
 	var url = '';
 	var collection = '';
+	var mytab = activeTab();
 
 	/* if object has subforms, which xml tag do we wrap them in? */
 	if (object == 'salesorder') {
@@ -1348,7 +1353,7 @@ function submitForm(object, action, id) {
 	console.log('Submitting form ' + object + ':' + action);
 
 	/* find out where to send this */
-	$("div.tablet.active").find(
+	mytab.find(
 		'div.' + object + '.' + action
 	).find('form:not(.subform)').each(function() {
 		collection = $(this).attr('action');
@@ -1366,19 +1371,25 @@ function submitForm(object, action, id) {
 		xml += ' id="' + id + '"';
 	}
 	xml += '>';
-	$("div.tablet.active").find(
+	mytab.find(
 		'div.' + object + '.' + action
-	).find('input:not(.nosubmit),select:not(.nosubmit)').each(function() {
-		if ($(this).attr('name')) {
-			if ($(this).attr('name') != 'id') {
+	).find('input:not(.nosubmit,default),select:not(.nosubmit,.default)').each(function() {
+		var name = $(this).attr('name');
+		if (name) {
+			console.log(name);
+			console.log(object);
+			if ((name != 'id')
+			&& ((name != 'relationship')||(object == 'organisation_contacts')))
+			{
+				console.log($(this).val());
 				if ($(this).hasClass('sub')) {
 					/* this is a subform entry, so add extra xml tag */
 					xml += '<' + subobject + '>';
 				}
 				if ($(this).val().length > 0) { /* skip blanks */
-					xml += '<' + $(this).attr('name') + '>';
+					xml += '<' + name + '>';
 					xml += escapeHTML($(this).val());
-					xml += '</' + $(this).attr('name') + '>';
+					xml += '</' + name + '>';
 				}
 				if ($(this).hasClass('endsub')) {
 					/* this is a subform entry, so close extra xml tag */
@@ -1387,6 +1398,7 @@ function submitForm(object, action, id) {
 			}
 		}
 	});
+
 	xml += '</' + object + '>';
 	xml += '</data></request>';
 
@@ -1434,12 +1446,14 @@ function submitFormSuccess(object, action, id, collection) {
 		showQuery(collection, '', false, tabid);
 	});
 
-	/* clear form ready for more data entry */
-	var mytab = $('div.tablet.active.business' + g_business);
-	var myform = mytab.find('div.' + object + '.' + action);
-	var tab = activeTabId();
+	if (action == 'create') {
+		/* clear form ready for more data entry */
+		var mytab = $('div.tablet.active.business' + g_business);
+		var myform = mytab.find('div.' + object + '.' + action);
+		var tab = activeTabId();
 
-	getForm(object, action, null, null, tab);
+		getForm(object, action, null, null, tab);
+	}
 }
 
 function submitFormError(object, action, id) {
