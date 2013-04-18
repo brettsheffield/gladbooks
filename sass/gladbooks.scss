@@ -681,3 +681,11 @@ div.statusmsg {
 	color: black;
 	font-weight: bold;
 }
+
+/* organisation form */
+tr.contact.link {
+	display: none;
+}
+tr.contact.link > td {
+	padding: 5px;
+}

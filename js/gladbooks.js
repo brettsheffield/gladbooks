@@ -603,6 +603,25 @@ function displayForm(object, action, title, html, xml, tab) {
 		constrainInput: true
 	});
 
+	/* play the accordion */
+	//$('.accordion').accordion(); /* not in use */
+	
+	/* tune the radio */
+	mytab.find('div.radio.untuned').find('input[type="radio"]').each(function()
+	{
+		var oldid = $(this).attr('id'); /* note old id */
+		$(this).attr('id', '');			/* remove old id */
+		$(this).uniqueId(); 			/* add new, unique id */
+		/* use old id to locate linked label, and update its "for" attr */
+		$(this).parent().find('label[for="' + oldid + '"]').attr('for', 
+			$(this).attr('id'));
+	});
+	mytab.find('div.radio.untuned').buttonset();
+	mytab.find('div.radio.untuned').change(function() {
+		changeRadio($(this), object);
+	});
+	mytab.find('div.radio.untuned').removeClass('untuned');
+
 	hideSpinner(); /* wake user */
 
     /* set up blur() events */
@@ -646,6 +665,22 @@ function displayForm(object, action, title, html, xml, tab) {
 		event.preventDefault();
 		doFormSubmit(object, action, id);
 	});
+}
+
+/* a radio button value has changed */
+function changeRadio(radio, object) {
+	var station = radio.find('input[type="radio"]:checked').val();
+	console.log('Radio tuned to ' + station);
+	if (object == 'organisation') {
+		if (station == '0') {
+			$('tr.contact.link').hide();
+			$('tr.contact.create').show();
+		}
+		else if (station == '1') {
+			$('tr.contact.create').hide();
+			$('tr.contact.link').show();
+		}
+	}
 }
 
 /* recalculate line total */

@@ -5,7 +5,7 @@
 		<ul>
 			<li>
 				<label for="name">Organisation Name</label>
-				<input class="focus" type="text" name="name" placeholder="Organisation Name"/>
+				<input class="focus" type="text" name="name" placeholder="Organisation Name" title="Name of the Organisation (must not be blank)"/>
 				<span class="form_hint">Name of the Organisation (must not be blank)</span>
 			</li>
 			<li><button class="submit formsubmit">Save</button></li>
@@ -14,9 +14,15 @@
 	<div class="organisation_contacts">
 		<form class="subform" action="organisation_contacts"/>
 		<h3>Contacts</h3>
+
+		<div class="radio untuned">
+			<input type="radio" id="radio1" class="radio1" name="radio" value="0" checked/><label for="radio1">Create Contact</label>
+			<input type="radio" id="radio2" class="radio2" name="radio" value="1"/><label for="radio2">Link Contact</label>
+		</div>
+
 		<table class="datatable">
 			<thead>
-				<tr>
+				<tr class="contact create">
 					<th>Name</th>
 					<th>Email</th>
 					<th>Telephone</th>
@@ -24,13 +30,21 @@
 					<th>Type</th>
 					<th>&nbsp;</th>
 				</tr>
-				<tr>
+				<tr class="contact create">
 					<td class="name"><input name="name" type="text" placeholder="Name"/></td>
 					<td class="email"><input name="email" type="email" placeholder="Email"/></td>
 					<td class="phone"><input name="phone" type="text" placeholder="Telephone"/></td>
 					<td class="phone"><input name="mobile" type="text" placeholder="Mobile"/></td>
-					<td><a class="datasource" href="relationships"/><select name="relationship" multiple class="relationship populate" data-placeholder="Select type(s)"></select></td>
+					<td><a class="datasource" href="relationships"></a><select name="relationship" multiple class="relationship populate" data-placeholder="Select type(s)"></select></td>
 					<td><button class="addrow">Add</button></td>
+				</tr>
+				<tr class="contact link">
+					<th>Link Existing Contact</th>
+					<th>&nbsp;</th>
+				</tr>
+				<tr class="contact link">
+					<td><input name="contactsearch" type="text" /> </td>
+					<td><button name="contactsearchsubmit" type="text">Find Contact</button> </td>
 				</tr>
 			</thead>
 			<tbody>
