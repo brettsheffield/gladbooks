@@ -660,11 +660,13 @@ function displayForm(object, action, title, html, xml, tab) {
 	});
 
 	/* contact search on organisation form */
+	/*
 	mytab.find('input.contactsearch').change(function(event)
 	{
 		//contactSearch(mytab.find('input.contactsearch').val());
 		contactSearch($(this).val());
 	});
+	*/
 
 	/* deal with submit event */
 	mytab.find('form:not(.subform)').submit(function(event)
@@ -697,6 +699,7 @@ function searchQuery(view, query) {
     });
 }
 
+/* TODO */
 function displaySearchResults(view, query, xml) {
 	console.log("Search results are in.");
 	var results = new Array();
@@ -985,8 +988,16 @@ function salesorderAddProduct(datatable) {
 
 function populateCombos(view, parentid) {
 	/* populate combos */
-	console.log('populating combos');
-	$('select.populate').each(function() {
+	if (parentid) {
+		console.log('populating combos for subform');
+		var isSub = '';
+	}
+	else {
+		console.log('populating combos');
+		var isSub = ':not(.sub)';
+	}
+
+	$('select.populate' + isSub).each(function() {
 		var combo = $(this);
 		$(this).parent().find('a.datasource').each(function() {
 			datasource = $(this).attr('href');
@@ -1014,6 +1025,7 @@ function loadCombo(datasource, combo, view, parentid) {
 
 function populateCombo(xml, combo, view, parentid) {
 	console.log('Combo data loaded for ' + combo.attr('name'));
+	console.log('I have a parentid: ' + parentid);
 
 	var selections = [];
 
@@ -1058,7 +1070,15 @@ function populateCombo(xml, combo, view, parentid) {
 
 	combo.change(function() {
 		if (combo.hasClass('relationship')) {
-			relationshipUpdate(combo, view, parentid);
+			var trow = combo.parent();
+			var contact = trow.find('input[name="id"]').val();
+			var relationships = new Array();
+			for (var x=0; x < combo[0].options.length; x++) {
+				if (combo[0].options[x].selected) {
+					relationships.push(x);
+				}
+			}
+			relationshipUpdate(parentid, contact, relationships);
 		}
 		comboChange($(this), xml);
 	});
@@ -1151,20 +1171,19 @@ function comboChange(combo, xml) {
 	
 }
 
-function relationshipUpdate(combo, view, parentid) {
+/* link contact to organisation */
+function relationshipUpdate(organisation, contact, relationships) {
 	console.log('Updating relationship');
 	var xml = createRequestXml();
-	var trow = combo.parent();
-	var id = trow.find('input[name="id"]').val();
 
-	console.log(view + ':' + parentid + ',' + id);
+    xml += '<organisation id="' + organisation + '"/>';
+    xml += '<contact id="' + contact + '"/>';
+	xml += '<relationship id="0"/>'; /* base "contact" relationship */
 
-    xml += '<organisation id="' + parentid + '"/>';
-    xml += '<contact id="' + id + '"/>';
-
-	for (var x=0; x < combo[0].options.length; x++) {
-		if (combo[0].options[x].selected) {
-    		xml += '<relationship id="' + x + '"/>';
+	/* any other relationship types we've been given */
+	if (relationships) {
+		for (var x=0; x < relationships.length; x++) {
+			xml += '<relationship id="' + relationships[x] + '"/>';
 		}
 	}
 
@@ -1172,7 +1191,9 @@ function relationshipUpdate(combo, view, parentid) {
 
 	console.log(xml);
 
-	var url = collection_url(view) + parentid + '/' + id + '/';
+	var url = collection_url('organisation_contacts') + organisation
+	url += '/' + contact + '/';
+
 	console.log('POST ' + url);
 	$.ajax({
 		url: url,
@@ -1304,10 +1325,11 @@ function displaySubformData(view, parentid, xml) {
 				id = $(this).text();
 			}
 			else if (this.tagName == 'type') {
+				/* TODO: change this to clone an existing combo to be more efficient */
 				row += '<td class="noclick">';
 				row += '<input type="hidden" name="id" value="' + id + '"/>';
 				row += '<a class="datasource" href="relationships"/>';
-				row += '<select name="relationship" multiple class="relationship populate chosify type' + i + '" data-placeholder="Select type(s)">';
+				row += '<select name="relationship" multiple class="relationship populate chosify type sub' + i + '" data-placeholder="Select type(s)">';
 
 				/* mark our selections 
 				 * NB: combo hasn't been populated fully at this stage */
@@ -1348,7 +1370,7 @@ function displaySubformData(view, parentid, xml) {
 		i++;
 	});
 
-	//populateCombos(view, parentid); /* populate combos */
+	populateCombos(view, parentid); /* populate combos */
 
 	datatable.find('tbody').fadeIn(300);
 
@@ -1377,6 +1399,12 @@ function displaySubformData(view, parentid, xml) {
 			},
 		});
 	});
+
+    /* "Link Contact" button event handler for organisation form */
+    activeTab().find('button.linkcontact').click(function() {
+		var contact = $(this).parent().parent().find('select.contactlink').val();
+		relationshipUpdate(parentid, contact);
+    });
 
 	console.log('Found ' + i + ' row(s)');
 }
