@@ -1226,6 +1226,7 @@ function loadSubformData(view, id) {
 		},
 		error: function(xml) {
 			console.log('Error loading subform data');
+			displaySubformData(view, id, xml); /* needed for events */
 		}
 	});
 }
