@@ -1402,8 +1402,8 @@ function displaySubformData(view, parentid, xml) {
 
     /* "Link Contact" button event handler for organisation form */
     activeTab().find('button.linkcontact').click(function() {
-		var contact = $(this).parent().parent().find('select.contactlink').val();
-		relationshipUpdate(parentid, contact);
+		var c = $(this).parent().parent().find('select.contactlink').val();
+		relationshipUpdate(parentid, c);
     });
 
 	console.log('Found ' + i + ' row(s)');
