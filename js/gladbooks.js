@@ -1336,7 +1336,8 @@ function displaySubformData(view, parentid, xml) {
 					types = $(this).text().split(',');
 					if (types.length > 0) {
 						for (var j=0; j < types.length; j++) {
-							combotype.find('option[value=' + types[j] +']').attr('selected', true);
+							var opt = 'option[value=' + types[j] +']';
+							combotype.find(opt).attr('selected', true);
 						}
 					}
 				}
