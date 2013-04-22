@@ -1309,15 +1309,14 @@ function displaySubformData(view, parentid, xml) {
 	var id = 0;
 	console.log("Displaying subform " + view + " data");
 	var datatable = $('div.tablet.active').find('div.' + view).find('table.datatable');
-	var row = '';
 	var types = [];
 	datatable.find('tbody').empty();
 
 	$(xml).find('resources').find('row').each(function() {
 		if (i % 2 == 0) {
-			row = '<tr class="even">';
+			var row = $('<tr class="even">');
 		} else {
-			row = '<tr class="odd">';
+			var row = $('<tr class="odd">');
 		}
 
 		$(this).children().each(function() {
@@ -1325,52 +1324,52 @@ function displaySubformData(view, parentid, xml) {
 				id = $(this).text();
 			}
 			else if (this.tagName == 'type') {
-				/* TODO: change this to clone an existing combo to be more efficient */
-				row += '<td class="noclick">';
-				row += '<input type="hidden" name="id" value="' + id + '"/>';
-				row += '<a class="datasource" href="relationships"/>';
-				row += '<select name="relationship" multiple class="relationship populate chosify type sub' + i + '" data-placeholder="Select type(s)">';
+				var combotype = datatable.find('select.relationship.nosubmit').clone();
 
-				/* mark our selections 
-				 * NB: combo hasn't been populated fully at this stage */
+				combotype.removeAttr("id");
+				combotype.css({display: "inline-block"});
+				combotype.removeClass('chzn-done nosubmit');
+				combotype.addClass('chosify sub');
+
+				/* mark our selections */
 				if ($(this).text()) {
 					types = $(this).text().split(',');
 					if (types.length > 0) {
 						for (var j=0; j < types.length; j++) {
-							row += '<option value="' + types[j] + '" selected>' + types[j] + '</option>';
+							combotype.find('option[value=' + types[j] +']').attr('selected', true);
 						}
 					}
 				}
 
-				row += '</select>';
-				row += '</td>';
+				var td = $('<td class="noclick">'
+					+ '<input type="hidden" name="id" value="' + id + '"/>');
+
+				td.append(combotype);
+				row.append(td);
 			}
 			else {
-				row += '<td>' + $(this).text() + '</td>';
+				row.append('<td>' + $(this).text() + '</td>');
 			}
 		});
 
 		/* append remove "X" button */
-		row += '<td class="removerow noclick">';
-		row += '<input type="hidden" name="id" value="' + id + '"/>';
-		row += '<button class="removerow">X</button></td>';
-
-		row += '</tr>';
-
-		var newrow = $(row);
+		row.append('<td class="removerow noclick">' 
+			+ '<input type="hidden" name="id" value="' 
+			+ id + '"/><button class="removerow">X</button></td>');
 
 		/* attach click event to edit elements of subform */
-		newrow.find('td').not('.noclick').click(function() {
+		row.find('td').not('.noclick').click(function() {
 			var id = $(this).parent().find('input[name="id"]').val();
 			collection = view.split('_')[1];
 			displayElement(collection, id);
 		});
 
-		newrow.appendTo(datatable);
+		datatable.append(row);
+
 		i++;
 	});
 
-	populateCombos(view, parentid); /* populate combos */
+	datatable.find('select.chosify').chosen();
 
 	datatable.find('tbody').fadeIn(300);
 
