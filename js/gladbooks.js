@@ -533,6 +533,11 @@ function activeTab() {
 
 /* display html form we've just fetched in new tab */
 function displayForm(object, action, title, html, xml, tab) {
+	console.log('displayForm("' 
+		+ object + '","'
+		+ action + '","'
+		+ title + '", <html>, <xml>, <tab>)'
+	);
 	var id = 0;
 	var content = '';
 	var locString = '';
@@ -987,6 +992,7 @@ function salesorderAddProduct(datatable) {
 }
 
 function populateCombos(view, parentid) {
+	console.log('populateCombos()');
 	/* populate combos */
 	if (parentid) {
 		console.log('populating combos for subform');
@@ -1008,6 +1014,7 @@ function populateCombos(view, parentid) {
 }
 
 function loadCombo(datasource, combo, view, parentid) {
+	console.log('loadCombo()');
 	url = collection_url(datasource);
 	console.log('populating a combo from datasource: ' + url);
 
@@ -1024,6 +1031,7 @@ function loadCombo(datasource, combo, view, parentid) {
 }
 
 function populateCombo(xml, combo, view, parentid) {
+	console.log('populateCombo()');
 	console.log('Combo data loaded for ' + combo.attr('name'));
 	console.log('I have a parentid: ' + parentid);
 
@@ -1212,6 +1220,7 @@ function relationshipUpdate(organisation, contact, relationships, refresh) {
 
 /* Fetch data for a subform */
 function loadSubformData(view, id) {
+	console.log('loadSubformData()');
 	console.log('Loading subform with data ' + view);
 	url = collection_url(view);
 	if (id) {
@@ -1233,6 +1242,7 @@ function loadSubformData(view, id) {
 
 function addSubformEvent(object, view, parentid) {
 	/* attach click event to add rows to subform */
+	console.log('addSubformEvent()');
 	console.log('Adding row to subform parent ' + parentid);
 
 	console.log('object:' + object);
@@ -1308,6 +1318,7 @@ function addSubformEvent(object, view, parentid) {
 
 /* We've loaded data for a subform; display it */
 function displaySubformData(view, parentid, xml) {
+	console.log('displaySubformData()');
 	var i = 0;
 	var id = 0;
 	console.log("Displaying subform " + view + " data");
