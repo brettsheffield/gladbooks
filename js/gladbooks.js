@@ -1172,7 +1172,7 @@ function comboChange(combo, xml) {
 }
 
 /* link contact to organisation */
-function relationshipUpdate(organisation, contact, relationships) {
+function relationshipUpdate(organisation, contact, relationships, refresh) {
 	console.log('Updating relationship');
 	var xml = createRequestXml();
 
@@ -1203,9 +1203,11 @@ function relationshipUpdate(organisation, contact, relationships) {
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		complete: function(xml) {
 			console.log('relationship updated');
+			if (refresh) {
+				loadSubformData('organisation_contacts', organisation);
+			}
 		},
 	});
-
 }
 
 /* Fetch data for a subform */
@@ -1403,7 +1405,7 @@ function displaySubformData(view, parentid, xml) {
     /* "Link Contact" button event handler for organisation form */
     activeTab().find('button.linkcontact').click(function() {
 		var c = $(this).parent().parent().find('select.contactlink').val();
-		relationshipUpdate(parentid, c);
+		relationshipUpdate(parentid, c, false, true);
     });
 
 	console.log('Found ' + i + ' row(s)');
