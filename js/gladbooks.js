@@ -33,6 +33,7 @@ var g_loggedin = false;
 var g_max_ledgers_per_journal=7;
 var g_frmLedger;
 var g_tabid = 0;
+var g_xml_relationships = '';
 
 var STATUS_INFO = 1;
 var STATUS_WARN = 2;
@@ -1008,7 +1009,14 @@ function populateCombos(view, parentid) {
 		$(this).parent().find('a.datasource').each(function() {
 			datasource = $(this).attr('href');
 			console.log('datasource: ' + datasource );
-			loadCombo(datasource, combo, view, parentid);
+			if ((datasource == 'relationships') && (g_xml_relationships)) {
+				/* here's one we prepared earlier */
+				console.log('using cached relationship data');
+				populateCombo(g_xml_relationships, combo, view, parentid);
+			}
+			else {
+				loadCombo(datasource, combo, view, parentid);
+			}
 		});
 	});
 }
@@ -1022,6 +1030,10 @@ function loadCombo(datasource, combo, view, parentid) {
 		url: url,
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
+			if (datasource == 'relationships') {
+				console.log('caching relationship data');
+				g_xml_relationships = xml;
+			}
 			populateCombo(xml, combo, view, parentid);
 		},
 		error: function(xml) {
@@ -1279,6 +1291,7 @@ function addSubformEvent(object, view, parentid) {
 
 	/* deal with select(s) */
 	row.find('select').each(function() {
+		console.log('deal with select(s)');
 		var input_name = $(this).attr('name');
 		if (input_name == 'relationship') {
 			xml += '<relationship organisation="'
@@ -1339,6 +1352,7 @@ function displaySubformData(view, parentid, xml) {
 				id = $(this).text();
 			}
 			else if (this.tagName == 'type') {
+				console.log('appending relationship combo');
 				var combotype = datatable.find('select.relationship.nosubmit').clone();
 
 				combotype.removeAttr("id");
