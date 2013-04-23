@@ -1260,7 +1260,8 @@ function addSubformEvent(object, view, parentid) {
 	xml += '<' + subform_collection.slice(0,-1) + '>';
 
 	/* find inputs */
-	object.parent().parent().find('input').each(function() {
+	var row = object.parent().parent();
+	row.find('input').each(function() {
 		var input_name = $(this).attr('name');
 		if (input_name) {
 			if (input_name == subform_collection) {
@@ -1277,7 +1278,7 @@ function addSubformEvent(object, view, parentid) {
 	});
 
 	/* deal with select(s) */
-	object.parent().parent().find('select').each(function() {
+	row.find('select').each(function() {
 		var input_name = $(this).attr('name');
 		if (input_name == 'relationship') {
 			xml += '<relationship organisation="'
