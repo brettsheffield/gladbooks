@@ -1420,6 +1420,8 @@ function displaySubformData(view, parentid, xml) {
 	datatable.find('input[type=email]').each(function() {
 		$(this).val('');
 	});
+	datatable.find('select.chzn-done:not(.sub)').val('');
+	datatable.find('select.chzn-done:not(.sub)').trigger("liszt:updated");
 
 	/* attach click event to remove rows from subform */
 	datatable.find('button.removerow').click(function() {
@@ -1434,7 +1436,6 @@ function displaySubformData(view, parentid, xml) {
 			beforeSend: function (xhr) { setAuthHeader(xhr); },
 			complete: function(xml) {
 				trow.parent().remove();
-				//loadSubformData(view, parentid);
 			},
 		});
 	});
