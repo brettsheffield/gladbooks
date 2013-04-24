@@ -411,6 +411,11 @@ td {
 .odd, tr.odd > td {
   background-color: white; }
 
+.ponumber,
+.socomment {
+  white-space: pre;
+  width: 10em; }
+
 .price,
 .total,
 .xml-debit,
