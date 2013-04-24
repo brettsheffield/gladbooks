@@ -1090,22 +1090,6 @@ function populateCombo(xml, combo, view, parentid) {
 
 	combo.chosen();
 
-	combo.change(function() {
-		console.log('combo.change()');
-		if (combo.hasClass('relationship')) {
-			var trow = combo.parent();
-			var contact = trow.find('input[name="id"]').val();
-			var relationships = new Array();
-			for (var x=0; x < combo[0].options.length; x++) {
-				if (combo[0].options[x].selected) {
-					relationships.push(x);
-				}
-			}
-			relationshipUpdate(parentid, contact, relationships);
-		}
-		comboChange($(this), xml);
-	});
-
 	if (combo.attr('name') == 'type') {
 		/* add change() event to nominal code input box */
 		activeTab().find('input.nominalcode').change(function() {
@@ -1362,12 +1346,12 @@ function displaySubformData(view, parentid, xml) {
 					 * and we don't */
 					console.log('Not in a relationship');
 				}
-				var combotype = datatable.find('select.relationship.nosubmit').clone();
+				var combo = datatable.find('select.relationship.nosubmit').clone();
 
-				combotype.removeAttr("id");
-				combotype.css({display: "inline-block"});
-				combotype.removeClass('chzn-done nosubmit');
-				combotype.addClass('chosify sub');
+				combo.removeAttr("id");
+				combo.css({display: "inline-block"});
+				combo.removeClass('chzn-done nosubmit');
+				combo.addClass('chosify sub');
 
 				/* mark our selections */
 				if ($(this).text()) {
@@ -1375,7 +1359,7 @@ function displaySubformData(view, parentid, xml) {
 					if (types.length > 0) {
 						for (var j=0; j < types.length; j++) {
 							var opt = 'option[value=' + types[j] +']';
-							combotype.find(opt).attr('selected', true);
+							combo.find(opt).attr('selected', true);
 						}
 					}
 				}
@@ -1383,7 +1367,24 @@ function displaySubformData(view, parentid, xml) {
 				var td = $('<td class="noclick">'
 					+ '<input type="hidden" name="id" value="' + id + '"/>');
 
-				td.append(combotype);
+				combo.change(function() {
+					console.log('combo.change()');
+					if (combo.hasClass('relationship')) {
+						var trow = combo.parent();
+						var contact = trow.find('input[name="id"]').val();
+						var relationships = new Array();
+						for (var x=0; x < combo[0].options.length; x++) {
+							if (combo[0].options[x].selected) {
+								relationships.push(x);
+							}
+						}
+						relationshipUpdate(parentid, contact, relationships);
+					}
+					comboChange($(this), xml);
+				});
+
+
+				td.append(combo);
 				row.append(td);
 			}
 			else {
