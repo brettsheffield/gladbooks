@@ -583,6 +583,10 @@ function displayForm(object, action, title, html, xml, tab) {
 		}
 	}
 
+	/* FIXME - if populateCombos() takes too long, or fails, relationship data
+	 * won't be ready in time for the org_contact subform */
+	populateCombos(); /* populate combos */
+
 	/* deal with subforms */
 	$(html).find('form.subform').each(function() {
 		var view = $(this).attr("action");
@@ -600,8 +604,6 @@ function displayForm(object, action, title, html, xml, tab) {
 		btnAdd.addClass('btnAdd');
 		loadSubformData(view, id);
 	});
-
-	populateCombos(); /* populate combos */
 
 	/* date pickers */
 	$('div.active').find('.datefield').datepicker({
@@ -1089,6 +1091,7 @@ function populateCombo(xml, combo, view, parentid) {
 	combo.chosen();
 
 	combo.change(function() {
+		console.log('combo.change()');
 		if (combo.hasClass('relationship')) {
 			var trow = combo.parent();
 			var contact = trow.find('input[name="id"]').val();
@@ -1353,6 +1356,12 @@ function displaySubformData(view, parentid, xml) {
 			}
 			else if (this.tagName == 'type') {
 				console.log('appending relationship combo');
+
+				if (!g_xml_relationships) {
+					/* FIXME - we're supposed to have relationship data here,
+					 * and we don't */
+					console.log('Not in a relationship');
+				}
 				var combotype = datatable.find('select.relationship.nosubmit').clone();
 
 				combotype.removeAttr("id");
