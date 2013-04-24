@@ -39,11 +39,15 @@ url     static  GET  /js/*	/usr/local/gladbooks/gladbooks-ui/js/
 url     static  GET  /html/*	/usr/local/gladbooks/gladbooks-ui/html/
 url     static  GET  /img/*	/usr/local/gladbooks/gladbooks-ui/img/
 
+url	sqlview GET  /*/*/search/contacts/*		gb contactsearch
 url	sqlview GET  /*/*/accounts/*   			gb accountlist
 url	sqlview GET  /*/*/accounttypes/  		gb accounttype
 url     sqlview GET  /auth/*				gb auth
 url	sqlview GET  /*/*/businesses/* 			gb businesses
+#url	sqlview GET  /*/*/contactlist/ 			gb contactlist
+#url	sqlview GET  /*/*/contacts/* 			gb contactdetail
 url	sqlview GET  /*/*/contacts/* 			gb contactlist
+url	sqlview GET  /*/*/cycles/* 			gb cycle
 url	sqlview GET  /*/*/departments/*			gb department
 url	sqlview GET  /*/*/divisions/*			gb division
 url	sqlview GET  /*/*/instances/* 			gb instances
@@ -51,9 +55,12 @@ url	sqlview GET  /*/*/journals/*			gb journal
 url	sqlview GET  /*/*/ledgers/*			gb ledger
 url	sqlview GET  /*/*/organisations/* 		gb organisationlist
 url	sqlview GET  /*/*/organisation_contacts/*/ 	gb org_contact
+url	sqlview GET  /*/*/products/*	 		gb product
 url	sqlview GET  /*/*/relationships/* 		gb relationships
 url	sqlview GET  /*/*/reports/balancesheet/ 	gb balancesheet
 url	sqlview GET  /*/*/reports/profitandloss/ 	gb profitandloss
+url	sqlview GET  /*/*/salesinvoices/* 		gb salesinvoices
+url	sqlview GET  /*/*/salesorders/*	 		gb salesorder
 
 url	sqlview DELETE /*/*/organisation_contacts/*	gb org_contact_del
 
@@ -66,6 +73,8 @@ url	xslpost POST /*/*/instances/*			gb instance
 url	xslpost POST /*/*/journals/*			gb journal
 url	xslpost POST /*/*/organisations/*		gb organisation
 url	xslpost POST /*/*/organisation_contacts/*	gb organisation_contact
+url	xslpost POST /*/*/products/*			gb product
+url	xslpost POST /*/*/salesorders/*			gb salesorder
 
 ###############################################################################
 # acls (tried in order of appearance)
@@ -100,6 +109,8 @@ sql balancesheet	SELECT * FROM gladbooks_$0_$1.balancesheet
 sql businesses		SELECT * FROM gladbooks_$0.business ORDER BY name ASC
 sql contactdetail	SELECT * FROM gladbooks_$0.contactdetailview
 sql contactlist		SELECT * FROM gladbooks_$0.contactlist
+sql contactsearch	SELECT * FROM gladbooks_$0.contactlist WHERE name ILIKE '%$4%'
+sql cycle		SELECT * FROM gladbooks.cycle
 sql department		SELECT * FROM gladbooks_$0_$1.department
 
 begin sql org_contact_del
@@ -132,11 +143,19 @@ begin sql ledger
 	INNER JOIN gladbooks_$0_$1.account a ON a.id = l.account
 end sql ledger
 
-
 sql organisationlist	SELECT * FROM gladbooks_$0.organisationlist
 
 begin sql org_contact	
-	SELECT id, name, email, phone, mobile
+	SELECT id, name, email, phone, mobile, 
+	array_to_string(
+		ARRAY(
+			SELECT relationship 
+			FROM gladbooks_$0.organisation_contact 
+			WHERE organisation='$3'
+			AND contact=cdv.id
+			AND relationship > 0
+		), ','
+	) as type
 	FROM gladbooks_$0.contactdetailview cdv
 	WHERE cdv.id IN (
 		SELECT contact
@@ -145,9 +164,11 @@ begin sql org_contact
 	)
 end sql org_contact
 
+sql product		SELECT * FROM gladbooks_$0_$1.productlist
 sql profitandloss	SELECT * FROM gladbooks_$0_$1.profitandloss
-sql relationships	SELECT * FROM gladbooks_$0.relationship
+sql relationships	SELECT * FROM gladbooks_$0.relationship WHERE id > 0
 sql salesinvoice	SELECT * FROM gladbooks_$0_$1.salesinvoice
+sql salesorder		SELECT * FROM gladbooks_$0_$1.salesorder	
 sql test		SELECT * FROM test
 
 sql ld_auth		ou=people
