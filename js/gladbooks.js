@@ -1096,6 +1096,11 @@ function populateCombo(xml, combo, view, parentid) {
 			return validateNominalCode($(this).val(), combo.val(), xml);
 		});
 	}
+	else {
+		combo.change(function() {
+			comboChange($(this), xml);
+		});
+	}
 
 	combo.trigger("liszt:updated");
 }
