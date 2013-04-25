@@ -1422,6 +1422,9 @@ function displaySubformData(view, parentid, xml) {
 	datatable.find('input[type=text]').each(function() {
 		$(this).val('');
 	});
+	datatable.find('input[name=qty]').each(function() {
+		$(this).val('1');
+	});
 	datatable.find('input[type=email]').each(function() {
 		$(this).val('');
 	});
