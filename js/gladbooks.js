@@ -1677,7 +1677,13 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 			$t += '<tr class="odd ' + this.tagName  + '">';
 		}
 		$(this).children().each(function() {
-			$t += '<td class="xml-' + this.tagName + '">' + $(this).text()
+			$t += '<td class="xml-' + this.tagName + '">'
+			if ((this.tagName == 'price_buy')||(this.tagName == 'price_sell')){
+				$t += decimalPad($(this).text(), 2);
+			}
+			else {
+				$t += $(this).text();
+			}
 			/* if this is a numeric value, and positive, add trailing space */
 			if ((this.tagName == 'debit') || (this.tagName == 'credit') 
 			 || (this.tagName == 'total') || (this.tagName == 'amount'))
