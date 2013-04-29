@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:element name="request">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="instance" type="xs:string"/>
+      <xs:element name="business" type="xs:positiveInteger"/>
+      <xs:element name="data">
+        <xs:complexType>
+          <xs:sequence>
+
+						<xs:element name="product" maxOccurs="1">
+							<xs:complexType>
+          			<xs:sequence>
+									<xs:element name="account" type="xs:nonNegativeInteger"/>
+									<xs:element name="shortname" type="xs:string"/>
+									<xs:element name="description" type="xs:string"/>
+									<xs:element name="price_buy" type="xs:decimal" minOccurs="0"/>
+									<xs:element name="price_sell" type="xs:decimal" minOccurs="0"/>
+          			</xs:sequence>
+								<xs:attribute name="id" type="xs:nonNegativeInteger" use="required"/>
+							</xs:complexType>
+						</xs:element><!--product-->
+
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element><!--data-->
+
+    </xs:sequence>
+  </xs:complexType>
+</xs:element><!--request-->
+
+</xs:schema>
