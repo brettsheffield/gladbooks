@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+  <instance>default</instance>
+  <business>1</business>	
+	<data>
+		<product>1</product>
+		<tax>1</tax>
+	</data>
+</request>

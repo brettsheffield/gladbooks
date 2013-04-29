@@ -1226,6 +1226,34 @@ function relationshipUpdate(organisation, contact, relationships, refresh) {
 	});
 }
 
+/* apply tax to product */
+function taxProduct(product, tax) {
+	console.log('Taxing product');
+	var xml = createRequestXml();
+
+    xml += '<product>' + product + '</product>';
+    xml += '<tax>' + tax + '</tax>';
+	xml += '</data></request>';
+
+	var url = collection_url('product_taxes');
+
+	console.log('POST ' + url);
+	$.ajax({
+		url: url,
+		data: xml,
+		contentType: 'text/xml',
+		type: 'POST',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		complete: function(xml) {
+			/*
+			if (refresh) {
+				loadSubformData('organisation_contacts', organisation);
+			}
+			*/
+		},
+	});
+}
+
 /* Fetch data for a subform */
 function loadSubformData(view, id) {
 	console.log('loadSubformData()');
@@ -1456,6 +1484,12 @@ function displaySubformData(view, parentid, xml) {
     activeTab().find('button.linkcontact').click(function() {
 		var c = $(this).parent().parent().find('select.contactlink').val();
 		relationshipUpdate(parentid, c, false, true);
+    });
+
+    /* "Apply Tax" button event handler for product form */
+    activeTab().find('button.taxproduct').click(function() {
+		var c = $(this).parent().parent().find('select.tax').val();
+		taxProduct(parentid, c);
     });
 
 	console.log('Found ' + i + ' row(s)');

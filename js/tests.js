@@ -808,6 +808,23 @@ test("create product", function() {
 
 });
 
+test("tax product (add)", function() {
+	var xml = createRequestXml();
+	xml += '<product>1</product><tax>1</tax></data></request>';
+
+    stop();
+    $.ajax({
+        url: collection_url('product_taxes'),
+        type: 'POST',
+        data: xml,
+        contentType: 'text/xml',
+        beforeSend: function (xhr) { setAuthHeader(xhr); },
+        success: function(xml) { ok(true); start(); },
+        error: function(xml) { ok(false); start(); },
+    });
+
+});
+
 module("Sales Orders");
 
 test("create sales order", function() {

@@ -75,34 +75,6 @@ INSERT INTO account (id, accounttype, description)
 INSERT INTO account (id, accounttype, description)
 	VALUES ('9999', '9000', 'Suspense Account');
 
--- Standard Rate VAT
-INSERT INTO tax VALUES (DEFAULT);
-INSERT INTO taxdetail (tax, account, name) VALUES (currval(pg_get_serial_sequence('tax', 'id')), '2202', 'Standard Rate VAT');
-
-INSERT INTO taxrate VALUES (DEFAULT);
-INSERT INTO taxratedetail (taxrate, tax, rate, valid_from, valid_to) VALUES (currval(pg_get_serial_sequence('taxrate', 'id')),currval(pg_get_serial_sequence('tax', 'id')),'17.5', NULL, '2008-12-31');
-
-INSERT INTO taxrate VALUES (DEFAULT);
-INSERT INTO taxratedetail (taxrate, tax, rate, valid_from, valid_to) VALUES (currval(pg_get_serial_sequence('taxrate', 'id')),currval(pg_get_serial_sequence('tax', 'id')),'15.0', '2009-01-01', '2009-12-31');
-
-INSERT INTO taxrate VALUES (DEFAULT);
-INSERT INTO taxratedetail (taxrate, tax, rate, valid_from, valid_to) VALUES (currval(pg_get_serial_sequence('taxrate', 'id')),currval(pg_get_serial_sequence('tax', 'id')),'17.5', '2010-01-01', '2010-12-31');
-
-INSERT INTO taxrate VALUES (DEFAULT);
-INSERT INTO taxratedetail (taxrate, tax, rate, valid_from, valid_to) VALUES (currval(pg_get_serial_sequence('taxrate', 'id')),currval(pg_get_serial_sequence('tax', 'id')),'20.0', '2011-01-01', NULL);
-
--- Reduced Rate VAT
-INSERT INTO tax VALUES (DEFAULT);
-INSERT INTO taxdetail (tax, account, name) VALUES (currval(pg_get_serial_sequence('tax', 'id')), '2202', 'Reduced Rate VAT');
-INSERT INTO taxrate VALUES (DEFAULT);
-INSERT INTO taxratedetail (taxrate, tax, rate, valid_from, valid_to) VALUES (currval(pg_get_serial_sequence('taxrate', 'id')),currval(pg_get_serial_sequence('tax', 'id')),'5.0', NULL, NULL);
-
--- Zero Rate VAT
-INSERT INTO tax VALUES (DEFAULT);
-INSERT INTO taxdetail (tax, account, name) VALUES (currval(pg_get_serial_sequence('tax', 'id')), '2202', 'Zero Rate VAT');
-INSERT INTO taxrate VALUES (DEFAULT);
-INSERT INTO taxratedetail (taxrate, tax, rate, valid_from, valid_to) VALUES (currval(pg_get_serial_sequence('taxrate', 'id')),currval(pg_get_serial_sequence('tax', 'id')),'0.0', NULL, NULL);
-
 --
 END;
 $$ LANGUAGE 'plpgsql';
