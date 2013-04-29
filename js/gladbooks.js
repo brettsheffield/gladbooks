@@ -1590,7 +1590,14 @@ function displayElement(collection, id) {
 		action = 'update';
 		title = 'Edit Organisation ' + id;
 	}
+	else if (collection.toLowerCase() == 'products') {
+		url = collection_url('products') + id;
+		object = 'product';
+		action = 'update';
+		title = 'Edit Product ' + id;
+	}
 	else {
+		console.log('displayElement() not implmented for ' + collection);
 		return;
 	}
 

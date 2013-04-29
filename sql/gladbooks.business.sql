@@ -570,6 +570,7 @@ ORDER BY lineorder, account ASC
 CREATE OR REPLACE VIEW productlist AS
 SELECT
         product as id,
+	account,
         shortname,
         description,
 	price_buy,
