@@ -1227,7 +1227,7 @@ function relationshipUpdate(organisation, contact, relationships, refresh) {
 }
 
 /* apply tax to product */
-function taxProduct(product, tax) {
+function taxProduct(product, tax, refresh) {
 	console.log('Taxing product');
 	var xml = createRequestXml();
 
@@ -1245,11 +1245,9 @@ function taxProduct(product, tax) {
 		type: 'POST',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		complete: function(xml) {
-			/*
 			if (refresh) {
-				loadSubformData('organisation_contacts', organisation);
+				loadSubformData('product_taxes', product);
 			}
-			*/
 		},
 	});
 }
@@ -1489,7 +1487,7 @@ function displaySubformData(view, parentid, xml) {
     /* "Apply Tax" button event handler for product form */
     activeTab().find('button.taxproduct').click(function() {
 		var c = $(this).parent().parent().find('select.tax').val();
-		taxProduct(parentid, c);
+		taxProduct(parentid, c, true);
     });
 
 	console.log('Found ' + i + ' row(s)');

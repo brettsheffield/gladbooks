@@ -56,11 +56,13 @@ url	sqlview GET  /*/*/ledgers/*			gb ledger
 url	sqlview GET  /*/*/organisations/* 		gb organisationlist
 url	sqlview GET  /*/*/organisation_contacts/*/ 	gb org_contact
 url	sqlview GET  /*/*/products/*	 		gb product
+url	sqlview GET  /*/*/product_taxes/*		gb product_taxes
 url	sqlview GET  /*/*/relationships/* 		gb relationships
 url	sqlview GET  /*/*/reports/balancesheet/ 	gb balancesheet
 url	sqlview GET  /*/*/reports/profitandloss/ 	gb profitandloss
 url	sqlview GET  /*/*/salesinvoices/* 		gb salesinvoices
 url	sqlview GET  /*/*/salesorders/*	 		gb salesorder
+url	sqlview GET  /*/*/taxes/*	 		gb tax
 
 url	sqlview DELETE /*/*/organisation_contacts/*	gb org_contact_del
 
@@ -74,6 +76,7 @@ url	xslpost POST /*/*/journals/*			gb journal
 url	xslpost POST /*/*/organisations/*		gb organisation
 url	xslpost POST /*/*/organisation_contacts/*	gb organisation_contact
 url	xslpost POST /*/*/products/*			gb product
+url	xslpost POST /*/*/product_taxes/*		gb product_tax
 url	xslpost POST /*/*/salesorders/*			gb salesorder
 
 ###############################################################################
@@ -165,10 +168,38 @@ begin sql org_contact
 end sql org_contact
 
 sql product		SELECT * FROM gladbooks_$0_$1.productlist
+
+begin sql product_taxes
+
+	SELECT tax, name
+	FROM gladbooks.taxdetail
+	WHERE tax IN
+	(
+		SELECT tax
+		FROM gladbooks_$0_$1.product_tax
+		WHERE id IN (
+			SELECT MAX(id) 
+			FROM gladbooks_$0_$1.product_tax 
+			GROUP BY product,tax
+		)
+		AND product='$3'
+		AND is_applicable='true'
+	) 
+		
+
+end sql product_taxes
+
 sql profitandloss	SELECT * FROM gladbooks_$0_$1.profitandloss
 sql relationships	SELECT * FROM gladbooks_$0.relationship WHERE id > 0
 sql salesinvoice	SELECT * FROM gladbooks_$0_$1.salesinvoice
 sql salesorder		SELECT * FROM gladbooks_$0_$1.salesorder	
+
+begin sql tax
+	SELECT tax as id, name
+	FROM gladbooks.taxdetail
+	WHERE id IN (SELECT MAX(id) FROM gladbooks.taxdetail GROUP BY tax)
+end sql tax
+
 sql test		SELECT * FROM test
 
 sql ld_auth		ou=people
