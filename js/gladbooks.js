@@ -1566,7 +1566,10 @@ function submitFormSuccess(object, action, id, collection) {
 	// lets check for tabs that will need refreshing
 	$('div.refresh.' + collection).each(function() {
 		var tabid = $(this).attr('id').substr(3);
-		showQuery(collection, '', false, tabid);
+		var title = $('#tabli' + tabid).find(
+			'a[href="' + tabid + '"]:not(.tabcloser)'
+		).text();
+		showQuery(collection, title, false, tabid);
 	});
 
 	if (action == 'create') {
