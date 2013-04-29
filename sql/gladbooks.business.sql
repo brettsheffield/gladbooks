@@ -201,7 +201,7 @@ CREATE TABLE productdetail (
                         NOT NULL,
         account         INT4 references account(id) ON DELETE RESTRICT
                         NOT NULL,
-        shortname       TEXT NOT NULL UNIQUE,
+        shortname       TEXT NOT NULL,
         description     TEXT NOT NULL,
         price_buy       NUMERIC,
         price_sell      NUMERIC,
