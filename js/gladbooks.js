@@ -25,9 +25,6 @@ var g_resourcedefaultsurl = '/defaults/';
 var g_username = '';
 var g_password = '';
 var g_instance = '';
-var g_username = 'betty';    /* temp */
-var g_password = 'ie5a8P40'; /* temp */
-var g_instance = 'bacs';	 /* temp */
 var g_business = '1';
 var g_loggedin = false;
 var g_max_ledgers_per_journal=7;
@@ -347,8 +344,7 @@ function displayLoginBox() {
 		'margin-left' : -popMargLeft
 	});
 	
-	// Add the mask to body
-	$('body').append('<div id="mask"></div>');
+	// Fade in background mask unless already visible
 	$('#mask').fadeIn(300);
 
 };
@@ -366,7 +362,7 @@ function setFocusLoginBox() {
 /* Hide Login Dialog */
 function hideLoginBox() {
 	$('#mask , .login-popup').fadeOut(300 , function() {
-		$('#mask').remove();  
+		$('#mask').hide();  
 	}); 
 }
 
