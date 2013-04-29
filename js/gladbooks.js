@@ -1092,6 +1092,14 @@ function populateCombo(xml, combo, view, parentid) {
 			return validateNominalCode($(this).val(), combo.val(), xml);
 		});
 	}
+	else if (combo.attr('name') == 'account') {
+		console.log('setting value of product->account combo');
+		activeTab().find('input.nosubmit[name="account"]').each(function() {
+			combo.find(
+				'option[value=' + $(this).val() + ']'
+			).attr('selected', 'selected');
+		});
+	}
 	else {
 		combo.change(function() {
 			comboChange($(this), xml);
