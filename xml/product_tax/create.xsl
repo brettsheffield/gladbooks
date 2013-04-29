@@ -30,7 +30,7 @@
 		<xsl:value-of select="../product"/>
 		<xsl:text>','</xsl:text>
 		<xsl:value-of select="../tax"/>
-		<xsl:text>','true',</xsl:text>
+		<xsl:text>','true','</xsl:text>
        		<xsl:copy-of select="$authuser"/>
 		<xsl:text>','</xsl:text>
 		<xsl:copy-of select="$clientip"/>
