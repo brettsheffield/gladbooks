@@ -26,11 +26,12 @@
 		<xsl:copy-of select="$instance"/>
 		<xsl:text>_</xsl:text>
 		<xsl:copy-of select="$business"/>
-		<xsl:text>.product_tax (product, tax, is_applicable, authuser, clientip) VALUES ('</xsl:text>
+		<xsl:text>.product_tax (product, tax, </xsl:text>
+		<xsl:text>authuser, clientip) VALUES ('</xsl:text>
 		<xsl:value-of select="../product"/>
 		<xsl:text>','</xsl:text>
 		<xsl:value-of select="../tax"/>
-		<xsl:text>','true','</xsl:text>
+		<xsl:text>','</xsl:text>
        		<xsl:copy-of select="$authuser"/>
 		<xsl:text>','</xsl:text>
 		<xsl:copy-of select="$clientip"/>
