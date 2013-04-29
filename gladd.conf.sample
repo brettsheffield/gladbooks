@@ -65,6 +65,7 @@ url	sqlview GET  /*/*/salesorders/*	 		gb salesorder
 url	sqlview GET  /*/*/taxes/*	 		gb tax
 
 url	sqlview DELETE /*/*/organisation_contacts/*	gb org_contact_del
+url	sqlview DELETE /*/*/product_taxes/*		gb product_tax_del
 
 url	xslpost POST /*/*/accounts/*			gb account
 url	xslpost POST /*/*/businesses/*			gb business
@@ -91,6 +92,7 @@ acl	GET	/*/*/*				require	*
 acl	POST	/*/*/*				require	*
 acl	GET	/auth/*				require	*
 acl	DELETE	/*/*/organisation_contacts/*	require *
+acl	DELETE	/*/*/product_taxes/*		require *
 
 ###############################################################################
 ## auth
@@ -171,7 +173,7 @@ sql product		SELECT * FROM gladbooks_$0_$1.productlist
 
 begin sql product_taxes
 
-	SELECT tax, name
+	SELECT tax as id, name
 	FROM gladbooks.taxdetail
 	WHERE tax IN
 	(
@@ -188,6 +190,13 @@ begin sql product_taxes
 		
 
 end sql product_taxes
+
+begin sql product_tax_del
+	INSERT INTO gladbooks_$0_$1.product_tax
+		(product, tax, is_applicable)
+	VALUES
+		('$3', '$4', 'false')
+end sql product_tax_del
 
 sql profitandloss	SELECT * FROM gladbooks_$0_$1.profitandloss
 sql relationships	SELECT * FROM gladbooks_$0.relationship WHERE id > 0
