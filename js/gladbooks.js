@@ -1435,7 +1435,7 @@ function displaySubformData(view, parentid, xml) {
 		/* attach click event to edit elements of subform */
 		row.find('td').not('.noclick').click(function() {
 			var id = $(this).parent().find('input[name="id"]').val();
-			collection = view.split('_')[1];
+			var collection = view.split('_')[1].toLowerCase();
 			displayElement(collection, id);
 		});
 
@@ -1619,30 +1619,25 @@ function submitFormError(object, action, id) {
 	statusMessage('Error saving ' + object, STATUS_CRIT);
 }
 
-/* Fetch an individual element of a collection for display / editing */
-function displayElement(collection, id) {
-	if (collection.toLowerCase() == 'contacts') {
-		url = collection_url('contacts') + id;
-		object = 'contact';
-		action = 'update';
-		title = 'Edit Contact ' + id;
-	}
-	else if (collection.toLowerCase() == 'organisations') {
-		url = collection_url('organisations') + id;
-		object = 'organisation';
-		action = 'update';
-		title = 'Edit Organisation ' + id;
-	}
-	else if (collection.toLowerCase() == 'products') {
-		url = collection_url('products') + id;
-		object = 'product';
-		action = 'update';
-		title = 'Edit Product ' + id;
+/* return the singular object name for a given collection */
+function collectionObject(c) {
+	if (c == 'taxes') {
+		return 'tax';
 	}
 	else {
-		console.log('displayElement() not implmented for ' + collection);
-		return;
+		/* the general case
+		 * - lop off the last character and hope for the best */
+		return c.substring(0, c.length - 1);
 	}
+}
+
+/* Fetch an individual element of a collection for display / editing */
+function displayElement(collection, id) {
+	url = collection_url(collection) + id;
+	object = collectionObject(collection);
+	action = 'update';
+	title = 'Edit ' + object.substring(0,1).toUpperCase()
+		+ object.substring(1)  + ' ' + id;
 
 	showSpinner(); /* tell user to wait */
 
@@ -1740,7 +1735,7 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 	/* attach click event */
 	$t.find('tr').click(function(event) {
 		event.preventDefault();
-		displayElement(title,$(this).find('td.xml-id').text());
+		displayElement(collection,$(this).find('td.xml-id').text());
 	});
 
 	if (tab) {
