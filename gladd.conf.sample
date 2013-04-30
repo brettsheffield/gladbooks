@@ -63,6 +63,7 @@ url	sqlview GET  /*/*/reports/profitandloss/ 	gb profitandloss
 url	sqlview GET  /*/*/salesinvoices/* 		gb salesinvoices
 url	sqlview GET  /*/*/salesorders/	 		gb salesorderlist
 url	sqlview GET  /*/*/salesorders/*	 		gb salesorderview
+url	sqlview GET  /*/*/salesorderitems/* 		gb salesorderitem
 url	sqlview GET  /*/*/taxes/*	 		gb tax
 
 url	sqlview DELETE /*/*/organisation_contacts/*	gb org_contact_del
@@ -204,6 +205,11 @@ sql relationships	SELECT * FROM gladbooks_$0.relationship WHERE id > 0
 sql salesinvoice	SELECT * FROM gladbooks_$0_$1.salesinvoice
 sql salesorderlist	SELECT * FROM gladbooks_$0_$1.salesorderlist
 sql salesorderview	SELECT * FROM gladbooks_$0_$1.salesorderview
+
+begin sql salesorderitem
+	SELECT * FROM gladbooks_$0_$1.salesorderitemview
+	WHERE salesorder = '$3'
+end sql salesorderitem
 
 begin sql tax
 	SELECT tax as id, name

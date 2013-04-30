@@ -651,6 +651,24 @@ AND sod.is_open = 'true'
 AND sod.is_deleted = 'false'
 ;
 
+CREATE OR REPLACE VIEW salesorderitemview AS
+SELECT
+	soid.salesorderitem as id,
+	soid.salesorder,
+	soid.product,
+	soid.linetext,
+	soid.discount,
+	soid.price,
+	soid.qty
+FROM salesorderitemdetail soid
+WHERE soid.salesorderitem IN (
+	SELECT MAX(id)
+	FROM salesorderitemdetail
+	GROUP BY salesorderitem
+)
+AND soid.is_deleted = 'false'
+;
+
 EXECUTE 'SELECT default_data(''' || instance || ''',''' || business_id || ''')';
 
 RETURN business;

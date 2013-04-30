@@ -545,7 +545,7 @@ function displayForm(object, action, title, html, xml, tab) {
 
 	if ((object == 'salesorder') && (action == 'update') && (xml)) {
 		/* Display Sales Order number as tab title */
-		title = 'SO ' + $(xml).find('order').text();
+		title = 'SO ' + $(xml).find('order').first().text();
 	}
 
 	if (tab) {

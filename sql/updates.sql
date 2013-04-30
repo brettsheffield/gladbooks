@@ -47,3 +47,21 @@ WHERE sod.salesorder IN (
 AND sod.is_open = 'true'
 AND sod.is_deleted = 'false'
 ;
+
+CREATE OR REPLACE VIEW salesorderitemview AS
+SELECT
+        salesorderitem as id,
+        product,
+        linetext,
+        discount,
+        price,
+        qty
+FROM salesorderitemdetail soid
+WHERE soid.salesorderitem IN (
+        SELECT MAX(id)
+        FROM salesorderitemdetail
+        GROUP BY salesorderitem
+)
+AND is_deleted = 'false'
+;
+
