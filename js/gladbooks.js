@@ -1509,7 +1509,7 @@ function submitForm(object, action, id) {
 
 	/* find out where to send this */
 	mytab.find(
-		'div.' + object + '.' + action
+		'div.' + object
 	).find('form:not(.subform)').each(function() {
 		collection = $(this).attr('action');
 		url = collection_url(collection);
@@ -1527,7 +1527,7 @@ function submitForm(object, action, id) {
 	}
 	xml += '>';
 	mytab.find(
-		'div.' + object + '.' + action
+		'div.' + object
 	).find('input:not(.nosubmit,default),select:not(.nosubmit,.default)').each(function() {
 		var name = $(this).attr('name');
 		if (name) {
@@ -1657,6 +1657,7 @@ function displayElement(collection, id) {
 function displayResultsGeneric(xml, collection, title, sorted, tab) {
 	var refresh = false;
 
+	/* TODO: refactor */
 	if (collection == 'contacts') {
 		refresh = true;
 	}
