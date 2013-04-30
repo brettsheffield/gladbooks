@@ -25,3 +25,25 @@ AND sod.is_open = 'true'
 AND sod.is_deleted = 'false'
 ;
 
+CREATE OR REPLACE VIEW salesorderview AS
+SELECT
+        sod.salesorder as id,
+        od.name || '(' || o.orgcode || ')' AS customer,
+        o.orgcode || '/' || lpad(CAST(so.ordernum AS TEXT), 5, '0') AS order,
+        sod.ponumber,
+        sod.description,
+        sod.cycle,
+        sod.start_date,
+        sod.end_date
+FROM salesorderdetail sod
+INNER JOIN salesorder so ON so.id = sod.salesorder
+INNER JOIN organisation o ON o.id = so.organisation
+INNER JOIN organisationdetail od ON o.id = od.organisation
+WHERE sod.salesorder IN (
+        SELECT MAX(id)
+        FROM salesorderdetail
+        GROUP BY salesorder
+)
+AND sod.is_open = 'true'
+AND sod.is_deleted = 'false'
+;

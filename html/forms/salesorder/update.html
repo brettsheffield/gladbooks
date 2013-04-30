@@ -1,1 +1,89 @@
-create.html
+<div class="salesorder">
+	<div class="statusmsg clearfix"/>
+	<h2>Edit Sales Order</h2>
+	<div class="tablewrapper">
+	<form class="salesorder form" method="post" action="salesorders">
+		<input type="hidden" name="id"/>
+
+		<table class="datatable">
+			<thead>
+				<th>Customer</th>
+				<th>Purchase Order</th>
+				<th>Comment</th>
+				<th>Cycle</th>
+				<th>Start Date</th>
+				<th>End Date</th>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<input name="customer" class="customer nosubmit" readonly="true"/>
+					</td>
+					<td>
+						<input name="ponumber" class="ponumber" autocomplete="off" placeholder="Customer Ref"/>
+					</td>
+					<td>
+						<input name="description" class="socomment" autocomplete="off" placeholder="Comments"/>
+					</td>
+					<td>
+						<a class="datasource" href="cycles"></a><select name="cycle" class="cycle populate focus"></select>
+					</td>
+					<td>
+						<input name="start_date" class="datefield" autocomplete="off"/>
+					</td>
+					<td>
+						<input name="end_date" class="datefield" autocomplete="off"/>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+
+		<div class="salesorderitems">
+			<form class="subform" action="salesorderitems"/>
+			<table class="datatable">
+				<thead>
+					<tr>
+						<th>Product</th>
+						<th>Line Text</th>
+						<th>Price</th>
+						<th>Qty</th>
+						<th>Total</th>
+					</tr>
+					<tr>
+						<td><a class="datasource" href="products"></a><select name="product" class="product populate nosubmit" data-placeholder=" - Select product - "></select></td>
+						<td class="linetext"><input class="linetext nosubmit" name="linetext" type="text" placeholder="Line Text"/></td>
+						<td class="price"><input class="price nosubmit" name="price" type="text" placeholder="0.00"/></td>
+						<td class="qty"><input class="qty nosubmit" name="qty" type="text" placeholder="1" value="1"/></td>
+						<td class="total"><input class="total nosubmit clone" name="total" type="text" placeholder="0.00" readonly="true"/></td>
+						<td><button class="addrow">Add</button></td>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+			<table class="totals">
+				<tbody>
+					<tr>
+						<td>Sub Total</td>
+						<td class="subtotal">0.00</td>
+						<td class="totalspacer"></td>
+					</tr>
+					<!--tr>
+						<td>Taxes</td>
+						<td class="taxes">0.00</td>
+						<td class="totalspacer"></td>
+					</tr>
+					<tr>
+						<td>Total</td>
+						<td class="gtotal">0.00</td>
+						<td class="totalspacer"></td>
+					</tr-->
+				</tbody>
+			</table>
+		</div>
+		</div> <!-- tablewrapper -->
+		<button class="save">Save</button>
+		<button class="cancel">Cancel</button>
+
+</div>

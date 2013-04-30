@@ -543,6 +543,11 @@ function displayForm(object, action, title, html, xml, tab) {
 		content += $(self).html();
 	});
 
+	if ((object == 'salesorder') && (action == 'update') && (xml)) {
+		/* Display Sales Order number as tab title */
+		title = 'SO ' + $(xml).find('order').text();
+	}
+
 	if (tab) {
 		updateTab(tab, html);
 	}
