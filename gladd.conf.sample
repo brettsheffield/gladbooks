@@ -201,7 +201,7 @@ end sql product_tax_del
 sql profitandloss	SELECT * FROM gladbooks_$0_$1.profitandloss
 sql relationships	SELECT * FROM gladbooks_$0.relationship WHERE id > 0
 sql salesinvoice	SELECT * FROM gladbooks_$0_$1.salesinvoice
-sql salesorder		SELECT * FROM gladbooks_$0_$1.salesorder	
+sql salesorder		SELECT * FROM gladbooks_$0_$1.salesorderlist
 
 begin sql tax
 	SELECT tax as id, name

@@ -584,6 +584,24 @@ WHERE id IN (
 ORDER BY shortname ASC
 ;
 
+CREATE OR REPLACE VIEW salesorderlist AS
+SELECT
+	salesorder as id,
+	ponumber,
+	description,
+	cycle,
+	start_date,
+	end_date
+FROM salesorderdetail
+WHERE salesorder IN (
+	SELECT MAX(id)
+	FROM salesorderdetail
+	GROUP BY salesorder
+)
+AND is_open = 'true'
+AND is_deleted = 'false'
+;
+
 
 
 EXECUTE 'SELECT default_data(''' || instance || ''',''' || business_id || ''')';
