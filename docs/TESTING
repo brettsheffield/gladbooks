@@ -32,6 +32,36 @@ TEST: Ensure Logout menu item is hidden.
 TEST: Ensure Login dialog is displayed.
 TEST: Ensure the password field has been blanked in the login dialog.
 
+= Contacts =
+
+ACTION: From the menu, click Contacts -> Contacts -> View Contacts
+TEST: Ensure a new tab is opened with a list of contacts
+
+ACTION: Click on the first contact in the list.
+TEST: Ensure a new tab is opened displaying an edit screen for the selected contact.
+
+ACTION: Change the contact name and click the Save button.
+TEST: Go to the Contacts tab you have open and verify the new contact name has been updated.
+
+ACTION:  Go back to the "Edit Contact 1" tab you have open.  Change the county and click the Save button.  Close the tab.  In the "Contacts" tab you have open, click the first contact in the list again.
+TEST: Verify that a new tab is opened with an edit screen for the selected contact, and that the "county" field displays the new value you entered.
+
+= Organisations =
+
+ACTION: From the menu, click Contacts -> Organisations -> View Organisations
+TEST: Ensure a new tab is opened with a list of organisations
+
+ACTION: Click on the first organisation in the list.
+TEST: Ensure a new tab is opened displaying an edit screen for the selected organisation.
+
+= Products =
+
+ACTION: From the menu, click Receivables -> Products -> View Products
+TEST: Ensure a new tab is opened with a list of products
+
+ACTION: Click on the first product in the list.
+TEST: Ensure a new tab is opened displaying an edit screen for the selected product.
+
 = Sales Orders =
 
 ACTION: From the menu, click Receivables -> Sales Orders -> View Sales Orders
