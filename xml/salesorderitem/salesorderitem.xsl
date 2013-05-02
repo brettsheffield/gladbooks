@@ -5,7 +5,7 @@
 	<xsl:template name="salesorderitem">
 		<xsl:call-template name="setSearchPath"/>
 
-                <xsl:if test="not(@id)">
+                <xsl:if test="not(../@id)">
                         <xsl:text>INSERT INTO salesorderitem (authuser, clientip) VALUES ('</xsl:text>
                         <xsl:copy-of select="$authuser"/>
                         <xsl:text>','</xsl:text>
@@ -13,10 +13,7 @@
                         <xsl:text>');</xsl:text>
                 </xsl:if>
 
-		<xsl:text>INSERT INTO salesorderitemdetail (salesorderitem,</xsl:text>
-		<xsl:if test="not(@id) or salesorder">
-			<xsl:text>salesorder,</xsl:text>
-		</xsl:if>
+		<xsl:text>INSERT INTO salesorderitemdetail (salesorderitem,salesorder,</xsl:text>
 
 		<xsl:if test="product">
 			<xsl:text>product,</xsl:text>
@@ -41,9 +38,11 @@
 		<xsl:text>authuser,clientip) VALUES (</xsl:text>
 
                 <xsl:choose>
-                        <xsl:when test="@id">
+                        <xsl:when test="../@id">
                                 <xsl:text>'</xsl:text>
-                                <xsl:value-of select="@id"/>
+                                <xsl:value-of select="../@id"/>
+                                <xsl:text>','</xsl:text>
+                                <xsl:value-of select="../../salesorder/@id"/>
                                 <xsl:text>','</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>

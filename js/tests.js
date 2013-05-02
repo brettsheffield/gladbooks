@@ -861,6 +861,22 @@ test("create sales order (two products)", function() {
 
 });
 
+test("update sales order", function() {
+    var xml = createRequestXml();
+    xml += '<salesorder id="1"><description>an updated sales order</description><salesorderitem><product>1</product></salesorderitem><salesorderitem><product>1</product></salesorderitem></salesorder></data></request>';
+
+    stop();
+    $.ajax({
+        url: collection_url('salesorders') + '1',
+        type: 'POST',
+        data: xml,
+        contentType: 'text/xml',
+        beforeSend: function (xhr) { setAuthHeader(xhr); },
+        success: function(xml) { ok(true); start(); },
+        error: function(xml) { ok(false); start(); },
+    });
+});
+
 module("Strings");
 
 test("escapeHTML()", function() {
