@@ -1361,6 +1361,67 @@ function addSubformEvent(object, view, parentid) {
 	});
 }
 
+/* return a tr with odd or even class as appropriate */
+function newRow(i) {
+	if (i % 2 == 0) {
+		return row = $('<tr class="even">');
+	} else {
+		return row = $('<tr class="odd">');
+	}
+}
+
+function markComboSelections(combo, typedata) {
+	if (typedata) {
+		var types = typedata.split(',');
+		if (types.length > 0) {
+			for (var j=0; j < types.length; j++) {
+				var opt = 'option[value=' + types[j] +']';
+				combo.find(opt).attr('selected', true);
+			}
+		}
+	}
+}
+
+function relationshipCombo(datatable, tag) {
+	console.log('appending relationship combo');
+
+	if (!g_xml_relationships) {
+		/* FIXME - we're supposed to have relationship data here,
+		 * and we don't */
+		console.log('Not in a relationship');
+	}
+	var combo = datatable.find('select.relationship.nosubmit').clone();
+
+	combo.removeAttr("id");
+	combo.css({display: "inline-block"});
+	combo.removeClass('chzn-done nosubmit');
+	combo.addClass('chosify sub');
+
+	/* mark our selections */
+	markComboSelections(combo, tag.text());
+
+	var td = $('<td class="noclick">'
+		+ '<input type="hidden" name="id" value="' + id + '"/>');
+
+	combo.change(function() {
+		console.log('combo.change()');
+		if (combo.hasClass('relationship')) {
+			var trow = combo.parent();
+			var contact = trow.find('input[name="id"]').val();
+			var relationships = new Array();
+			for (var x=0; x < combo[0].options.length; x++) {
+				if (combo[0].options[x].selected) {
+					relationships.push(x);
+				}
+			}
+			relationshipUpdate(parentid, contact, relationships);
+		}
+		comboChange(tag, xml);
+	});
+	td.append(combo);
+	return td;
+}
+
 /* We've loaded data for a subform; display it */
 function displaySubformData(view, parentid, xml) {
 	console.log('displaySubformData()');
@@ -1371,68 +1432,15 @@ function displaySubformData(view, parentid, xml) {
 	var types = [];
 	datatable.find('tbody').empty();
 
-	console.log('SO has ' + 
-		$(xml).find('resources').find('row').length
-		+ ' products');
-
 	$(xml).find('resources').find('row').each(function() {
-		if (i % 2 == 0) {
-			var row = $('<tr class="even">');
-		} else {
-			var row = $('<tr class="odd">');
-		}
-
+		var row = newRow(i);
 
 		$(this).children().each(function() {
 			if (this.tagName == 'id') {
 				id = $(this).text();
 			}
 			else if (this.tagName == 'type') {
-				console.log('appending relationship combo');
-
-				if (!g_xml_relationships) {
-					/* FIXME - we're supposed to have relationship data here,
-					 * and we don't */
-					console.log('Not in a relationship');
-				}
-				var combo = datatable.find('select.relationship.nosubmit').clone();
-
-				combo.removeAttr("id");
-				combo.css({display: "inline-block"});
-				combo.removeClass('chzn-done nosubmit');
-				combo.addClass('chosify sub');
-
-				/* mark our selections */
-				if ($(this).text()) {
-					types = $(this).text().split(',');
-					if (types.length > 0) {
-						for (var j=0; j < types.length; j++) {
-							var opt = 'option[value=' + types[j] +']';
-							combo.find(opt).attr('selected', true);
-						}
-					}
-				}
-
-				var td = $('<td class="noclick">'
-					+ '<input type="hidden" name="id" value="' + id + '"/>');
-
-				combo.change(function() {
-					console.log('combo.change()');
-					if (combo.hasClass('relationship')) {
-						var trow = combo.parent();
-						var contact = trow.find('input[name="id"]').val();
-						var relationships = new Array();
-						for (var x=0; x < combo[0].options.length; x++) {
-							if (combo[0].options[x].selected) {
-								relationships.push(x);
-							}
-						}
-						relationshipUpdate(parentid, contact, relationships);
-					}
-					comboChange($(this), xml);
-				});
-				td.append(combo);
-				row.append(td);
+				row.append(relationshipCombo(datatable, $(this)));
 			}
 			else if (view = 'salesorder') {
 				/* deal with salesorder specialness */
