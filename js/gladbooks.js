@@ -206,13 +206,16 @@ function activateTab(tabid) {
 }
 
 /*******************************************************************************
+ * activateNextTab(tabid)
+ *
  * Activate the "next" tab.
  *
  * Which tab is next?  Users have come to expect that if they close 
  * the active tab, the next tab to the right will become active,
  * unless there isn't one, in which case we go left instead.
  * See Mozilla Firefox tabs for an example.
- */
+ *
+ ******************************************************************************/
 function activateNextTab(tabid) {
 	var trytab = tabid + 1;
 
