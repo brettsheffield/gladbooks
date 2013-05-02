@@ -42,7 +42,7 @@ module("Account");
 
 test("create account (asset)", function() {
 	var xml = createRequestXml();
-	xml += '<account type="1000" description="Test ASSET account creation"/></data></request>';
+	xml += '<account><type>1000</type><description>Test ASSET account creation</description></account></data></request>';
 
 	stop();
 	$.ajax({
@@ -59,7 +59,7 @@ test("create account (asset)", function() {
 
 test("create account (liability)", function() {
 	var xml = createRequestXml();
-	xml += '<account type="2000" description="Test LIABILITY account creation"/></data></request>';
+	xml += '<account><type>2000</type><description>Test LIABILITY account creation</description></account></data></request>';
 
 	stop();
 	$.ajax({
@@ -76,7 +76,7 @@ test("create account (liability)", function() {
 
 test("create account (capital)", function() {
 	var xml = createRequestXml();
-	xml += '<account type="3000" description="Test CAPITAL account creation"/></data></request>';
+	xml += '<account><type>3000</type><description>Test CAPITAL account creation</description></account></data></request>';
 
 	stop();
 	$.ajax({
@@ -93,7 +93,7 @@ test("create account (capital)", function() {
 
 test("create account (revenue)", function() {
 	var xml = createRequestXml();
-	xml += '<account type="4000" description="Test REVENUE account creation"/></data></request>';
+	xml += '<account><type>4000</type><description>Test REVENUE account creation</description></account></data></request>';
 
 	stop();
 	$.ajax({
@@ -110,7 +110,7 @@ test("create account (revenue)", function() {
 
 test("create account (expenditure)", function() {
 	var xml = createRequestXml();
-	xml += '<account type="5000" description="Test EXPENDITURE account creation"/></data></request>';
+	xml += '<account><type>5000</type><description>Test EXPENDITURE account creation</description></account></data></request>';
 
 	stop();
 	$.ajax({
@@ -127,7 +127,7 @@ test("create account (expenditure)", function() {
 
 test("create account (invalid type) - MUST be rejected", function() {
 	var xml = createRequestXml();
-	xml += '<account type="666" description="Test INVALID account creation is rejected"/></data></request>';
+	xml += '<account><type>666</type><description>Test INVALID account creation</description></account></data></request>';
 
 	stop();
 	$.ajax({
