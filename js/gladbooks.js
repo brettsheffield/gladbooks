@@ -1479,6 +1479,9 @@ function addSalesOrderProducts(xml, datatable) {
 		addSalesOrderProductField('price', price);
 		addSalesOrderProductField('qty', qty);
 
+		/* trigger line total calculation */
+		activeTab().find('input.qty').trigger('blur');
+
 		salesorderAddProduct(datatable)
 	});
 }
