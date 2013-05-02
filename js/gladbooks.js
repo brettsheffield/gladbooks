@@ -1545,12 +1545,52 @@ function addSalesOrderProducts(xml, datatable) {
 	});
 }
 
+/*******************************************************************************
+ * addSubFormRows()
+ *
+ * add row to datatable for each subform item - not used for salesorders
+ *
+ ******************************************************************************/
+function addSubFormRows(xml, datatable, view) {
+	var i = 0;
+	var id = 0;
+	$(xml).find('resources').find('row').each(function() {
+		var row = newRow(i);
+
+		$(this).children().each(function() {
+			if (this.tagName == 'id') {
+				id = $(this).text();
+			}
+			else if (this.tagName == 'type') {
+				row.append(relationshipCombo(datatable, $(this), id));
+			}
+			else {
+				row.append('<td>' + $(this).text() + '</td>');
+			}
+		});
+
+		/* append remove "X" button */
+		row.append('<td class="removerow noclick">' 
+			+ '<input type="hidden" name="id" value="' 
+			+ id + '"/><button class="removerow">X</button></td>');
+
+		/* attach click event to edit elements of subform */
+		row.find('td').not('.noclick').click(function() {
+			var id = $(this).parent().find('input[name="id"]').val();
+			var collection = view.split('_')[1].toLowerCase();
+			displayElement(collection, id);
+		});
+
+		datatable.append(row);
+
+		i++;
+	});
+}
+
 /******************************************************************************/
 /* We've loaded data for a subform; display it */
 function displaySubformData(view, parentid, xml) {
 	console.log('displaySubformData()');
-	var i = 0;
-	var id = 0;
 	console.log("Displaying subform " + view + " data");
 	var datatable = $('div.tablet.active').find('div.' + view).find('table.datatable');
 	var types = [];
@@ -1560,41 +1600,10 @@ function displaySubformData(view, parentid, xml) {
 		addSalesOrderProducts(xml, datatable);
 	}
 	else {
-		$(xml).find('resources').find('row').each(function() {
-			var row = newRow(i);
-
-			$(this).children().each(function() {
-				if (this.tagName == 'id') {
-					id = $(this).text();
-				}
-				else if (this.tagName == 'type') {
-					row.append(relationshipCombo(datatable, $(this), id));
-				}
-				else {
-					row.append('<td>' + $(this).text() + '</td>');
-				}
-			});
-
-			/* append remove "X" button */
-			row.append('<td class="removerow noclick">' 
-				+ '<input type="hidden" name="id" value="' 
-				+ id + '"/><button class="removerow">X</button></td>');
-
-			/* attach click event to edit elements of subform */
-			row.find('td').not('.noclick').click(function() {
-				var id = $(this).parent().find('input[name="id"]').val();
-				var collection = view.split('_')[1].toLowerCase();
-				displayElement(collection, id);
-			});
-
-			datatable.append(row);
-
-			i++;
-		});
+		addSubFormRows(xml, datatable, view);
 	}
 
 	datatable.find('select.chosify').chosen();
-
 	datatable.find('tbody').fadeIn(300);
 
 	/* clear form */
@@ -1625,8 +1634,6 @@ function displaySubformData(view, parentid, xml) {
 		var c = $(this).parent().parent().find('select.tax').val();
 		taxProduct(parentid, c, true);
     });
-
-	console.log('Found ' + i + ' row(s)');
 }
 
 /******************************************************************************/
