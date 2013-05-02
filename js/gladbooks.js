@@ -36,6 +36,7 @@ var STATUS_INFO = 1;
 var STATUS_WARN = 2;
 var STATUS_CRIT = 4;
 
+/******************************************************************************/
 $(document).ready(function() {
 
 	/* no password, display login dialog */
@@ -84,7 +85,7 @@ $(document).ready(function() {
 
 });
 
-/* 
+/*******************************************************************************
  * auth_check()
  *
  * Request an auth required page to test login credentials.
@@ -92,7 +93,8 @@ $(document).ready(function() {
  * Else, chuck them back to the login page with an error
  * NB: we send Authorization: 'Silent' instead of 'Basic' to 
  * prevent the browser popping up an auth dialog.
- */
+ *
+ ******************************************************************************/
 function auth_check()
 {
 	$.ajax({
@@ -103,6 +105,7 @@ function auth_check()
 	});
 }
 
+/******************************************************************************/
 /* Prepare authentication hash */
 function auth_encode(username, password) {
 	var tok = username + ':' + password;
@@ -110,6 +113,7 @@ function auth_encode(username, password) {
 	return hash;
 }
 
+/******************************************************************************/
 /* prepare tabbed workarea */
 function deployTabs() {
 	$('.tabcloser').click(function(event) {
@@ -118,6 +122,7 @@ function deployTabs() {
 	});
 }
 
+/******************************************************************************/
 /* add a new tab with content, optionally activating it */
 function addTab(title, content, activate, collection, refresh) {
 	var tabid = g_tabid++;
@@ -166,10 +171,12 @@ function addTab(title, content, activate, collection, refresh) {
 	$('div.tabs').fadeIn(300);
 }
 
+/******************************************************************************/
 function activeTabId() {
 	return $('li.tabhead.active').find('a.tabcloser').attr('href');
 }
 
+/******************************************************************************/
 function updateTab(tabid, content) {
 	console.log('updating tab ' + tabid);
 	var tab = $('#tab' + tabid);
@@ -184,6 +191,7 @@ function updateTab(tabid, content) {
 	}
 }
 
+/******************************************************************************/
 function activateTab(tabid) {
 		console.log("activating tab " + tabid);
         /* remove "active" styling from all tabs for this business */
@@ -197,7 +205,7 @@ function activateTab(tabid) {
         $(".tablet" + tabid).find(".focus").focus();
 }
 
-/* 
+/*******************************************************************************
  * Activate the "next" tab.
  *
  * Which tab is next?  Users have come to expect that if they close 
@@ -235,6 +243,7 @@ function activateNextTab(tabid) {
 	return false; /* no tab to activate */
 }
 
+/******************************************************************************/
 /* remove a tab */
 function closeTab(tabid) {
 	var tabcount = $('div#tabs').find('div').size();
@@ -259,18 +268,21 @@ function closeTab(tabid) {
 	}
 }
 
+/******************************************************************************/
 /* Remove all tabs from working area */
 function removeAllTabs() {
 	$('ul.tablist').children().remove(); /* tab headers */
 	$('div.tablet').fadeOut(300);		 /* content */
 }
 
+/******************************************************************************/
 /* Add Authentication header with logged-in user's credentials */
 function setAuthHeader(xhr) {
 	var hash = auth_encode(g_username, g_password);
 	xhr.setRequestHeader("Authorization", "Silent " + hash);
 }
 
+/******************************************************************************/
 /* login successful, do successful things */
 function loginok(xml) {
 	g_instance = '';
@@ -290,6 +302,7 @@ function loginok(xml) {
 	}
 }
 
+/******************************************************************************/
 /* Login failed - inform user */
 function loginfailed() {
 	g_password = '';
@@ -298,6 +311,7 @@ function loginfailed() {
 	setFocusLoginBox();
 }
 
+/******************************************************************************/
 /* logout() - Clear password and mark user logged out.  */
 function logout()
 {
@@ -318,7 +332,7 @@ function logout()
 	$('input:password[name=password]').val('');
 }
 
-/* 
+/*******************************************************************************
  * displayLoginBox()
  *
  * Display login dialog.  
@@ -349,6 +363,7 @@ function displayLoginBox() {
 
 };
 
+/******************************************************************************/
 /* Set Focus in Login Dialog Appropriately */
 function setFocusLoginBox() {
 	// if username is blank, set focus there, otherwise set it to password
@@ -359,6 +374,7 @@ function setFocusLoginBox() {
 	}
 };
 
+/******************************************************************************/
 /* Hide Login Dialog */
 function hideLoginBox() {
 	$('#mask , .login-popup').fadeOut(300 , function() {
@@ -366,6 +382,7 @@ function hideLoginBox() {
 	}); 
 }
 
+/******************************************************************************/
 /* prepare static menus */
 function prepMenu() {
 	$('ul.nav').find('a').each(function() {
@@ -374,6 +391,7 @@ function prepMenu() {
 	});
 }
 
+/******************************************************************************/
 /* Fetch user specific menus in xml format */
 function getMenu() {
 	$.ajax({
@@ -384,6 +402,7 @@ function getMenu() {
 	});
 }
 
+/******************************************************************************/
 function dropMenu() {
 	/* move Logout out of the way */
 	$logout = $('a#logout').detach();
@@ -396,6 +415,7 @@ function dropMenu() {
 	$('a#logout').text('');
 }
 
+/******************************************************************************/
 function setMenu(xml) {
 	/* move Logout out of the way */
 	$logout = $('a#logout').detach();
@@ -415,6 +435,7 @@ function setMenu(xml) {
 	$('a#logout').text('Logout (' + g_username  + ')' );
 }
 
+/******************************************************************************/
 /* grab menu event and fetch content in the background */
 function clickMenu(event) {
 	event.preventDefault();
@@ -493,6 +514,7 @@ function clickMenu(event) {
 	}
 }
 
+/******************************************************************************/
 /* Display query results as list */
 function showQuery(collection, title, sort, tab) {
 	showSpinner();
@@ -508,6 +530,7 @@ function showQuery(collection, title, sort, tab) {
 	});
 }
 
+/******************************************************************************/
 /* fetch html form from server to display */
 function getForm(object, action, title, xml, tab) {
 	showSpinner();
@@ -523,11 +546,13 @@ function getForm(object, action, title, xml, tab) {
 	});
 }
 
+/******************************************************************************/
 /* return active tab as jquery object */
 function activeTab() {
 	return $('div.tablet.active.business' + g_business);
 }
 
+/******************************************************************************/
 /* display html form we've just fetched in new tab */
 function displayForm(object, action, title, html, xml, tab) {
 	console.log('displayForm("' 
@@ -685,11 +710,13 @@ function displayForm(object, action, title, html, xml, tab) {
 	});
 }
 
+/******************************************************************************/
 function contactSearch(searchString) {
 	console.log('searching for contacts like "' + searchString + '"');
 	searchQuery('contacts', searchString);
 }
 
+/******************************************************************************/
 function searchQuery(view, query) {
     console.log('Loading subform with data ' + view);
     url = collection_url('search/' + view);
@@ -708,6 +735,7 @@ function searchQuery(view, query) {
     });
 }
 
+/******************************************************************************/
 /* TODO */
 function displaySearchResults(view, query, xml) {
 	console.log("Search results are in.");
@@ -722,6 +750,7 @@ function displaySearchResults(view, query, xml) {
 	);
 }
 
+/******************************************************************************/
 /* a radio button value has changed */
 function changeRadio(radio, object) {
 	var station = radio.find('input[type="radio"]:checked').val();
@@ -738,6 +767,7 @@ function changeRadio(radio, object) {
 	}
 }
 
+/******************************************************************************/
 /* recalculate line total */
 function recalculateLineTotal(parentrow) {
 	var p = parentrow.find('input.price').val();
@@ -760,6 +790,7 @@ function recalculateLineTotal(parentrow) {
 	}
 }
 
+/******************************************************************************/
 function doFormSubmit(object, action, id) {
 	if (validateForm(object, action, id)) {
 		if (id > 0) {
@@ -771,6 +802,7 @@ function doFormSubmit(object, action, id) {
 	}
 }
 
+/******************************************************************************/
 function validateForm(object, action, id) {
 	console.log('validating form ' + object + '.' + action);
 	statusHide(); /* remove any prior status */
@@ -787,6 +819,7 @@ function validateForm(object, action, id) {
 	return true;
 }
 
+/******************************************************************************/
 function validateFormAccount(action, id) {
 	var mytab = activeTab();
 
@@ -807,6 +840,7 @@ function validateFormAccount(action, id) {
 	return true;
 }
 
+/******************************************************************************/
 function validateFormProduct(action, id) {
 	var mytab = activeTab();
 
@@ -832,6 +866,7 @@ function validateFormProduct(action, id) {
 	return true;
 }
 
+/******************************************************************************/
 function validateFormSalesOrder(action, id) {
 	var mytab = activeTab();
 
@@ -850,11 +885,13 @@ function validateFormSalesOrder(action, id) {
 	return true;
 }
 
+/******************************************************************************/
 function statusHide() {
 	var statusmsg = activeTab().find('div.statusmsg');
 	statusmsg.hide();
 }
 
+/******************************************************************************/
 function statusMessage(message, severity, fade) {
 	var statusmsg = activeTab().find('div.statusmsg');
 
@@ -878,6 +915,7 @@ function statusMessage(message, severity, fade) {
 	}
 }
 
+/******************************************************************************/
 function updateSalesOrderTotals() {
 	console.log('Updating salesorder totals');
 
@@ -911,6 +949,7 @@ function updateSalesOrderTotals() {
 
 }
 
+/******************************************************************************/
 function productBoxClone(mytab, product) {
 	var productBox = $('<td class="xml-product"></td>');
 	var productCombo = mytab.find('select.product.nosubmit').clone(true);
@@ -924,6 +963,7 @@ function productBoxClone(mytab, product) {
 	return productBox;
 }
 
+/******************************************************************************/
 function cloneInput(mytab, input) {
 	console.log('Cloning input ' + input);
 	if (input == 'total') {
@@ -945,6 +985,7 @@ function cloneInput(mytab, input) {
 	return td;
 }
 
+/******************************************************************************/
 function salesorderAddProduct(datatable) {
 	var mytab = $('div.tablet.active.business' + g_business);
 	var product = mytab.find('select.product.nosubmit').val();
@@ -999,6 +1040,7 @@ function salesorderAddProduct(datatable) {
 	updateSalesOrderTotals();
 }
 
+/******************************************************************************/
 function populateCombos(view, parentid) {
 	console.log('populateCombos()');
 	/* populate combos */
@@ -1028,6 +1070,7 @@ function populateCombos(view, parentid) {
 	});
 }
 
+/******************************************************************************/
 function loadCombo(datasource, combo, view, parentid) {
 	console.log('loadCombo()');
 	url = collection_url(datasource);
@@ -1049,6 +1092,7 @@ function loadCombo(datasource, combo, view, parentid) {
 	});
 }
 
+/******************************************************************************/
 function populateCombo(xml, combo, view, parentid) {
 	console.log('populateCombo()');
 	console.log('Combo data loaded for ' + combo.attr('name'));
@@ -1118,6 +1162,7 @@ function populateCombo(xml, combo, view, parentid) {
 	combo.trigger("liszt:updated");
 }
 
+/******************************************************************************/
 /* return true iff nominal code is in range for type */
 function validateNominalCode(code, type, xml) {
 
@@ -1166,6 +1211,7 @@ function validateNominalCode(code, type, xml) {
 	return true;
 }
 
+/******************************************************************************/
 /* handle actions required when combo value changes */
 function comboChange(combo, xml) {
 	var id = combo.attr('id');
@@ -1196,6 +1242,7 @@ function comboChange(combo, xml) {
 	
 }
 
+/******************************************************************************/
 /* link contact to organisation */
 function relationshipUpdate(organisation, contact, relationships, refresh) {
 	console.log('Updating relationship');
@@ -1246,6 +1293,7 @@ function relationshipUpdate(organisation, contact, relationships, refresh) {
 	});
 }
 
+/******************************************************************************/
 /* apply tax to product */
 function taxProduct(product, tax, refresh) {
 	console.log('Taxing product');
@@ -1272,6 +1320,7 @@ function taxProduct(product, tax, refresh) {
 	});
 }
 
+/******************************************************************************/
 /* Fetch data for a subform */
 function loadSubformData(view, id) {
 	console.log('loadSubformData()');
@@ -1294,6 +1343,7 @@ function loadSubformData(view, id) {
 	});
 }
 
+/******************************************************************************/
 function addSubformEvent(object, view, parentid) {
 	/* attach click event to add rows to subform */
 	console.log('addSubformEvent()');
@@ -1372,6 +1422,7 @@ function addSubformEvent(object, view, parentid) {
 	});
 }
 
+/******************************************************************************/
 /* return a tr with odd or even class as appropriate */
 function newRow(i) {
 	if (i % 2 == 0) {
@@ -1381,6 +1432,7 @@ function newRow(i) {
 	}
 }
 
+/******************************************************************************/
 function markComboSelections(combo, typedata) {
 	if (typedata) {
 		var types = typedata.split(',');
@@ -1393,6 +1445,7 @@ function markComboSelections(combo, typedata) {
 	}
 }
 
+/******************************************************************************/
 function relationshipCombo(datatable, tag, id) {
 	console.log('appending relationship combo');
 
@@ -1433,6 +1486,7 @@ function relationshipCombo(datatable, tag, id) {
 	return td;
 }
 
+/******************************************************************************/
 function prepareSalesOrderData(tag) {
 	/* FIXME: this simply doesn't work */
 	console.log('salesorderitem: ' + tag.tagName);
@@ -1452,12 +1506,14 @@ function prepareSalesOrderData(tag) {
 	}
 }
 
+/******************************************************************************/
 function addSalesOrderProductField(field, value) {
 	if (value.length > 0) {
 		activeTab().find('input.nosubmit[name="' + field + '"]').val(value);
 	}
 }
 
+/******************************************************************************/
 function addSalesOrderProducts(xml, datatable) {
 	console.log('sod it');
 	$(xml).find('resources').find('row').each(function() {
@@ -1486,6 +1542,7 @@ function addSalesOrderProducts(xml, datatable) {
 	});
 }
 
+/******************************************************************************/
 /* We've loaded data for a subform; display it */
 function displaySubformData(view, parentid, xml) {
 	console.log('displaySubformData()');
@@ -1569,11 +1626,13 @@ function displaySubformData(view, parentid, xml) {
 	console.log('Found ' + i + ' row(s)');
 }
 
+/******************************************************************************/
 function btnClickLinkContact(parentid) {
 	var c = $(this).parent().parent().find('select.contactlink').val();
 	relationshipUpdate(parentid, c, false, true);
 }
 
+/******************************************************************************/
 function btnClickRemoveRow(view, parentid) {
 	var trow = $(this).parent();
 	var id = trow.find('input[name="id"]').val();
@@ -1590,6 +1649,7 @@ function btnClickRemoveRow(view, parentid) {
 	});
 }
 
+/******************************************************************************/
 /* build xml and submit form */
 function submitForm(object, action, id) {
 	var xml = createRequestXml();
@@ -1668,6 +1728,7 @@ function submitForm(object, action, id) {
     });
 }
 
+/******************************************************************************/
 /* Replace HTML Special Characters */
 function escapeHTML(html) {
 	var x;
@@ -1685,6 +1746,7 @@ function escapeHTML(html) {
 	return html;
 }
 
+/******************************************************************************/
 function submitFormSuccess(object, action, id, collection) {
 	statusMessage(object + ' saved', STATUS_INFO, 5000);
 
@@ -1711,11 +1773,13 @@ function submitFormSuccess(object, action, id, collection) {
 	}
 }
 
+/******************************************************************************/
 function submitFormError(object, action, id) {
 	hideSpinner();
 	statusMessage('Error saving ' + object, STATUS_CRIT);
 }
 
+/******************************************************************************/
 /* return the singular object name for a given collection */
 function collectionObject(c) {
 	if (c == 'taxes') {
@@ -1728,6 +1792,7 @@ function collectionObject(c) {
 	}
 }
 
+/******************************************************************************/
 /* Fetch an individual element of a collection for display / editing */
 function displayElement(collection, id) {
 	url = collection_url(collection) + id;
@@ -1750,6 +1815,7 @@ function displayElement(collection, id) {
 
 }
 
+/******************************************************************************/
 /* display XML results as a sortable table */
 function displayResultsGeneric(xml, collection, title, sorted, tab) {
 	var refresh = false;
@@ -1855,6 +1921,7 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 	hideSpinner();
 }
 
+/******************************************************************************/
 /* hide please wait dialog */
 function showSpinner(message) {
 	if (message) {
@@ -1866,11 +1933,13 @@ function showSpinner(message) {
 	$("#loading-div-background").show();
 }
 
+/******************************************************************************/
 /* hide please wait dialog */
 function hideSpinner() {
 	$("#loading-div-background").hide();
 }
 
+/******************************************************************************/
 /* Populate Accounts Drop-Downs with XML Data */
 function populateAccountsDDowns(xml, tab) {
 	$('select.account').empty();
@@ -1892,6 +1961,7 @@ function populateAccountsDDowns(xml, tab) {
 	finishJournalForm(tab);
 }
 
+/******************************************************************************/
 function populateDepartmentsDDowns(xml, tab) {
 	$('select.department').empty();
 	$(xml).find('row').each(function() {
@@ -1903,6 +1973,7 @@ function populateDepartmentsDDowns(xml, tab) {
 	});
 }
 
+/******************************************************************************/
 function populateDivisionsDDowns(xml, tab) {
 	$('select.division').empty();
 	$(xml).find('row').each(function() {
@@ -1914,6 +1985,7 @@ function populateDivisionsDDowns(xml, tab) {
 	});
 }
 
+/******************************************************************************/
 /* debits and credits */
 function populateDebitCreditDDowns() {
 	$('select.type:not(.populated)').empty();
@@ -1926,6 +1998,7 @@ function populateDebitCreditDDowns() {
 	$('select.type:not(.populated)').addClass('populated');
 }
 
+/******************************************************************************/
 /* return url for collection */
 function collection_url(collection) {
 	var url;
@@ -1933,6 +2006,7 @@ function collection_url(collection) {
 	return url;
 }
 
+/******************************************************************************/
 /* set up journal form */
 function setupJournalForm(tab) {
 
@@ -1964,6 +2038,7 @@ function setupJournalForm(tab) {
 	populateDebitCreditDDowns();
 }
 
+/******************************************************************************/
 /* show the form, after setup is complete */
 function finishJournalForm(tab) {
 	var ledger_lines = 1;
@@ -2029,6 +2104,7 @@ function finishJournalForm(tab) {
 
 }
 
+/******************************************************************************/
 /* validate journal entry form and return xml to submit */
 function validateJournalEntry(form) {
 	var xml = createRequestXml();
@@ -2118,6 +2194,7 @@ function validateJournalEntry(form) {
 	return xml;
 }
 
+/******************************************************************************/
 /* Javascript has no decimal type, so we need to teach it how to add up */
 function decimalAdd(x, y) {
 
@@ -2128,11 +2205,13 @@ function decimalAdd(x, y) {
 
 }
 
+/******************************************************************************/
 /* Compare two string representations of decimals numerically */
 function decimalEqual(term1, term2) {
 	return (Number(term1) == Number(term2));
 }
 
+/******************************************************************************/
 /* Return string representation of decimal padded to at least <digits> 
  * decimal places */
 function decimalPad(decimal, digits) {
@@ -2163,16 +2242,19 @@ function decimalPad(decimal, digits) {
 	return decimal;
 }
 
+/******************************************************************************/
 /* pad out a string with leading zeros */
 function padString(str, max) {
 	return str.length < max ? padString("0" + str, max) : str;
 }
 
+/******************************************************************************/
 function roundHalfEven(n, dp) {
 	var x = Big(n);
 	return x.round(dp, 2);
 }
 
+/******************************************************************************/
 function submitJournalEntry(event, form) {
 	event.preventDefault();
 	xml = validateJournalEntry(form);
@@ -2192,6 +2274,7 @@ function submitJournalEntry(event, form) {
     });
 }
 
+/******************************************************************************/
 /* journal was posted successfully */
 function submitJournalEntrySuccess(xml) {
 	$('p.journalstatus').text("Journal posted");
@@ -2201,6 +2284,7 @@ function submitJournalEntrySuccess(xml) {
 	hideSpinner();
 }
 
+/******************************************************************************/
 /* problem posting journal */
 function submitJournalEntryError(xml) {
 	$('p.journalstatus').text("Error posting journal");
@@ -2208,6 +2292,7 @@ function submitJournalEntryError(xml) {
 	hideSpinner();
 }
 
+/******************************************************************************/
 /* Start building an xml request */
 function createRequestXml() {
 	var xml = '<?xml version="1.0" encoding="UTF-8"?><request>';
@@ -2217,6 +2302,7 @@ function createRequestXml() {
 	return xml;
 }
 
+/******************************************************************************/
 /* create business selector combo */
 function prepBusinessSelector() {
 	$.ajax({
@@ -2231,6 +2317,7 @@ function prepBusinessSelector() {
 	});
 }
 
+/******************************************************************************/
 /* Display combo for switching between businesses */
 function showBusinessSelector(xml) {
 	if ($(xml).find('row').length == 0) {
@@ -2255,6 +2342,7 @@ function showBusinessSelector(xml) {
 	$('select.businessselect').val(g_business);
 }
 
+/******************************************************************************/
 /* Switch to the selected business */
 function switchBusiness(business) {
 	/* hide content of active tab */
@@ -2277,6 +2365,7 @@ function switchBusiness(business) {
 	});
 }
 
+/******************************************************************************/
 function loadMap(locationString) {
 	var canvas;
 	var map;
@@ -2312,5 +2401,4 @@ function loadMap(locationString) {
 				+ status);
 		}
 	});
-
 }
