@@ -1588,6 +1588,21 @@ function addSubFormRows(xml, datatable, view) {
 }
 
 /******************************************************************************/
+function clearForm(datatable) {
+	datatable.find('input[type=text]').each(function() {
+		$(this).val('');
+	});
+	datatable.find('input[name=qty]').each(function() {
+		$(this).val('1');
+	});
+	datatable.find('input[type=email]').each(function() {
+		$(this).val('');
+	});
+	datatable.find('select.chzn-done:not(.sub)').val('');
+	datatable.find('select.chzn-done:not(.sub)').trigger("liszt:updated");
+}
+
+/******************************************************************************/
 /* We've loaded data for a subform; display it */
 function displaySubformData(view, parentid, xml) {
 	console.log('displaySubformData()');
@@ -1603,21 +1618,9 @@ function displaySubformData(view, parentid, xml) {
 		addSubFormRows(xml, datatable, view);
 	}
 
-	datatable.find('select.chosify').chosen();
-	datatable.find('tbody').fadeIn(300);
-
-	/* clear form */
-	datatable.find('input[type=text]').each(function() {
-		$(this).val('');
-	});
-	datatable.find('input[name=qty]').each(function() {
-		$(this).val('1');
-	});
-	datatable.find('input[type=email]').each(function() {
-		$(this).val('');
-	});
-	datatable.find('select.chzn-done:not(.sub)').val('');
-	datatable.find('select.chzn-done:not(.sub)').trigger("liszt:updated");
+	datatable.find('select.chosify').chosen(); /* format combos */
+	datatable.find('tbody').fadeIn(300);       /* display table body */
+	clearForm(datatable);                      /* clear form */
 
 	/* attach click event to remove rows from subform */
 	datatable.find('button.removerow').click(function() {
