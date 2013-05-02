@@ -1199,6 +1199,17 @@ function comboChange(combo, xml) {
 /* link contact to organisation */
 function relationshipUpdate(organisation, contact, relationships, refresh) {
 	console.log('Updating relationship');
+
+	/* ensure we were called with required arguments */
+	if (!organisation) {
+		console.log('relationshipUpdate() called without organisation.  Aborting.');
+		return false;
+	}
+	if (!contact) {
+		console.log('relationshipUpdate() called without contact.  Aborting.');
+		return false;
+	}
+
 	var xml = createRequestXml();
 
     xml += '<organisation id="' + organisation + '"/>';
@@ -1382,7 +1393,7 @@ function markComboSelections(combo, typedata) {
 	}
 }
 
-function relationshipCombo(datatable, tag) {
+function relationshipCombo(datatable, tag, id) {
 	console.log('appending relationship combo');
 
 	if (!g_xml_relationships) {
@@ -1422,6 +1433,25 @@ function relationshipCombo(datatable, tag) {
 	return td;
 }
 
+function prepareSalesOrderData(tag) {
+	/* FIXME: this simply doesn't work */
+	console.log('salesorderitem: ' + tag.tagName);
+	if (tag.tagName == 'product') {
+		var p = activeTab().find(
+			'select.nosubmit[name="' + tag.tagName + '"]'
+		);
+		p.find(
+			'option[value="' + $(tag).text()  + '"]'
+		).attr('selected', 'selected');
+		p.trigger("change");
+	}
+	else {
+		activeTab().find(
+			'input.nosubmit[name="' + tag.tagName + '"]'
+		).val($(tag).text());
+	}
+}
+
 /* We've loaded data for a subform; display it */
 function displaySubformData(view, parentid, xml) {
 	console.log('displaySubformData()');
@@ -1440,25 +1470,10 @@ function displaySubformData(view, parentid, xml) {
 				id = $(this).text();
 			}
 			else if (this.tagName == 'type') {
-				row.append(relationshipCombo(datatable, $(this)));
+				row.append(relationshipCombo(datatable, $(this), id));
 			}
 			else if (view = 'salesorder') {
-				/* deal with salesorder specialness */
-				console.log('salesorderitem: ' + this.tagName);
-				if (this.tagName == 'product') {
-					var p = activeTab().find(
-						'select.nosubmit[name="' + this.tagName + '"]'
-					);
-					p.find(
-						'option[value="' + $(this).text()  + '"]'
-					).attr('selected', 'selected');
-					p.trigger("change");
-				}
-				else {
-					activeTab().find(
-						'input.nosubmit[name="' + this.tagName + '"]'
-					).val($(this).text());
-				}
+				prepareSalesOrderData(this);
 			}
 			else {
 				row.append('<td>' + $(this).text() + '</td>');
@@ -1506,26 +1521,13 @@ function displaySubformData(view, parentid, xml) {
 
 	/* attach click event to remove rows from subform */
 	datatable.find('button.removerow').click(function() {
-		var trow = $(this).parent();
-		var id = trow.find('input[name="id"]').val();
-		console.log('Delete sub id + ' + id + ' from parent ' + parentid);
-		var url = collection_url(view) + parentid + '/' + id + '/';
-		console.log('DELETE ' + url);
-		$.ajax({
-			url: url,
-			type: 'DELETE',
-			beforeSend: function (xhr) { setAuthHeader(xhr); },
-			complete: function(xml) {
-				trow.parent().remove();
-			},
-		});
+		btnClickRemoveRow(view, parentid);
 	});
 
     /* "Link Contact" button event handler for organisation form */
     activeTab().find('button.linkcontact').click(function() {
-		var c = $(this).parent().parent().find('select.contactlink').val();
-		relationshipUpdate(parentid, c, false, true);
-    });
+		btnClickLinkContact(parentid);
+	});
 
     /* "Apply Tax" button event handler for product form */
     activeTab().find('button.taxproduct').click(function() {
@@ -1534,6 +1536,27 @@ function displaySubformData(view, parentid, xml) {
     });
 
 	console.log('Found ' + i + ' row(s)');
+}
+
+function btnClickLinkContact(parentid) {
+	var c = $(this).parent().parent().find('select.contactlink').val();
+	relationshipUpdate(parentid, c, false, true);
+}
+
+function btnClickRemoveRow(view, parentid) {
+	var trow = $(this).parent();
+	var id = trow.find('input[name="id"]').val();
+	console.log('Delete sub id + ' + id + ' from parent ' + parentid);
+	var url = collection_url(view) + parentid + '/' + id + '/';
+	console.log('DELETE ' + url);
+	$.ajax({
+		url: url,
+		type: 'DELETE',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		complete: function(xml) {
+			trow.parent().remove();
+		},
+	});
 }
 
 /* build xml and submit form */
