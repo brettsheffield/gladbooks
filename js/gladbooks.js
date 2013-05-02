@@ -1472,7 +1472,7 @@ function displaySubformData(view, parentid, xml) {
 			else if (this.tagName == 'type') {
 				row.append(relationshipCombo(datatable, $(this), id));
 			}
-			else if (view = 'salesorder') {
+			else if (view == 'salesorder') {
 				prepareSalesOrderData(this);
 			}
 			else {
