@@ -911,6 +911,40 @@ function updateSalesOrderTotals() {
 
 }
 
+function productBoxClone(mytab, product) {
+	var productBox = $('<td class="xml-product"></td>');
+	var productCombo = mytab.find('select.product.nosubmit').clone(true);
+	productCombo.removeAttr("id");
+	productCombo.css({display: "inline-block"});
+	productCombo.removeClass('chzn-done nosubmit');
+	productCombo.addClass('chosify sub');
+	productCombo.val(product);
+	productCombo.find('option[value=-1]').remove();
+	productCombo.appendTo(productBox);
+	return productBox;
+}
+
+function cloneInput(mytab, input) {
+	console.log('Cloning input ' + input);
+	if (input == 'total') {
+		var iClass = 'clone';
+	}
+	else {
+		var iClass = 'nosubmit';
+	}
+	var iSelector = 'input.' + iClass + '.' + input;
+	var iBox = mytab.find(iSelector);
+	var td = iBox.parent().clone(true);
+	td.addClass('xml-' + input);
+	td.find(iSelector).each(function() {
+		$(this).removeClass(iClass);
+		if (input == 'qty') {
+			$(this).addClass('endsub');
+		}
+	});
+	return td;
+}
+
 function salesorderAddProduct(datatable) {
 	var mytab = $('div.tablet.active.business' + g_business);
 	var product = mytab.find('select.product.nosubmit').val();
@@ -930,49 +964,19 @@ function salesorderAddProduct(datatable) {
 	 * screen until the user clicks "save" */
 
 	/* copy the product combo and prepare for chosen() */
-	var productBox = $('<td class="xml-product"></td>');
-	var productCombo = mytab.find('select.product.nosubmit').clone(true);
-	productCombo.removeAttr("id");
-	productCombo.css({display: "inline-block"});
-	productCombo.removeClass('chzn-done nosubmit');
-	productCombo.addClass('chosify sub');
-	productCombo.val(product);
-	productCombo.find('option[value=-1]').remove();
-	productCombo.appendTo(productBox);
-	row.append(productBox);
+	row.append(productBoxClone(mytab, product));
 
 	/* append linetext input */
-	var linetext = mytab.find('input.linetext.nosubmit').parent().clone(true);
-	linetext.addClass('xml-linetext');
-	linetext.find('input.linetext.nosubmit').each(function() {
-		$(this).removeClass('nosubmit');
-	});
-	row.append(linetext);
+	row.append(cloneInput(mytab, 'linetext'));
 
 	/* clone price input and events */
-	var priceBox = mytab.find('input.price.nosubmit').parent().clone(true);
-	priceBox.addClass('xml-amount');
-	priceBox.find('input.price.nosubmit').each(function() {
-		$(this).removeClass('nosubmit');
-	});
-	row.append(priceBox);
+	row.append(cloneInput(mytab, 'price'));
 
 	/* clone qty input and events */
-	var qtyBox = mytab.find('input.qty.nosubmit').parent().clone(true);
-	qtyBox.addClass('xml-qty');
-	qtyBox.find('input.qty.nosubmit').each(function() {
-		$(this).removeClass('nosubmit');
-		$(this).addClass('endsub');
-	});
-	row.append(qtyBox);
+	row.append(cloneInput(mytab, 'qty'));
 
 	/* clone total input and events */
-	var totalBox = mytab.find('input.total.clone').parent().clone(true);
-	totalBox.addClass('xml-total');
-	totalBox.find('input.total.clone').each(function() {
-		$(this).removeClass('clone');
-	});
-	row.append(totalBox);
+	row.append(cloneInput(mytab, 'total'));
 
 	row.append('<td class="removerow"><button class="removerow">X</button></td>');
 
@@ -1367,12 +1371,17 @@ function displaySubformData(view, parentid, xml) {
 	var types = [];
 	datatable.find('tbody').empty();
 
+	console.log('SO has ' + 
+		$(xml).find('resources').find('row').length
+		+ ' products');
+
 	$(xml).find('resources').find('row').each(function() {
 		if (i % 2 == 0) {
 			var row = $('<tr class="even">');
 		} else {
 			var row = $('<tr class="odd">');
 		}
+
 
 		$(this).children().each(function() {
 			if (this.tagName == 'id') {
@@ -1422,29 +1431,50 @@ function displaySubformData(view, parentid, xml) {
 					}
 					comboChange($(this), xml);
 				});
-
-
 				td.append(combo);
 				row.append(td);
+			}
+			else if (view = 'salesorder') {
+				/* deal with salesorder specialness */
+				console.log('salesorderitem: ' + this.tagName);
+				if (this.tagName == 'product') {
+					var p = activeTab().find(
+						'select.nosubmit[name="' + this.tagName + '"]'
+					);
+					p.find(
+						'option[value="' + $(this).text()  + '"]'
+					).attr('selected', 'selected');
+					p.trigger("change");
+				}
+				else {
+					activeTab().find(
+						'input.nosubmit[name="' + this.tagName + '"]'
+					).val($(this).text());
+				}
 			}
 			else {
 				row.append('<td>' + $(this).text() + '</td>');
 			}
 		});
 
-		/* append remove "X" button */
-		row.append('<td class="removerow noclick">' 
-			+ '<input type="hidden" name="id" value="' 
-			+ id + '"/><button class="removerow">X</button></td>');
+		if (view == 'salesorder') {
+			salesorderAddProduct(datatable);
+		}
+		else {
+			/* append remove "X" button */
+			row.append('<td class="removerow noclick">' 
+				+ '<input type="hidden" name="id" value="' 
+				+ id + '"/><button class="removerow">X</button></td>');
 
-		/* attach click event to edit elements of subform */
-		row.find('td').not('.noclick').click(function() {
-			var id = $(this).parent().find('input[name="id"]').val();
-			var collection = view.split('_')[1].toLowerCase();
-			displayElement(collection, id);
-		});
+			/* attach click event to edit elements of subform */
+			row.find('td').not('.noclick').click(function() {
+				var id = $(this).parent().find('input[name="id"]').val();
+				var collection = view.split('_')[1].toLowerCase();
+				displayElement(collection, id);
+			});
 
-		datatable.append(row);
+			datatable.append(row);
+		}
 
 		i++;
 	});
