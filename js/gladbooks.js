@@ -1452,6 +1452,37 @@ function prepareSalesOrderData(tag) {
 	}
 }
 
+function addSalesOrderProductField(field, value) {
+	if (value.length > 0) {
+		activeTab().find('input.nosubmit[name="' + field + '"]').val(value);
+	}
+}
+
+function addSalesOrderProducts(xml, datatable) {
+	console.log('sod it');
+	$(xml).find('resources').find('row').each(function() {
+		console.log('a sodding product');
+		var id = $(this).find('id').text();
+		var salesorder = $(this).find('salesorder').text();
+		var product = $(this).find('product').text();
+		var linetext = $(this).find('linetext').text();
+		var discount = $(this).find('discount').text();
+		var price = $(this).find('price').text();
+		var qty = $(this).find('qty').text();
+
+		/* select product */
+		var p = activeTab().find('select.nosubmit[name="product"]');
+		p.find('option[value="' + product + '"]').attr('selected', 'selected');
+		p.trigger("change");
+
+		addSalesOrderProductField('linetext', linetext);
+		addSalesOrderProductField('price', price);
+		addSalesOrderProductField('qty', qty);
+
+		salesorderAddProduct(datatable)
+	});
+}
+
 /* We've loaded data for a subform; display it */
 function displaySubformData(view, parentid, xml) {
 	console.log('displaySubformData()');
@@ -1462,28 +1493,25 @@ function displaySubformData(view, parentid, xml) {
 	var types = [];
 	datatable.find('tbody').empty();
 
-	$(xml).find('resources').find('row').each(function() {
-		var row = newRow(i);
+	if (view == 'salesorderitems') {
+		addSalesOrderProducts(xml, datatable);
+	}
+	else {
+		$(xml).find('resources').find('row').each(function() {
+			var row = newRow(i);
 
-		$(this).children().each(function() {
-			if (this.tagName == 'id') {
-				id = $(this).text();
-			}
-			else if (this.tagName == 'type') {
-				row.append(relationshipCombo(datatable, $(this), id));
-			}
-			else if (view == 'salesorder') {
-				prepareSalesOrderData(this);
-			}
-			else {
-				row.append('<td>' + $(this).text() + '</td>');
-			}
-		});
+			$(this).children().each(function() {
+				if (this.tagName == 'id') {
+					id = $(this).text();
+				}
+				else if (this.tagName == 'type') {
+					row.append(relationshipCombo(datatable, $(this), id));
+				}
+				else {
+					row.append('<td>' + $(this).text() + '</td>');
+				}
+			});
 
-		if (view == 'salesorder') {
-			salesorderAddProduct(datatable);
-		}
-		else {
 			/* append remove "X" button */
 			row.append('<td class="removerow noclick">' 
 				+ '<input type="hidden" name="id" value="' 
@@ -1497,10 +1525,10 @@ function displaySubformData(view, parentid, xml) {
 			});
 
 			datatable.append(row);
-		}
 
-		i++;
-	});
+			i++;
+		});
+	}
 
 	datatable.find('select.chosify').chosen();
 
