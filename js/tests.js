@@ -20,8 +20,8 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-g_username='betty';
-g_password='ie5a8P40';
+g_username='alpha';
+g_password='pass';
 g_instance='test';
 g_business='1';
 
@@ -35,6 +35,61 @@ test("build authentication hash", function() {
 	// Quick decode test.
 	var myclear = Base64.decode(myhash);
 	equal(myclear, "betty:nobby", myclear);
+});
+
+test("test user login", function() {
+
+	stop();
+	$.ajax({
+		url: '/auth/betty',
+		type: 'GET',
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { ok(true); start(); },
+		error: function(xml) { ok(false); start(); },
+	});
+
+});
+
+test("test user login - invalid", function() {
+	var tmp_password = g_password;
+
+	g_password = 'false';
+
+	stop();
+	$.ajax({
+		url: '/auth/betty',
+		type: 'GET',
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { ok(false); start(); },
+		error: function(xml) { ok(true); start(); },
+	});
+
+	/* reset password to the test one we're using */
+	g_password = tmp_password;
+});
+
+test("test ldap login", function() {
+	var tmp_username = g_username;
+	var tmp_password = g_password;
+
+	g_username='betty';
+	g_password='ie5a8P40';
+
+	stop();
+	$.ajax({
+		url: '/auth/betty',
+		type: 'GET',
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { ok(true); start(); },
+		error: function(xml) { ok(false); start(); },
+	});
+
+	/* reset password to the test one we're using */
+	g_username = tmp_username;
+	g_password = tmp_password;
 });
 
 /* do some POST testing */
