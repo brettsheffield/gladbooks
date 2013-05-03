@@ -79,5 +79,6 @@ INSERT INTO username (id, instance) VALUES ('ghouston', 'ghouston');
 INSERT INTO username (id, instance) VALUES ('robertmc', 'robertmc');
 INSERT INTO username (id, instance) VALUES ('aboyd', 'trinityf');
 INSERT INTO username (id, instance) VALUES ('jross', 'trinityf');
+INSERT INTO username (id, instance) VALUES ('alpha', 'test');
 
 COMMIT;
