@@ -544,7 +544,7 @@ function showQuery(collection, title, sort, tab) {
 /* fetch html form from server to display */
 function getForm(object, action, title, xml, tab) {
 	showSpinner();
-	$.ajax({
+	return $.ajax({
 		url: '/html/forms/' + object + '/' + action + '.html',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(html) {
@@ -564,9 +564,10 @@ function activeTab() {
 
 /******************************************************************************/
 /* pre-populate form with xml data                                            */
-function populateForm(xml) {
+function populateForm(tab, object, xml) {
 	var locString = '';
 	var id = '';
+	var mytab = getTabById(tab);
 
 	if (xml) {
 		/* we have some data, pre-populate form */
@@ -574,7 +575,7 @@ function populateForm(xml) {
 			if (this.tagName == 'id') {
 				id = $(this).text();
 			}
-			$("div.tablet.active").find('form.' + object).find(
+			mytab.find('form.' + object).find(
 				"[name='" + this.tagName + "']"
 			).val($(this).text());
 
@@ -645,32 +646,33 @@ function displayForm(object, action, title, html, xml, tab) {
 
 	var mytab = activeTab();
 
-	id = populateForm(xml);     /* if we have some data, pre-populate form */
+	id = populateForm(tab, object, xml);     /* if we have some data, pre-populate form */
+
+	handleSubforms(tab, html, id);   /* deal with subforms */
 
 	/* FIXME - if populateCombos() takes too long, or fails, relationship data
 	 * won't be ready in time for the org_contact subform */
-	var callback = finaliseForm(tab);
-	if (! populateCombos(callback)) {
-		window(callback);
-		console.log('I call myself');
-	}
-	handleSubforms(tab, html, id);   /* deal with subforms */
-}
-
-function finaliseForm(tab) {
-	formatDatePickers();        /* date pickers */
-	formatRadioButtons(tab);  	/* tune the radio */
-	formBlurEvents(tab);		/* set up blur() events */
-	formEvents(tab);			/* submit and click events etc. */
-	activateTab(tab);			/* activate the tab */
-	hideSpinner();              /* wake user */
+	$.when(populateCombos())
+	.done(function() {
+		finaliseForm(tab, object);
+	});
 }
 
 /******************************************************************************/
-function formEvents(tab) {
+function finaliseForm(tab, object, action, id) {
+	formatDatePickers();        			  /* date pickers */
+	formatRadioButtons(tab, object);  		  /* tune the radio */
+	formBlurEvents(tab);					  /* set up blur() events */
+	formEvents(tab, object, action, id);      /* submit and click events etc. */
+	activateTab(tab);			              /* activate the tab */
+	hideSpinner();                            /* wake user */
+}
+
+/******************************************************************************/
+function formEvents(tab, object, action, id) {
 	var mytab = getTabById(tab);
 
-	    /* save button click handler */
+	/* save button click handler */
 	mytab.find('button.save').click(function() 
 	{
 		doFormSubmit(object, action, id);
@@ -717,7 +719,7 @@ function formBlurEvents(tab) {
 }
 
 /******************************************************************************/
-function formatRadioButtons(tab) {
+function formatRadioButtons(tab, object) {
 	var mytab = getTabById(tab);
 	/* tune the radio */
 	mytab.find('div.radio.untuned').find('input[type="radio"]').each(function()
@@ -1077,8 +1079,7 @@ function salesorderAddProduct(datatable) {
 /******************************************************************************/
 function populateCombos(view, parentid) {
 	console.log('populateCombos()');
-	var haveCombos = false;
-
+	
 	/* populate combos */
 	if (parentid) {
 		console.log('populating combos for subform');
@@ -1100,13 +1101,11 @@ function populateCombos(view, parentid) {
 				populateCombo(g_xml_relationships, combo, view, parentid);
 			}
 			else {
-				loadCombo(datasource, combo, view, parentid);
-				haveCombos = true;
+				/* TODO: fixme - need to chain several of these */
+				return loadCombo(datasource, combo, view, parentid);
 			}
 		});
 	});
-
-	return haveCombos; /* return true if we're waiting on any combos */
 }
 
 /******************************************************************************/
@@ -1115,7 +1114,7 @@ function loadCombo(datasource, combo, view, parentid) {
 	url = collection_url(datasource);
 	console.log('populating a combo from datasource: ' + url);
 
-	$.ajax({
+	return $.ajax({
 		url: url,
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
@@ -1844,24 +1843,48 @@ function collectionObject(c) {
 /******************************************************************************/
 /* Fetch an individual element of a collection for display / editing */
 function displayElement(collection, id) {
-	url = collection_url(collection) + id;
-	object = collectionObject(collection);
-	action = 'update';
-	title = 'Edit ' + object.substring(0,1).toUpperCase()
-		+ object.substring(1)  + ' ' + id;
+	var object = collectionObject(collection);
+	var action = 'update';
+	var title = 'Edit ' + object.substring(0,1).toUpperCase()
+		+ object.substring(1) + ' ' + id;
+	var dataURL = collection_url(collection) + id;
+	var formURL = '/html/forms/' + object + '/' + action + '.html';
 
 	showSpinner(); /* tell user to wait */
 
-	/* first, fetch xml data */
-	$.ajax({
+	/* fetch the xml and html we need, then display the form */
+	$.when(
+		getXML(dataURL),
+		getHTML(formURL)
+	)
+	.done(function(xml, html) {
+		/* all data is in, display form */
+		displayForm(object, action, title, html, xml);
+	})
+	.fail(function() {
+		/* something went wrong */
+		statusMessage('error loading data', STATUS_CRIT);
+		hideSpinner();
+	});
+}
+
+/******************************************************************************/
+function getHTML(url) {
+	return $.ajax({
+		url: url,
+		type: 'GET',
+		contentType: 'text/html',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+	});
+}
+/******************************************************************************/
+function getXML(url) {
+	return $.ajax({
 		url: url,
 		type: 'GET',
 		contentType: 'text/xml',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
-		success: function(xml) { getForm(object, action, title, xml); },
-		error: function(xml) { hideSpinner(); },
 	});
-
 }
 
 /******************************************************************************/
