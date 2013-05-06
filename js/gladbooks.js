@@ -592,13 +592,31 @@ function populateForm(xml) {
 }
 
 /******************************************************************************/
+/* deal with subforms */
+function handleSubforms(html, id) {
+	$(html).find('form.subform').each(function() {
+		var view = $(this).attr("action");
+		var parentdiv = $(this).parent();
+		var mytab = activeTab();
+		var datatable = mytab.find('div.' + view).find('table.datatable');
+		var btnAdd = datatable.find('button.addrow:not(.btnAdd)');
+		btnAdd.click(function(){
+			if (view == 'salesorderitems') {
+				salesorderAddProduct(datatable);
+			}
+			else {
+				addSubformEvent($(this), view, id);
+			}
+		});
+		btnAdd.addClass('btnAdd');
+		loadSubformData(view, id);
+	});
+}
+
+/******************************************************************************/
 /* display html form we've just fetched in new tab */
 function displayForm(object, action, title, html, xml, tab) {
-	console.log('displayForm("' 
-		+ object + '","'
-		+ action + '","'
-		+ title + '", <html>, <xml>, <tab>)'
-	);
+	console.log('displayForm("'+ object +'","'+ action +'","'+ title +'")');
 	var id = 0;
 	var content = '';
 
@@ -620,74 +638,24 @@ function displayForm(object, action, title, html, xml, tab) {
 
 	var mytab = activeTab();
 
-	id = populateForm(xml); /* if we have some data, pre-populate form */
+	id = populateForm(xml);     /* if we have some data, pre-populate form */
 
 	/* FIXME - if populateCombos() takes too long, or fails, relationship data
 	 * won't be ready in time for the org_contact subform */
-	populateCombos(); /* populate combos */
+	populateCombos();           /* populate combos */
 
-	/* deal with subforms */
-	$(html).find('form.subform').each(function() {
-		var view = $(this).attr("action");
-		var parentdiv = $(this).parent();
-		var datatable = mytab.find('div.' + view).find('table.datatable');
-		var btnAdd = datatable.find('button.addrow:not(.btnAdd)');
-		btnAdd.click(function(){
-			if (view == 'salesorderitems') {
-				salesorderAddProduct(datatable);
-			}
-			else {
-				addSubformEvent($(this), view, id);
-			}
-		});
-		btnAdd.addClass('btnAdd');
-		loadSubformData(view, id);
-	});
+	handleSubforms(html, id);   /* deal with subforms */
+	formatDatePickers();        /* date pickers */
+	formatRadioButtons(mytab);  /* tune the radio */
+	hideSpinner();              /* wake user */
+	formatRadioButtons(mytab);  /* set up blur() events */
+	formEvents(mytab);			/* submit and click events etc. */
 
-	/* date pickers */
-	$('div.active').find('.datefield').datepicker({
-	   	dateFormat: "yy-mm-dd",
-		constrainInput: true
-	});
+}
 
-	/* play the accordion */
-	//$('.accordion').accordion(); /* not in use */
-	
-	/* tune the radio */
-	mytab.find('div.radio.untuned').find('input[type="radio"]').each(function()
-	{
-		var oldid = $(this).attr('id'); /* note old id */
-		$(this).attr('id', '');			/* remove old id */
-		$(this).uniqueId(); 			/* add new, unique id */
-		/* use old id to locate linked label, and update its "for" attr */
-		$(this).parent().find('label[for="' + oldid + '"]').attr('for', 
-			$(this).attr('id'));
-	});
-	mytab.find('div.radio.untuned').buttonset();
-	mytab.find('div.radio.untuned').change(function() {
-		changeRadio($(this), object);
-	});
-	mytab.find('div.radio.untuned').removeClass('untuned');
-
-	hideSpinner(); /* wake user */
-
-    /* set up blur() events */
-    mytab.find('input.price').each(function() {
-        $(this).blur(function() {
-            /* pad amounts to two decimal places */
-			if ($(this).val().length > 0) {
-	            var newamount = decimalPad($(this).val(), 2);
-        		$(this).val(newamount);
-			}
-        });
-    });
-	mytab.find('input.price, input.qty').each(function() {
-        $(this).blur(function() {
-			recalculateLineTotal($(this).parent().parent());
-		});
-	});
-
-	/* save button click handler */
+/******************************************************************************/
+function formEvents(mytab) {
+	    /* save button click handler */
 	mytab.find('button.save').click(function() 
 	{
 		doFormSubmit(object, action, id);
@@ -706,20 +674,56 @@ function displayForm(object, action, title, html, xml, tab) {
 		mytab.find('form:not(.subform)').get(0).reset();
 	});
 
-	/* contact search on organisation form */
-	/*
-	mytab.find('input.contactsearch').change(function(event)
-	{
-		//contactSearch(mytab.find('input.contactsearch').val());
-		contactSearch($(this).val());
-	});
-	*/
-
 	/* deal with submit event */
 	mytab.find('form:not(.subform)').submit(function(event)
 	{
 		event.preventDefault();
 		doFormSubmit(object, action, id);
+	});
+}
+
+/******************************************************************************/
+function formBlurEvents(mytab) {
+    mytab.find('input.price').each(function() {
+        $(this).blur(function() {
+            /* pad amounts to two decimal places */
+			if ($(this).val().length > 0) {
+	            var newamount = decimalPad($(this).val(), 2);
+        		$(this).val(newamount);
+			}
+        });
+    });
+	mytab.find('input.price, input.qty').each(function() {
+        $(this).blur(function() {
+			recalculateLineTotal($(this).parent().parent());
+		});
+	});
+}
+
+/******************************************************************************/
+function formatRadioButtons(mytab) {
+	/* tune the radio */
+	mytab.find('div.radio.untuned').find('input[type="radio"]').each(function()
+	{
+		var oldid = $(this).attr('id'); /* note old id */
+		$(this).attr('id', '');			/* remove old id */
+		$(this).uniqueId(); 			/* add new, unique id */
+		/* use old id to locate linked label, and update its "for" attr */
+		$(this).parent().find('label[for="' + oldid + '"]').attr('for', 
+			$(this).attr('id'));
+	});
+	mytab.find('div.radio.untuned').buttonset();
+	mytab.find('div.radio.untuned').change(function() {
+		changeRadio($(this), object);
+	});
+	mytab.find('div.radio.untuned').removeClass('untuned');
+}
+
+/******************************************************************************/
+function formatDatePickers() {
+	$('div.active').find('.datefield').datepicker({
+	   	dateFormat: "yy-mm-dd",
+		constrainInput: true
 	});
 }
 
