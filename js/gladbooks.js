@@ -169,6 +169,8 @@ function addTab(title, content, activate, collection, refresh) {
 
 	/* fade in if we aren't already visible */
 	$('div.tabs').fadeIn(300);
+
+	return tabid; /* return new tab id */
 }
 
 /******************************************************************************/
@@ -189,6 +191,11 @@ function updateTab(tabid, content) {
 	if (statusmsg) {
 		tab.find('.statusmsg').replaceWith(statusmsg);
 	}
+}
+
+/******************************************************************************/
+function getTabById(tabid) {
+	return $('#tab' + tabid);
 }
 
 /******************************************************************************/
@@ -593,11 +600,11 @@ function populateForm(xml) {
 
 /******************************************************************************/
 /* deal with subforms */
-function handleSubforms(html, id) {
+function handleSubforms(tab, html, id) {
 	$(html).find('form.subform').each(function() {
 		var view = $(this).attr("action");
 		var parentdiv = $(this).parent();
-		var mytab = activeTab();
+		var mytab = getTabById(tab);
 		var datatable = mytab.find('div.' + view).find('table.datatable');
 		var btnAdd = datatable.find('button.addrow:not(.btnAdd)');
 		btnAdd.click(function(){
@@ -630,10 +637,10 @@ function displayForm(object, action, title, html, xml, tab) {
 	}
 
 	if (tab) {
-		updateTab(tab, html);
+		tab = updateTab(tab, html);
 	}
 	else {
-		addTab(title, html, true);
+		tab = addTab(title, html, false);
 	}
 
 	var mytab = activeTab();
@@ -642,19 +649,27 @@ function displayForm(object, action, title, html, xml, tab) {
 
 	/* FIXME - if populateCombos() takes too long, or fails, relationship data
 	 * won't be ready in time for the org_contact subform */
-	populateCombos();           /* populate combos */
+	var callback = finaliseForm(tab);
+	if (! populateCombos(callback)) {
+		window(callback);
+		console.log('I call myself');
+	}
+	handleSubforms(tab, html, id);   /* deal with subforms */
+}
 
-	handleSubforms(html, id);   /* deal with subforms */
+function finaliseForm(tab) {
 	formatDatePickers();        /* date pickers */
-	formatRadioButtons(mytab);  /* tune the radio */
+	formatRadioButtons(tab);  	/* tune the radio */
+	formBlurEvents(tab);		/* set up blur() events */
+	formEvents(tab);			/* submit and click events etc. */
+	activateTab(tab);			/* activate the tab */
 	hideSpinner();              /* wake user */
-	formatRadioButtons(mytab);  /* set up blur() events */
-	formEvents(mytab);			/* submit and click events etc. */
-
 }
 
 /******************************************************************************/
-function formEvents(mytab) {
+function formEvents(tab) {
+	var mytab = getTabById(tab);
+
 	    /* save button click handler */
 	mytab.find('button.save').click(function() 
 	{
@@ -683,7 +698,8 @@ function formEvents(mytab) {
 }
 
 /******************************************************************************/
-function formBlurEvents(mytab) {
+function formBlurEvents(tab) {
+	var mytab = getTabById(tab);
     mytab.find('input.price').each(function() {
         $(this).blur(function() {
             /* pad amounts to two decimal places */
@@ -701,7 +717,8 @@ function formBlurEvents(mytab) {
 }
 
 /******************************************************************************/
-function formatRadioButtons(mytab) {
+function formatRadioButtons(tab) {
+	var mytab = getTabById(tab);
 	/* tune the radio */
 	mytab.find('div.radio.untuned').find('input[type="radio"]').each(function()
 	{
@@ -1060,6 +1077,8 @@ function salesorderAddProduct(datatable) {
 /******************************************************************************/
 function populateCombos(view, parentid) {
 	console.log('populateCombos()');
+	var haveCombos = false;
+
 	/* populate combos */
 	if (parentid) {
 		console.log('populating combos for subform');
@@ -1082,9 +1101,12 @@ function populateCombos(view, parentid) {
 			}
 			else {
 				loadCombo(datasource, combo, view, parentid);
+				haveCombos = true;
 			}
 		});
 	});
+
+	return haveCombos; /* return true if we're waiting on any combos */
 }
 
 /******************************************************************************/
