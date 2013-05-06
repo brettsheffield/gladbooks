@@ -556,34 +556,10 @@ function activeTab() {
 }
 
 /******************************************************************************/
-/* display html form we've just fetched in new tab */
-function displayForm(object, action, title, html, xml, tab) {
-	console.log('displayForm("' 
-		+ object + '","'
-		+ action + '","'
-		+ title + '", <html>, <xml>, <tab>)'
-	);
-	var id = 0;
-	var content = '';
+/* pre-populate form with xml data                                            */
+function populateForm(xml) {
 	var locString = '';
-
-	$(html).find('div.' + object + '.action').each(function() {
-		content += $(self).html();
-	});
-
-	if ((object == 'salesorder') && (action == 'update') && (xml)) {
-		/* Display Sales Order number as tab title */
-		title = 'SO ' + $(xml).find('order').first().text();
-	}
-
-	if (tab) {
-		updateTab(tab, html);
-	}
-	else {
-		addTab(title, html, true);
-	}
-
-	var mytab = activeTab();
+	var id = '';
 
 	if (xml) {
 		/* we have some data, pre-populate form */
@@ -611,6 +587,40 @@ function displayForm(object, action, title, html, xml, tab) {
 			loadMap(locString);
 		}
 	}
+
+	return id;
+}
+
+/******************************************************************************/
+/* display html form we've just fetched in new tab */
+function displayForm(object, action, title, html, xml, tab) {
+	console.log('displayForm("' 
+		+ object + '","'
+		+ action + '","'
+		+ title + '", <html>, <xml>, <tab>)'
+	);
+	var id = 0;
+	var content = '';
+
+	$(html).find('div.' + object + '.action').each(function() {
+		content += $(self).html();
+	});
+
+	if ((object == 'salesorder') && (action == 'update') && (xml)) {
+		/* Display Sales Order number as tab title */
+		title = 'SO ' + $(xml).find('order').first().text();
+	}
+
+	if (tab) {
+		updateTab(tab, html);
+	}
+	else {
+		addTab(title, html, true);
+	}
+
+	var mytab = activeTab();
+
+	id = populateForm(xml); /* if we have some data, pre-populate form */
 
 	/* FIXME - if populateCombos() takes too long, or fails, relationship data
 	 * won't be ready in time for the org_contact subform */
