@@ -1079,6 +1079,7 @@ function salesorderAddProduct(datatable) {
 /******************************************************************************/
 function populateCombos(view, parentid) {
 	console.log('populateCombos()');
+	var combosity = new Array();
 	
 	/* populate combos */
 	if (parentid) {
@@ -1101,11 +1102,13 @@ function populateCombos(view, parentid) {
 				populateCombo(g_xml_relationships, combo, view, parentid);
 			}
 			else {
-				/* TODO: fixme - need to chain several of these */
-				return loadCombo(datasource, combo, view, parentid);
+				combosity.push(loadCombo(datasource, combo, view, parentid));
 			}
 		});
 	});
+
+	console.log('combosity level is ' + combosity.length);
+	return $.when(combosity);
 }
 
 /******************************************************************************/
