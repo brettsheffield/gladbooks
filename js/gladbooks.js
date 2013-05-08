@@ -592,7 +592,7 @@ function populateForm(tab, object, xml) {
 		/* load map */
 		if (locString.length > 0) {
 			console.log('locString:' + locString);
-			loadMap(locString);
+			loadMap(locString, tab);
 		}
 	}
 
@@ -626,11 +626,6 @@ function handleSubforms(tab, html, id) {
 function displayForm(object, action, title, html, xml, tab) {
 	console.log('displayForm("'+ object +'","'+ action +'","'+ title +'")');
 	var id = 0;
-	var content = '';
-
-	$(html).find('div.' + object + '.action').each(function() {
-		content += $(self).html();
-	});
 
 	if ((object == 'salesorder') && (action == 'update') && (xml)) {
 		/* Display Sales Order number as tab title */
@@ -2441,7 +2436,7 @@ function switchBusiness(business) {
 }
 
 /******************************************************************************/
-function loadMap(locationString) {
+function loadMap(locationString, tab) {
 	var canvas;
 	var map;
 	var geocoder = new google.maps.Geocoder();
@@ -2451,8 +2446,14 @@ function loadMap(locationString) {
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	}
 
-	var activeTablet = $('.tablet.active.business' + g_business);
-	activeTablet.find('.map-canvas').each(function() {
+	if (tab) {
+		mytab = getTabById(tab);
+	}
+	else {
+		mytab = activeTab();
+	}
+
+	mytab.find('.map-canvas').each(function() {
 		console.log('found a map-canvas');
 		canvas = this;
 		$(canvas).fadeIn(300);
