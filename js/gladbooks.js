@@ -644,14 +644,14 @@ function displayForm(object, action, title, html, xml, tab) {
 		tab = addTab(title, html, false);
 	}
 
-	var mytab = activeTab();
+	var mytab = getTabById(tab);
 
-	id = populateForm(tab, object, xml);     /* if we have some data, pre-populate form */
+	/* if we have some data, pre-populate form */
+	id = populateForm(tab, object, xml);
 
 	handleSubforms(tab, html, id);   /* deal with subforms */
 
-	/* FIXME - if populateCombos() takes too long, or fails, relationship data
-	 * won't be ready in time for the org_contact subform */
+	/* when all combos are populated, finalise form display */
 	$.when(populateCombos())
 	.done(function() {
 		finaliseForm(tab, object);
