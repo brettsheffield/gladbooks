@@ -927,6 +927,13 @@ function statusHide() {
 function statusMessage(message, severity, fade) {
 	var statusmsg = activeTab().find('div.statusmsg');
 
+	if (statusmsg.length == 0) {
+		/* no status box, create one */
+		console.log("No div.statusmsg - creating one");
+		activeTab().find('div').first().prepend('<div class="statusmsg clearfix"/>');
+		var statusmsg = activeTab().find('div.statusmsg');
+	}
+
 	statusmsg.removeClass('info warn crit');
 
 	if (severity == STATUS_INFO) {
@@ -1818,6 +1825,8 @@ function submitFormSuccess(object, action, id, collection) {
 
 		getForm(object, action, null, null, tab);
 	}
+
+	hideSpinner();
 }
 
 /******************************************************************************/
