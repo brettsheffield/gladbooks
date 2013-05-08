@@ -1952,6 +1952,9 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 			if ((this.tagName == 'price_buy')||(this.tagName == 'price_sell')){
 				$t += decimalPad($(this).text(), 2);
 			}
+			else if (this.tagName == 'nominalcode'){
+				$t += padString($(this).text(), 4);
+			}
 			else {
 				$t += $(this).text();
 			}
