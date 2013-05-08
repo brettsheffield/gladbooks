@@ -547,6 +547,7 @@ function getForm(object, action, title, xml, tab) {
 	return $.ajax({
 		url: '/html/forms/' + object + '/' + action + '.html',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		dataType: "html",
 		success: function(html) {
 			displayForm(object, action, title, html, xml, tab);
 		},
@@ -1857,7 +1858,7 @@ function displayElement(collection, id) {
 	)
 	.done(function(xml, html) {
 		/* all data is in, display form */
-		displayForm(object, action, title, html, xml);
+		displayForm(object, action, title, html[0], xml[0]);
 	})
 	.fail(function() {
 		/* something went wrong */
@@ -1871,7 +1872,7 @@ function getHTML(url) {
 	return $.ajax({
 		url: url,
 		type: 'GET',
-		contentType: 'text/html',
+		dataType: 'html',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 	});
 }
@@ -1880,7 +1881,7 @@ function getXML(url) {
 	return $.ajax({
 		url: url,
 		type: 'GET',
-		contentType: 'text/xml',
+		dataType: 'xml',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 	});
 }
