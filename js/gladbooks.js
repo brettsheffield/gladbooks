@@ -193,9 +193,10 @@ function updateTab(tabid, content) {
 	}
 }
 
-/******************************************************************************/
+/*******************************************************************************
+ * return jQuery object for specified tab, or active tab if no tab specified  */
 function getTabById(tabid) {
-	return $('#tab' + tabid);
+	return (tabid) ? $('#tab' + tabid) : activeTab();
 }
 
 /******************************************************************************/
@@ -614,11 +615,11 @@ function handleSubforms(tab, html, id) {
 				salesorderAddProduct(datatable);
 			}
 			else {
-				addSubformEvent($(this), view, id);
+				addSubformEvent($(this), view, id, tab);
 			}
 		});
 		btnAdd.addClass('btnAdd');
-		loadSubformData(view, id);
+		loadSubformData(view, id, tab);
 	});
 }
 
@@ -1200,7 +1201,7 @@ function populateCombo(xml, combo, view, parentid) {
 	}
 	else {
 		combo.change(function() {
-			comboChange($(this), xml);
+			comboChange($(this), xml, view);
 		});
 	}
 
@@ -1258,7 +1259,7 @@ function validateNominalCode(code, type, xml) {
 
 /******************************************************************************/
 /* handle actions required when combo value changes */
-function comboChange(combo, xml) {
+function comboChange(combo, xml, view) {
 	var id = combo.attr('id');
 	var newval = combo.val();
 
@@ -1270,20 +1271,21 @@ function comboChange(combo, xml) {
 		var code = activeTab().find('input.nominalcode').val();
 		return validateNominalCode(code, newval, xml);
 	}
-	
-	$(xml).find('row').find('id').each(function() {
-		if ($(this).text() == newval) {
-			/* in the salesorder form, dynamically set placeholders
-			 * to show defaults */
-			var desc = $(this).parent().find('description').text();
-			var price = $(this).parent().find('price_sell').text();
-			price = decimalPad(price, 2);
-			var parentrow = combo.parent().parent();
-			parentrow.find('input.linetext').attr('placeholder', desc);
-			parentrow.find('input.price').attr('placeholder', price);
-			recalculateLineTotal(parentrow);
-		}
-	});
+
+	if (view == 'salesorder') {
+	/* in the salesorder form, dynamically set placeholders to show defaults */
+		$(xml).find('row').find('id').each(function() {
+			if ($(this).text() == newval) {
+				var desc = $(this).parent().find('description').text();
+				var price = $(this).parent().find('price_sell').text();
+				price = decimalPad(price, 2);
+				var parentrow = combo.parent().parent();
+				parentrow.find('input.linetext').attr('placeholder', desc);
+				parentrow.find('input.price').attr('placeholder', price);
+				recalculateLineTotal(parentrow);
+			}
+		});
+	}
 	
 }
 
@@ -1332,7 +1334,7 @@ function relationshipUpdate(organisation, contact, relationships, refresh) {
 		complete: function(xml) {
 			console.log('relationship updated');
 			if (refresh) {
-				loadSubformData('organisation_contacts', organisation);
+				loadSubformData('organisation_contacts', organisation, tab);
 			}
 		},
 	});
@@ -1340,7 +1342,7 @@ function relationshipUpdate(organisation, contact, relationships, refresh) {
 
 /******************************************************************************/
 /* apply tax to product */
-function taxProduct(product, tax, refresh) {
+function taxProduct(product, tax, refresh, tab) {
 	console.log('Taxing product');
 	var xml = createRequestXml();
 
@@ -1359,7 +1361,7 @@ function taxProduct(product, tax, refresh) {
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		complete: function(xml) {
 			if (refresh) {
-				loadSubformData('product_taxes', product);
+				loadSubformData('product_taxes', product, tab);
 			}
 		},
 	});
@@ -1367,7 +1369,7 @@ function taxProduct(product, tax, refresh) {
 
 /******************************************************************************/
 /* Fetch data for a subform */
-function loadSubformData(view, id) {
+function loadSubformData(view, id, tab) {
 	console.log('loadSubformData()');
 	console.log('Loading subform with data ' + view);
 	url = collection_url(view);
@@ -1379,17 +1381,17 @@ function loadSubformData(view, id) {
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
 			console.log("Loaded subform data.  Hoorah.");
-			displaySubformData(view, id, xml);
+			displaySubformData(view, id, xml, tab);
 		},
 		error: function(xml) {
 			console.log('Error loading subform data');
-			displaySubformData(view, id, xml); /* needed for events */
+			displaySubformData(view, id, xml, tab); /* needed for events */
 		}
 	});
 }
 
 /******************************************************************************/
-function addSubformEvent(object, view, parentid) {
+function addSubformEvent(object, view, parentid, tab) {
 	/* attach click event to add rows to subform */
 	console.log('addSubformEvent()');
 	console.log('Adding row to subform parent ' + parentid);
@@ -1459,7 +1461,7 @@ function addSubformEvent(object, view, parentid) {
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
 			console.log('SUCCESS: added row to subform');
-			loadSubformData(view, parentid);
+			loadSubformData(view, parentid, tab);
 		},
 		error: function(xml) {
 			console.log('ERROR adding row to subform');
@@ -1525,7 +1527,7 @@ function relationshipCombo(datatable, tag, id) {
 			}
 			relationshipUpdate(parentid, contact, relationships);
 		}
-		comboChange(tag, xml);
+		comboChange(tag, xml, 'organisation');
 	});
 	td.append(combo);
 	return td;
@@ -1646,10 +1648,12 @@ function clearForm(datatable) {
 
 /******************************************************************************/
 /* We've loaded data for a subform; display it */
-function displaySubformData(view, parentid, xml) {
+function displaySubformData(view, parentid, xml, tab) {
 	console.log('displaySubformData()');
 	console.log("Displaying subform " + view + " data");
-	var datatable = $('div.tablet.active').find('div.' + view).find('table.datatable');
+	console.log('displaySubformData() is operating on tab ' + tab);
+	var mytab = getTabById(tab);
+	var datatable = mytab.find('div.' + view).find('table.datatable');
 	var types = [];
 	datatable.find('tbody').empty();
 
@@ -1670,20 +1674,21 @@ function displaySubformData(view, parentid, xml) {
 	});
 
     /* "Link Contact" button event handler for organisation form */
-    activeTab().find('button.linkcontact').click(function() {
-		btnClickLinkContact(parentid);
+    mytab.find('button.linkcontact').click(function() {
+		btnClickLinkContact(parentid, tab);
 	});
 
     /* "Apply Tax" button event handler for product form */
-    activeTab().find('button.taxproduct').click(function() {
+    mytab.find('button.taxproduct').click(function() {
 		var c = $(this).parent().parent().find('select.tax').val();
-		taxProduct(parentid, c, true);
+		taxProduct(parentid, c, true, tab);
     });
 }
 
 /******************************************************************************/
-function btnClickLinkContact(parentid) {
-	var c = $(this).parent().parent().find('select.contactlink').val();
+function btnClickLinkContact(parentid, tab) {
+	var mytab = getTabById(tab);
+	var c = mytab.find('select.contactlink').val();
 	relationshipUpdate(parentid, c, false, true);
 }
 
