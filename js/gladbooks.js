@@ -612,7 +612,7 @@ function handleSubforms(tab, html, id) {
 		var btnAdd = datatable.find('button.addrow:not(.btnAdd)');
 		btnAdd.click(function(){
 			if (view == 'salesorderitems') {
-				salesorderAddProduct(datatable);
+				salesorderAddProduct(datatable, tab);
 			}
 			else {
 				addSubformEvent($(this), view, id, tab);
@@ -649,7 +649,7 @@ function displayForm(object, action, title, html, xml, tab) {
 	handleSubforms(tab, html, id);   /* deal with subforms */
 
 	/* when all combos are populated, finalise form display */
-	$.when(populateCombos())
+	$.when(populateCombos(tab))
 	.done(function() {
 		finaliseForm(tab, object, action, id);
 	});
@@ -1027,8 +1027,8 @@ function cloneInput(mytab, input) {
 }
 
 /******************************************************************************/
-function salesorderAddProduct(datatable) {
-	var mytab = $('div.tablet.active.business' + g_business);
+function salesorderAddProduct(datatable, tab) {
+	var mytab = getTabById(tab);
 	var product = mytab.find('select.product.nosubmit').val();
 	var linetext = mytab.find('input[name$="linetext"]').val();
 	var price = mytab.find('input[name$="price"]').val();
@@ -1082,21 +1082,12 @@ function salesorderAddProduct(datatable) {
 }
 
 /******************************************************************************/
-function populateCombos(view, parentid) {
+function populateCombos(tab) {
 	console.log('populateCombos()');
 	var combosity = new Array();
-	
-	/* populate combos */
-	if (parentid) {
-		console.log('populating combos for subform');
-		var isSub = '';
-	}
-	else {
-		console.log('populating combos');
-		var isSub = ':not(.sub)';
-	}
+	var mytab = getTabById(tab);
 
-	$('select.populate' + isSub).each(function() {
+	mytab.find('select.populate:not(.sub)').each(function() {
 		var combo = $(this);
 		$(this).parent().find('a.datasource').each(function() {
 			datasource = $(this).attr('href');
@@ -1104,10 +1095,10 @@ function populateCombos(view, parentid) {
 			if ((datasource == 'relationships') && (g_xml_relationships)) {
 				/* here's one we prepared earlier */
 				console.log('using cached relationship data');
-				populateCombo(g_xml_relationships, combo, view, parentid);
+				populateCombo(g_xml_relationships, combo);
 			}
 			else {
-				combosity.push(loadCombo(datasource, combo, view, parentid));
+				combosity.push(loadCombo(datasource, combo));
 			}
 		});
 	});
@@ -1117,7 +1108,7 @@ function populateCombos(view, parentid) {
 }
 
 /******************************************************************************/
-function loadCombo(datasource, combo, view, parentid) {
+function loadCombo(datasource, combo) {
 	console.log('loadCombo()');
 	url = collection_url(datasource);
 	console.log('populating a combo from datasource: ' + url);
@@ -1130,7 +1121,7 @@ function loadCombo(datasource, combo, view, parentid) {
 				console.log('caching relationship data');
 				g_xml_relationships = xml;
 			}
-			populateCombo(xml, combo, view, parentid);
+			populateCombo(xml, combo);
 		},
 		error: function(xml) {
 			console.log('Error loading combo data');
@@ -1139,12 +1130,11 @@ function loadCombo(datasource, combo, view, parentid) {
 }
 
 /******************************************************************************/
-function populateCombo(xml, combo, view, parentid) {
+function populateCombo(xml, combo, tab) {
 	console.log('populateCombo()');
 	console.log('Combo data loaded for ' + combo.attr('name'));
-	console.log('I have a parentid: ' + parentid);
-
 	var selections = [];
+	var mytab = getTabById(tab);
 
 	/* first, preserve selections */
 	for (var x=0; x < combo[0].options.length; x++) {
@@ -1187,13 +1177,13 @@ function populateCombo(xml, combo, view, parentid) {
 
 	if (combo.attr('name') == 'type') {
 		/* add change() event to nominal code input box */
-		activeTab().find('input.nominalcode').change(function() {
+		mytab.find('input.nominalcode').change(function() {
 			return validateNominalCode($(this).val(), combo.val(), xml);
 		});
 	}
 	else if (combo.attr('name') == 'account') {
 		console.log('setting value of product->account combo');
-		activeTab().find('input.nosubmit[name="account"]').each(function() {
+		mytab.find('input.nosubmit[name="account"]').each(function() {
 			combo.find(
 				'option[value=' + $(this).val() + ']'
 			).attr('selected', 'selected');
@@ -1201,7 +1191,7 @@ function populateCombo(xml, combo, view, parentid) {
 	}
 	else {
 		combo.change(function() {
-			comboChange($(this), xml, view);
+			comboChange($(this), xml, tab);
 		});
 	}
 
@@ -1259,7 +1249,7 @@ function validateNominalCode(code, type, xml) {
 
 /******************************************************************************/
 /* handle actions required when combo value changes */
-function comboChange(combo, xml, view) {
+function comboChange(combo, xml, tab) {
 	var id = combo.attr('id');
 	var newval = combo.val();
 
@@ -1267,13 +1257,13 @@ function comboChange(combo, xml, view) {
 
 	/* deal with chart form type combo */
 	if (combo.attr('name') == 'type') {
-		console.log('As easy as falling off a logarithm');
 		var code = activeTab().find('input.nominalcode').val();
 		return validateNominalCode(code, newval, xml);
 	}
 
-	if (view == 'salesorder') {
 	/* in the salesorder form, dynamically set placeholders to show defaults */
+	if (getTabById(tab).find('div.salesorder')) {
+		console.log('I am a sales order');
 		$(xml).find('row').find('id').each(function() {
 			if ($(this).text() == newval) {
 				var desc = $(this).parent().find('description').text();
@@ -1286,7 +1276,6 @@ function comboChange(combo, xml, view) {
 			}
 		});
 	}
-	
 }
 
 /******************************************************************************/
@@ -1493,7 +1482,7 @@ function markComboSelections(combo, typedata) {
 }
 
 /******************************************************************************/
-function relationshipCombo(datatable, tag, id) {
+function relationshipCombo(datatable, tag, id, tab) {
 	console.log('appending relationship combo');
 
 	if (!g_xml_relationships) {
@@ -1527,7 +1516,7 @@ function relationshipCombo(datatable, tag, id) {
 			}
 			relationshipUpdate(parentid, contact, relationships);
 		}
-		comboChange(tag, xml, 'organisation');
+		comboChange(tag, xml, tab);
 	});
 	td.append(combo);
 	return td;
@@ -1561,8 +1550,9 @@ function addSalesOrderProductField(field, value) {
 }
 
 /******************************************************************************/
-function addSalesOrderProducts(xml, datatable) {
+function addSalesOrderProducts(xml, datatable, tab) {
 	$(xml).find('resources').find('row').each(function() {
+		var mytab = getTabById(tab);
 		var id = $(this).find('id').text();
 		var salesorder = $(this).find('salesorder').text();
 		var product = $(this).find('product').text();
@@ -1581,9 +1571,9 @@ function addSalesOrderProducts(xml, datatable) {
 		addSalesOrderProductField('qty', qty);
 
 		/* trigger line total calculation */
-		activeTab().find('input.qty').trigger('blur');
+		mytab.find('input.qty').trigger('blur');
 
-		salesorderAddProduct(datatable)
+		salesorderAddProduct(datatable, tab)
 	});
 }
 
@@ -1593,7 +1583,7 @@ function addSalesOrderProducts(xml, datatable) {
  * add row to datatable for each subform item - not used for salesorders
  *
  ******************************************************************************/
-function addSubFormRows(xml, datatable, view) {
+function addSubFormRows(xml, datatable, view, tab) {
 	var i = 0;
 	var id = 0;
 	$(xml).find('resources').find('row').each(function() {
@@ -1604,7 +1594,7 @@ function addSubFormRows(xml, datatable, view) {
 				id = $(this).text();
 			}
 			else if (this.tagName == 'type') {
-				row.append(relationshipCombo(datatable, $(this), id));
+				row.append(relationshipCombo(datatable, $(this), id, tab));
 			}
 			else {
 				row.append('<td>' + $(this).text() + '</td>');
@@ -1656,10 +1646,10 @@ function displaySubformData(view, parentid, xml, tab) {
 	datatable.find('tbody').empty();
 
 	if (view == 'salesorderitems') {
-		addSalesOrderProducts(xml, datatable);
+		addSalesOrderProducts(xml, datatable, tab);
 	}
 	else {
-		addSubFormRows(xml, datatable, view);
+		addSubFormRows(xml, datatable, view, tab);
 	}
 
 	datatable.find('select.chosify').chosen(); /* format combos */
