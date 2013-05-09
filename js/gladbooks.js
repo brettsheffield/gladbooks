@@ -650,7 +650,7 @@ function displayForm(object, action, title, html, xml, tab) {
 	/* when all combos are populated, finalise form display */
 	$.when(populateCombos())
 	.done(function() {
-		finaliseForm(tab, object);
+		finaliseForm(tab, object, action, id);
 	});
 }
 
@@ -824,6 +824,7 @@ function recalculateLineTotal(parentrow) {
 
 /******************************************************************************/
 function doFormSubmit(object, action, id) {
+	console.log('doFormSubmit(' + object + ',' + action + ',' + id + ')');
 	if (validateForm(object, action, id)) {
 		if (id > 0) {
 			submitForm(object, action, id);
@@ -1742,8 +1743,7 @@ function submitForm(object, action, id) {
 	).find('input:not(.nosubmit,default),select:not(.nosubmit,.default)').each(function() {
 		var name = $(this).attr('name');
 		if (name) {
-			console.log(name);
-			console.log(object);
+			console.log('processing input ' + name);
 			if ((name != 'id')
 			&& ((name != 'relationship')||(object == 'organisation_contacts')))
 			{
@@ -1752,10 +1752,12 @@ function submitForm(object, action, id) {
 					/* this is a subform entry, so add extra xml tag */
 					xml += '<' + subobject + '>';
 				}
-				if ($(this).val().length > 0) { /* skip blanks */
-					xml += '<' + name + '>';
-					xml += escapeHTML($(this).val());
-					xml += '</' + name + '>';
+				if ($(this).val()) {
+					if ($(this).val().length > 0) { /* skip blanks */
+						xml += '<' + name + '>';
+						xml += escapeHTML($(this).val());
+						xml += '</' + name + '>';
+					}
 				}
 				if ($(this).hasClass('endsub')) {
 					/* this is a subform entry, so close extra xml tag */
