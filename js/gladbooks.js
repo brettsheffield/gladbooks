@@ -1334,7 +1334,7 @@ function relationshipUpdate(organisation, contact, relationships, refresh) {
 		complete: function(xml) {
 			console.log('relationship updated');
 			if (refresh) {
-				loadSubformData('organisation_contacts', organisation, tab);
+				loadSubformData('organisation_contacts', organisation);
 			}
 		},
 	});
