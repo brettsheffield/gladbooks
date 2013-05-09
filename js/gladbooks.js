@@ -1562,9 +1562,7 @@ function addSalesOrderProductField(field, value) {
 
 /******************************************************************************/
 function addSalesOrderProducts(xml, datatable) {
-	console.log('sod it');
 	$(xml).find('resources').find('row').each(function() {
-		console.log('a sodding product');
 		var id = $(this).find('id').text();
 		var salesorder = $(this).find('salesorder').text();
 		var product = $(this).find('product').text();
