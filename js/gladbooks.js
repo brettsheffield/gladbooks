@@ -604,6 +604,7 @@ function populateForm(tab, object, xml) {
 /******************************************************************************/
 /* deal with subforms */
 function handleSubforms(tab, html, id) {
+	var subforms = new Array();
 	$(html).find('form.subform').each(function() {
 		var view = $(this).attr("action");
 		var parentdiv = $(this).parent();
@@ -619,8 +620,9 @@ function handleSubforms(tab, html, id) {
 			}
 		});
 		btnAdd.addClass('btnAdd');
-		loadSubformData(view, id, tab);
+		subforms.push(loadSubformData(view, id, tab));
 	});
+	return subforms;
 }
 
 /******************************************************************************/
@@ -646,12 +648,17 @@ function displayForm(object, action, title, html, xml, tab) {
 	/* if we have some data, pre-populate form */
 	id = populateForm(tab, object, xml);
 
-	handleSubforms(tab, html, id);   /* deal with subforms */
-
-	/* when all combos are populated, finalise form display */
-	$.when(populateCombos(tab))
+	$.when(
+		handleSubforms(tab, html, id)   /* deal with subforms */
+	)
 	.done(function() {
-		finaliseForm(tab, object, action, id);
+		/* when all combos are populated, finalise form display */
+		$.when(
+			populateCombos(tab)
+		)
+		.done(function() {
+			finaliseForm(tab, object, action, id);
+		});
 	});
 }
 
@@ -1366,7 +1373,7 @@ function loadSubformData(view, id, tab) {
 	if (id) {
 		url += id + '/';
 	}
-	$.ajax({
+	return $.ajax({
 		url: url,
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
