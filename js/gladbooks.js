@@ -648,7 +648,7 @@ function displayForm(object, action, title, html, xml, tab) {
 	/* if we have some data, pre-populate form */
 	id = populateForm(tab, object, xml);
 
-	$.when(
+	$.when.apply(
 		handleSubforms(tab, html, id)   /* deal with subforms */
 	)
 	.done(function() {
@@ -1860,17 +1860,20 @@ function displayElement(collection, id) {
 		+ object.substring(1) + ' ' + id;
 	var dataURL = collection_url(collection) + id;
 	var formURL = '/html/forms/' + object + '/' + action + '.html';
+	var servercalls = new Array();
 
 	showSpinner(); /* tell user to wait */
 
+	/* stack up our async calls */
+	servercalls.push(getHTML(formURL));
+	servercalls.push(getXML(dataURL));
+
 	/* fetch the xml and html we need, then display the form */
-	$.when(
-		getXML(dataURL),
-		getHTML(formURL)
-	)
-	.done(function(xml, html) {
+	$.when.apply(null, servercalls)
+	.done(function(html) {
 		/* all data is in, display form */
-		displayForm(object, action, title, html[0], xml[0]);
+		var args = Array.prototype.splice.call(arguments, 1);
+		displayForm(object, action, title, html[0], args[0]);
 	})
 	.fail(function() {
 		/* something went wrong */
