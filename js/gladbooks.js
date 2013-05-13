@@ -710,7 +710,7 @@ function formBlurEvents(tab) {
     });
 	mytab.find('input.price, input.qty').each(function() {
         $(this).blur(function() {
-			recalculateLineTotal($(this).parent().parent());
+			recalculateLineTotal($(this).parent().parent(), tab);
 		});
 	});
 }
@@ -802,7 +802,7 @@ function changeRadio(radio, object) {
 
 /******************************************************************************/
 /* recalculate line total */
-function recalculateLineTotal(parentrow) {
+function recalculateLineTotal(parentrow, tab) {
 	var p = parentrow.find('input.price').val();
 	var q = parentrow.find('input.qty').val();
 
@@ -819,7 +819,7 @@ function recalculateLineTotal(parentrow) {
 	var oldval = inputtotal.val();
 	inputtotal.val(t);
 	if (oldval != t) {
-		updateSalesOrderTotals();
+		updateSalesOrderTotals(tab);
 	}
 }
 
@@ -957,15 +957,16 @@ function statusMessage(message, severity, fade) {
 }
 
 /******************************************************************************/
-function updateSalesOrderTotals() {
+function updateSalesOrderTotals(tab) {
+	/* FIXME: uncaught exception: NaN */
 	console.log('Updating salesorder totals');
 
 	var subtotal = Big('0.00');
 	var taxes = Big('0.00');
 	var gtotal = Big('0.00');
+	var mytab = getTabById(tab);
 
-	$('div.tablet.active.business'
-	+ g_business).find('input.total:not(.clone)').each(function() 
+	mytab.find('input.total:not(.clone)').each(function() 
 	{
 		subtotal = subtotal.plus(Big($(this).val()));
 	});
@@ -974,16 +975,14 @@ function updateSalesOrderTotals() {
 
 	/* update sub total */
 	subtotal = decimalPad(subtotal, 2);
-	$('div.tablet.active.business' 
-	+ g_business).find('table.totals').find('td.subtotal').each(function() 
+	mytab.find('table.totals').find('td.subtotal').each(function() 
 	{
 		$(this).text(subtotal);
 	});
 
 	/* update grand total */
 	gtotal = decimalPad(gtotal, 2);
-	$('div.tablet.active.business' 
-	+ g_business).find('table.totals').find('td.gtotal').each(function() 
+	mytab.find('table.totals').find('td.gtotal').each(function() 
 	{
 		$(this).text(gtotal);
 	});
@@ -1066,7 +1065,7 @@ function salesorderAddProduct(datatable, tab) {
 	row.find('button.removerow').click(function () {
 		$(this).parent().parent().fadeOut(300, function() {
 			$(this).remove();
-			updateSalesOrderTotals();
+			updateSalesOrderTotals(tab);
 		});
 	});
 
@@ -1078,7 +1077,7 @@ function salesorderAddProduct(datatable, tab) {
 		$(this).removeClass('chosify');
 	});
 
-	updateSalesOrderTotals();
+	updateSalesOrderTotals(tab);
 }
 
 /******************************************************************************/
@@ -1263,7 +1262,9 @@ function comboChange(combo, xml, tab) {
 
 	/* in the salesorder form, dynamically set placeholders to show defaults */
 	if (getTabById(tab).find('div.salesorder')) {
-		console.log('I am a sales order');
+		if (newval == '-1') {
+			alert('I want a cup of tea');
+		}
 		$(xml).find('row').find('id').each(function() {
 			if ($(this).text() == newval) {
 				var desc = $(this).parent().find('description').text();
@@ -1272,7 +1273,7 @@ function comboChange(combo, xml, tab) {
 				var parentrow = combo.parent().parent();
 				parentrow.find('input.linetext').attr('placeholder', desc);
 				parentrow.find('input.price').attr('placeholder', price);
-				recalculateLineTotal(parentrow);
+				recalculateLineTotal(parentrow, tab);
 			}
 		});
 	}
