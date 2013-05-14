@@ -588,28 +588,6 @@ CREATE OR REPLACE VIEW salesorderlist AS
 SELECT
         sod.salesorder as id,
         so.organisation AS customer,
-        o.orgcode || '/' || so.ordernum AS order,
-        sod.ponumber,
-        sod.description,
-        sod.cycle,
-        sod.start_date,
-        sod.end_date
-FROM salesorderdetail sod
-INNER JOIN salesorder so ON so.id = sod.salesorder
-INNER JOIN organisation o ON o.id = so.organisation
-WHERE sod.salesorder IN (
-        SELECT MAX(id)
-        FROM salesorderdetail
-        GROUP BY salesorder
-)
-AND sod.is_open = 'true'
-AND sod.is_deleted = 'false'
-;
-
-CREATE OR REPLACE VIEW salesorderlist AS
-SELECT
-        sod.salesorder as id,
-        so.organisation AS customer,
         o.orgcode || '/' || lpad(CAST(so.ordernum AS TEXT), 5, '0') AS order,
         sod.ponumber,
         sod.description,
@@ -619,7 +597,7 @@ SELECT
 FROM salesorderdetail sod
 INNER JOIN salesorder so ON so.id = sod.salesorder
 INNER JOIN organisation o ON o.id = so.organisation
-WHERE sod.salesorder IN (
+WHERE sod.id IN (
         SELECT MAX(id)
         FROM salesorderdetail
         GROUP BY salesorder
@@ -642,7 +620,7 @@ FROM salesorderdetail sod
 INNER JOIN salesorder so ON so.id = sod.salesorder
 INNER JOIN organisation o ON o.id = so.organisation
 INNER JOIN organisationdetail od ON o.id = od.organisation
-WHERE sod.salesorder IN (
+WHERE sod.id IN (
         SELECT MAX(id)
         FROM salesorderdetail
         GROUP BY salesorder
@@ -661,7 +639,7 @@ SELECT
 	soid.price,
 	soid.qty
 FROM salesorderitemdetail soid
-WHERE soid.salesorderitem IN (
+WHERE soid.id IN (
 	SELECT MAX(id)
 	FROM salesorderitemdetail
 	GROUP BY salesorderitem
