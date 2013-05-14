@@ -603,11 +603,9 @@ function populateForm(tab, object, xml) {
 
 /******************************************************************************/
 /* deal with subforms */
-function handleSubforms(tab, html, id) {
-	var subforms = new Array();
+function handleSubforms(tab, html, id, xml) {
 	$(html).find('form.subform').each(function() {
 		var view = $(this).attr("action");
-		var parentdiv = $(this).parent();
 		var mytab = getTabById(tab);
 		var datatable = mytab.find('div.' + view).find('table.datatable');
 		var btnAdd = datatable.find('button.addrow:not(.btnAdd)');
@@ -620,9 +618,8 @@ function handleSubforms(tab, html, id) {
 			}
 		});
 		btnAdd.addClass('btnAdd');
-		subforms.push(loadSubformData(view, id, tab));
+		displaySubformData(view, id, xml, tab);
 	});
-	return subforms;
 }
 
 /******************************************************************************/
@@ -631,9 +628,9 @@ function displayForm(object, action, title, html, xml, tab) {
 	console.log('displayForm("'+ object +'","'+ action +'","'+ title +'")');
 	var id = 0;
 
-	if ((object == 'salesorder') && (action == 'update') && (xml)) {
+	if ((object == 'salesorder') && (action == 'update') && (xml[0])) {
 		/* Display Sales Order number as tab title */
-		title = 'SO ' + $(xml).find('order').first().text();
+		title = 'SO ' + $(xml[0]).find('order').first().text();
 	}
 
 	if (tab) {
@@ -643,23 +640,21 @@ function displayForm(object, action, title, html, xml, tab) {
 		tab = addTab(title, html, false);
 	}
 
+	id = populateForm(tab, object, xml[0]); /* pre-populate form */
+
+	/* populate combos with xml data */
+	var x = 2;
 	var mytab = getTabById(tab);
-
-	/* if we have some data, pre-populate form */
-	id = populateForm(tab, object, xml);
-
-	$.when.apply(
-		handleSubforms(tab, html, id)   /* deal with subforms */
-	)
-	.done(function() {
-		/* when all combos are populated, finalise form display */
-		$.when(
-			populateCombos(tab)
-		)
-		.done(function() {
-			finaliseForm(tab, object, action, id);
-		});
+	mytab.find('select.populate:not(.sub)').each(function() {
+		var combo = $(this);
+		populateCombo(xml[x], combo, tab);
+		x++;
 	});
+
+	handleSubforms(tab, html, id, xml[1])   /* deal with subforms */
+
+	/* finalise form display */
+	finaliseForm(tab, object, action, id);
 }
 
 /******************************************************************************/
@@ -1072,7 +1067,8 @@ function salesorderAddProduct(datatable, tab) {
 	row.find('button.removerow').click(function () {
 		$(this).parent().parent().fadeOut(300, function() {
 			$(this).remove();
-			updateSalesOrderTotals(tab);
+			/* FIXME */
+			//updateSalesOrderTotals(tab);
 		});
 	});
 
@@ -1084,7 +1080,8 @@ function salesorderAddProduct(datatable, tab) {
 		$(this).removeClass('chosify');
 	});
 
-	updateSalesOrderTotals(tab);
+	/* FIXME */
+	//updateSalesOrderTotals(tab);
 }
 
 /******************************************************************************/
@@ -1570,7 +1567,7 @@ function addSalesOrderProducts(xml, datatable, tab) {
 		var qty = $(this).find('qty').text();
 
 		/* select product */
-		var p = activeTab().find('select.nosubmit[name="product"]');
+		var p = mytab.find('select.nosubmit[name="product"]');
 		p.find('option[value="' + product + '"]').attr('selected', 'selected');
 		p.trigger("change");
 
@@ -1858,28 +1855,54 @@ function displayElement(collection, id) {
 	var action = 'update';
 	var title = 'Edit ' + object.substring(0,1).toUpperCase()
 		+ object.substring(1) + ' ' + id;
-	var dataURL = collection_url(collection) + id;
-	var formURL = '/html/forms/' + object + '/' + action + '.html';
-	var servercalls = new Array();
 
 	showSpinner(); /* tell user to wait */
 
-	/* stack up our async calls */
-	servercalls.push(getHTML(formURL));
-	servercalls.push(getXML(dataURL));
-
 	/* fetch the xml and html we need, then display the form */
-	$.when.apply(null, servercalls)
+	var d = fetchElementData(collection, id, object, action);
+	$.when.apply(null, d)
 	.done(function(html) {
 		/* all data is in, display form */
 		var args = Array.prototype.splice.call(arguments, 1);
-		displayForm(object, action, title, html[0], args[0]);
+		displayForm(object, action, title, html[0], args);
 	})
 	.fail(function() {
 		/* something went wrong */
 		statusMessage('error loading data', STATUS_CRIT);
 		hideSpinner();
 	});
+}
+
+/******************************************************************************/
+function fetchElementData(collection, id, object, action) {
+	var dataURL = collection_url(collection) + id;
+	var formURL = '/html/forms/' + object + '/' + action + '.html';
+	var d = new Array(); /* array of deferreds */
+
+	/* stack up our async calls */
+	d.push(getHTML(formURL));	/* fetch html form */
+	d.push(getXML(dataURL));	/* fetch element data */
+
+	/* fetch any other data we need:
+	 *  first, any subform rows, 
+	 *  then, combos in the order they appear on the form */
+	if (collection == 'organisations') {
+		d.push(getXML(collection_url('organisation_contacts') + id + '/'));
+		d.push(getXML(collection_url('relationships')));
+		d.push(getXML(collection_url('contacts')));
+	}
+	else if (collection == 'products') {
+		d.push(getXML(collection_url('product_taxes') + id + '/'));
+		d.push(getXML(collection_url('accounts')));
+		d.push(getXML(collection_url('taxes')));
+	}
+	else if (collection == 'salesorders') {
+		d.push(getXML(collection_url('salesorderitems') + id + '/'));
+		d.push(getXML(collection_url('cycles')));
+		d.push(getXML(collection_url('products')));
+	}
+
+	return d;
 }
 
 /******************************************************************************/
