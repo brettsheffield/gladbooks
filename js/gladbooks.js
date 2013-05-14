@@ -196,7 +196,7 @@ function updateTab(tabid, content) {
 /*******************************************************************************
  * return jQuery object for specified tab, or active tab if no tab specified  */
 function getTabById(tabid) {
-	return (tabid) ? $('#tab' + tabid) : activeTab();
+	return (tabid != null) ? $('#tab' + tabid) : activeTab();
 }
 
 /******************************************************************************/
@@ -544,18 +544,38 @@ function showQuery(collection, title, sort, tab) {
 /******************************************************************************/
 /* fetch html form from server to display */
 function getForm(object, action, title, xml, tab) {
-	showSpinner();
-	return $.ajax({
-		url: '/html/forms/' + object + '/' + action + '.html',
-		beforeSend: function (xhr) { setAuthHeader(xhr); },
-		dataType: "html",
-		success: function(html) {
-			displayForm(object, action, title, html, xml, tab);
-		},
-		error: function(html) {
-			displayForm(object, action, title, html, null, tab);
-		}
+	console.log('getForm()');
+	showSpinner(); /* tell user to wait */
+
+	var d = fetchFormData(object, action);
+	$.when.apply(null, d)
+	.done(function(html) {
+		var args = Array.prototype.splice.call(arguments, 1);
+		console.log(args);
+		displayForm(object, action, title, html[0], args, tab);
+	})
+	.fail(function() {
+		console.log('fetchFormData() failed');
+		hideSpinner();
 	});
+}
+
+
+/******************************************************************************/
+function fetchFormData(object, action) {
+	console.log('fetchFormData()');
+	var d = new Array(); /* array of deferreds */
+
+	var formURL = '/html/forms/' + object + '/' + action + '.html';
+	d.push(getHTML(formURL));   /* fetch html form */
+
+	if (object == 'salesorder') {
+		d.push(getXML(collection_url('organisations')));
+		d.push(getXML(collection_url('cycles')));
+		d.push(getXML(collection_url('products')));
+	}
+
+	return d;
 }
 
 /******************************************************************************/
@@ -573,7 +593,7 @@ function populateForm(tab, object, xml) {
 
 	if (xml) {
 		/* we have some data, pre-populate form */
-		$(xml).find('resources').find('row').children().each(function() {
+		$(xml[0]).find('resources').find('row').children().each(function() {
 			if (this.tagName == 'id') {
 				id = $(this).text();
 			}
@@ -627,6 +647,7 @@ function handleSubforms(tab, html, id, xml) {
 function displayForm(object, action, title, html, xml, tab) {
 	console.log('displayForm("'+ object +'","'+ action +'","'+ title +'")');
 	var id = 0;
+	var x = 0;
 
 	if ((object == 'salesorder') && (action == 'update') && (xml[0])) {
 		/* Display Sales Order number as tab title */
@@ -640,10 +661,12 @@ function displayForm(object, action, title, html, xml, tab) {
 		tab = addTab(title, html, false);
 	}
 
-	id = populateForm(tab, object, xml[0]); /* pre-populate form */
+	if (action == 'update') {
+		id = populateForm(tab, object, xml); /* pre-populate form */
+		x = 2;
+	}
 
 	/* populate combos with xml data */
-	var x = 2;
 	var mytab = getTabById(tab);
 	mytab.find('select.populate:not(.sub)').each(function() {
 		var combo = $(this);
@@ -651,7 +674,9 @@ function displayForm(object, action, title, html, xml, tab) {
 		x++;
 	});
 
-	handleSubforms(tab, html, id, xml[1])   /* deal with subforms */
+	if (action == 'update') {
+		handleSubforms(tab, html, id, xml)   /* deal with subforms */
+	}
 
 	/* finalise form display */
 	finaliseForm(tab, object, action, id);
@@ -1067,8 +1092,7 @@ function salesorderAddProduct(datatable, tab) {
 	row.find('button.removerow').click(function () {
 		$(this).parent().parent().fadeOut(300, function() {
 			$(this).remove();
-			/* FIXME */
-			//updateSalesOrderTotals(tab);
+			updateSalesOrderTotals(tab);
 		});
 	});
 
@@ -1080,8 +1104,7 @@ function salesorderAddProduct(datatable, tab) {
 		$(this).removeClass('chosify');
 	});
 
-	/* FIXME */
-	//updateSalesOrderTotals(tab);
+	updateSalesOrderTotals(tab);
 }
 
 /******************************************************************************/
@@ -1136,6 +1159,11 @@ function loadCombo(datasource, combo) {
 function populateCombo(xml, combo, tab) {
 	console.log('populateCombo()');
 	console.log('Combo data loaded for ' + combo.attr('name'));
+	if (!(xml)) {
+		console.log('no data supplied for combo');
+		return false;
+	}
+	console.log(xml);
 	var selections = [];
 	var mytab = getTabById(tab);
 
@@ -1266,9 +1294,6 @@ function comboChange(combo, xml, tab) {
 
 	/* in the salesorder form, dynamically set placeholders to show defaults */
 	if (getTabById(tab).find('div.salesorder')) {
-		if (newval == '-1') {
-			alert('I want a cup of tea');
-		}
 		$(xml).find('row').find('id').each(function() {
 			if ($(this).text() == newval) {
 				var desc = $(this).parent().find('description').text();
@@ -1548,38 +1573,32 @@ function prepareSalesOrderData(tag) {
 }
 
 /******************************************************************************/
-function addSalesOrderProductField(field, value) {
+function addSalesOrderProductField(field, value, mytab) {
 	if (value.length > 0) {
-		activeTab().find('input.nosubmit[name="' + field + '"]').val(value);
+		mytab.find('input.nosubmit[name="' + field + '"]').val(value);
 	}
 }
 
 /******************************************************************************/
-function addSalesOrderProducts(xml, datatable, tab) {
+function addSalesOrderProducts(xml, datatable) {
+	console.log('addSalesOrderProducts()');
 	$(xml).find('resources').find('row').each(function() {
-		var mytab = getTabById(tab);
-		var id = $(this).find('id').text();
-		var salesorder = $(this).find('salesorder').text();
 		var product = $(this).find('product').text();
 		var linetext = $(this).find('linetext').text();
-		var discount = $(this).find('discount').text();
 		var price = $(this).find('price').text();
 		var qty = $(this).find('qty').text();
 
-		/* select product */
-		var p = mytab.find('select.nosubmit[name="product"]');
-		p.find('option[value="' + product + '"]').attr('selected', 'selected');
-		p.trigger("change");
-
-		addSalesOrderProductField('linetext', linetext);
-		addSalesOrderProductField('price', price);
-		addSalesOrderProductField('qty', qty);
-
-		/* trigger line total calculation */
-		mytab.find('input.qty').trigger('blur');
-
-		salesorderAddProduct(datatable, tab)
+		addSalesOrderProduct(datatable, product, linetext, price, qty);
 	});
+}
+
+/*******************************************************************************/
+function addSalesOrderProduct(datatable, product, linetext, price, qty) {
+	console.log('addSalesOrderProduct()');
+	console.log('Adding product to SO: ' + product);
+	console.log('linetext: ' + linetext);
+	console.log('price: ' + price);
+	console.log('qty: ' + qty);
 }
 
 /*******************************************************************************
@@ -1650,11 +1669,13 @@ function displaySubformData(view, parentid, xml, tab) {
 	var types = [];
 	datatable.find('tbody').empty();
 
-	if (view == 'salesorderitems') {
-		addSalesOrderProducts(xml, datatable, tab);
-	}
-	else {
-		addSubFormRows(xml, datatable, view, tab);
+	if (xml) {
+		if (view == 'salesorderitems') {
+			addSalesOrderProducts(xml[1], datatable);
+		}
+		else {
+			addSubFormRows(xml[1], datatable, view, tab);
+		}
 	}
 
 	datatable.find('select.chosify').chosen(); /* format combos */
@@ -1852,9 +1873,14 @@ function collectionObject(c) {
 /* Fetch an individual element of a collection for display / editing */
 function displayElement(collection, id) {
 	var object = collectionObject(collection);
-	var action = 'update';
 	var title = 'Edit ' + object.substring(0,1).toUpperCase()
 		+ object.substring(1) + ' ' + id;
+	if (id) {
+		var action = 'update';
+	}
+	else {
+		var action = 'create';
+	}
 
 	showSpinner(); /* tell user to wait */
 
