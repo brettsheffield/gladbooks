@@ -638,7 +638,9 @@ function handleSubforms(tab, html, id, xml) {
 			}
 		});
 		btnAdd.addClass('btnAdd');
-		displaySubformData(view, id, xml, tab);
+		if (id) {
+			displaySubformData(view, id, xml, tab);
+		}
 	});
 }
 
@@ -674,9 +676,7 @@ function displayForm(object, action, title, html, xml, tab) {
 		x++;
 	});
 
-	if (action == 'update') {
-		handleSubforms(tab, html, id, xml)   /* deal with subforms */
-	}
+	handleSubforms(tab, html, id, xml)   /* deal with subforms */
 
 	/* finalise form display */
 	finaliseForm(tab, object, action, id);
