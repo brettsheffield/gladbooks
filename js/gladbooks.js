@@ -1051,11 +1051,9 @@ function cloneInput(mytab, input, value) {
 	var iSelector = 'input.' + iClass + '.' + input;
 	var iBox = mytab.find(iSelector);
 	var td = iBox.parent().clone(true);
-	if (value != null) {
-		td.text(value);
-	}
 	td.addClass('xml-' + input);
 	td.find(iSelector).each(function() {
+		$(this).val(value);
 		$(this).removeClass(iClass);
 		if (input == 'qty') {
 			$(this).addClass('endsub');
@@ -1699,7 +1697,7 @@ function displaySubformData(view, parentid, xml, tab) {
 
 	datatable.find('select.chosify').chosen(); /* format combos */
 	datatable.find('tbody').fadeIn(300);       /* display table body */
-	clearForm(datatable);                      /* clear form */
+	//clearForm(datatable);                      /* clear form */
 
 	/* attach click event to remove rows from subform */
 	datatable.find('button.removerow').click(function() {
