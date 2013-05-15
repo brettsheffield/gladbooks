@@ -830,6 +830,7 @@ function changeRadio(radio, object) {
 /******************************************************************************/
 /* recalculate line total */
 function recalculateLineTotal(parentrow, tab) {
+	console.log('recalculateLineTotal()');
 	var p = parentrow.find('input.price').val();
 	var q = parentrow.find('input.qty').val();
 
@@ -837,7 +838,12 @@ function recalculateLineTotal(parentrow, tab) {
 	if (!p) {
 		p = parentrow.find('input.price').attr('placeholder');
 	}
-
+	if (isNaN(p)) {
+		p = 0;
+	}
+	if (isNaN(q)) {
+		q = 0;
+	}
 	p = new Big(p);
 	q = new Big(q);
 	var t = p.times(q);
@@ -992,10 +998,14 @@ function updateSalesOrderTotals(tab) {
 	var taxes = Big('0.00');
 	var gtotal = Big('0.00');
 	var mytab = getTabById(tab);
+	var x = 0;
 
 	mytab.find('input.total:not(.clone)').each(function() 
 	{
-		subtotal = subtotal.plus(Big($(this).val()));
+		x = $(this).val();
+		if ((! isNaN(x)) && (x != '')) {
+			subtotal = subtotal.plus(Big(x));
+		}
 	});
 
 	gtotal = subtotal.plus(taxes);
@@ -1013,7 +1023,6 @@ function updateSalesOrderTotals(tab) {
 	{
 		$(this).text(gtotal);
 	});
-
 }
 
 /******************************************************************************/
@@ -1031,7 +1040,7 @@ function productBoxClone(mytab, product) {
 }
 
 /******************************************************************************/
-function cloneInput(mytab, input) {
+function cloneInput(mytab, input, value) {
 	console.log('Cloning input ' + input);
 	if (input == 'total') {
 		var iClass = 'clone';
@@ -1042,6 +1051,9 @@ function cloneInput(mytab, input) {
 	var iSelector = 'input.' + iClass + '.' + input;
 	var iBox = mytab.find(iSelector);
 	var td = iBox.parent().clone(true);
+	if (value != null) {
+		td.text(value);
+	}
 	td.addClass('xml-' + input);
 	td.find(iSelector).each(function() {
 		$(this).removeClass(iClass);
@@ -1053,13 +1065,31 @@ function cloneInput(mytab, input) {
 }
 
 /******************************************************************************/
-function salesorderAddProduct(datatable, tab) {
-	var mytab = getTabById(tab);
-	var product = mytab.find('select.product.nosubmit').val();
-	var linetext = mytab.find('input[name$="linetext"]').val();
-	var price = mytab.find('input[name$="price"]').val();
-	var row = $('<tr class="even"></tr>');
+function salesorderAddProduct(tab, datatable, product, linetext, price, qty) {
+	console.log('salesorderAddProduct()');
 	console.log('Adding product ' + product + ' to salesorder');
+	var mytab = getTabById(tab);
+	var row = $('<tr class="even"></tr>');
+
+	/* TODO: 
+	 * set product combo val
+	 * trigger change
+	 * placeholders will then update
+	 * then finally overwrite with any supplied values
+	 */
+
+	if (product == null) {
+		product = mytab.find('select.product.nosubmit').val();
+	}
+	if (linetext == null) {
+		linetext = mytab.find('input[name$="linetext"]').val();
+	}
+	if (price == null) {
+		price = mytab.find('input[name$="price"]').val();
+	}
+	if (qty == null) {
+		qty = mytab.find('input[name$="qty"]').val();
+	}
 
 	statusHide();
 
@@ -1075,13 +1105,13 @@ function salesorderAddProduct(datatable, tab) {
 	row.append(productBoxClone(mytab, product));
 
 	/* append linetext input */
-	row.append(cloneInput(mytab, 'linetext'));
+	row.append(cloneInput(mytab, 'linetext', linetext));
 
 	/* clone price input and events */
-	row.append(cloneInput(mytab, 'price'));
+	row.append(cloneInput(mytab, 'price', price));
 
 	/* clone qty input and events */
-	row.append(cloneInput(mytab, 'qty'));
+	row.append(cloneInput(mytab, 'qty', qty));
 
 	/* clone total input and events */
 	row.append(cloneInput(mytab, 'total'));
@@ -1102,6 +1132,7 @@ function salesorderAddProduct(datatable, tab) {
 	datatable.find('select.chosify').each(function() {
 		$(this).chosen();
 		$(this).removeClass('chosify');
+		$(this).trigger('change');
 	});
 
 	updateSalesOrderTotals(tab);
@@ -1163,7 +1194,6 @@ function populateCombo(xml, combo, tab) {
 		console.log('no data supplied for combo');
 		return false;
 	}
-	console.log(xml);
 	var selections = [];
 	var mytab = getTabById(tab);
 
@@ -1580,7 +1610,7 @@ function addSalesOrderProductField(field, value, mytab) {
 }
 
 /******************************************************************************/
-function addSalesOrderProducts(xml, datatable) {
+function addSalesOrderProducts(tab, datatable, xml) {
 	console.log('addSalesOrderProducts()');
 	$(xml).find('resources').find('row').each(function() {
 		var product = $(this).find('product').text();
@@ -1588,17 +1618,8 @@ function addSalesOrderProducts(xml, datatable) {
 		var price = $(this).find('price').text();
 		var qty = $(this).find('qty').text();
 
-		addSalesOrderProduct(datatable, product, linetext, price, qty);
+		salesorderAddProduct(tab, datatable, product, linetext, price, qty);
 	});
-}
-
-/*******************************************************************************/
-function addSalesOrderProduct(datatable, product, linetext, price, qty) {
-	console.log('addSalesOrderProduct()');
-	console.log('Adding product to SO: ' + product);
-	console.log('linetext: ' + linetext);
-	console.log('price: ' + price);
-	console.log('qty: ' + qty);
 }
 
 /*******************************************************************************
@@ -1662,8 +1683,6 @@ function clearForm(datatable) {
 /* We've loaded data for a subform; display it */
 function displaySubformData(view, parentid, xml, tab) {
 	console.log('displaySubformData()');
-	console.log("Displaying subform " + view + " data");
-	console.log('displaySubformData() is operating on tab ' + tab);
 	var mytab = getTabById(tab);
 	var datatable = mytab.find('div.' + view).find('table.datatable');
 	var types = [];
@@ -1671,7 +1690,7 @@ function displaySubformData(view, parentid, xml, tab) {
 
 	if (xml) {
 		if (view == 'salesorderitems') {
-			addSalesOrderProducts(xml[1], datatable);
+			addSalesOrderProducts(tab, datatable, xml[1]);
 		}
 		else {
 			addSubFormRows(xml[1], datatable, view, tab);
