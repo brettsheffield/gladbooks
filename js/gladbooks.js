@@ -594,21 +594,25 @@ function populateForm(tab, object, xml) {
 	if (xml) {
 		/* we have some data, pre-populate form */
 		$(xml[0]).find('resources').find('row').children().each(function() {
-			if (this.tagName == 'id') {
-				id = $(this).text();
-			}
-			mytab.find('form.' + object).find(
-				"[name='" + this.tagName + "']"
-			).val($(this).text());
+			var tagName = this.tagName;
+			var tagValue = $(this).text();
 
-			if ((this.tagName == 'town') || (this.tagName == 'postcode')) {
-				/* grab whatever location data we can, giving preference to 
-				 * postcode */
-				if ($(this).text().length > 0) {
-					locString = $(this).text();
+			if (tagName == 'id') {
+				id = tagValue;
+			}
+
+			console.log(tagName + ' == ' + tagValue); /* temp */
+
+			mytab.find('form.' + object).find(
+				"[name='" + tagName + "']"
+			).val(tagValue);
+
+			/* get location data, giving preference to postcode */
+			if ((tagName == 'town') || (tagName == 'postcode')) {
+				if (tagValue.length > 0) {
+					locString = tagValue;
 				}
 			}
-
 		});
 
 		/* load map */
@@ -617,7 +621,6 @@ function populateForm(tab, object, xml) {
 			loadMap(locString, tab);
 		}
 	}
-
 	return id;
 }
 
