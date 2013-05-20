@@ -631,7 +631,7 @@ function handleSubforms(tab, html, id, xml) {
 		var btnAdd = datatable.find('button.addrow:not(.btnAdd)');
 		btnAdd.click(function(){
 			if (view == 'salesorderitems') {
-				salesorderAddProduct(datatable, tab);
+				salesorderAddProduct(tab, datatable);
 			}
 			else {
 				addSubformEvent($(this), view, id, tab);
