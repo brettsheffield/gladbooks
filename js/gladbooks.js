@@ -1889,6 +1889,7 @@ function collectionObject(c) {
 /******************************************************************************/
 /* Fetch an individual element of a collection for display / editing */
 function displayElement(collection, id) {
+	console.log('displayElement()');
 	var object = collectionObject(collection);
 	var title = 'Edit ' + object.substring(0,1).toUpperCase()
 		+ object.substring(1) + ' ' + id;
@@ -1918,6 +1919,7 @@ function displayElement(collection, id) {
 
 /******************************************************************************/
 function fetchElementData(collection, id, object, action) {
+	console.log('fetchElementData()');
 	var dataURL = collection_url(collection) + id;
 	var formURL = '/html/forms/' + object + '/' + action + '.html';
 	var d = new Array(); /* array of deferreds */

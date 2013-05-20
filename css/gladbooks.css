@@ -513,7 +513,8 @@ select.organisations {
 
 select.account,
 select.contactlink,
-select.product {
+select.product,
+select.tax {
   width: 20em; }
 
 /* totals table (salesorder form) */
