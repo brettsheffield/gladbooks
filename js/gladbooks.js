@@ -179,7 +179,7 @@ function activeTabId() {
 }
 
 /******************************************************************************/
-function updateTab(tabid, content) {
+function updateTab(tabid, content, activate) {
 	console.log('updating tab ' + tabid);
 	var tab = $('#tab' + tabid);
 
@@ -191,6 +191,7 @@ function updateTab(tabid, content) {
 	if (statusmsg) {
 		tab.find('.statusmsg').replaceWith(statusmsg);
 	}
+	return tabid;
 }
 
 /*******************************************************************************
@@ -1864,7 +1865,7 @@ function submitFormSuccess(object, action, id, collection) {
 
 	if (action == 'create') {
 		/* clear form ready for more data entry */
-		var mytab = $('div.tablet.active.business' + g_business);
+		var mytab = activeTab();
 		var myform = mytab.find('div.' + object + '.' + action);
 		var tab = activeTabId();
 
