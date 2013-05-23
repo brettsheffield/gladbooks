@@ -514,6 +514,7 @@ select.organisations {
 select.account,
 select.contactlink,
 select.product,
+select.type,
 select.tax {
   width: 20em; }
 

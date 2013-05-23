@@ -1223,15 +1223,17 @@ function populateCombo(xml, combo, tab) {
 		if (combo.attr('name') == 'cycle') {
 			var name = $(this).find('cyclename').text();
 		}
-		else if ((combo.attr('name') == 'account') ||
-		         (combo.attr('name') == 'type')) 
-		{
+		else if (combo.attr('name') == 'account') {
    			var id = $(this).find('nominalcode').text();
 			id = padString(id, 4);  /* pad nominal code to 4 digits */
 			var name = id + " - " + $(this).find('account').text();
 		}
 		else if (combo.attr('name') == 'product') {
 			var name = $(this).find('shortname').text();
+		}
+		else if (combo.attr('name') == 'type') {
+			id = padString(id, 4);  /* pad nominal code to 4 digits */
+			var name = $(this).find('name').text();
 		}
 		else {
 			var name = $(this).find('name').text();
@@ -1937,12 +1939,18 @@ function fetchElementData(collection, id, object, action) {
 
 	/* stack up our async calls */
 	d.push(getHTML(formURL));	/* fetch html form */
-	d.push(getXML(dataURL));	/* fetch element data */
+
+	if (id) {
+		d.push(getXML(dataURL));	/* fetch element data */
+	}
 
 	/* fetch any other data we need:
 	 *  first, any subform rows, 
 	 *  then, combos in the order they appear on the form */
-	if (collection == 'organisations') {
+	if (collection == 'accounts') {
+		d.push(getXML(collection_url('accounttypes')));
+	}
+	else if (collection == 'organisations') {
 		d.push(getXML(collection_url('organisation_contacts') + id + '/'));
 		d.push(getXML(collection_url('relationships')));
 		d.push(getXML(collection_url('contacts')));
