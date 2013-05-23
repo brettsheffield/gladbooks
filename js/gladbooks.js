@@ -601,11 +601,12 @@ function populateForm(tab, object, xml) {
 				id = tagValue;
 			}
 
-			console.log(tagName + ' == ' + tagValue); /* temp */
-
-			mytab.find('form.' + object).find(
+			/* set field value */
+			var fld = mytab.find('form.' + object).find(
 				"[name='" + tagName + "']"
-			).val(tagValue);
+			);
+			fld.val(tagValue);
+			fld.trigger("liszt:updated");/* ensure chosen type combos update */
 
 			/* get location data, giving preference to postcode */
 			if ((tagName == 'town') || (tagName == 'postcode')) {
@@ -667,7 +668,6 @@ function displayForm(object, action, title, html, xml, tab) {
 	}
 
 	if (action == 'update') {
-		id = populateForm(tab, object, xml); /* pre-populate form */
 		x = 2;
 	}
 
@@ -678,6 +678,10 @@ function displayForm(object, action, title, html, xml, tab) {
 		populateCombo(xml[x], combo, tab);
 		x++;
 	});
+
+	if (action == 'update') {
+		id = populateForm(tab, object, xml); /* pre-populate form */
+	}
 
 	handleSubforms(tab, html, id, xml)   /* deal with subforms */
 
@@ -1102,7 +1106,6 @@ function salesorderAddProduct(tab, datatable, product, linetext, price, qty) {
 	/* We're not saving anything yet - just building up a salesorder on the
 	 * screen until the user clicks "save" */
 
-	/* copy the product combo and prepare for chosen() */
 	row.append(productBoxClone(mytab, product));
 
 	/* append linetext input */
