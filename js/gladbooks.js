@@ -1883,8 +1883,9 @@ function submitFormError(object, action, id) {
 /******************************************************************************/
 /* return the singular object name for a given collection */
 function collectionObject(c) {
-	if (c == 'taxes') {
-		return 'tax';
+	if (c.substring(c.length - 2) == 'es') {
+		/* plural ending in 'es' */
+		return c.substring(0, c.length - 2);
 	}
 	else {
 		/* the general case
