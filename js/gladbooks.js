@@ -1912,7 +1912,7 @@ function collectionObject(c) {
 /******************************************************************************/
 /* Fetch an individual element of a collection for display / editing */
 function displayElement(collection, id) {
-	console.log('displayElement()');
+	console.log('displayElement(' + collection + ',' + id + ')');
 	var object = collectionObject(collection);
 	var title = 'Edit ' + object.substring(0,1).toUpperCase()
 		+ object.substring(1) + ' ' + id;
@@ -2085,7 +2085,13 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 	/* attach click event */
 	$t.find('tr').click(function(event) {
 		event.preventDefault();
-		displayElement(collection,$(this).find('td.xml-id').text());
+		if (collection == 'accounts') {
+			var id = $(this).find('td.xml-nominalcode').text();
+		}
+		else {
+			var id = $(this).find('td.xml-id').text();
+		}
+		displayElement(collection, id);
 	});
 
 	if (tab) {
