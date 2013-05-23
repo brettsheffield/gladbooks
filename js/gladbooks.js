@@ -1223,7 +1223,9 @@ function populateCombo(xml, combo, tab) {
 		if (combo.attr('name') == 'cycle') {
 			var name = $(this).find('cyclename').text();
 		}
-		else if (combo.attr('name') == 'account') {
+		else if ((combo.attr('name') == 'account') ||
+		         (combo.attr('name') == 'type')) 
+		{
    			var id = $(this).find('nominalcode').text();
 			id = padString(id, 4);  /* pad nominal code to 4 digits */
 			var name = id + " - " + $(this).find('account').text();
