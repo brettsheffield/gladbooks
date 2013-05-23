@@ -552,7 +552,8 @@ function getForm(object, action, title, xml, tab) {
 	$.when.apply(null, d)
 	.done(function(html) {
 		var args = Array.prototype.splice.call(arguments, 1);
-		displayForm(object, action, title, html, args, tab);
+		var safeHTML = $.parseHTML(html[0]);
+		displayForm(object, action, title, safeHTML, args, tab);
 	})
 	.fail(function() {
 		console.log('fetchFormData() failed');
@@ -563,16 +564,25 @@ function getForm(object, action, title, xml, tab) {
 
 /******************************************************************************/
 function fetchFormData(object, action) {
-	console.log('fetchFormData()');
+	console.log('fetchFormData(' + object + ',' + action + ')');
 	var d = new Array(); /* array of deferreds */
 
 	var formURL = '/html/forms/' + object + '/' + action + '.html';
 	d.push(getHTML(formURL));   /* fetch html form */
 
-	if (object == 'salesorder') {
+	if (object == 'account') {
+		d.push(getXML(collection_url('accounttypes')));
+	}
+	else if (object == 'product') {
+		d.push(getXML(collection_url('accounts')));
+	}
+	else if (object == 'salesorder') {
 		d.push(getXML(collection_url('organisations')));
 		d.push(getXML(collection_url('cycles')));
 		d.push(getXML(collection_url('products')));
+	}
+	else {
+		d.push($.Deferred().resolve()); /* succeed at nothing */
 	}
 
 	return d;
