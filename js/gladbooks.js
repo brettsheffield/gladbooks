@@ -2012,7 +2012,7 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 	$t += "<thead>";
 	$t += "<tr>";
 	var row = 0;
-	$(xml).find('resources').children().each(function() {
+	$(xml).find('resources').find('row').each(function() {
 		row += 1;
 		if (row == 1) {
 			$(this).children().each(function() {
