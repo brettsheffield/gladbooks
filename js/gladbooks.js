@@ -1942,7 +1942,7 @@ function displayElement(collection, id) {
 
 /******************************************************************************/
 function fetchElementData(collection, id, object, action) {
-	console.log('fetchElementData()');
+	console.log('fetchElementData(' + collection + ',' + id + ')');
 	var dataURL = collection_url(collection) + id;
 	var formURL = '/html/forms/' + object + '/' + action + '.html';
 	var d = new Array(); /* array of deferreds */
@@ -2098,7 +2098,7 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 
 	/* make our table pretty and sortable */
 	if (sorted) {
-		$('.tablet.active.business' + g_business).find(".datatable").tablesorter({
+		getTabById(tab).find(".datatable").tablesorter({
 			sortList: [[0,0], [1,0]], 
 			widgets: ['zebra'] 
 		});
