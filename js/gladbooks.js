@@ -551,8 +551,7 @@ function getForm(object, action, title, xml, tab) {
 	$.when.apply(null, d)
 	.done(function(html) {
 		var args = Array.prototype.splice.call(arguments, 1);
-		console.log(args);
-		displayForm(object, action, title, html[0], args, tab);
+		displayForm(object, action, title, html, args, tab);
 	})
 	.fail(function() {
 		console.log('fetchFormData() failed');
@@ -628,6 +627,7 @@ function populateForm(tab, object, xml) {
 /******************************************************************************/
 /* deal with subforms */
 function handleSubforms(tab, html, id, xml) {
+	console.log('handleSubforms()');
 	$(html).find('form.subform').each(function() {
 		var view = $(this).attr("action");
 		var mytab = getTabById(tab);
