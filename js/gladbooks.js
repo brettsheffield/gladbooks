@@ -691,7 +691,7 @@ function displayForm(object, action, title, html, xml, tab) {
 
 /******************************************************************************/
 function finaliseForm(tab, object, action, id) {
-	formatDatePickers();        			  /* date pickers */
+	formatDatePickers(tab);        			  /* date pickers */
 	formatRadioButtons(tab, object);  		  /* tune the radio */
 	formBlurEvents(tab);					  /* set up blur() events */
 	formEvents(tab, object, action, id);      /* submit and click events etc. */
@@ -770,8 +770,9 @@ function formatRadioButtons(tab, object) {
 }
 
 /******************************************************************************/
-function formatDatePickers() {
-	$('div.active').find('.datefield').datepicker({
+function formatDatePickers(tab) {
+	var mytab = getTabById(tab);
+	mytab.find('.datefield').datepicker({
 	   	dateFormat: "yy-mm-dd",
 		constrainInput: true
 	});
