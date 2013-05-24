@@ -1139,8 +1139,14 @@ function salesorderAddProduct(tab, datatable, id, product, linetext, price, qty)
 	/* add handler to remove row */
 	row.find('button.removerow').click(function () {
 		$(this).parent().parent().fadeOut(300, function() {
-			$(this).find('input[name="is_deleted"]').val('1');
-			$(this).find('input.total').val('0');
+			if ($(this).find('input[name="subid"]').val() != null) {
+				$(this).find('input[name="is_deleted"]').val('1');
+				$(this).find('input.total').val('0');
+			}
+			else {
+				/* this item hadn't been saved yet, so just remove */
+				$(this).remove();
+			}
 			updateSalesOrderTotals(tab);
 		});
 	});
