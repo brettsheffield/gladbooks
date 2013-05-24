@@ -1082,18 +1082,12 @@ function cloneInput(mytab, input, value) {
 }
 
 /******************************************************************************/
-function salesorderAddProduct(tab, datatable, product, linetext, price, qty) {
+function salesorderAddProduct(tab, datatable, id, product, linetext, price, qty)
+{
 	console.log('salesorderAddProduct()');
 	console.log('Adding product ' + product + ' to salesorder');
 	var mytab = getTabById(tab);
 	var row = $('<tr class="even"></tr>');
-
-	/* TODO: 
-	 * set product combo val
-	 * trigger change
-	 * placeholders will then update
-	 * then finally overwrite with any supplied values
-	 */
 
 	if (product == null) {
 		product = mytab.find('select.product.nosubmit').val();
@@ -1118,7 +1112,15 @@ function salesorderAddProduct(tab, datatable, product, linetext, price, qty) {
 	/* We're not saving anything yet - just building up a salesorder on the
 	 * screen until the user clicks "save" */
 
+	if (id) {
+		row.append('<input type="hidden" name="subid" value="' + id + '" />');
+	}
+
 	row.append(productBoxClone(mytab, product));
+
+	if (id) {
+		row.append('<input type="hidden" name="is_deleted" value="" />');
+	}
 
 	/* append linetext input */
 	row.append(cloneInput(mytab, 'linetext', linetext));
@@ -1137,7 +1139,8 @@ function salesorderAddProduct(tab, datatable, product, linetext, price, qty) {
 	/* add handler to remove row */
 	row.find('button.removerow').click(function () {
 		$(this).parent().parent().fadeOut(300, function() {
-			$(this).remove();
+			$(this).find('input[name="is_deleted"]').val('1');
+			$(this).find('input.total').val('0');
 			updateSalesOrderTotals(tab);
 		});
 	});
@@ -1633,12 +1636,13 @@ function addSalesOrderProductField(field, value, mytab) {
 function addSalesOrderProducts(tab, datatable, xml) {
 	console.log('addSalesOrderProducts()');
 	$(xml).find('resources').find('row').each(function() {
+		var id = $(this).find('id').text();
 		var product = $(this).find('product').text();
 		var linetext = $(this).find('linetext').text();
 		var price = $(this).find('price').text();
 		var qty = $(this).find('qty').text();
 
-		salesorderAddProduct(tab, datatable, product, linetext, price, qty);
+		salesorderAddProduct(tab, datatable, id, product, linetext, price, qty);
 	});
 }
 
@@ -1719,7 +1723,6 @@ function displaySubformData(view, parentid, xml, tab) {
 
 	datatable.find('select.chosify').chosen(); /* format combos */
 	datatable.find('tbody').fadeIn(300);       /* display table body */
-	//clearForm(datatable);                      /* clear form */
 
 	/* attach click event to remove rows from subform */
 	datatable.find('button.removerow').click(function() {
@@ -1747,11 +1750,19 @@ function btnClickLinkContact(parentid, tab) {
 
 /******************************************************************************/
 function btnClickRemoveRow(view, parentid) {
-	var trow = $(this).parent();
-	var id = trow.find('input[name="id"]').val();
-	console.log('Delete sub id + ' + id + ' from parent ' + parentid);
-	var url = collection_url(view) + parentid + '/' + id + '/';
-	console.log('DELETE ' + url);
+	console.log('btnClickRemoveRow(' + view + ',' + parentid + ')');
+	console.log('doing nothing');
+
+	/* Note: not used by salesorder */
+	/* product editing needs this */
+
+	//var trow = $(this).parent();
+	//var id = trow.find('input[name="id"]').val();
+	//console.log('Delete sub id + ' + id + ' from parent ' + parentid);
+	//var url = collection_url(view) + parentid + '/' + id + '/';
+	//console.log('DELETE ' + url);
+	//trow.parent().hide();
+	/*
 	$.ajax({
 		url: url,
 		type: 'DELETE',
@@ -1760,6 +1771,7 @@ function btnClickRemoveRow(view, parentid) {
 			trow.parent().remove();
 		},
 	});
+	*/
 }
 
 /******************************************************************************/
@@ -1769,6 +1781,7 @@ function submitForm(object, action, id) {
 	var url = '';
 	var collection = '';
 	var mytab = activeTab();
+	var subid = null;
 
 	/* if object has subforms, which xml tag do we wrap them in? */
 	if (object == 'salesorder') {
@@ -1801,14 +1814,22 @@ function submitForm(object, action, id) {
 	).find('input:not(.nosubmit,default),select:not(.nosubmit,.default)').each(function() {
 		var name = $(this).attr('name');
 		if (name) {
+			if (name == 'subid') {
+				subid = $(this).val();
+			}
 			console.log('processing input ' + name);
-			if ((name != 'id')
+			if ((name != 'id') && (name != 'subid')
 			&& ((name != 'relationship')||(object == 'organisation_contacts')))
 			{
 				console.log($(this).val());
 				if ($(this).hasClass('sub')) {
 					/* this is a subform entry, so add extra xml tag */
-					xml += '<' + subobject + '>';
+					xml += '<' + subobject;
+					if (subid) {
+						xml += ' id="' + subid + '"';
+						subid = null;
+					}
+					xml += '>';
 				}
 				if ($(this).val()) {
 					if ($(this).val().length > 0) { /* skip blanks */

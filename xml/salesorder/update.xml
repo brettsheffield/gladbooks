@@ -3,8 +3,15 @@
   <instance>default</instance>
   <business>1</business>
 	<data>
-		<organisation id="1">
-			<name>Rename of Organisation</name>
-		</organisation>
+		<salesorder id="1">
+			<cycle>7</cycle>
+			<start_date>2013-05-22</start_date>
+			<salesorderitem id="1">
+				<product>2</product>
+				<is_deleted>1</is_deleted>
+				<qty>1</qty>
+			</salesorderitem>
+		</salesorder>
 	</data>
 </request>
+
