@@ -1732,7 +1732,7 @@ function displaySubformData(view, parentid, xml, tab) {
 
 	/* attach click event to remove rows from subform */
 	datatable.find('button.removerow').click(function() {
-		btnClickRemoveRow(view, parentid);
+		btnClickRemoveRow(view, parentid, $(this).parent());
 	});
 
     /* "Link Contact" button event handler for organisation form */
@@ -1755,20 +1755,18 @@ function btnClickLinkContact(parentid, tab) {
 }
 
 /******************************************************************************/
-function btnClickRemoveRow(view, parentid) {
+function btnClickRemoveRow(view, parentid, trow) {
 	console.log('btnClickRemoveRow(' + view + ',' + parentid + ')');
-	console.log('doing nothing');
 
-	/* Note: not used by salesorder */
-	/* product editing needs this */
+	if (view == 'salesorderitems') {
+		console.log('skipping btnClickRemoveRow() for salesorder');
+		return;
+	}
 
-	//var trow = $(this).parent();
-	//var id = trow.find('input[name="id"]').val();
-	//console.log('Delete sub id + ' + id + ' from parent ' + parentid);
-	//var url = collection_url(view) + parentid + '/' + id + '/';
-	//console.log('DELETE ' + url);
-	//trow.parent().hide();
-	/*
+	var id = trow.find('input[name="id"]').val();
+	var url = collection_url(view) + parentid + '/' + id + '/';
+	console.log('DELETE ' + url);
+	trow.parent().hide();
 	$.ajax({
 		url: url,
 		type: 'DELETE',
@@ -1777,7 +1775,6 @@ function btnClickRemoveRow(view, parentid) {
 			trow.parent().remove();
 		},
 	});
-	*/
 }
 
 /******************************************************************************/
