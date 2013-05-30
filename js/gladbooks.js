@@ -1596,6 +1596,7 @@ function relationshipCombo(datatable, tag, id, tab) {
 		console.log('combo.change()');
 		if (combo.hasClass('relationship')) {
 			var trow = combo.parent();
+			var org = getTabById(tab).find('input[name="id"]').first().val();
 			var contact = trow.find('input[name="id"]').val();
 			var relationships = new Array();
 			for (var x=0; x < combo[0].options.length; x++) {
@@ -1603,9 +1604,8 @@ function relationshipCombo(datatable, tag, id, tab) {
 					relationships.push(x);
 				}
 			}
-			relationshipUpdate(parentid, contact, relationships);
+			relationshipUpdate(org, contact, relationships);
 		}
-		comboChange(tag, xml, tab);
 	});
 	td.append(combo);
 	return td;
