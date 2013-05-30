@@ -1458,8 +1458,8 @@ function loadSubformData(view, id, tab) {
 		url: url,
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
-			console.log("Loaded subform data.  Hoorah.");
-			displaySubformData(view, id, xml, tab);
+			console.log("Loaded subform data");
+			displaySubformData(view, id, [null, xml], tab);
 		},
 		error: function(xml) {
 			console.log('Error loading subform data');
@@ -1659,6 +1659,7 @@ function addSalesOrderProducts(tab, datatable, xml) {
  *
  ******************************************************************************/
 function addSubFormRows(xml, datatable, view, tab) {
+	console.log('addSubFormRows()');
 	var i = 0;
 	var id = 0;
 	$(xml).find('resources').find('row').each(function() {
