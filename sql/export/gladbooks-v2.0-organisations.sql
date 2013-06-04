@@ -1,0 +1,1 @@
+SELECT organisation, name, term, billcontact, is_active, is_suspended, is_vatreg, vatnumber, updated from organisationdetail where id IN (SELECT MAX(id) FROM organisationdetail GROUP BY organisation) INTO OUTFILE '/tmp/organisations.csv' FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' ESCAPED BY '\\' LINES TERMINATED BY '\n';
