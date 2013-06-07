@@ -55,9 +55,92 @@ function importData(src) {
 	.done(function(xml) {
 		console.log('data fetched');
 		displayResultsGeneric(xml, 'organisations', 'Accounts', true);
+		createOrganisations(xml);
 	})
 	.fail(function() {
 		console.log('failed to fetch data');
 		hideSpinner();
 	});
+}
+
+/* override gladbooks.js function */
+function displayElement() {
+	// do nothing
+}
+
+function createOrganisations(xml) {
+	var row = 0;
+	$(xml).find('resources').find('row').each(function() {
+		row += 1;
+		var doc = '';
+		var organisation_name = null;
+		var organisation_isactive = null;
+		var organisation_issuspended = null;
+		var organisation_isvatreg = null;
+		var organisation_terms = null;
+		var organisation_vatnumber = null;
+
+		$(this).children().each(function() {
+			if (this.tagName == 'name') {
+				organisation_name = $(this).text();
+			}
+			else if (this.tagName == 'is_active') {
+				organisation_isactive = $(this).text();
+			}
+			else if (this.tagName == 'is_suspended') {
+				organisation_issuspended = $(this).text();
+			}
+			else if (this.tagName == 'is_isvatreg') {
+				organisation_isvatreg = $(this).text();
+			}
+			else if (this.tagName == 'term') {
+				organisation_terms = $(this).text();
+			}
+			else if (this.tagName == 'vatnumber') {
+				organisation_vatnumber = $(this).text();
+			}
+		});
+		if (organisation_name != null) {
+			doc += '<organisation';
+			if (organisation_isactive != null) {
+				doc += ' is_active="' + organisation_isactive + '"';
+			}
+			if (organisation_issuspended != null) {
+				doc += ' is_suspended="' + organisation_issuspended + '"';
+			}
+			if (organisation_isvatreg != null) {
+				doc += ' is_vatreg="' + organisation_isvatreg + '"';
+			}
+			doc += '>';
+			doc += '<name>' + escapeHTML(organisation_name) + '</name>';
+			if (organisation_terms != null) {
+				doc += '<terms>' + organisation_terms + '</terms>';
+			}
+			if (organisation_vatnumber != null) {
+				if (organisation_vatnumber != 'NULL') {
+					doc += '<vatnumber>';
+					doc += escapeHTML(organisation_vatnumber);
+					doc += '</vatnumber>';
+				}
+			}
+			doc += '</organisation>';
+			postDoc(organisation_name, doc);
+		}
+	});
+	console.log(row + ' row(s) processed');
+}
+
+function postDoc(name, doc) {
+	var xml = createRequestXml() + doc + '</data></request>';
+	d = $.ajax({
+		url: collection_url('organisations'),
+		type: 'POST',
+		data: xml,
+		contentType: 'text/xml',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) { 
+			console.log('organisation "' + name + '" created'); 
+		},
+	});
+	return d;
 }
