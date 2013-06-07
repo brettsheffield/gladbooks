@@ -39,6 +39,11 @@ var STATUS_CRIT = 4;
 /******************************************************************************/
 $(document).ready(function() {
 
+	if (window.location.pathname != '/') {
+		/* we're not the main application page, bail out */
+		return false;
+	}
+
 	/* no password, display login dialog */
 	if (g_password == '') { displayLoginBox(); }
 
