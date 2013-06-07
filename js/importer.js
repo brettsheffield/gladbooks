@@ -20,13 +20,8 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-var SRC_GLADBOOKS = 0;
-var SRC_GLADSERV = 1;
-var SRC_PENGUINFACTORY = 2;
-
 $(document).ready(function() {
 	console.log('Gladbooks Data Importer loaded.');
-	prepMenu();
 });
 
 function clickMenu(event) {
@@ -34,11 +29,11 @@ function clickMenu(event) {
 
 	if ($(this).attr("href") == '#import_gladserv') {
 		console.log('Importing Gladserv Ltd data...');
-		importData(SRC_GLADSERV);
+		importData('gladserv');
 	}
 	else if ($(this).attr("href") == '#import_penguinfactory') {
 		console.log('Importing Penguin Factory Ltd data...');
-		importData(SRC_PENGUINFACTORY);
+		importData('penguinfactory');
 	}
 	else if ($(this).attr("href") == '#') {
 		console.log('Doing nothing, successfully');
@@ -53,11 +48,13 @@ function importData(src) {
 	var d = new Array();
 
 	showSpinner(); /* tell user to wait */
-	d.push(getXML(collection_url('organisations')));
+
+	d.push(getXML('/' + src + '/organisations/'));
+
 	$.when.apply(null, d)
 	.done(function(xml) {
 		console.log('data fetched');
-		hideSpinner();
+		displayResultsGeneric(xml, 'organisations', 'Accounts', true);
 	})
 	.fail(function() {
 		console.log('failed to fetch data');

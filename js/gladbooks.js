@@ -39,10 +39,10 @@ var STATUS_CRIT = 4;
 /******************************************************************************/
 $(document).ready(function() {
 
-	if (window.location.pathname != '/') {
+//	if (window.location.pathname != '/') {
 		/* we're not the main application page, bail out */
-		return false;
-	}
+//		return false;
+//	}
 
 	/* no password, display login dialog */
 	if (g_password == '') { displayLoginBox(); }
@@ -59,17 +59,7 @@ $(document).ready(function() {
 		$(this).fadeTo("slow", 0, function(){location.reload(true);});
 	});     
 
-	/* set up login box */
-	$("form.signin :input").bind("keydown", function(event) {
-		// handle enter key presses in input boxes
-		var keycode = (event.keyCode ? event.keyCode :
-			(event.which ? event.which : event.charCode));
-		if (keycode == 13) { // enter key pressed
-			// submit form
-			document.getElementById('btnLogin').click();
-			event.preventDefault();
-		}
-	});
+	loginSetup();
 
 	/* logout menu */
 	$('a.logout-window').click(function() {
@@ -89,6 +79,20 @@ $(document).ready(function() {
 	});
 
 });
+
+function loginSetup() {
+	/* set up login box */
+	$("form.signin :input").bind("keydown", function(event) {
+		// handle enter key presses in input boxes
+		var keycode = (event.keyCode ? event.keyCode :
+			(event.which ? event.which : event.charCode));
+		if (keycode == 13) { // enter key pressed
+			// submit form
+			document.getElementById('btnLogin').click();
+			event.preventDefault();
+		}
+	});
+}
 
 /*******************************************************************************
  * auth_check()
