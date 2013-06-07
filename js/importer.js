@@ -20,7 +20,47 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
+var SRC_GLADBOOKS = 0;
+var SRC_GLADSERV = 1;
+var SRC_PENGUINFACTORY = 2;
 
 $(document).ready(function() {
-	console.log('Gladbooks Data Importer');
+	console.log('Gladbooks Data Importer loaded.');
+	prepMenu();
 });
+
+function clickMenu(event) {
+	event.preventDefault();
+
+	if ($(this).attr("href") == '#import_gladserv') {
+		console.log('Importing Gladserv Ltd data...');
+		importData(SRC_GLADSERV);
+	}
+	else if ($(this).attr("href") == '#import_penguinfactory') {
+		console.log('Importing Penguin Factory Ltd data...');
+		importData(SRC_PENGUINFACTORY);
+	}
+	else if ($(this).attr("href") == '#') {
+		console.log('Doing nothing, successfully');
+	}
+	else {
+		addTab("Not Implemented", "<h2>Feature Not Available Yet</h2>", true);
+	}
+}
+
+function importData(src) {
+	console.log('importData()');
+	var d = new Array();
+
+	showSpinner(); /* tell user to wait */
+	d.push(getXML(collection_url('organisations')));
+	$.when.apply(null, d)
+	.done(function(xml) {
+		console.log('data fetched');
+		hideSpinner();
+	})
+	.fail(function() {
+		console.log('failed to fetch data');
+		hideSpinner();
+	});
+}
