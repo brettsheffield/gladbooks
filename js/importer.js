@@ -102,32 +102,32 @@ function createOrganisations(xml) {
 		});
 		if (organisation_name != null) {
 			doc += '<organisation';
-			if (organisation_isactive != null) {
-				doc += ' is_active="' + organisation_isactive + '"';
-			}
-			if (organisation_issuspended != null) {
-				doc += ' is_suspended="' + organisation_issuspended + '"';
-			}
-			if (organisation_isvatreg != null) {
-				doc += ' is_vatreg="' + organisation_isvatreg + '"';
-			}
+			doc = appendXMLAttr(doc, 'is_active', organisation_isactive);
+			doc = appendXMLAttr(doc, 'is_suspended', organisation_issuspended);
+			doc = appendXMLAttr(doc, 'is_vatreg', organisation_isvatreg);
 			doc += '>';
-			doc += '<name>' + escapeHTML(organisation_name) + '</name>';
-			if (organisation_terms != null) {
-				doc += '<terms>' + organisation_terms + '</terms>';
-			}
-			if (organisation_vatnumber != null) {
-				if (organisation_vatnumber != 'NULL') {
-					doc += '<vatnumber>';
-					doc += escapeHTML(organisation_vatnumber);
-					doc += '</vatnumber>';
-				}
-			}
+			doc = appendXMLTag(doc, 'name', organisation_name);
+			doc = appendXMLTag(doc, 'terms', organisation_terms);
+			doc = appendXMLTag(doc, 'vatnumber', organisation_vatnumber);
 			doc += '</organisation>';
 			postDoc(organisation_name, doc);
 		}
 	});
 	console.log(row + ' row(s) processed');
+}
+
+function appendXMLAttr(doc, attribute, value) {
+	if ((value != null) && (value != 'NULL')) {
+		doc += ' ' + attribute + '="' + value + '"';
+	}
+	return doc;
+}
+
+function appendXMLTag(doc, tagName, value) {
+	if ((value != null) && (value != 'NULL')){
+		doc += '<' + tagName + '>' + escapeHTML(value) + '</' + tagName + '>';
+	}
+	return doc;
 }
 
 function postDoc(name, doc) {
