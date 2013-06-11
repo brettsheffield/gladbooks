@@ -20,12 +20,22 @@
 		<xsl:text>BEGIN;</xsl:text>
 
                 <xsl:if test="not(@id)">
-                        <xsl:text>INSERT INTO organisation (authuser, clientip) VALUES ('</xsl:text>
+                        <xsl:text>INSERT INTO organisation (</xsl:text>
+			<xsl:if test="@orgcode">
+				<xsl:text>orgcode, </xsl:text>
+			</xsl:if>
+                        <xsl:text>authuser, clientip) VALUES ('</xsl:text>
+			<xsl:if test="@orgcode">
+				<xsl:value-of select="@orgcode"/>
+				<xsl:text>','</xsl:text>
+			</xsl:if>
                         <xsl:copy-of select="$authuser"/>
                         <xsl:text>','</xsl:text>
                         <xsl:copy-of select="$clientip"/>
                         <xsl:text>');</xsl:text>
                 </xsl:if>
+
+		<!-- do contacts here -->
 
 		<xsl:text>INSERT INTO organisationdetail (organisation,</xsl:text>
 		<xsl:if test="name">

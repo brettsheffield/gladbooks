@@ -1,0 +1,24 @@
+<request>
+	<instance>test</instance>
+	<business>1</business>
+	<data>
+		<organisation orgcode="TESTORGX" is_active="1" is_suspended="0">
+			<name>Buckinghuge Palace Ltd</name>
+			<terms>2</terms>
+			<contact is_active="1" is_billing="1" is_shipping="0">
+				<name>Buckinghuge Palace</name>
+				<town>London</town>
+				<postcode>SW1A 1AA</postcode>
+				<email>buckinghuge@buckinghuge.co.uk</email>
+				<phone>01234 567890</phone>
+			</contact>
+			<contact is_active="1" is_billing="0" is_shipping="1">
+				<name>Servant's Entrance</name>
+				<town>London</town>
+				<postcode>SW1A 1AA</postcode>
+				<email>deliveries@buckinghuge.co.uk</email>
+				<phone>01234 567891</phone>
+			</contact>
+		</organisation>
+	</data>
+</request>

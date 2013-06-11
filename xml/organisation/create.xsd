@@ -17,7 +17,32 @@
 									<xs:element name="terms" type="xs:positiveInteger" minOccurs="0"/>
 									<xs:element name="billcontact" type="xs:positiveInteger" minOccurs="0"/>
 									<xs:element name="vatnumber" type="xs:string" minOccurs="0"/>
+
+									<xs:element name="contact" minOccurs="0" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="name" type="xs:string" minOccurs="0"/>
+												<xs:element name="line_1" type="xs:string" minOccurs="0"/>
+												<xs:element name="line_2" type="xs:string" minOccurs="0"/>
+												<xs:element name="line_3" type="xs:string" minOccurs="0"/>
+												<xs:element name="town" type="xs:string" minOccurs="0"/>
+												<xs:element name="county" type="xs:string" minOccurs="0"/>
+												<xs:element name="country" type="xs:string" minOccurs="0"/>
+												<xs:element name="postcode" type="xs:string" minOccurs="0"/>
+												<xs:element name="email" type="xs:string" minOccurs="0"/>
+												<xs:element name="phone" type="xs:string" minOccurs="0"/>
+												<xs:element name="phonealt" type="xs:string" minOccurs="0"/>
+												<xs:element name="mobile" type="xs:string" minOccurs="0"/>
+												<xs:element name="fax" type="xs:string" minOccurs="0"/>
+											</xs:sequence>
+											<xs:attribute name="is_active" type="xs:boolean"/>
+											<xs:attribute name="is_billing" type="xs:boolean"/>
+											<xs:attribute name="is_shipping" type="xs:boolean"/>
+										</xs:complexType>
+									</xs:element><!--contact-->
+
 								</xs:sequence>
+								<xs:attribute name="orgcode" type="xs:string"/>
 								<xs:attribute name="is_active" type="xs:boolean"/>
 								<xs:attribute name="is_suspended" type="xs:boolean"/>
 								<xs:attribute name="is_vatreg" type="xs:boolean"/>

@@ -55,7 +55,7 @@ function importData(src) {
 	.done(function(xml) {
 		console.log('data fetched');
 		displayResultsGeneric(xml, 'organisations', 'Accounts', true);
-		createOrganisations(xml);
+		createOrganisations(src, xml);
 	})
 	.fail(function() {
 		console.log('failed to fetch data');
@@ -63,25 +63,38 @@ function importData(src) {
 	});
 }
 
+function fetchContactsByOrganisation(src, id) {
+	var d = new Array();
+	d.push(getXML('/' + src + '/organisation_contacts/' + id + '/'));
+	return d;
+}
+
 /* override gladbooks.js function */
 function displayElement() {
 	// do nothing
 }
 
-function createOrganisations(xml) {
+function createOrganisations(src, xml) {
 	var row = 0;
+
+	/* loop through rows */
 	$(xml).find('resources').find('row').each(function() {
 		row += 1;
 		var doc = '';
+		var organisation_id = null;
 		var organisation_name = null;
 		var organisation_isactive = null;
 		var organisation_issuspended = null;
 		var organisation_isvatreg = null;
 		var organisation_terms = null;
 		var organisation_vatnumber = null;
-
+		
+		/* loop through fields */
 		$(this).children().each(function() {
-			if (this.tagName == 'name') {
+			if (this.tagName == 'account') {
+				organisation_id = $(this).text();
+			}
+			else if (this.tagName == 'name') {
 				organisation_name = $(this).text();
 			}
 			else if (this.tagName == 'is_active') {
@@ -100,8 +113,10 @@ function createOrganisations(xml) {
 				organisation_vatnumber = $(this).text();
 			}
 		});
+		/* build organisation xml */
 		if (organisation_name != null) {
 			doc += '<organisation';
+			doc = appendXMLAttr(doc, 'orgcode', organisation_id);
 			doc = appendXMLAttr(doc, 'is_active', organisation_isactive);
 			doc = appendXMLAttr(doc, 'is_suspended', organisation_issuspended);
 			doc = appendXMLAttr(doc, 'is_vatreg', organisation_isvatreg);
@@ -109,8 +124,14 @@ function createOrganisations(xml) {
 			doc = appendXMLTag(doc, 'name', organisation_name);
 			doc = appendXMLTag(doc, 'terms', organisation_terms);
 			doc = appendXMLTag(doc, 'vatnumber', organisation_vatnumber);
-			doc += '</organisation>';
-			postDoc(organisation_name, doc);
+			/* insert contacts here */
+			d = fetchContactsByOrganisation(src, organisation_id);
+			$.when.apply(null, d)
+			.done(function(contacts) {
+				doc = appendXMLContacts(doc, contacts);
+				doc += '</organisation>';
+				postDoc(organisation_name, doc);
+			})
 		}
 	});
 	console.log(row + ' row(s) processed');
@@ -127,6 +148,98 @@ function appendXMLTag(doc, tagName, value) {
 	if ((value != null) && (value != 'NULL')){
 		doc += '<' + tagName + '>' + escapeHTML(value) + '</' + tagName + '>';
 	}
+	return doc;
+}
+
+function appendXMLContacts(doc, xml) {
+	$(xml).find('resources').find('row').each(function() {
+		var contact_name = null;
+		var contact_isbilling = null;
+		var contact_isshipping = null;
+		var contact_isactive = null;
+		var contact_line1 = null;
+		var contact_line2 = null;
+		var contact_line3 = null;
+		var contact_town = null
+		var contact_county = null;
+		var contact_country = null;
+		var contact_postcode = null;
+		var contact_email = null;
+		var contact_phone = null;
+		var contact_phonealt = null;
+		var contact_mobile = null;
+		var contact_fax = null;
+
+		$(this).children().each(function() {
+			if (this.tagName == 'name') {
+				contact_name = $(this).text();
+			}
+			else if (this.tagName == 'is_billing') {
+				contact_isbilling = $(this).text();
+			}
+			else if (this.tagName == 'is_shipping') {
+				contact_isshipping = $(this).text();
+			}
+			else if (this.tagName == 'is_active') {
+				contact_isactive = $(this).text();
+			}
+			else if (this.tagName == 'line1') {
+				contact_line1 = $(this).text();
+			}
+			else if (this.tagName == 'line2') {
+				contact_line2 = $(this).text();
+			}
+			else if (this.tagName == 'line3') {
+				contact_line3 = $(this).text();
+			}
+			else if (this.tagName == 'town') {
+				contact_town = $(this).text();
+			}
+			else if (this.tagName == 'county') {
+				contact_county = $(this).text();
+			}
+			else if (this.tagName == 'country') {
+				contact_country = $(this).text();
+			}
+			else if (this.tagName == 'postcode') {
+				contact_postcode = $(this).text();
+			}
+			else if (this.tagName == 'email') {
+				contact_email = $(this).text();
+			}
+			else if (this.tagName == 'phone') {
+				contact_phone = $(this).text();
+			}
+			else if (this.tagName == 'phonealt') {
+				contact_phonealt = $(this).text();
+			}
+			else if (this.tagName == 'mobile') {
+				contact_mobile = $(this).text();
+			}
+			else if (this.tagName == 'fax') {
+				contact_fax = $(this).text();
+			}
+		});
+		doc += '<contact';
+		doc = appendXMLAttr(doc, 'is_active', contact_isactive);
+		doc = appendXMLAttr(doc, 'is_billing', contact_isbilling);
+		doc = appendXMLAttr(doc, 'is_shipping', contact_isshipping);
+		doc += '>';
+		doc = appendXMLTag(doc, 'name', contact_name);
+		doc = appendXMLTag(doc, 'line_1', contact_line1);
+		doc = appendXMLTag(doc, 'line_2', contact_line2);
+		doc = appendXMLTag(doc, 'line_3', contact_line3);
+		doc = appendXMLTag(doc, 'town', contact_town);
+		doc = appendXMLTag(doc, 'county', contact_county);
+		doc = appendXMLTag(doc, 'country', contact_country);
+		doc = appendXMLTag(doc, 'postcode', contact_postcode);
+		doc = appendXMLTag(doc, 'email', contact_email);
+		doc = appendXMLTag(doc, 'phone', contact_phone);
+		doc = appendXMLTag(doc, 'phonealt', contact_phonealt);
+		doc = appendXMLTag(doc, 'mobile', contact_mobile);
+		doc = appendXMLTag(doc, 'fax', contact_fax);
+		doc += '</contact>';
+	});
 	return doc;
 }
 
