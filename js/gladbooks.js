@@ -2595,7 +2595,6 @@ function switchBusiness(business) {
 function loadMap(locationString, tab) {
 	var canvas;
 	var map;
-	var geocoder = new google.maps.Geocoder();
 
 	var mapOptions = {
 	    zoom: 15,
@@ -2612,15 +2611,18 @@ function loadMap(locationString, tab) {
 	mytab.find('.map-canvas').each(function() {
 		console.log('found a map-canvas');
 		canvas = this;
-		$(canvas).fadeIn(300);
+		$(canvas).empty();
 		map = new google.maps.Map(canvas, mapOptions);
+		$(canvas).fadeIn(300, function() {
+			renderMap(map, locationString);
+		});
 	});
 
-	if (!(map)) {
-		console.log('No map-canvas found');
-		return;
-	}
 
+}
+
+function renderMap(map, locationString) {
+	var geocoder = new google.maps.Geocoder();
 	geocoder.geocode( { 'address': locationString}, function(results, status) {
 		if (status == google.maps.GeocoderStatus.OK) {
 			map.setCenter(results[0].geometry.location);
@@ -2633,4 +2635,5 @@ function loadMap(locationString, tab) {
 				+ status);
 		}
 	});
+	google.maps.event.trigger(map, "resize");
 }
