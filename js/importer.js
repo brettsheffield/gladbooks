@@ -57,7 +57,14 @@ function importData(src) {
 		console.log('data fetched');
 		var args = Array.prototype.splice.call(arguments, 1);
 		displayResultsGeneric(xml, 'organisations', 'Accounts', true);
-		//createOrganisations(src, xml[0]);
+
+		/* import organisations & contacts */
+		var attributes = ['account', 'organisation', 'is_active', 'is_suspended', 'is_vatreg'];
+		var fields = ['name', 'terms', 'vatnumber'];
+		var fieldmap = {'account':'orgcode', 'organisation':'orgcode'};
+		createObjects('organisation', src, xml[0], attributes, fields, fieldmap);
+
+		/* import products */
 		var attributes = ['product'];
 		var fields = ['account', 'nominalcode', 'shortname', 'description', 'price_buy', 'price_sell', 'price'];
 		var fieldmap = {'product': 'import_id', 'nominalcode': 'account', 'price': 'price_sell'};
@@ -78,51 +85,6 @@ function fetchContactsByOrganisation(src, id) {
 /* override gladbooks.js function */
 function displayElement() {
 	// do nothing
-}
-
-/* TODO: refactor to use createObjects() */
-function createOrganisations(src, xml) {
-	var row = 0;
-
-	/* loop through rows */
-	$(xml).find('resources').find('row').each(function() {
-		row += 1;
-		var doc = '';
-		var organisation = new Object();
-		
-		/* loop through fields */
-		$(this).children().each(function() {
-			setTagValue(organisation, 'id', this, 'account');
-			setTagValue(organisation, 'id', this, 'organisation');
-			setTagValue(organisation, 'name', this, 'name');
-			setTagValue(organisation, 'isactive', this, 'is_active');
-			setTagValue(organisation, 'issuspended', this, 'is_suspended');
-			setTagValue(organisation, 'isvatreg', this, 'is_isvatreg');
-			setTagValue(organisation, 'terms', this, 'term');
-			setTagValue(organisation, 'vatnumber', this, 'vatnumber');
-		});
-		/* build organisation xml */
-		if (organisation.name != null) {
-			doc += '<organisation';
-			doc = appendXMLAttr(doc, 'orgcode', organisation.id);
-			doc = appendXMLAttr(doc, 'is_active', organisation.isactive);
-			doc = appendXMLAttr(doc, 'is_suspended', organisation.issuspended);
-			doc = appendXMLAttr(doc, 'is_vatreg', organisation.isvatreg);
-			doc += '>';
-			doc = appendXMLTag(doc, 'name', organisation.name);
-			doc = appendXMLTag(doc, 'terms', organisation.terms);
-			doc = appendXMLTag(doc, 'vatnumber', organisation.vatnumber);
-			/* insert contacts here */
-			d = fetchContactsByOrganisation(src, organisation.id);
-			$.when.apply(null, d)
-			.done(function(contacts) {
-				doc = appendXMLContacts(doc, contacts);
-				doc += '</organisation>';
-				postDoc('organisation', organisation.name, doc);
-			})
-		}
-	});
-	console.log(row + ' row(s) processed');
 }
 
 function createObjects(object, src, xml, attributes, fields, fieldmap) {
@@ -154,34 +116,50 @@ function createObjects(object, src, xml, attributes, fields, fieldmap) {
 			}
 		});
 		/* build xml */
-		if (obj.shortname != null) {
-			doc += '<' + object;
-			for (i=0; i<attributes.length; i++) {
-				if (fieldmap[attributes[i]]) {
-					doc = appendXMLAttr(doc, fieldmap[attributes[i]], obj[attributes[i]]);
-				}
-				else {
-					doc = appendXMLAttr(doc, attributes[i], obj[attributes[i]]);
-				}
+		doc += '<' + object;
+		/* attributes */
+		for (i=0; i<attributes.length; i++) {
+			if (fieldmap[attributes[i]]) {
+				doc = appendXMLAttr(doc, fieldmap[attributes[i]], obj[attributes[i]]);
 			}
-			doc += '>';
-			for (i=0; i<fields.length; i++) {
-				if (fieldmap[fields[i]]) {
-					doc = appendXMLTag(doc, fieldmap[fields[i]], obj[fields[i]]);
-				}
-				else {
-					doc = appendXMLTag(doc, fields[i], obj[fields[i]]);
-				}
+			else {
+				doc = appendXMLAttr(doc, attributes[i], obj[attributes[i]]);
 			}
-			doc += '</' + object + '>';
 		}
-		postDoc(object, doc);
+		doc += '>';
+		/* fields */
+		for (i=0; i<fields.length; i++) {
+			if (fieldmap[fields[i]]) {
+				doc = appendXMLTag(doc, fieldmap[fields[i]], obj[fields[i]]);
+			}
+			else {
+				doc = appendXMLTag(doc, fields[i], obj[fields[i]]);
+			}
+		}
+		if (object == 'organisation') {
+			/* for organisation we need to import contacts also */
+			d = fetchContactsByOrganisation(src, obj["orgcode"]);
+			$.when.apply(null, d)
+			.done(function(contacts) {
+				doc = appendXMLContacts(doc, contacts);
+				doc += '</' + object + '>';
+				postDoc(object, doc);
+			})
+			.fail(function() {
+				doc += '</' + object + '>';
+				postDoc(object, doc);
+			});
+		}
+		else {
+			doc += '</' + object + '>';
+			postDoc(object, doc);
+		}
 	});
 	console.log(row + ' row(s) processed');
 }
 
-function setTagValue(object, attr, tag, tagName) {
-	if (tag.tagName == tagName) {
+function setTagValue(object, attr, tag) {
+	if (tag.tagName == attr) {
 		object[attr] = $(tag).text();
 	}
 }
@@ -201,94 +179,48 @@ function appendXMLTag(doc, tagName, value) {
 }
 
 function appendXMLContacts(doc, xml) {
+	var object = 'contact';
 	$(xml).find('resources').find('row').each(function() {
-		var contact_name = null;
-		var contact_isbilling = null;
-		var contact_isshipping = null;
-		var contact_isactive = null;
-		var contact_line1 = null;
-		var contact_line2 = null;
-		var contact_line3 = null;
-		var contact_town = null
-		var contact_county = null;
-		var contact_country = null;
-		var contact_postcode = null;
-		var contact_email = null;
-		var contact_phone = null;
-		var contact_phonealt = null;
-		var contact_mobile = null;
-		var contact_fax = null;
+		var contact = new Object();
 
 		$(this).children().each(function() {
-			if (this.tagName == 'name') {
-				contact_name = $(this).text();
-			}
-			else if (this.tagName == 'is_billing') {
-				contact_isbilling = $(this).text();
-			}
-			else if (this.tagName == 'is_shipping') {
-				contact_isshipping = $(this).text();
-			}
-			else if (this.tagName == 'is_active') {
-				contact_isactive = $(this).text();
-			}
-			else if (this.tagName == 'line_1') {
-				contact_line1 = $(this).text();
-			}
-			else if (this.tagName == 'line_2') {
-				contact_line2 = $(this).text();
-			}
-			else if (this.tagName == 'line_3') {
-				contact_line3 = $(this).text();
-			}
-			else if (this.tagName == 'town') {
-				contact_town = $(this).text();
-			}
-			else if (this.tagName == 'county') {
-				contact_county = $(this).text();
-			}
-			else if (this.tagName == 'country') {
-				contact_country = $(this).text();
-			}
-			else if (this.tagName == 'postcode') {
-				contact_postcode = $(this).text();
-			}
-			else if (this.tagName == 'email') {
-				contact_email = $(this).text();
-			}
-			else if (this.tagName == 'phone') {
-				contact_phone = $(this).text();
-			}
-			else if (this.tagName == 'phonealt') {
-				contact_phonealt = $(this).text();
-			}
-			else if (this.tagName == 'mobile') {
-				contact_mobile = $(this).text();
-			}
-			else if (this.tagName == 'fax') {
-				contact_fax = $(this).text();
-			}
+			setTagValue(contact, 'name', this);
+			setTagValue(contact, 'is_billing', this);
+			setTagValue(contact, 'is_shipping', this);
+			setTagValue(contact, 'is_active', this);
+			setTagValue(contact, 'line_1', this);
+			setTagValue(contact, 'line_2', this);
+			setTagValue(contact, 'line_3', this);
+			setTagValue(contact, 'town', this);
+			setTagValue(contact, 'county', this);
+			setTagValue(contact, 'country', this);
+			setTagValue(contact, 'postcode', this);
+			setTagValue(contact, 'email', this);
+			setTagValue(contact, 'phone', this);
+			setTagValue(contact, 'phonealt', this);
+			setTagValue(contact, 'mobile', this);
+			setTagValue(contact, 'fax', this);
 		});
-		doc += '<contact';
-		doc = appendXMLAttr(doc, 'is_active', contact_isactive);
+		doc += '<' + object;
+		doc = appendXMLAttr(doc, 'is_active', contact.is_active);
 		doc += '>';
-		doc = appendXMLTag(doc, 'name', contact_name);
-		doc = appendXMLTag(doc, 'line_1', contact_line1);
-		doc = appendXMLTag(doc, 'line_2', contact_line2);
-		doc = appendXMLTag(doc, 'line_3', contact_line3);
-		doc = appendXMLTag(doc, 'town', contact_town);
-		doc = appendXMLTag(doc, 'county', contact_county);
-		doc = appendXMLTag(doc, 'country', contact_country);
-		doc = appendXMLTag(doc, 'postcode', contact_postcode);
-		doc = appendXMLTag(doc, 'email', contact_email);
-		doc = appendXMLTag(doc, 'phone', contact_phone);
-		doc = appendXMLTag(doc, 'phonealt', contact_phonealt);
-		doc = appendXMLTag(doc, 'mobile', contact_mobile);
-		doc = appendXMLTag(doc, 'fax', contact_fax);
+		doc = appendXMLTag(doc, 'name', contact.name);
+		doc = appendXMLTag(doc, 'line_1', contact.line_1);
+		doc = appendXMLTag(doc, 'line_2', contact.line_2);
+		doc = appendXMLTag(doc, 'line_3', contact.line_3);
+		doc = appendXMLTag(doc, 'town', contact.town);
+		doc = appendXMLTag(doc, 'county', contact.county);
+		doc = appendXMLTag(doc, 'country', contact.country);
+		doc = appendXMLTag(doc, 'postcode', contact.postcode);
+		doc = appendXMLTag(doc, 'email', contact.email);
+		doc = appendXMLTag(doc, 'phone', contact.phone);
+		doc = appendXMLTag(doc, 'phonealt', contact.phonealt);
+		doc = appendXMLTag(doc, 'mobile', contact.mobile);
+		doc = appendXMLTag(doc, 'fax', contact.fax);
 		doc = appendXMLRelationship(doc, '0', '1');
-		doc = appendXMLRelationship(doc, '1', contact_isbilling);
-		doc = appendXMLRelationship(doc, '2', contact_isshipping);
-		doc += '</contact>';
+		doc = appendXMLRelationship(doc, '1', contact.is_billing);
+		doc = appendXMLRelationship(doc, '2', contact.is_shipping);
+		doc += '</' + object + '>';
 	});
 	return doc;
 }
