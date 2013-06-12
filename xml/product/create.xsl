@@ -20,7 +20,15 @@
 		<xsl:text>BEGIN;</xsl:text>
 
                 <xsl:if test="not(@id)">
-                        <xsl:text>INSERT INTO product (authuser, clientip) VALUES ('</xsl:text>
+                        <xsl:text>INSERT INTO product (</xsl:text>
+			<xsl:if test="@import_id">
+				<xsl:text>id,</xsl:text>
+			</xsl:if>
+			<xsl:text>authuser, clientip) VALUES ('</xsl:text>
+			<xsl:if test="@import_id">
+                        	<xsl:value-of select="@import_id"/>
+				<xsl:text>','</xsl:text>
+			</xsl:if>
                         <xsl:copy-of select="$authuser"/>
                         <xsl:text>','</xsl:text>
                         <xsl:copy-of select="$clientip"/>
@@ -50,6 +58,11 @@
                         <xsl:when test="@id">
                                 <xsl:text>'</xsl:text>
                                 <xsl:value-of select="@id"/>
+                                <xsl:text>','</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="@import_id">
+                                <xsl:text>'</xsl:text>
+                                <xsl:value-of select="@import_id"/>
                                 <xsl:text>','</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>

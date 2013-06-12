@@ -50,12 +50,18 @@ function importData(src) {
 	showSpinner(); /* tell user to wait */
 
 	d.push(getXML('/' + src + '/organisations/'));
+	d.push(getXML('/' + src + '/products/'));
 
 	$.when.apply(null, d)
 	.done(function(xml) {
 		console.log('data fetched');
+		var args = Array.prototype.splice.call(arguments, 1);
 		displayResultsGeneric(xml, 'organisations', 'Accounts', true);
-		createOrganisations(src, xml);
+		//createOrganisations(src, xml[0]);
+		var attributes = ['product'];
+		var fields = ['account', 'nominalcode', 'shortname', 'description', 'price_buy', 'price_sell', 'price'];
+		var fieldmap = {'product': 'import_id', 'nominalcode': 'account', 'price': 'price_sell'};
+		createObjects('product', src, args[0], attributes, fields, fieldmap);
 	})
 	.fail(function() {
 		console.log('failed to fetch data');
@@ -74,6 +80,7 @@ function displayElement() {
 	// do nothing
 }
 
+/* TODO: refactor to use createObjects() */
 function createOrganisations(src, xml) {
 	var row = 0;
 
@@ -81,60 +88,102 @@ function createOrganisations(src, xml) {
 	$(xml).find('resources').find('row').each(function() {
 		row += 1;
 		var doc = '';
-		var organisation_id = null;
-		var organisation_name = null;
-		var organisation_isactive = null;
-		var organisation_issuspended = null;
-		var organisation_isvatreg = null;
-		var organisation_terms = null;
-		var organisation_vatnumber = null;
+		var organisation = new Object();
 		
 		/* loop through fields */
 		$(this).children().each(function() {
-			if ((this.tagName == 'account')||(this.tagName == 'organisation')){
-				organisation_id = $(this).text();
-			}
-			else if (this.tagName == 'name') {
-				organisation_name = $(this).text();
-			}
-			else if (this.tagName == 'is_active') {
-				organisation_isactive = $(this).text();
-			}
-			else if (this.tagName == 'is_suspended') {
-				organisation_issuspended = $(this).text();
-			}
-			else if (this.tagName == 'is_isvatreg') {
-				organisation_isvatreg = $(this).text();
-			}
-			else if (this.tagName == 'term') {
-				organisation_terms = $(this).text();
-			}
-			else if (this.tagName == 'vatnumber') {
-				organisation_vatnumber = $(this).text();
-			}
+			setTagValue(organisation, 'id', this, 'account');
+			setTagValue(organisation, 'id', this, 'organisation');
+			setTagValue(organisation, 'name', this, 'name');
+			setTagValue(organisation, 'isactive', this, 'is_active');
+			setTagValue(organisation, 'issuspended', this, 'is_suspended');
+			setTagValue(organisation, 'isvatreg', this, 'is_isvatreg');
+			setTagValue(organisation, 'terms', this, 'term');
+			setTagValue(organisation, 'vatnumber', this, 'vatnumber');
 		});
 		/* build organisation xml */
-		if (organisation_name != null) {
+		if (organisation.name != null) {
 			doc += '<organisation';
-			doc = appendXMLAttr(doc, 'orgcode', organisation_id);
-			doc = appendXMLAttr(doc, 'is_active', organisation_isactive);
-			doc = appendXMLAttr(doc, 'is_suspended', organisation_issuspended);
-			doc = appendXMLAttr(doc, 'is_vatreg', organisation_isvatreg);
+			doc = appendXMLAttr(doc, 'orgcode', organisation.id);
+			doc = appendXMLAttr(doc, 'is_active', organisation.isactive);
+			doc = appendXMLAttr(doc, 'is_suspended', organisation.issuspended);
+			doc = appendXMLAttr(doc, 'is_vatreg', organisation.isvatreg);
 			doc += '>';
-			doc = appendXMLTag(doc, 'name', organisation_name);
-			doc = appendXMLTag(doc, 'terms', organisation_terms);
-			doc = appendXMLTag(doc, 'vatnumber', organisation_vatnumber);
+			doc = appendXMLTag(doc, 'name', organisation.name);
+			doc = appendXMLTag(doc, 'terms', organisation.terms);
+			doc = appendXMLTag(doc, 'vatnumber', organisation.vatnumber);
 			/* insert contacts here */
-			d = fetchContactsByOrganisation(src, organisation_id);
+			d = fetchContactsByOrganisation(src, organisation.id);
 			$.when.apply(null, d)
 			.done(function(contacts) {
 				doc = appendXMLContacts(doc, contacts);
 				doc += '</organisation>';
-				postDoc(organisation_name, doc);
+				postDoc('organisation', organisation.name, doc);
 			})
 		}
 	});
 	console.log(row + ' row(s) processed');
+}
+
+function createObjects(object, src, xml, attributes, fields, fieldmap) {
+	var row = 0;
+
+	/* loop through rows */
+	$(xml).find('resources').find('row').each(function() {
+		row += 1;
+		var doc = '';
+		var obj = new Object();
+
+		/* loop through fields */
+		$(this).children().each(function() {
+			for (i=0; i< attributes.concat(fields).length; i++) {
+				var fld = attributes.concat(fields)[i];
+				if ((fields.indexOf(this.tagName) != -1) ||
+				    (attributes.indexOf(this.tagName) != -1)) 
+				{
+					/* this is a field we want to import */
+					if (this.tagName in fieldmap) {
+						/* map this field to a different field name */
+						obj[fieldmap[this.tagName]] = $(this).text();
+					}
+					else {
+						/* use field name unmapped */
+						obj[this.tagName] = $(this).text();
+					}
+				}
+			}
+		});
+		/* build xml */
+		if (obj.shortname != null) {
+			doc += '<' + object;
+			for (i=0; i<attributes.length; i++) {
+				if (fieldmap[attributes[i]]) {
+					doc = appendXMLAttr(doc, fieldmap[attributes[i]], obj[attributes[i]]);
+				}
+				else {
+					doc = appendXMLAttr(doc, attributes[i], obj[attributes[i]]);
+				}
+			}
+			doc += '>';
+			for (i=0; i<fields.length; i++) {
+				if (fieldmap[fields[i]]) {
+					doc = appendXMLTag(doc, fieldmap[fields[i]], obj[fields[i]]);
+				}
+				else {
+					doc = appendXMLTag(doc, fields[i], obj[fields[i]]);
+				}
+			}
+			doc += '</' + object + '>';
+		}
+		postDoc(object, doc);
+	});
+	console.log(row + ' row(s) processed');
+}
+
+function setTagValue(object, attr, tag, tagName) {
+	if (tag.tagName == tagName) {
+		object[attr] = $(tag).text();
+	}
 }
 
 function appendXMLAttr(doc, attribute, value) {
@@ -251,16 +300,16 @@ function appendXMLRelationship(doc, type, value) {
 	return doc;
 }
 
-function postDoc(name, doc) {
+function postDoc(object, doc) {
 	var xml = createRequestXml() + doc + '</data></request>';
 	d = $.ajax({
-		url: collection_url('organisations'),
+		url: collection_url(object + 's'),
 		type: 'POST',
 		data: xml,
 		contentType: 'text/xml',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) { 
-			console.log('organisation "' + name + '" created'); 
+			console.log(object + ' created'); 
 		},
 	});
 	return d;

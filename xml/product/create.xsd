@@ -18,7 +18,14 @@
 									<xs:element name="description" type="xs:string"/>
 									<xs:element name="price_buy" type="xs:decimal" minOccurs="0"/>
 									<xs:element name="price_sell" type="xs:decimal" minOccurs="0"/>
+									<xs:element name="tax" minOccurs="0" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:attribute name="id" type="xs:positiveInteger" use="required"/>
+										</xs:complexType>
+									</xs:element><!--tax-->
+
           			</xs:sequence>
+								<xs:attribute name="import_id" type="xs:positiveInteger"/>
 							</xs:complexType>
 						</xs:element><!--product-->
 

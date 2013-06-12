@@ -3,12 +3,13 @@
   <instance>default</instance>
   <business>1</business>
 	<data>
-		<product>
+		<product import_id="12">
 		  <account>4000</account>
 			<shortname>Name of Product</shortname>
 			<description>Name of Product</description>
 			<price_buy>99.95</price_buy>
 			<price_sell>123.45</price_sell>
+			<tax id="1"/>
 		</product>
 	</data>
 </request>
