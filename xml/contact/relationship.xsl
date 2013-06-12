@@ -6,7 +6,16 @@
                 <xsl:text>INSERT INTO gladbooks_</xsl:text>
                 <xsl:copy-of select="$instance"/>
                 <xsl:text>.organisation_contact (organisation, contact, relationship, authuser, clientip) VALUES ('</xsl:text>
-                <xsl:value-of select="@organisation"/>
+
+		<xsl:choose>
+			<xsl:when test="@organisation">
+                		<xsl:value-of select="@organisation"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:text>currval(pg_get_serial_sequence('organisation','id'))</xsl:text>
+			</xsl:otherwise>
+		</xsl:choose>
+
                 <xsl:text>',currval(pg_get_serial_sequence('contact','id')),'</xsl:text>
                 <xsl:value-of select="@type"/>
                 <xsl:text>','</xsl:text>

@@ -9,6 +9,7 @@
 
 	<xsl:include href="../cleanQuote.xsl"/>
 	<xsl:include href="../setSearchPath.xsl"/>
+	<xsl:include href="../contact/contact.xsl"/>
 
         <xsl:template match="request">
                 <xsl:apply-templates select="data/organisation"/>
@@ -36,6 +37,7 @@
                 </xsl:if>
 
 		<!-- TODO contacts here -->
+                <xsl:apply-templates select="contact"/>
 		<!-- note - find billcontact -->
 
 		<xsl:text>INSERT INTO organisationdetail (organisation,</xsl:text>
