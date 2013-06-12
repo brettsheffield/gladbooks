@@ -236,6 +236,7 @@ function appendXMLContacts(doc, xml) {
 		doc = appendXMLTag(doc, 'phonealt', contact_phonealt);
 		doc = appendXMLTag(doc, 'mobile', contact_mobile);
 		doc = appendXMLTag(doc, 'fax', contact_fax);
+		doc = appendXMLRelationship(doc, '0', '1');
 		doc = appendXMLRelationship(doc, '1', contact_isbilling);
 		doc = appendXMLRelationship(doc, '2', contact_isshipping);
 		doc += '</contact>';
