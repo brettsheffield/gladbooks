@@ -34,10 +34,13 @@
 												<xs:element name="phonealt" type="xs:string" minOccurs="0"/>
 												<xs:element name="mobile" type="xs:string" minOccurs="0"/>
 												<xs:element name="fax" type="xs:string" minOccurs="0"/>
+												<xs:element name="relationship" minOccurs="0" maxOccurs="unbounded">
+													<xs:complexType>
+														<xs:attribute name="type" type="xs:nonNegativeInteger" use="required"/>
+													</xs:complexType>
+												</xs:element>
 											</xs:sequence>
 											<xs:attribute name="is_active" type="xs:boolean"/>
-											<xs:attribute name="is_billing" type="xs:boolean"/>
-											<xs:attribute name="is_shipping" type="xs:boolean"/>
 										</xs:complexType>
 									</xs:element><!--contact-->
 
