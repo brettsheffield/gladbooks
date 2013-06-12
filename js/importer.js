@@ -222,8 +222,6 @@ function appendXMLContacts(doc, xml) {
 		});
 		doc += '<contact';
 		doc = appendXMLAttr(doc, 'is_active', contact_isactive);
-		doc = appendXMLAttr(doc, 'is_billing', contact_isbilling);
-		doc = appendXMLAttr(doc, 'is_shipping', contact_isshipping);
 		doc += '>';
 		doc = appendXMLTag(doc, 'name', contact_name);
 		doc = appendXMLTag(doc, 'line_1', contact_line1);
@@ -238,8 +236,17 @@ function appendXMLContacts(doc, xml) {
 		doc = appendXMLTag(doc, 'phonealt', contact_phonealt);
 		doc = appendXMLTag(doc, 'mobile', contact_mobile);
 		doc = appendXMLTag(doc, 'fax', contact_fax);
+		doc = appendXMLRelationship(doc, '1', contact_isbilling);
+		doc = appendXMLRelationship(doc, '2', contact_isshipping);
 		doc += '</contact>';
 	});
+	return doc;
+}
+
+function appendXMLRelationship(doc, type, value) {
+	if (value) {
+		doc += '<relationship type="' + type + '"/>';
+	}
 	return doc;
 }
 
