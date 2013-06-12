@@ -680,6 +680,16 @@ function displayForm(object, action, title, html, xml, tab) {
 		title = 'SO ' + $(xml[0]).find('order').first().text();
 	}
 
+	if ((object == 'contact') && (action == 'update') && (xml[0])) {
+		/* Display Contact name as tab title */
+		title = $(xml[0]).find('name').first().text();
+	}
+
+	if ((object == 'organisation') && (action == 'update') && (xml[0])) {
+		/* Display Organisation name as tab title */
+		title = $(xml[0]).find('name').first().text();
+	}
+
 	if (tab) {
 		tab = updateTab(tab, html);
 	}
