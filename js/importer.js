@@ -91,7 +91,7 @@ function createOrganisations(src, xml) {
 		
 		/* loop through fields */
 		$(this).children().each(function() {
-			if (this.tagName == 'account') {
+			if ((this.tagName == 'account')||(this.tagName == 'organisation')){
 				organisation_id = $(this).text();
 			}
 			else if (this.tagName == 'name') {
@@ -145,7 +145,7 @@ function appendXMLAttr(doc, attribute, value) {
 }
 
 function appendXMLTag(doc, tagName, value) {
-	if ((value != null) && (value != 'NULL')){
+	if ((value != null) && (value != 'NULL') && (value != 'None')){
 		doc += '<' + tagName + '>' + escapeHTML(value) + '</' + tagName + '>';
 	}
 	return doc;
@@ -183,13 +183,13 @@ function appendXMLContacts(doc, xml) {
 			else if (this.tagName == 'is_active') {
 				contact_isactive = $(this).text();
 			}
-			else if (this.tagName == 'line1') {
+			else if (this.tagName == 'line_1') {
 				contact_line1 = $(this).text();
 			}
-			else if (this.tagName == 'line2') {
+			else if (this.tagName == 'line_2') {
 				contact_line2 = $(this).text();
 			}
-			else if (this.tagName == 'line3') {
+			else if (this.tagName == 'line_3') {
 				contact_line3 = $(this).text();
 			}
 			else if (this.tagName == 'town') {
@@ -244,7 +244,7 @@ function appendXMLContacts(doc, xml) {
 }
 
 function appendXMLRelationship(doc, type, value) {
-	if (value) {
+	if (value == 1) {
 		doc += '<relationship type="' + type + '"/>';
 	}
 	return doc;
