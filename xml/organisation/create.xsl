@@ -36,9 +36,7 @@
                         <xsl:text>');</xsl:text>
                 </xsl:if>
 
-		<!-- TODO contacts here -->
                 <xsl:apply-templates select="contact"/>
-		<!-- note - find billcontact -->
 
 		<xsl:text>INSERT INTO organisationdetail (organisation,</xsl:text>
 		<xsl:if test="name">
