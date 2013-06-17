@@ -28,12 +28,20 @@ function fetchData(src) {
 }
 
 function processData(src, xml) {
+    var salesorderitems = new ImportSchema();
+    salesorderitems.object = 'salesorderitem';
+	salesorderitems.source = src;
+	salesorderitems.attributes =[];
+	salesorderitems.fields =['product', 'linetext', 'price', 'qty'];
+	salesorderitems.fieldmap = {};
+
     var salesorders = new ImportSchema();
     salesorders.object = 'salesorder';
     salesorders.source = src;
     salesorders.attributes = ['salesorder', 'is_open'];
     salesorders.fields = ['ponumber', 'cycle', 'start_date', 'end_date'];
     salesorders.fieldmap = {};
+	salesorders.children = [ salesorderitems ];
 
     var contacts = new ImportSchema();
     contacts.object = 'contact';
@@ -47,6 +55,7 @@ function processData(src, xml) {
     /* import organisations & contacts */
     var organisations = new ImportSchema();
     organisations.object = 'organisation';
+	organisations.id = 'orgcode';
     organisations.source = src;
     organisations.attributes = ['account', 'organisation', 'is_active', 'is_suspended', 'is_vatreg'];
     organisations.fields = ['name', 'terms', 'vatnumber'];

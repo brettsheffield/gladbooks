@@ -129,16 +129,18 @@ function createObjectXML(schema, row) {
 	doc = appendXMLFields(doc, obj, schema, false); /* fields */
 
 	if (schema.children) {
-		var id = (schema.object == 'organisation') ? obj['orgcode'] : obj['id'];
+		var id = schema.id ? obj[schema.id] : obj[schema.object];
 		d = fetchRelatedData(schema, id);
 		$.when.apply(null, d)
 		.done(function() {
 			var args = Array.prototype.splice.call(arguments, 0);
-			for (var i=0; i<args.length; args++) {
-				schema.children[i].data = args[i];
-				xml = createObjects(schema.children[i]);
-				if (xml) {
-					doc += xml;
+			for (var i=0; i<=args.length; i++) {
+				if (schema.children[i]) {
+					schema.children[i].data = args[i];
+					xml = createObjects(schema.children[i]);
+					if (xml) {
+						doc += xml;
+					}
 				}
 			}
 			doc += '</' + schema.object + '>';
