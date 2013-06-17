@@ -21,7 +21,7 @@
 									<xs:element name="start_date" type="xs:date" minOccurs="0"/>
 									<xs:element name="end_date" type="xs:date" minOccurs="0"/>
 
-									<xs:element name="salesorderitem" maxOccurs="unbounded">
+									<xs:element name="salesorderitem" minOccurs="0" maxOccurs="unbounded">
 										<xs:complexType>
 											<xs:sequence>
 												<xs:element name="product" type="xs:positiveInteger"/>
@@ -35,6 +35,7 @@
 									</xs:element><!--salesorderitem-->
 
 								</xs:sequence>
+								<xs:attribute name="salesorder" type="xs:string"/>
 								<xs:attribute name="is_open" type="xs:boolean"/>
 								<xs:attribute name="is_deleted" type="xs:boolean"/>
 							</xs:complexType>

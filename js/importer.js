@@ -44,31 +44,14 @@ function clickMenu(event) {
 }
 
 function importData(src) {
-	console.log('importData()');
-	var d = new Array();
-
 	showSpinner(); /* tell user to wait */
 
-	d.push(getXML('/' + src + '/organisations/'));
-	d.push(getXML('/' + src + '/products/'));
-
+	var d = fetchData(src);
 	$.when.apply(null, d)
 	.done(function(xml) {
-		console.log('data fetched');
-		var args = Array.prototype.splice.call(arguments, 1);
-		displayResultsGeneric(xml, 'organisations', 'Accounts', true);
-
-		/* import organisations & contacts */
-		var attributes = ['account', 'organisation', 'is_active', 'is_suspended', 'is_vatreg'];
-		var fields = ['name', 'terms', 'vatnumber'];
-		var fieldmap = {'account':'orgcode', 'organisation':'orgcode'};
-		createObjects('organisation', src, xml[0], attributes, fields, fieldmap);
-
-		/* import products */
-		var attributes = ['product'];
-		var fields = ['account', 'nominalcode', 'shortname', 'description', 'price_buy', 'price_sell', 'price'];
-		var fieldmap = {'product': 'import_id', 'nominalcode': 'account', 'price': 'price_sell'};
-		createObjects('product', src, args[0], attributes, fields, fieldmap);
+		hideSpinner();
+		var args = Array.prototype.splice.call(arguments, 0);
+		processData(src, args);
 	})
 	.fail(function() {
 		console.log('failed to fetch data');
@@ -76,9 +59,14 @@ function importData(src) {
 	});
 }
 
-function fetchContactsByOrganisation(src, id) {
+function ImportSchema() {
+}
+
+function fetchRelatedData(schema, id) {
 	var d = new Array();
-	d.push(getXML('/' + src + '/organisation_contacts/' + id + '/'));
+	for (i=0; i<schema.children.length; i++) {
+		d.push(getXML('/' + schema.source + '/' + schema.object + '_' + schema.children[i].object + 's/' + id + '/'));
+	}
 	return d;
 }
 
@@ -87,75 +75,113 @@ function displayElement() {
 	// do nothing
 }
 
-function createObjects(object, src, xml, attributes, fields, fieldmap) {
-	var row = 0;
-
+function createObjects(schema, post) {
+	var doc = '';
 	/* loop through rows */
-	$(xml).find('resources').find('row').each(function() {
-		row += 1;
-		var doc = '';
-		var obj = new Object();
-
-		/* loop through fields */
-		$(this).children().each(function() {
-			for (i=0; i< attributes.concat(fields).length; i++) {
-				var fld = attributes.concat(fields)[i];
-				if ((fields.indexOf(this.tagName) != -1) ||
-				    (attributes.indexOf(this.tagName) != -1)) 
-				{
-					/* this is a field we want to import */
-					if (this.tagName in fieldmap) {
-						/* map this field to a different field name */
-						obj[fieldmap[this.tagName]] = $(this).text();
-					}
-					else {
-						/* use field name unmapped */
-						obj[this.tagName] = $(this).text();
-					}
-				}
-			}
-		});
-		/* build xml */
-		doc += '<' + object;
-		/* attributes */
-		for (i=0; i<attributes.length; i++) {
-			if (fieldmap[attributes[i]]) {
-				doc = appendXMLAttr(doc, fieldmap[attributes[i]], obj[attributes[i]]);
-			}
-			else {
-				doc = appendXMLAttr(doc, attributes[i], obj[attributes[i]]);
-			}
-		}
-		doc += '>';
-		/* fields */
-		for (i=0; i<fields.length; i++) {
-			if (fieldmap[fields[i]]) {
-				doc = appendXMLTag(doc, fieldmap[fields[i]], obj[fields[i]]);
-			}
-			else {
-				doc = appendXMLTag(doc, fields[i], obj[fields[i]]);
-			}
-		}
-		if (object == 'organisation') {
-			/* for organisation we need to import contacts also */
-			d = fetchContactsByOrganisation(src, obj["orgcode"]);
-			$.when.apply(null, d)
-			.done(function(contacts) {
-				doc = appendXMLContacts(doc, contacts);
-				doc += '</' + object + '>';
-				postDoc(object, doc);
-			})
-			.fail(function() {
-				doc += '</' + object + '>';
-				postDoc(object, doc);
-			});
+	$(schema.data).find('resources').find('row').each(function() {
+		var xml = createObjectXML(schema, this);
+		if (xml && post) {
+			postDoc(schema.object, xml);
 		}
 		else {
-			doc += '</' + object + '>';
-			postDoc(object, doc);
+			doc += xml;
 		}
 	});
-	console.log(row + ' row(s) processed');
+
+	return doc;
+}
+
+function processFieldValues(schema, row) {
+	var obj = new Object();
+
+	/* loop through fields */
+	$(row).children().each(function() {
+		for (i=0; i< schema.attributes.concat(schema.fields).length; i++) {
+			var fld = schema.attributes.concat(schema.fields)[i];
+			if ((schema.fields.indexOf(this.tagName) != -1) ||
+				(schema.attributes.indexOf(this.tagName) != -1)) 
+			{
+				/* this is a field we want to import */
+				if ((this.tagName in schema.fieldmap) &&
+				    (schema.fieldmap[this.tagName] != 'NULL'))
+				{
+					/* map this field to a different field name */
+					obj[schema.fieldmap[this.tagName]] = $(this).text();
+				}
+				else {
+					/* use field name unmapped */
+					obj[this.tagName] = $(this).text();
+				}
+			}
+		}
+	});
+	return obj;
+}
+
+function createObjectXML(schema, row) {
+	var obj = processFieldValues(schema, row);
+
+	/* build xml */
+	var doc = '';
+	doc += '<' + schema.object;
+	doc = appendXMLFields(doc, obj, schema, true);  /* attributes */
+	doc += '>';
+	doc = appendXMLFields(doc, obj, schema, false); /* fields */
+
+	if (schema.children) {
+		var id = (schema.object == 'organisation') ? obj['orgcode'] : obj['id'];
+		d = fetchRelatedData(schema, id);
+		$.when.apply(null, d)
+		.done(function() {
+			var args = Array.prototype.splice.call(arguments, 0);
+			for (var i=0; i<args.length; args++) {
+				schema.children[i].data = args[i];
+				xml = createObjects(schema.children[i]);
+				if (xml) {
+					doc += xml;
+				}
+			}
+			doc += '</' + schema.object + '>';
+			postDoc(schema.object, doc);
+		})
+		.fail(function() {
+			doc += '</' + schema.object + '>';
+			return doc;
+		});
+	}
+	else {
+		doc += '</' + schema.object + '>';
+		return doc;
+	}
+	return;
+}
+
+/* append either the mapped or unaltered fields/attributes to the xml doc */
+function appendXMLFields(doc, obj, schema, is_attribute) {
+	if (is_attribute) {
+		f = appendXMLAttr;
+		fields = schema.attributes;
+	}
+	else {
+		f = appendXMLTag;
+		fields = schema.fields;
+	}
+	for (i=0; i<fields.length; i++) {
+		if (schema.fieldmap[fields[i]]) {
+			/* append using mapped field name, skipping NULL */
+			if (schema.fieldmap[fields[i]] != 'NULL') {
+				doc = f(doc, schema.fieldmap[fields[i]], obj[fields[i]]);
+			}
+		}
+		else {
+			/* au naturel */
+			doc = f(doc, fields[i], obj[fields[i]]);
+		}
+	}
+	if ((schema.appendF) && (! is_attribute)) {
+		doc = schema.appendF(doc, obj); /* call schema's handler function */
+	}
+	return doc;
 }
 
 function setTagValue(object, attr, tag) {
@@ -178,53 +204,6 @@ function appendXMLTag(doc, tagName, value) {
 	return doc;
 }
 
-function appendXMLContacts(doc, xml) {
-	var object = 'contact';
-	$(xml).find('resources').find('row').each(function() {
-		var contact = new Object();
-
-		$(this).children().each(function() {
-			setTagValue(contact, 'name', this);
-			setTagValue(contact, 'is_billing', this);
-			setTagValue(contact, 'is_shipping', this);
-			setTagValue(contact, 'is_active', this);
-			setTagValue(contact, 'line_1', this);
-			setTagValue(contact, 'line_2', this);
-			setTagValue(contact, 'line_3', this);
-			setTagValue(contact, 'town', this);
-			setTagValue(contact, 'county', this);
-			setTagValue(contact, 'country', this);
-			setTagValue(contact, 'postcode', this);
-			setTagValue(contact, 'email', this);
-			setTagValue(contact, 'phone', this);
-			setTagValue(contact, 'phonealt', this);
-			setTagValue(contact, 'mobile', this);
-			setTagValue(contact, 'fax', this);
-		});
-		doc += '<' + object;
-		doc = appendXMLAttr(doc, 'is_active', contact.is_active);
-		doc += '>';
-		doc = appendXMLTag(doc, 'name', contact.name);
-		doc = appendXMLTag(doc, 'line_1', contact.line_1);
-		doc = appendXMLTag(doc, 'line_2', contact.line_2);
-		doc = appendXMLTag(doc, 'line_3', contact.line_3);
-		doc = appendXMLTag(doc, 'town', contact.town);
-		doc = appendXMLTag(doc, 'county', contact.county);
-		doc = appendXMLTag(doc, 'country', contact.country);
-		doc = appendXMLTag(doc, 'postcode', contact.postcode);
-		doc = appendXMLTag(doc, 'email', contact.email);
-		doc = appendXMLTag(doc, 'phone', contact.phone);
-		doc = appendXMLTag(doc, 'phonealt', contact.phonealt);
-		doc = appendXMLTag(doc, 'mobile', contact.mobile);
-		doc = appendXMLTag(doc, 'fax', contact.fax);
-		doc = appendXMLRelationship(doc, '0', '1');
-		doc = appendXMLRelationship(doc, '1', contact.is_billing);
-		doc = appendXMLRelationship(doc, '2', contact.is_shipping);
-		doc += '</' + object + '>';
-	});
-	return doc;
-}
-
 function appendXMLRelationship(doc, type, value) {
 	if (value == 1) {
 		doc += '<relationship type="' + type + '"/>';
@@ -240,9 +219,10 @@ function postDoc(object, doc) {
 		data: xml,
 		contentType: 'text/xml',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
-		success: function(xml) { 
-			console.log(object + ' created'); 
+		fail: function() { 
+			console.log(object + ' not created'); 
 		},
 	});
 	return d;
 }
+

@@ -21,9 +21,17 @@
 		<xsl:text>BEGIN;</xsl:text>
 
                 <xsl:if test="not(@id)">
-                        <xsl:text>INSERT INTO salesorder (organisation, authuser, clientip) VALUES ('</xsl:text>
-			<xsl:value-of select="organisation"/>
-			<xsl:text>','</xsl:text>
+                        <xsl:text>INSERT INTO salesorder (organisation, authuser, clientip) VALUES (</xsl:text>
+			<xsl:choose>
+				<xsl:when test="organisation">
+					<xsl:text>'</xsl:text>
+					<xsl:value-of select="organisation"/>
+					<xsl:text>','</xsl:text>
+				</xsl:when>
+				<xsl:otherwise>
+					currval(pg_get_serial_sequence('organisation','id')),'
+				</xsl:otherwise>
+			</xsl:choose>
                         <xsl:copy-of select="$authuser"/>
                         <xsl:text>','</xsl:text>
                         <xsl:copy-of select="$clientip"/>
