@@ -407,7 +407,6 @@ function hideLoginBox() {
 /* prepare static menus */
 function prepMenu() {
 	$('ul.nav').find('a').each(function() {
-		console.log("Menu: " + $(this).text());
 		$(this).click(clickMenu);
 	});
 }
@@ -460,8 +459,6 @@ function setMenu(xml) {
 /* grab menu event and fetch content in the background */
 function clickMenu(event) {
 	event.preventDefault();
-
-	console.log("Menu '" + $(this).text() + "' was clicked");
 
 	if ($(this).attr("href") == '#journal') {
 		setupJournalForm();
@@ -527,7 +524,6 @@ function clickMenu(event) {
 		addTab("Help", "<h2>Help</h2>", true);
 	}
 	else if ($(this).attr("href") == '#') {
-		// do nothing
 		console.log('Doing nothing, successfully');
 	}
 	else {
