@@ -39,7 +39,7 @@ function processData(src, xml) {
     salesorders.object = 'salesorder';
     salesorders.source = src;
     salesorders.attributes = ['salesorder', 'is_open'];
-    salesorders.fields = ['ponumber', 'cycle', 'start_date', 'end_date'];
+    salesorders.fields = ['organisation', 'ponumber', 'cycle', 'start_date', 'end_date'];
     salesorders.fieldmap = {};
 	salesorders.children = [ salesorderitems ];
 

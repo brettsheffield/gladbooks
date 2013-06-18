@@ -65,7 +65,7 @@ function ImportSchema() {
 function fetchRelatedData(schema, id) {
 	var d = new Array();
 	for (i=0; i<schema.children.length; i++) {
-		d.push(getXML('/' + schema.source + '/' + schema.object + '_' + schema.children[i].object + 's/' + id + '/'));
+		d.push(getXML('/' + schema.source + '/' + schema.object + '_' + schema.children[i].object + 's/' + id + '/', false)); /* fetch data synchronously */
 	}
 	return d;
 }
@@ -143,19 +143,10 @@ function createObjectXML(schema, row) {
 					}
 				}
 			}
-			doc += '</' + schema.object + '>';
-			postDoc(schema.object, doc);
-		})
-		.fail(function() {
-			doc += '</' + schema.object + '>';
-			return doc;
 		});
 	}
-	else {
-		doc += '</' + schema.object + '>';
-		return doc;
-	}
-	return;
+	doc += '</' + schema.object + '>';
+	return doc;
 }
 
 /* append either the mapped or unaltered fields/attributes to the xml doc */

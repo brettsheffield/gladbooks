@@ -2029,10 +2029,11 @@ function getHTML(url) {
 	});
 }
 /******************************************************************************/
-function getXML(url) {
+function getXML(url, async=true) {
 	return $.ajax({
 		url: url,
 		type: 'GET',
+		async: async,
 		dataType: 'xml',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 	});
