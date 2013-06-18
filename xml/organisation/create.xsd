@@ -1,63 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
+<xs:include schemaLocation="organisation.xsd"/>
+
 <xs:element name="request">
-  <xs:complexType>
-    <xs:sequence>
-      <xs:element name="instance" type="xs:string"/>
-      <xs:element name="business" type="xs:positiveInteger"/>
-      <xs:element name="data">
-        <xs:complexType>
-          <xs:sequence>
+	<xs:complexType>
+		<xs:sequence>
+			<xs:element name="instance" type="xs:string"/>
+			<xs:element name="business" type="xs:positiveInteger"/>
 
-						<xs:element name="organisation" maxOccurs="1">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="name" type="xs:string"/>
-									<xs:element name="terms" type="xs:positiveInteger" minOccurs="0"/>
-									<xs:element name="billcontact" type="xs:positiveInteger" minOccurs="0"/>
-									<xs:element name="vatnumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="data">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="organisation" type="organisation" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element><!--data-->
 
-									<xs:element name="contact" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:sequence>
-												<xs:element name="name" type="xs:string" minOccurs="0"/>
-												<xs:element name="line_1" type="xs:string" minOccurs="0"/>
-												<xs:element name="line_2" type="xs:string" minOccurs="0"/>
-												<xs:element name="line_3" type="xs:string" minOccurs="0"/>
-												<xs:element name="town" type="xs:string" minOccurs="0"/>
-												<xs:element name="county" type="xs:string" minOccurs="0"/>
-												<xs:element name="country" type="xs:string" minOccurs="0"/>
-												<xs:element name="postcode" type="xs:string" minOccurs="0"/>
-												<xs:element name="email" type="xs:string" minOccurs="0"/>
-												<xs:element name="phone" type="xs:string" minOccurs="0"/>
-												<xs:element name="phonealt" type="xs:string" minOccurs="0"/>
-												<xs:element name="mobile" type="xs:string" minOccurs="0"/>
-												<xs:element name="fax" type="xs:string" minOccurs="0"/>
-												<xs:element name="relationship" minOccurs="0" maxOccurs="unbounded">
-													<xs:complexType>
-														<xs:attribute name="type" type="xs:nonNegativeInteger" use="required"/>
-													</xs:complexType>
-												</xs:element>
-											</xs:sequence>
-											<xs:attribute name="is_active" type="xs:boolean"/>
-										</xs:complexType>
-									</xs:element><!--contact-->
-
-								</xs:sequence>
-								<xs:attribute name="orgcode" type="xs:string"/>
-								<xs:attribute name="is_active" type="xs:boolean"/>
-								<xs:attribute name="is_suspended" type="xs:boolean"/>
-								<xs:attribute name="is_vatreg" type="xs:boolean"/>
-							</xs:complexType>
-						</xs:element><!--organisation-->
-
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element><!--data-->
-
-    </xs:sequence>
-  </xs:complexType>
+		</xs:sequence>
+	</xs:complexType>
 </xs:element><!--request-->
 
 </xs:schema>

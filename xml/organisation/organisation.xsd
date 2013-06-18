@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:include schemaLocation="contact.xsd"/>
+<xs:include schemaLocation="salesorder.xsd"/>
+
+<xs:complexType name="organisation">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string"/>
+			<xs:element name="terms" type="xs:positiveInteger" minOccurs="0"/>
+			<xs:element name="billcontact" type="xs:positiveInteger" minOccurs="0"/>
+			<xs:element name="vatnumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="contact" type="contact" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="salesorder" type="salesorder" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="orgcode" type="xs:string"/>
+		<xs:attribute name="is_active" type="xs:boolean"/>
+		<xs:attribute name="is_suspended" type="xs:boolean"/>
+		<xs:attribute name="is_vatreg" type="xs:boolean"/>
+</xs:complexType>
+
+</xs:schema>
