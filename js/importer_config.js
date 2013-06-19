@@ -49,7 +49,7 @@ function processData(src, xml) {
     contacts.attributes = ['is_open'];
     contacts.fields = ['name', 'line_1', 'line_2', 'line_3', 'town', 'county', 'country', 'postcode', 'email', 'phone', 'phonealt', 'mobile', 'fax', 'is_billing', 'is_shipping'];
     contacts.fieldmap = {'is_billing':'NULL', 'is_shipping':'NULL'};
-    /* hander to tack on relationships after the rest of the xml is built */
+    /* handler to tack on relationships after the rest of the xml is built */
     contacts.appendF = handleContactRelationships;
 
     /* import organisations & contacts */
