@@ -160,6 +160,9 @@ function appendXMLFields(doc, obj, schema, is_attribute) {
 		fields = schema.fields;
 	}
 	for (i=0; i<fields.length; i++) {
+		if (schema.fixValue) {
+			obj[fields[i]] = schema.fixValue(fields[i], obj[fields[i]]);
+		}
 		if (schema.fieldmap[fields[i]]) {
 			/* append using mapped field name, skipping NULL */
 			if (schema.fieldmap[fields[i]] != 'NULL') {

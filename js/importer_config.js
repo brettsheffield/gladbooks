@@ -52,6 +52,9 @@ function processData(src, xml) {
     salesorders.fields = ['organisation', 'ponumber', 'cycle', 'start_date', 'end_date'];
     salesorders.fieldmap = {};
 	salesorders.children = [ salesorderitems ];
+	if (src == 'gladserv') {
+		salesorders.fixValue = fixValueGladserv;
+	}
 
     var contacts = new ImportSchema();
     contacts.object = 'contact';
@@ -82,4 +85,14 @@ function handleContactRelationships(doc, obj) {
     doc = appendXMLRelationship(doc, '1', obj.is_billing);
     doc = appendXMLRelationship(doc, '2', obj.is_shipping);
     return doc;
+}
+
+function fixValueGladserv(field, value) {
+	if ((field == 'cycle') && (value >=2) && (! isNaN(value))) {
+		/* cycles above 2 are off by one in old GS system */
+		return (Number(value) - 1).toString();
+	}
+	else {
+		return value;
+	}
 }
