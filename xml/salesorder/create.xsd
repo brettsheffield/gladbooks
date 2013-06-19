@@ -1,52 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
+<xs:include schemaLocation="salesorder.xsd"/>
+
 <xs:element name="request">
-  <xs:complexType>
-    <xs:sequence>
-      <xs:element name="instance" type="xs:string"/>
-      <xs:element name="business" type="xs:positiveInteger"/>
-      <xs:element name="data">
-        <xs:complexType>
-          <xs:sequence>
+	<xs:complexType>
+		<xs:sequence>
+			<xs:element name="instance" type="xs:string"/>
+			<xs:element name="business" type="xs:positiveInteger"/>
 
-						<xs:element name="salesorder" maxOccurs="1">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="organisation" type="xs:positiveInteger" minOccurs="0"/>
-									<xs:element name="quotenumber" type="xs:string" minOccurs="0"/>
-									<xs:element name="ponumber" type="xs:string" minOccurs="0"/>
-									<xs:element name="description" type="xs:string" minOccurs="0"/>
-									<xs:element name="cycle" type="xs:nonNegativeInteger" minOccurs="0"/>
-									<xs:element name="start_date" type="xs:date" minOccurs="0"/>
-									<xs:element name="end_date" type="xs:date" minOccurs="0"/>
+			<xs:element name="data">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="salesorder" type="salesorder" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element><!--data-->
 
-									<xs:element name="salesorderitem" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:sequence>
-												<xs:element name="product" type="xs:positiveInteger"/>
-												<xs:element name="linetext" type="xs:string" minOccurs="0"/>
-												<xs:element name="discount" type="xs:decimal" minOccurs="0"/>
-												<xs:element name="price" type="xs:decimal" minOccurs="0"/>
-												<xs:element name="qty" type="xs:decimal" minOccurs="0"/>
-												
-											</xs:sequence>
-										</xs:complexType>
-									</xs:element><!--salesorderitem-->
-
-								</xs:sequence>
-								<xs:attribute name="salesorder" type="xs:string"/>
-								<xs:attribute name="is_open" type="xs:boolean"/>
-								<xs:attribute name="is_deleted" type="xs:boolean"/>
-							</xs:complexType>
-						</xs:element><!--salesorder-->
-
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element><!--data-->
-
-    </xs:sequence>
-  </xs:complexType>
+		</xs:sequence>
+	</xs:complexType>
 </xs:element><!--request-->
 
 </xs:schema>

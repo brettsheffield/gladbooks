@@ -18,6 +18,7 @@
 		<xs:element name="fax" type="xs:string" minOccurs="0"/>
 		<xs:element name="relationship" minOccurs="0" maxOccurs="unbounded">
 			<xs:complexType>
+				<xs:attribute name="organisation" type="xs:nonNegativeInteger"/>
 				<xs:attribute name="type" type="xs:nonNegativeInteger" use="required"/>
 			</xs:complexType>
 		</xs:element>
