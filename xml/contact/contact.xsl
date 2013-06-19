@@ -6,7 +6,6 @@
 
 	<xsl:template match="contact">
 		<xsl:call-template name="setSearchPath"/>
-                <xsl:text>BEGIN;</xsl:text>
 
                 <xsl:if test="not(@id)">
                         <xsl:text>INSERT INTO contact (authuser, clientip) VALUES ('</xsl:text>
@@ -196,9 +195,6 @@
                 <xsl:for-each select="relationship">
                         <xsl:call-template name="relationship"/>
                 </xsl:for-each>
-
-                <xsl:text>COMMIT;</xsl:text>
-
 	</xsl:template>
 
 </xsl:stylesheet>

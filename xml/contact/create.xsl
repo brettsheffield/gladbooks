@@ -12,7 +12,9 @@
 	<xsl:include href="contact.xsl"/>
 
         <xsl:template match="request">
+		<xsl:text>BEGIN;</xsl:text>
 		<xsl:apply-templates select="data/contact"/>
+		<xsl:text>COMMIT;</xsl:text>
 	</xsl:template>
 
 </xsl:stylesheet>

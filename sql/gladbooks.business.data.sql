@@ -69,6 +69,8 @@ INSERT INTO account (id, accounttype, description)
 INSERT INTO account (id, accounttype, description)
 	VALUES ('3200', '3000', 'Retained Earnings Account');
 INSERT INTO account (id, accounttype, description)
+	VALUES ('4000', '4000', 'General Revenues');
+INSERT INTO account (id, accounttype, description)
 	VALUES ('5100', '5000', 'Shipping');
 INSERT INTO account (id, accounttype, description)
 	VALUES ('7501', '7000', 'Postage and Shipping');

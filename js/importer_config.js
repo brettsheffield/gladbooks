@@ -28,7 +28,17 @@ function fetchData(src) {
 }
 
 function processData(src, xml) {
-    var salesorderitems = new ImportSchema();
+    /* import products */
+    var products = new ImportSchema();
+    products.object = 'product';
+    products.source = src;
+    products.attributes = ['product'];
+    products.fields = ['account', 'nominalcode', 'shortname', 'description', 'price_buy', 'price_sell', 'price'];
+    products.fieldmap = {'product': 'import_id', 'nominalcode': 'account', 'price': 'price_sell'};
+    products.data = xml[1];
+    createObjects(products, true);
+
+	var salesorderitems = new ImportSchema();
     salesorderitems.object = 'salesorderitem';
 	salesorderitems.source = src;
 	salesorderitems.attributes =[];
@@ -64,15 +74,6 @@ function processData(src, xml) {
     organisations.children = [ contacts, salesorders ];
     createObjects(organisations, true);
 
-    /* import products */
-    var schema = new ImportSchema();
-    schema.object = 'product';
-    schema.source = src;
-    schema.attributes = ['product'];
-    schema.fields = ['account', 'nominalcode', 'shortname', 'description', 'price_buy', 'price_sell', 'price'];
-    schema.fieldmap = {'product': 'import_id', 'nominalcode': 'account', 'price': 'price_sell'};
-    schema.data = xml[1];
-    createObjects(schema);
 }
 
 /* handle relationships for contacts */
