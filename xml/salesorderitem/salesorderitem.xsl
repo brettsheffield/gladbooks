@@ -15,7 +15,7 @@
 
 		<xsl:text>INSERT INTO salesorderitemdetail (salesorderitem,salesorder,</xsl:text>
 
-		<xsl:if test="product">
+		<xsl:if test="product or product_import">
 			<xsl:text>product,</xsl:text>
 		</xsl:if>
 
@@ -51,16 +51,24 @@
                         <xsl:when test="../../salesorder/@id">
                                 <xsl:text>'</xsl:text>
                                 <xsl:value-of select="../../salesorder/@id"/>
-                                <xsl:text>','</xsl:text>
+                                <xsl:text>',</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>
-				<xsl:text>currval(pg_get_serial_sequence('salesorder','id')),'</xsl:text>
+				<xsl:text>currval(pg_get_serial_sequence('salesorder','id')),</xsl:text>
                         </xsl:otherwise>
                 </xsl:choose>
 
 		<xsl:if test="product">
+			<xsl:text>'</xsl:text>
 			<xsl:value-of select="product"/>
 			<xsl:text>','</xsl:text>
+		</xsl:if>
+
+		<xsl:if test="product_import">
+			<xsl:text>(SELECT id FROM product </xsl:text>
+			<xsl:text>WHERE import_id='</xsl:text>
+			<xsl:value-of select="product_import"/>
+			<xsl:text>'),'</xsl:text>
 		</xsl:if>
 
 		<xsl:if test="linetext">

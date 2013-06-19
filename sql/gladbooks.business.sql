@@ -190,9 +190,11 @@ CREATE TABLE emailrecipient (
 
 CREATE TABLE product (
         id              SERIAL PRIMARY KEY,
+	import_id	INT4,
         updated         timestamp with time zone default now(),
         authuser        TEXT,
-        clientip        TEXT
+        clientip        TEXT,
+	UNIQUE (import_id)
 );
 
 CREATE TABLE productdetail (

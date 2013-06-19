@@ -32,9 +32,9 @@ function processData(src, xml) {
     var products = new ImportSchema();
     products.object = 'product';
     products.source = src;
-    products.attributes = ['product'];
-    products.fields = ['account', 'nominalcode', 'shortname', 'description', 'price_buy', 'price_sell', 'price'];
-    products.fieldmap = {'product': 'import_id', 'nominalcode': 'account', 'price': 'price_sell'};
+    products.attributes = ['import_id'];
+    products.fields = ['product', 'account', 'nominalcode', 'shortname', 'description', 'price_buy', 'price_sell', 'price'];
+    products.fieldmap = {'product':'import_id', 'nominalcode': 'account', 'price': 'price_sell'};
     products.data = xml[1];
     createObjects(products, true);
 
@@ -42,8 +42,8 @@ function processData(src, xml) {
     salesorderitems.object = 'salesorderitem';
 	salesorderitems.source = src;
 	salesorderitems.attributes =[];
-	salesorderitems.fields =['product', 'linetext', 'price', 'qty'];
-	salesorderitems.fieldmap = {};
+	salesorderitems.fields =['product', 'product_import', 'linetext', 'price', 'qty'];
+	salesorderitems.fieldmap = {'product':'product_import'};
 
     var salesorders = new ImportSchema();
     salesorders.object = 'salesorder';

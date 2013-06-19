@@ -191,6 +191,11 @@ function appendXMLAttr(doc, attribute, value) {
 }
 
 function appendXMLTag(doc, tagName, value) {
+	if (((tagName == 'start_date') || (tagName == 'end_date'))
+	&& (value == '0000-00-00'))
+	{
+		return doc; /* skip blank dates */
+	}
 	if ((value != null) && (value != 'NULL') && (value != 'None')){
 		doc += '<' + tagName + '>' + escapeHTML(value) + '</' + tagName + '>';
 	}

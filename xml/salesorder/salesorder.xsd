@@ -19,7 +19,10 @@
 
 <xs:complexType name="salesorderitem">
 	<xs:sequence>
-		<xs:element name="product" type="xs:positiveInteger"/>
+		<xs:choice>
+			<xs:element name="product" type="xs:positiveInteger"/>
+			<xs:element name="product_import" type="xs:positiveInteger"/>
+		</xs:choice>
 		<xs:element name="linetext" type="xs:string" minOccurs="0"/>
 		<xs:element name="discount" type="xs:decimal" minOccurs="0"/>
 		<xs:element name="price" type="xs:decimal" minOccurs="0"/>

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
+<xs:include schemaLocation="product.xsd"/> 
+
 <xs:element name="request">
   <xs:complexType>
     <xs:sequence>
@@ -9,26 +11,7 @@
       <xs:element name="data">
         <xs:complexType>
           <xs:sequence>
-
-						<xs:element name="product" maxOccurs="1">
-							<xs:complexType>
-          			<xs:sequence>
-									<xs:element name="account" type="xs:nonNegativeInteger"/>
-									<xs:element name="shortname" type="xs:string"/>
-									<xs:element name="description" type="xs:string"/>
-									<xs:element name="price_buy" type="xs:decimal" minOccurs="0"/>
-									<xs:element name="price_sell" type="xs:decimal" minOccurs="0"/>
-									<xs:element name="tax" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:attribute name="id" type="xs:positiveInteger" use="required"/>
-										</xs:complexType>
-									</xs:element><!--tax-->
-
-          			</xs:sequence>
-								<xs:attribute name="import_id" type="xs:positiveInteger"/>
-							</xs:complexType>
-						</xs:element><!--product-->
-
+						<xs:element name="product" type="product" maxOccurs="1"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element><!--data-->
