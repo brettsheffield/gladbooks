@@ -3,6 +3,7 @@
 <xsl:output method="text" disable-output-escaping="yes" />
 
 	<xsl:include href="../salesorderitem/salesorderitem.xsl"/>
+	<xsl:include href="../salesinvoice/salesinvoice.xsl"/>
 
 	<xsl:template match="salesorder">
 		<xsl:call-template name="setSearchPath"/>
@@ -120,6 +121,11 @@
 		<!-- add any salesorderitems -->
 		<xsl:for-each select="salesorderitem">
 			<xsl:call-template name="salesorderitem"/>
+		</xsl:for-each>
+
+		<!-- add any salesinvoices -->
+		<xsl:for-each select="salesinvoice">
+			<xsl:call-template name="salesinvoice"/>
 		</xsl:for-each>
 	</xsl:template>
 

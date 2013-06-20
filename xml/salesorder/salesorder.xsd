@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
+<xs:include schemaLocation="../salesitem/salesitem.xsd"/>
+<xs:include schemaLocation="../salesinvoice/salesinvoice.xsd"/>
+
 <xs:complexType name="salesorder">
 	<xs:sequence>
 		<xs:element name="organisation" type="xs:positiveInteger" minOccurs="0"/>
@@ -10,24 +13,12 @@
 		<xs:element name="cycle" type="xs:nonNegativeInteger" minOccurs="0"/>
 		<xs:element name="start_date" type="xs:date" minOccurs="0"/>
 		<xs:element name="end_date" type="xs:date" minOccurs="0"/>
-		<xs:element name="salesorderitem" type="salesorderitem" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:element name="salesorderitem" type="salesitem" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:element name="salesinvoice" type="salesinvoice" minOccurs="0" maxOccurs="unbounded"/>
 	</xs:sequence>
 	<xs:attribute name="salesorder" type="xs:string"/>
 	<xs:attribute name="is_open" type="xs:boolean"/>
 	<xs:attribute name="is_deleted" type="xs:boolean"/>
-</xs:complexType>
-
-<xs:complexType name="salesorderitem">
-	<xs:sequence>
-		<xs:choice>
-			<xs:element name="product" type="xs:positiveInteger"/>
-			<xs:element name="product_import" type="xs:positiveInteger"/>
-		</xs:choice>
-		<xs:element name="linetext" type="xs:string" minOccurs="0"/>
-		<xs:element name="discount" type="xs:decimal" minOccurs="0"/>
-		<xs:element name="price" type="xs:decimal" minOccurs="0"/>
-		<xs:element name="qty" type="xs:decimal" minOccurs="0"/>
-	</xs:sequence>
 </xs:complexType>
 
 </xs:schema>

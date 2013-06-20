@@ -38,11 +38,18 @@ function processData(src, xml) {
     products.data = xml[1];
     createObjects(products, true);
 
+	var salesinvoices = new ImportSchema();
+	salesinvoices.object = 'salesinvoice';
+	salesinvoices.source = src;
+	salesinvoices.attributes = ['salesorder'];
+	salesinvoices.fields = ['period', 'taxpoint', 'issued', 'due', 'subtotal', 'tax', 'total', 'pdf', 'ponumber', 'emailtext'];
+	salesinvoices.fieldmap = {};
+
 	var salesorderitems = new ImportSchema();
     salesorderitems.object = 'salesorderitem';
 	salesorderitems.source = src;
 	salesorderitems.attributes =[];
-	salesorderitems.fields =['product', 'product_import', 'linetext', 'price', 'qty'];
+	salesorderitems.fields = ['product', 'product_import', 'linetext', 'price', 'qty'];
 	salesorderitems.fieldmap = {'product':'product_import'};
 
     var salesorders = new ImportSchema();
@@ -51,7 +58,7 @@ function processData(src, xml) {
     salesorders.attributes = ['salesorder', 'is_open'];
     salesorders.fields = ['organisation', 'ponumber', 'cycle', 'start_date', 'end_date'];
     salesorders.fieldmap = {};
-	salesorders.children = [ salesorderitems ];
+	salesorders.children = [ salesorderitems, salesinvoices ];
 	if (src == 'gladserv') {
 		salesorders.fixValue = fixValueGladserv;
 	}
