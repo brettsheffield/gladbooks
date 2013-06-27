@@ -2478,6 +2478,7 @@ function decimalPad(decimal, digits) {
 /******************************************************************************/
 /* pad out a string with leading zeros */
 function padString(str, max) {
+	str = '' + str;
 	return str.length < max ? padString("0" + str, max) : str;
 }
 
