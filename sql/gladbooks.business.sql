@@ -372,7 +372,7 @@ CREATE TABLE salesinvoice (
 CREATE TABLE salesinvoicedetail (
 	id		SERIAL PRIMARY KEY,
 	salesinvoice	INT4 references salesinvoice(id) NOT NULL,
-	salesorder	INT4 references salesorder(id) NOT NULL,
+	salesorder	INT4 references salesorder(id),
 	period		INT4,
 	ponumber	TEXT,
 	taxpoint	date,

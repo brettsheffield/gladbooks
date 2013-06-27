@@ -2,9 +2,9 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
 <xsl:output method="text" disable-output-escaping="yes" />
 
-	<!--xsl:include href="../salesitem/salesitem.xsl"/-->
+	<xsl:include href="../salesitem/salesitem.xsl"/>
 
-	<xsl:template name="salesinvoice">
+	<xsl:template match="salesinvoice">
 		<xsl:call-template name="setSearchPath"/>
 
                 <xsl:if test="not(@id)">
@@ -26,7 +26,7 @@
                 </xsl:if>
 
 		<xsl:text>INSERT INTO salesinvoicedetail (</xsl:text>
-		<xsl:text>salesinvoice, salesorder,</xsl:text>
+		<xsl:text>salesinvoice,salesorder,</xsl:text>
 
 		<xsl:if test="period">
 			<xsl:text>period,</xsl:text>
@@ -81,8 +81,11 @@
                                 <xsl:value-of select="@id"/>
                                 <xsl:text>','</xsl:text>
                         </xsl:when>
-                        <xsl:otherwise>
+			<xsl:when test="@id">
                                 <xsl:text>currval(pg_get_serial_sequence('salesorder','id')),'</xsl:text>
+			</xsl:when>
+                        <xsl:otherwise>
+				<xsl:text>NULL,</xsl:text>
                         </xsl:otherwise>
 		</xsl:choose>
 

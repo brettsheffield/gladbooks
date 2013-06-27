@@ -9,11 +9,11 @@
 
 	<xsl:include href="../cleanQuote.xsl"/>
 	<xsl:include href="../setSearchPath.xsl"/>
-	<xsl:include href="salesorder.xsl"/>
+	<xsl:include href="salesinvoice.xsl"/>
 
         <xsl:template match="request">
 		<xsl:text>BEGIN;</xsl:text>
-                <xsl:apply-templates select="data/salesorder"/>
+                <xsl:apply-templates select="data/salesinvoice"/>
 		<xsl:text>COMMIT;</xsl:text>
         </xsl:template>
 

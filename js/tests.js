@@ -932,6 +932,46 @@ test("update sales order", function() {
     });
 });
 
+module("Sales Invoices");
+
+test("create sales invoice", function() {
+	testXmlPost('salesinvoice', 0);
+});
+
+function testXmlPost(object, testid) {
+
+    stop();
+	var url = '/testdata/' + padString(testid, 5) + '.xml';
+	$.ajax({
+		url: url,
+		dataType: 'text',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) {  
+			var posturl = collection_url(object + 's');
+			//xml = xml.replace(/\s{0,}\n\s{0,}/g, ''); /* strip */
+			$.ajax({
+				url: posturl,
+				type: 'POST',
+				data: xml,
+				contentType: 'text/xml',
+				beforeSend: function (xhr) { setAuthHeader(xhr); },
+				success: function(xml) { 
+					ok(true); start(); 
+				},
+				error: function() {
+					ok(false, "POST failed " + posturl);
+					start();
+				},
+			});
+		},
+		error: function() {
+			ok(false, "failed to GET testdata " + url); 
+			start();
+		},
+	});
+}
+
+
 module("Strings");
 
 test("escapeHTML()", function() {

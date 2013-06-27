@@ -1,26 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <request>
 	<instance>test</instance>
 	<business>1</business>
 	<data>
-		<organisation orgcode="TESTORGX" is_active="1" is_suspended="0">
-			<name>Buckinghuge Palace Ltd</name>
-			<terms>2</terms>
-			<contact is_active="1">
-				<name>Buckinghuge Palace</name>
+		<organisation is_active="1" is_suspended="0" is_vatreg="0">
+			<name>Buckinghuge Commercial Ltd</name>
+			<contact>
+				<name>King Buckinghuge</name>
+				<line_1>The Mall</line_1>
+				<line_2>Right up the far end</line_2>
 				<town>London</town>
-				<postcode>SW1A 1AA</postcode>
-				<email>buckinghuge@buckinghuge.co.uk</email>
+				<postcode>SW1 1AA</postcode>
+				<email>your.highness@buckinghuge.co.uk</email>
 				<phone>01234 567890</phone>
-				<relationship type="1"/>
+				<relationship type="0"></relationship>
+				<relationship type="1"></relationship>
 			</contact>
-			<contact is_active="1">
-				<name>Servant's Entrance</name>
+			<contact>
+				<name>Queen Buckinghuge</name>
+				<line_1>The Mall</line_1>
+				<line_2>Right up the far end</line_2>
 				<town>London</town>
-				<postcode>SW1A 1AA</postcode>
-				<email>deliveries@buckinghuge.co.uk</email>
-				<phone>01234 567891</phone>
-				<relationship type="2"/>
+				<postcode>SW1 1AA</postcode>
+				<email>queenie@buckinghuge.co.uk</email>
+				<phone>01234 567890</phone>
+				<relationship type="0"></relationship>
+				<relationship type="1"></relationship>
 			</contact>
+			<salesorder salesorder="BUCKHUGE/0001" is_open="1">
+				<cycle>3</cycle>
+				<start_date>2013-03-01</start_date>
+				<salesorderitem>
+					<product_import>2</product_import>
+					<linetext>Small Business Hosting %%%PERIOD%%%</linetext>
+					<price>100.00</price>
+					<qty>1</qty>
+				</salesorderitem>
+				<salesinvoice salesorder="BUCKHUGE/0001">
+					<period>1</period>
+					<taxpoint>2013-03-01</taxpoint>
+					<issued>2013-03-01</issued>
+					<due>2013-03-30</due>
+					<subtotal>100.00</subtotal>
+					<tax>20.00</tax>
+					<total>120.00</total>
+					<pdf>SI-BUCKHUGE-0001.pdf</pdf>
+				</salesinvoice>
+				<salesinvoice salesorder="BUCKHUGE/0001">
+					<period>2</period>
+					<taxpoint>2013-04-01</taxpoint>
+					<issued>2013-04-01</issued>
+					<due>2013-04-30</due>
+					<subtotal>100.00</subtotal>
+					<tax>20.00</tax>
+					<total>120.00</total>
+					<pdf>SI-BUCKHUGE-0002.pdf</pdf>
+				</salesinvoice>
+			</salesorder>
 		</organisation>
 	</data>
 </request>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+	<instance>test</instance>
+	<business>1</business>
+	<data>
+		<salesinvoice>
+			<period>1</period>
+			<organisation>1</organisation>
+			<ponumber>1</ponumber>
+			<description>A test invoice</description>
+			<taxpoint>2013-04-01</taxpoint>
+			<issued>2013-04-01</issued>
+			<due>2013-04-30</due>
+			<subtotal>100.00</subtotal>
+			<tax>20.00</tax>
+			<total>120.00</total>
+			<salesinvoiceitem>
+				<product>1</product>
+			</salesinvoiceitem>
+		</salesinvoice>
+	</data>
+</request>

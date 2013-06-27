@@ -120,12 +120,12 @@
 
 		<!-- add any salesorderitems -->
 		<xsl:for-each select="salesorderitem">
-			<xsl:call-template name="salesorderitem"/>
+			<xsl:apply-templates select="salesorderitem"/>
 		</xsl:for-each>
 
 		<!-- add any salesinvoices -->
 		<xsl:for-each select="salesinvoice">
-			<xsl:call-template name="salesinvoice"/>
+			<xsl:apply-templates select="salesinvoice"/>
 		</xsl:for-each>
 	</xsl:template>
 
