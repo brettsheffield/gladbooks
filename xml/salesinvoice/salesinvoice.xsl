@@ -85,7 +85,7 @@
                                 <xsl:text>currval(pg_get_serial_sequence('salesorder','id')),'</xsl:text>
 			</xsl:when>
                         <xsl:otherwise>
-				<xsl:text>NULL,</xsl:text>
+				<xsl:text>NULL,'</xsl:text>
                         </xsl:otherwise>
 		</xsl:choose>
 
@@ -153,12 +153,10 @@
 		<xsl:copy-of select="$clientip"/>
 		<xsl:text>');</xsl:text>
 
-		<!-- add any salesinvoiceitems -->
-		<!-- TODO
-		<xsl:for-each select="salesorderitem">
-			<xsl:call-template name="salesorderitem"/>
-		</xsl:for-each>
-		-->
+		<!-- add any salesitems -->
+		<xsl:apply-templates select="salesitem">
+			<xsl:with-param name="parentobject" select="'salesinvoice'" />
+		</xsl:apply-templates>
 	</xsl:template>
 
 </xsl:stylesheet>

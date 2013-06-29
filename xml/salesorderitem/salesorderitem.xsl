@@ -2,7 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
 <xsl:output method="text" disable-output-escaping="yes" />
 
-	<xsl:template name="salesorderitem">
+	<xsl:template match="salesorderitem">
 		<xsl:call-template name="setSearchPath"/>
 
                 <xsl:if test="not(@id)">

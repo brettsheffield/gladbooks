@@ -2,13 +2,20 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
 <xsl:output method="text" disable-output-escaping="yes" />
 
-	<xsl:template name="salesitem">
+	<xsl:template match="salesitem">
+		<xsl:param name="parentobject"/>
 		<xsl:call-template name="setSearchPath"/>
 
                 <xsl:if test="not(@id)">
                         <xsl:text>INSERT INTO </xsl:text>
-			<xsl:value-of select="parentobject"/>
-			<xsl:text> (authuser, clientip) VALUES ('</xsl:text>
+			<xsl:value-of select="$parentobject"/>
+			<xsl:text>item (</xsl:text>
+			<xsl:value-of select="$parentobject"/>
+			<xsl:text>, authuser, clientip) </xsl:text>
+			<xsl:text>VALUES (</xsl:text>
+			<xsl:text>currval(pg_get_serial_sequence('</xsl:text>
+			<xsl:value-of select="$parentobject"/>
+			<xsl:text>','id')),'</xsl:text>
                         <xsl:copy-of select="$authuser"/>
                         <xsl:text>','</xsl:text>
                         <xsl:copy-of select="$clientip"/>
@@ -16,9 +23,9 @@
                 </xsl:if>
 
 		<xsl:text>INSERT INTO </xsl:text>
-		<xsl:value-of select="parentobject"/>
+		<xsl:value-of select="$parentobject"/>
 		<xsl:text>itemdetail (</xsl:text>
-		<xsl:value-of select="parentobject"/>
+		<xsl:value-of select="$parentobject"/>
 		<!-- FIXME -->
 		<xsl:text>item,salesorder</xsl:text>
 		<xsl:text>,</xsl:text>

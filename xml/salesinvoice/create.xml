@@ -14,9 +14,12 @@
 			<subtotal>100.00</subtotal>
 			<tax>20.00</tax>
 			<total>120.00</total>
-			<salesinvoiceitem>
+			<salesitem>
 				<product>1</product>
-			</salesinvoiceitem>
+				<linetext>Override Default Product Description</linetext>
+				<price>123.45</price>
+				<qty>2</qty>
+			</salesitem>
 		</salesinvoice>
 	</data>
 </request>

@@ -119,14 +119,10 @@
 		<xsl:text>');</xsl:text>
 
 		<!-- add any salesorderitems -->
-		<xsl:for-each select="salesorderitem">
-			<xsl:apply-templates select="salesorderitem"/>
-		</xsl:for-each>
+		<xsl:apply-templates select="salesorderitem"/>
 
 		<!-- add any salesinvoices -->
-		<xsl:for-each select="salesinvoice">
-			<xsl:apply-templates select="salesinvoice"/>
-		</xsl:for-each>
+		<xsl:apply-templates select="salesinvoice"/>
 	</xsl:template>
 
 </xsl:stylesheet>
