@@ -16,26 +16,6 @@ SELECT create_instance('bacs');
 INSERT INTO gladbooks_bacs.relationship (id, name) VALUES (0, 'contact');
 INSERT INTO gladbooks_bacs.relationship (name) VALUES ('billing');
 INSERT INTO gladbooks_bacs.relationship (name) VALUES ('shipping');
-SELECT create_instance('richardf');
-INSERT INTO gladbooks_richardf.relationship (id, name) VALUES (0, 'contact');
-INSERT INTO gladbooks_richardf.relationship (name) VALUES ('billing');
-INSERT INTO gladbooks_richardf.relationship (name) VALUES ('shipping');
-SELECT create_instance('shandydann');
-INSERT INTO gladbooks_shandydann.relationship (id, name) VALUES (0, 'contact');
-INSERT INTO gladbooks_shandydann.relationship (name) VALUES ('billing');
-INSERT INTO gladbooks_shandydann.relationship (name) VALUES ('shipping');
-SELECT create_instance('robertmc');
-INSERT INTO gladbooks_robertmc.relationship (id, name) VALUES (0, 'contact');
-INSERT INTO gladbooks_robertmc.relationship (name) VALUES ('billing');
-INSERT INTO gladbooks_robertmc.relationship (name) VALUES ('shipping');
-SELECT create_instance('ghouston');
-INSERT INTO gladbooks_ghouston.relationship (id, name) VALUES (0, 'contact');
-INSERT INTO gladbooks_ghouston.relationship (name) VALUES ('billing');
-INSERT INTO gladbooks_ghouston.relationship (name) VALUES ('shipping');
-SELECT create_instance('trinityf');
-INSERT INTO gladbooks_trinityf.relationship (id, name) VALUES (0, 'contact');
-INSERT INTO gladbooks_trinityf.relationship (name) VALUES ('billing');
-INSERT INTO gladbooks_trinityf.relationship (name) VALUES ('shipping');
 
 SET search_path TO gladbooks_test,gladbooks;
 
@@ -73,12 +53,6 @@ INSERT INTO contactdetail (contact,name,line_1,line_2,line_3,town,county,country
 
 INSERT INTO username (id, instance) VALUES ('betty', 'test');
 INSERT INTO username (id, instance) VALUES ('bacs', 'bacs');
-INSERT INTO username (id, instance) VALUES ('shandydann', 'shandydann');
-INSERT INTO username (id, instance) VALUES ('richardf', 'richardf');
-INSERT INTO username (id, instance) VALUES ('ghouston', 'ghouston');
-INSERT INTO username (id, instance) VALUES ('robertmc', 'robertmc');
-INSERT INTO username (id, instance) VALUES ('aboyd', 'trinityf');
-INSERT INTO username (id, instance) VALUES ('jross', 'trinityf');
 INSERT INTO username (id, instance) VALUES ('alpha', 'test');
 
 COMMIT;

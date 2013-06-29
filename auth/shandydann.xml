@@ -1,6 +1,0 @@
-<login>
-	<menu item="A" tooltip="Accounts" href="/gladbooks/penguinfactory/accounts/" />
-	<menu item="O" tooltip="Organisations" href="/gladbooks/penguinfactory/organisations/" />
-	<menu item="SO" tooltip="Sales Orders" href="/gladbooks/penguinfactory/salesorders/" />
-	<menu item="SI" tooltip="Sales Invoices" href="/gladbooks/penguinfactory/salesinvoices/" />
-</login>

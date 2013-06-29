@@ -19,7 +19,7 @@
 # If not, see <http://www.gnu.org/licenses/>.
 
 debug		1
-port		3000
+port		80
 daemon		0
 encoding	UTF-8
 url_default	/html/index.html
@@ -29,7 +29,7 @@ xmlpath         /usr/local/gladbooks/gladbooks-ui/xml/
 ###############################################################################
 ## databases
 db      gb		pg	localhost       	 gladbooks
-db      ldap1       	ldap    ldap://ldap.gladserv.com dc=gladserv,dc=com
+db      ldap1       	ldap    ldap://ldap.example.com dc=example,dc=com
 
 ###############################################################################
 # urls (tried in order of appearance)
@@ -44,8 +44,6 @@ url	sqlview GET  /*/*/accounts/*   			gb accountlist
 url	sqlview GET  /*/*/accounttypes/  		gb accounttype
 url     sqlview GET  /auth/*				gb auth
 url	sqlview GET  /*/*/businesses/* 			gb businesses
-#url	sqlview GET  /*/*/contactlist/ 			gb contactlist
-#url	sqlview GET  /*/*/contacts/* 			gb contactdetail
 url	sqlview GET  /*/*/contacts/* 			gb contactlist
 url	sqlview GET  /*/*/cycles/* 			gb cycle
 url	sqlview GET  /*/*/departments/*			gb department
@@ -85,20 +83,26 @@ url	xslpost POST /*/*/salesorders/*			gb salesorder
 ###############################################################################
 # acls (tried in order of appearance)
 ###############################################################################
-acl	GET	/css/*				allow	*
-acl	GET	/js/*				allow	*
-acl	GET	/html/*				allow	*
-acl	GET	/media/*			allow	*
-acl	GET	/img/*				allow	*
-acl	GET	/*/*/*				require	*
-acl	POST	/*/*/*				require	*
-acl	GET	/auth/*				require	*
-acl	DELETE	/*/*/organisation_contacts/*	require *
-acl	DELETE	/*/*/product_taxes/*		require *
+acl     GET     /css/*                          allow   *
+acl     GET     /js/*                           allow   *
+acl     GET     /html/*                         allow   *
+acl     GET     /media/*                        allow   *
+acl     GET     /img/*                          allow   *
+acl     GET     /*/*/*                          sufficient      *
+acl     POST    /*/*/*                          sufficient      *
+acl     GET     /auth/*                         sufficient      *
+acl     DELETE  /*/*/organisation_contacts/*    sufficient      *
+acl     DELETE  /*/*/product_taxes/*            sufficient      *
 
 ###############################################################################
 ## auth
+auth    user    user    *       *               *
 auth    ldap    ldap    ldap1   ld_auth         uid
+
+###############################################################################
+## user
+user    alpha   pass
+user    bravo   pass
 
 ###############################################################################
 # sql

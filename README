@@ -1,0 +1,28 @@
+Gladbooks
+
+A flexible, extensible, open source accounting system with a RESTful API
+
+== Status ==
+
+Gladbooks is still in development and is incomplete.  Once all the basic accounting functions for purchasing, sales and banking are complete a release will be prepared.  The code is here for reference and discussion only.  Feel free to comment, test and raise bugs but be mindful of its incomplete status.  It is NOT ready for production use yet.  It has sharp edges.  Documentation is almost non-existent.  You have been warned.
+
+== Architecture ==
+
+For a linux system daemon, I chose c - I don't believe there is a better or more widely used choice available in that space.  That program has been released separately under the name gladd[1].  It's fast, does what it needs to and nothing else.
+
+For the gui, I've chosen js, because it is realistically the only choice for a web front end - every modern browser supports it, and nothing else.  I'm using the jquery libraries to make it easier to work with, and work across multiple browsers/platforms with minimal problems.
+
+The GUI is styled in CSS3, and the structure is HTML5.  To complete the AJAX stack, I've implemented a RESTful API, which communicates using XML over HTTP(s).  To validate the XML, I use XSD (XML schemas).  The database is PostgreSQL, although it would be easy to use another database.  Previous (not publically released versions of Gladbooks used MySQL).  To translate XML into SQL, I use XSLT, which is specifically designed to do the job of handling XML and turning it into either HTML or plain text outputs.  This gets around one of my pet peeves: mixing up languages.  Building SQL inside another program inevitably gets messy.
+
+It sounds like a lot, but it is a complex system comprising several programs.  At every turn, I've tried to make the "correct" and maintainable choice, and to keep the components separate.  eg.  Rather than try and build an HTML form in js which is inevitably messy, I just GET a html document from the server, some XML data to pre-populate it, and then use js to display one in the other.  This means you edit html in a html document, js in .js etc.  Keeps your syntax highlighter happy :-)  Performance is plenty good enough, and there is a lot I can do to optimise when/if I need to.
+
+Tests are built using the qunit test system.  To test an aspect of the API, I GET some XML from the server, POST it back at the API, and then GET both the result and the expected result.  Does a == b ?
+
+So, yes, it's complex when taken all together, but so are most frameworks that I've seen.  You *just* define your data in this non-standard format over here, set up your config (which is not just config but actually a program written in python or ruby usually), set up this non-standard HTML template over here, define your urls in this other special format here, issue some arcane command to set it all up etc.  Then to put it in production you need to jump through more hoops with apache or other httpd config because you mustn't use the framework's builtin httpd in production because it's rubbish.  etc etc etc.
+
+Having mastered all that, you then find that the framework starts getting in the way as soon as you want some control over how it generates the database schema, or what SQL it produces and you end up in pain.  I've been there a few times now.  And next year, when you look at it again, a bunch of non-backwards compatible changes have happened that break all your code.
+
+I'm intending to write some demo programs and documentation to help others using gladd, and as an aid to estimating future projects that may use it. 
+
+
+[1] https://github.com/brettsheffield/gladd
