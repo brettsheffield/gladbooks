@@ -26,8 +26,8 @@
 		<xsl:value-of select="$parentobject"/>
 		<xsl:text>itemdetail (</xsl:text>
 		<xsl:value-of select="$parentobject"/>
-		<!-- FIXME -->
-		<xsl:text>item,salesorder</xsl:text>
+		<xsl:text>item,</xsl:text>
+		<xsl:value-of select="$parentobject"/>
 		<xsl:text>,</xsl:text>
 
 		<xsl:if test="product or product_import">
@@ -59,7 +59,9 @@
                                 <xsl:text>',</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>
-                                <xsl:text>currval(pg_get_serial_sequence('salesorderitem','id')),</xsl:text>
+                                <xsl:text>currval(pg_get_serial_sequence('</xsl:text>
+				<xsl:value-of select="$parentobject"/>
+				<xsl:text>item','id')),</xsl:text>
                         </xsl:otherwise>
                 </xsl:choose>
                 <xsl:choose>
@@ -69,7 +71,9 @@
                                 <xsl:text>',</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>
-				<xsl:text>currval(pg_get_serial_sequence('salesorder','id')),</xsl:text>
+				<xsl:text>currval(pg_get_serial_sequence('</xsl:text>
+				<xsl:value-of select="$parentobject"/>
+				<xsl:text>','id')),</xsl:text>
                         </xsl:otherwise>
                 </xsl:choose>
 
