@@ -393,15 +393,24 @@ CREATE TABLE salesinvoicedetail (
 	clientip	TEXT
 );
 
--- NOTE: references salesorderitemdetail NOT salesorderitem, 
--- as the salesorder may be edited between recurring invoices and we need a 
--- permanent record of the exact details on the invoice at the time it was
--- issued.
 CREATE TABLE salesinvoiceitem (
 	id		SERIAL PRIMARY KEY,
 	salesinvoice	INT4 references salesinvoice(id) NOT NULL,
-	salesorderitemdetail	INT4 references salesorderitemdetail(id)
-			ON DELETE RESTRICT NOT NULL,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE salesinvoiceitemdetail (
+	id		SERIAL PRIMARY KEY,
+	salesinvoiceitem	INT4 references salesinvoiceitem(id) NOT NULL,
+	salesinvoice	INT4 references salesinvoice(id) NOT NULL,
+	product		INT4 references product(id) NOT NULL,
+	linetext	TEXT,
+	discount	NUMERIC,
+	price		NUMERIC,
+	qty		NUMERIC DEFAULT '1',
+	is_deleted	boolean DEFAULT false,
 	updated		timestamp with time zone default now(),
 	authuser	TEXT,
 	clientip	TEXT
