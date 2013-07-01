@@ -7,13 +7,11 @@
 <xs:complexType name="purchaseorder">
 	<xs:sequence>
 		<xs:element name="organisation" type="xs:positiveInteger" minOccurs="0"/>
-		<xs:element name="quotenumber" type="xs:string" minOccurs="0"/>
-		<xs:element name="ponumber" type="xs:string" minOccurs="0"/>
 		<xs:element name="description" type="xs:string" minOccurs="0"/>
 		<xs:element name="cycle" type="xs:nonNegativeInteger" minOccurs="0"/>
 		<xs:element name="start_date" type="xs:date" minOccurs="0"/>
 		<xs:element name="end_date" type="xs:date" minOccurs="0"/>
-		<xs:element name="purchaseorderitem" type="salesitem" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:element name="salesitem" type="salesitem" minOccurs="0" maxOccurs="unbounded"/>
 		<xs:element name="purchaseinvoice" type="purchaseinvoice" minOccurs="0" maxOccurs="unbounded"/>
 	</xs:sequence>
 	<xs:attribute name="purchaseorder" type="xs:string"/>

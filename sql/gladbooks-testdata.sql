@@ -44,6 +44,9 @@ INSERT INTO account (accounttype, description) VALUES ('8000', 'Depreciation');
 INSERT INTO product DEFAULT VALUES;
 INSERT INTO productdetail (product, account, shortname, description) VALUES (currval(pg_get_serial_sequence('product','id')),'4000', 'Test Product', 'Description of Test Product');
 
+INSERT INTO product DEFAULT VALUES;
+INSERT INTO productdetail (product, account, shortname, description) VALUES (currval(pg_get_serial_sequence('product','id')),'4000', 'A 2nd Test Product', 'Description of Test Product');
+
 INSERT INTO organisation VALUES (DEFAULT);
 INSERT INTO organisationdetail (organisation, name)
 	VALUES (currval(pg_get_serial_sequence('organisation','id')), 'This is a test company! With some garbage£ & spaces''');

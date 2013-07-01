@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <request>
-  <instance>default</instance>
+  <instance>test</instance>
   <business>1</business>	
 	<data>
 		<purchaseorder is_open="1" is_deleted="0">
 			<organisation>1</organisation>
-			<quotenumber>Q 123 4567</quotenumber>
-			<ponumber>PO 123 4567</ponumber>
 			<description>A Purchase Order</description>
 			<cycle>1</cycle>
 			<start_date>2013-04-01</start_date>

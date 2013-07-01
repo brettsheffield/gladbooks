@@ -886,6 +886,12 @@ test("tax product (add)", function() {
 
 });
 
+module("Purchase Orders");
+
+test("create purchase order", function() {
+	testXmlPost('purchaseorder', 4);
+});
+
 module("Sales Orders");
 
 test("create sales order", function() {

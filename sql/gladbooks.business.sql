@@ -280,10 +280,12 @@ CREATE TABLE purchaseorderdetail (
 	id		SERIAL PRIMARY KEY,
 	purchaseorder	INT4 NOT NULL,
 	purchaseinvoice	INT4,
+	description	TEXT,
 	cycle		INT4,
 	start_date	date,
 	end_date	date,
 	is_open		boolean DEFAULT true,
+	is_deleted	boolean DEFAULT false,
 	updated		timestamp with time zone default now(),
 	authuser	TEXT,
 	clientip	TEXT,
@@ -297,9 +299,20 @@ CREATE TABLE purchaseorderdetail (
 
 CREATE TABLE purchaseorderitem (
 	id		SERIAL PRIMARY KEY,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE purchaseorderitemdetail (
+	id		SERIAL PRIMARY KEY,
+	purchaseorderitem INT4 references purchaseorderitem(id) NOT NULL,
 	purchaseorder	INT4 REFERENCES purchaseorder(id) NOT NULL,
 	product		INT4 REFERENCES product(id) NOT NULL,
+	linetext	TEXT,
 	price		NUMERIC,
+	qty		NUMERIC DEFAULT '1',
+	is_deleted	boolean DEFAULT false,
 	updated		timestamp with time zone default now(),
 	authuser	TEXT,
 	clientip	TEXT
@@ -410,7 +423,6 @@ CREATE TABLE salesinvoicedetail (
 
 CREATE TABLE salesinvoiceitem (
 	id		SERIAL PRIMARY KEY,
-	salesinvoice	INT4 references salesinvoice(id) NOT NULL,
 	updated		timestamp with time zone default now(),
 	authuser	TEXT,
 	clientip	TEXT

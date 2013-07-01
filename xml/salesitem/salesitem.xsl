@@ -10,12 +10,9 @@
                         <xsl:text>INSERT INTO </xsl:text>
 			<xsl:value-of select="$parentobject"/>
 			<xsl:text>item (</xsl:text>
-			<xsl:value-of select="$parentobject"/>
-			<xsl:text>, authuser, clientip) </xsl:text>
+			<xsl:text>authuser, clientip) </xsl:text>
 			<xsl:text>VALUES (</xsl:text>
-			<xsl:text>currval(pg_get_serial_sequence('</xsl:text>
-			<xsl:value-of select="$parentobject"/>
-			<xsl:text>','id')),'</xsl:text>
+			<xsl:text>'</xsl:text>
                         <xsl:copy-of select="$authuser"/>
                         <xsl:text>','</xsl:text>
                         <xsl:copy-of select="$clientip"/>
