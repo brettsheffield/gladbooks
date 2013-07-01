@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:include schemaLocation="../salesitem/salesitem.xsd"/>
+
+<xs:complexType name="purchaseinvoice">
+	<xs:sequence>
+		<xs:element name="period" type="xs:positiveInteger" minOccurs="0"/>
+		<xs:element name="organisation" type="xs:positiveInteger" minOccurs="0"/>
+		<xs:element name="ponumber" type="xs:string" minOccurs="0"/>
+		<xs:element name="description" type="xs:string" minOccurs="0"/>
+		<xs:element name="taxpoint" type="xs:date" minOccurs="0"/>
+		<xs:element name="issued" type="xs:date" minOccurs="0"/>
+		<xs:element name="due" type="xs:date" minOccurs="0"/>
+		<xs:element name="subtotal" type="xs:decimal"/>
+		<xs:element name="tax" type="xs:decimal"/>
+		<xs:element name="total" type="xs:decimal"/>
+		<xs:element name="pdf" type="xs:string" minOccurs="0"/>
+
+		<xs:element name="purchaseitem" type="salesitem" minOccurs="0" maxOccurs="unbounded"/>
+	</xs:sequence>
+	<xs:attribute name="purchaseorder" type="xs:string"/>
+</xs:complexType>
+
+</xs:schema>

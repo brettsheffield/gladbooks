@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:include schemaLocation="../salesitem/salesitem.xsd"/>
+<xs:include schemaLocation="../purchaseinvoice/purchaseinvoice.xsd"/>
+
+<xs:complexType name="purchaseorder">
+	<xs:sequence>
+		<xs:element name="organisation" type="xs:positiveInteger" minOccurs="0"/>
+		<xs:element name="quotenumber" type="xs:string" minOccurs="0"/>
+		<xs:element name="ponumber" type="xs:string" minOccurs="0"/>
+		<xs:element name="description" type="xs:string" minOccurs="0"/>
+		<xs:element name="cycle" type="xs:nonNegativeInteger" minOccurs="0"/>
+		<xs:element name="start_date" type="xs:date" minOccurs="0"/>
+		<xs:element name="end_date" type="xs:date" minOccurs="0"/>
+		<xs:element name="purchaseorderitem" type="salesitem" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:element name="purchaseinvoice" type="purchaseinvoice" minOccurs="0" maxOccurs="unbounded"/>
+	</xs:sequence>
+	<xs:attribute name="purchaseorder" type="xs:string"/>
+	<xs:attribute name="is_open" type="xs:boolean"/>
+	<xs:attribute name="is_deleted" type="xs:boolean"/>
+</xs:complexType>
+
+</xs:schema>
