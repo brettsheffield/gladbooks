@@ -323,16 +323,47 @@ CREATE TABLE purchaseinvoicedetail (
 	clientip	TEXT
 );
 
-
 CREATE TABLE purchasepayment (
 	id		SERIAL PRIMARY KEY,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE purchasepaymentdetail (
+	id		SERIAL PRIMARY KEY,
+	purchasepayment	INT4 references purchasepayment(id) NOT NULL,
+	paymenttype	INT4 references paymenttype(id) NOT NULL,
 	organisation	INT4 references organisation(id) NOT NULL,
-	amount		NUMERIC NOT NULL,
+	transactdate	date,
+	amount		NUMERIC,
+	description	TEXT,
 	journal		INT4 references journal(id),
 	updated		timestamp with time zone default now(),
 	authuser	TEXT,
 	clientip	TEXT
 );
+
+CREATE TABLE purchasepaymentallocation (
+	id		SERIAL PRIMARY KEY,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE purchasepaymentallocationdetail (
+	id		SERIAL PRIMARY KEY,
+	purchasepaymentallocation	INT4 references purchasepaymentallocation(id) NOT NULL,
+	purchasepayment	INT4 references purchasepayment(id) NOT NULL,
+	purchaseinvoice	INT4 references purchaseinvoice(id) NOT NULL,
+	amount		NUMERIC,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+-- TODO: trigger to ensure sum of amounts in purchasepaymentallocation do not exceed amount of purchasepayment --
+
 
 CREATE TABLE salesorder (
 	id		SERIAL PRIMARY KEY,
