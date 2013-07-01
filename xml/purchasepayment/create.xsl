@@ -11,16 +11,16 @@
 	<xsl:include href="../setSearchPath.xsl"/>
 
         <xsl:template match="request">
-                <xsl:apply-templates select="data/salespayment"/>
+                <xsl:apply-templates select="data/purchasepayment"/>
         </xsl:template>
 
-	<xsl:template match="salespayment">
+	<xsl:template match="purchasepayment">
 		<xsl:call-template name="setSearchPath"/>
 
 		<xsl:text>BEGIN;</xsl:text>
 
                 <xsl:if test="not(@id)">
-                        <xsl:text>INSERT INTO salespayment (</xsl:text>
+                        <xsl:text>INSERT INTO purchasepayment (</xsl:text>
 			<xsl:text>authuser, clientip) VALUES ('</xsl:text>
                         <xsl:copy-of select="$authuser"/>
                         <xsl:text>','</xsl:text>
@@ -28,8 +28,8 @@
                         <xsl:text>');</xsl:text>
                 </xsl:if>
 
-		<xsl:text>INSERT INTO salespaymentdetail (</xsl:text>
-		<xsl:text>salespayment,</xsl:text>
+		<xsl:text>INSERT INTO purchasepaymentdetail (</xsl:text>
+		<xsl:text>purchasepayment,</xsl:text>
 		<xsl:if test="transactdate">
 			<xsl:text>transactdate,</xsl:text>
 		</xsl:if>
@@ -55,7 +55,7 @@
                                 <xsl:text>','</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>
-                                <xsl:text>currval(pg_get_serial_sequence('salespayment','id')),'</xsl:text>
+                                <xsl:text>currval(pg_get_serial_sequence('purchasepayment','id')),'</xsl:text>
                         </xsl:otherwise>
                 </xsl:choose>
 

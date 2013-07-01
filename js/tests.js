@@ -898,6 +898,18 @@ test("create purchase invoice", function() {
 	testXmlPost('purchaseinvoice', 5);
 });
 
+module("Purchase Payments");
+
+test("create purchase payment", function() {
+	testXmlPost('purchasepayment', 6);
+});
+
+module("Purchase Payment Allocation");
+
+test("allocate purchase payment", function() {
+	testXmlPost('purchasepaymentallocation', 7);
+});
+
 module("Sales Orders");
 
 test("create sales order", function() {

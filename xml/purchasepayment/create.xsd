@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-<xs:include schemaLocation="salespayment.xsd"/> 
+<xs:include schemaLocation="purchasepayment.xsd"/> 
 
 <xs:element name="request">
   <xs:complexType>
@@ -11,7 +11,7 @@
       <xs:element name="data">
         <xs:complexType>
           <xs:sequence>
-						<xs:element name="salespayment" type="salespayment" maxOccurs="1"/>
+						<xs:element name="purchasepayment" type="purchasepayment" maxOccurs="1"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element><!--data-->
