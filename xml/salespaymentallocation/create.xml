@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+  <instance>test</instance>
+  <business>1</business>
+	<data>
+		<salespaymentallocation>
+			<salespayment>1</salespayment>
+			<salesinvoice>1</salesinvoice>
+			<amount>120.00</amount>
+		</salespaymentallocation>
+	</data>
+</request>

@@ -474,7 +474,7 @@ CREATE TABLE salespaymentallocation (
 
 CREATE TABLE salespaymentallocationdetail (
 	id		SERIAL PRIMARY KEY,
-	salespaymentallocation	INT4 references salespayment(id) NOT NULL,
+	salespaymentallocation	INT4 references salespaymentallocation(id) NOT NULL,
 	salespayment	INT4 references salespayment(id) NOT NULL,
 	salesinvoice	INT4 references salesinvoice(id) NOT NULL,
 	amount		NUMERIC,

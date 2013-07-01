@@ -950,6 +950,10 @@ test("create sales payment", function() {
 	testXmlPost('salespayment', 1);
 });
 
+test("allocate sales payment", function() {
+	testXmlPost('salespaymentallocation', 3);
+});
+
 function testXmlPost(object, testid) {
 
     stop();
