@@ -24,6 +24,66 @@ CREATE TABLE account (
 	clientip	TEXT
 );
 
+CREATE TABLE paymenttype (
+        id              SERIAL PRIMARY KEY,
+        name            TEXT
+);
+
+CREATE OR REPLACE FUNCTION bankdetailupdate()
+RETURNS TRIGGER AS
+$$
+DECLARE
+        priorentries    INT4;
+        otransactdate   date;
+        odescription    TEXT;
+        oaccount        INT4;
+        opaymenttype    INT4;
+        ojournal        INT4;
+        odebit          NUMERIC;
+        ocredit         NUMERIC;
+BEGIN
+        SELECT INTO priorentries COUNT(id) FROM bankdetail
+                WHERE bank = NEW.bank;
+        IF priorentries > 0 THEN
+                -- This isn't our first time, so use previous values 
+                SELECT INTO
+                        otransactdate, odescription, oaccount, opaymenttype,
+                        ojournal, odebit, ocredit
+                        transactdate, description, account, paymenttype,
+                        journal, debit, credit
+                FROM bankdetail WHERE id IN (
+                        SELECT MAX(id)
+                        FROM bankdetail
+                        GROUP BY bank
+                )
+                AND bank = NEW.bank;
+
+                IF NEW.transactdate IS NULL THEN
+                        NEW.transactdate = otransactdate;
+                END IF;
+                IF NEW.description IS NULL THEN
+                        NEW.description = odescription;
+                END IF;
+                IF NEW.account IS NULL THEN
+                        NEW.account = oaccount;
+                END IF;
+                IF NEW.paymenttype IS NULL THEN
+                        NEW.paymenttype = opaymenttype;
+                END IF;
+                IF NEW.journal IS NULL THEN
+                        NEW.journal = ojournal;
+                END IF;
+                IF NEW.debit IS NULL THEN
+                        NEW.debit = odebit;
+                END IF;
+                IF NEW.credit IS NULL THEN
+                        NEW.credit = ocredit;
+                END IF;
+        END IF;
+        RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
 CREATE TABLE department (
         id              SERIAL PRIMARY KEY,
         name            TEXT UNIQUE,

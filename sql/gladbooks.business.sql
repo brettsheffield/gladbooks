@@ -118,11 +118,6 @@ CREATE TABLE ledger (
 -- prevent deletes from ledger table
 CREATE RULE ledger_del AS ON DELETE TO ledger DO NOTHING;
 
-CREATE TABLE paymenttype (
-	id		SERIAL PRIMARY KEY,
-	name		TEXT
-);
-
 CREATE TABLE bank (
 	id		SERIAL PRIMARY KEY,
 	updated		timestamp with time zone default now(),
@@ -146,6 +141,9 @@ CREATE TABLE bankdetail (
 	authuser	TEXT,
 	clientip	TEXT
 );
+
+CREATE TRIGGER bankdetailupdate BEFORE INSERT ON bankdetail
+FOR EACH ROW EXECUTE PROCEDURE bankdetailupdate();
 
 CREATE TABLE email (
 	id		SERIAL PRIMARY KEY,
