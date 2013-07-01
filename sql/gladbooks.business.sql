@@ -118,11 +118,26 @@ CREATE TABLE ledger (
 -- prevent deletes from ledger table
 CREATE RULE ledger_del AS ON DELETE TO ledger DO NOTHING;
 
+CREATE TABLE paymenttype (
+	id		SERIAL PRIMARY KEY,
+	name		TEXT
+);
+
 CREATE TABLE bank (
 	id		SERIAL PRIMARY KEY,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE bankdetail (
+	id		SERIAL PRIMARY KEY,
+	bank		INT4 references bank(id) ON DELETE RESTRICT,
 	transactdate	date NOT NULL,
 	description	TEXT,
 	account		INT4 references account(id) ON DELETE RESTRICT
+			NOT NULL,
+	paymenttype	INT4 references paymenttype(id) ON DELETE RESTRICT
 			NOT NULL,
 	journal		INT4 references journal(id) ON DELETE RESTRICT,
 	debit		NUMERIC,
@@ -427,11 +442,6 @@ CREATE TABLE salesinvoiceitem_tax (
 	updated		timestamp with time zone default now(),
 	authuser	TEXT,
 	clientip	TEXT
-);
-
-CREATE TABLE paymenttype (
-	id		SERIAL PRIMARY KEY,
-	name		TEXT
 );
 
 CREATE TABLE salespayment (

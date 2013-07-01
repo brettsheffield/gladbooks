@@ -197,6 +197,12 @@ test("create account (invalid type) - MUST be rejected", function() {
 
 });
 
+module("Bank");
+
+test("create bank entry", function() {
+	testXmlPost('bank', 2);
+});
+
 module("Contacts");
 
 test("create contact", function() {

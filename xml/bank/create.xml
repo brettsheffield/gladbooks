@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+  <instance>test</instance>
+  <business>1</business>
+	<data>
+		<bank>
+			<transactdate>2013-04-01</transactdate>
+			<description>a comment</description>
+			<account>1000</account>
+			<paymenttype>1</paymenttype>
+			<debit>120.00</debit>
+			<credit>0.00</credit>
+		</bank>
+	</data>
+</request>
