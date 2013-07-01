@@ -465,6 +465,26 @@ CREATE TABLE salespaymentdetail (
 	clientip	TEXT
 );
 
+CREATE TABLE salespaymentallocation (
+	id		SERIAL PRIMARY KEY,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE salespaymentallocationdetail (
+	id		SERIAL PRIMARY KEY,
+	salespaymentallocation	INT4 references salespayment(id) NOT NULL,
+	salespayment	INT4 references salespayment(id) NOT NULL,
+	salesinvoice	INT4 references salesinvoice(id) NOT NULL,
+	amount		NUMERIC,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+-- TODO: trigger to ensure sum of amounts in salespaymentallocation do not exceed amount of salespayment --
+
 CREATE TRIGGER set_organisation_purchaseorder BEFORE INSERT ON purchaseorder
 FOR EACH ROW EXECUTE PROCEDURE set_organisation_purchaseorder();
 
