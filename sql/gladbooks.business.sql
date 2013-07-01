@@ -429,10 +429,26 @@ CREATE TABLE salesinvoiceitem_tax (
 	clientip	TEXT
 );
 
+CREATE TABLE paymenttype (
+	id		SERIAL PRIMARY KEY,
+	name		TEXT
+);
+
 CREATE TABLE salespayment (
 	id		SERIAL PRIMARY KEY,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
+CREATE TABLE salespaymentdetail (
+	id		SERIAL PRIMARY KEY,
+	salespayment	INT4 references salespayment(id) NOT NULL,
+	paymenttype	INT4 references paymenttype(id) NOT NULL,
 	organisation	INT4 references organisation(id) NOT NULL,
+	transactdate	date,
 	amount		NUMERIC,
+	description	TEXT,
 	journal		INT4 references journal(id),
 	updated		timestamp with time zone default now(),
 	authuser	TEXT,

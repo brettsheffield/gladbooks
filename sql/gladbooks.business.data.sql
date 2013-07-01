@@ -77,6 +77,11 @@ INSERT INTO account (id, accounttype, description)
 INSERT INTO account (id, accounttype, description)
 	VALUES ('9999', '9000', 'Suspense Account');
 
+
+INSERT INTO paymenttype (name) VALUES ('cash');
+INSERT INTO paymenttype (name) VALUES ('cheque');
+INSERT INTO paymenttype (name) VALUES ('bank transfer');
+
 --
 END;
 $$ LANGUAGE 'plpgsql';

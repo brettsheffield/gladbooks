@@ -938,6 +938,12 @@ test("create sales invoice", function() {
 	testXmlPost('salesinvoice', 0);
 });
 
+module("Sales Payment");
+
+test("create sales payment", function() {
+	testXmlPost('salespayment', 1);
+});
+
 function testXmlPost(object, testid) {
 
     stop();
