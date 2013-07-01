@@ -242,28 +242,6 @@ CREATE TABLE product_tax (
         clientip        TEXT
 );
 
-CREATE TABLE purchaseinvoice (
-	id		SERIAL PRIMARY KEY,
-	organisation	INT4 references organisation(id) NOT NULL,
-	invoicenum	INT4 NOT NULL,
-	updated		timestamp with time zone default now(),
-	authuser	TEXT,
-	clientip	TEXT,
-	UNIQUE (organisation, invoicenum)
-);
-
-CREATE TABLE purchaseinvoicedetail (
-	id		SERIAL PRIMARY KEY,
-	purchaseinvoice	INT4 references purchaseinvoice(id) NOT NULL,
-	journal		INT4 references journal(id),
-	subtotal	NUMERIC,
-	tax		NUMERIC,
-	total		NUMERIC,
-	updated		timestamp with time zone default now(),
-	authuser	TEXT,
-	clientip	TEXT
-);
-
 CREATE TABLE purchaseorder (
 	id		SERIAL PRIMARY KEY,
 	organisation	INT4 NOT NULL,
@@ -279,7 +257,6 @@ CREATE TABLE purchaseorder (
 CREATE TABLE purchaseorderdetail (
 	id		SERIAL PRIMARY KEY,
 	purchaseorder	INT4 NOT NULL,
-	purchaseinvoice	INT4,
 	description	TEXT,
 	cycle		INT4,
 	start_date	date,
@@ -291,8 +268,6 @@ CREATE TABLE purchaseorderdetail (
 	clientip	TEXT,
 	CONSTRAINT purchaseorderdetail_fkey_purchaseorder
 		FOREIGN KEY (purchaseorder) REFERENCES purchaseorder(id),
-	CONSTRAINT purchaseorderdetail_fkey_purchaseinvoice
-		FOREIGN KEY (purchaseinvoice) REFERENCES purchaseinvoice(id),
 	CONSTRAINT purchaseorderdetail_fkey_cycle
 		FOREIGN KEY (cycle) REFERENCES cycle(id)
 );
@@ -317,6 +292,37 @@ CREATE TABLE purchaseorderitemdetail (
 	authuser	TEXT,
 	clientip	TEXT
 );
+
+CREATE TABLE purchaseinvoice (
+	id		SERIAL PRIMARY KEY,
+	organisation	INT4 references organisation(id) NOT NULL,
+	invoicenum	INT4 NOT NULL,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT,
+	UNIQUE (organisation, invoicenum)
+);
+
+CREATE TABLE purchaseinvoicedetail (
+	id		SERIAL PRIMARY KEY,
+	purchaseinvoice	INT4 references purchaseinvoice(id) NOT NULL,
+	purchaseorder	INT4 references purchaseorder(id),
+	period		INT4,
+	ponumber	TEXT,
+	taxpoint	date,
+	endpoint	date,
+	issued		timestamp with time zone default now(),
+	journal		INT4 references journal(id),
+	due		date,
+	subtotal	NUMERIC,
+	tax		NUMERIC,
+	total		NUMERIC,
+	pdf		TEXT,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
 
 CREATE TABLE purchasepayment (
 	id		SERIAL PRIMARY KEY,

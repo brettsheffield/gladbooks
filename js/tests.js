@@ -892,6 +892,12 @@ test("create purchase order", function() {
 	testXmlPost('purchaseorder', 4);
 });
 
+module("Purchase Invoices");
+
+test("create purchase invoice", function() {
+	testXmlPost('purchaseinvoice', 5);
+});
+
 module("Sales Orders");
 
 test("create sales order", function() {
