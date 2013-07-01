@@ -477,6 +477,7 @@ DECLARE
 	bdebit		NUMERIC;
 	bcredit		NUMERIC;
 	payment		NUMERIC;
+	paymentid	INT4;
 BEGIN
 	-- check arguments --
 	IF type <> 'sales' AND type <> 'purchase' THEN
@@ -512,7 +513,10 @@ BEGIN
 
 	-- create payment entry --
 	EXECUTE format('INSERT INTO %I DEFAULT VALUES;', idtable);
-	--FIXME:
+
+	EXECUTE format('SELECT currval(pg_get_serial_sequence(''%I'',''id''));',
+	idtable) INTO paymentid;
+
 	EXECUTE format('
 	INSERT INTO %I (
 		%I,
@@ -529,8 +533,8 @@ BEGIN
 	organisation, bankid, btransactdate, payment, bdescription
 	);
 
-	-- FIXME: return id of new payment entry --
-	RETURN '0';
+	-- return id of new payment entry --
+	RETURN paymentid;
 END;
 $$ LANGUAGE 'plpgsql';
 
