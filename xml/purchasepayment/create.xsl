@@ -39,6 +39,9 @@
 		<xsl:if test="organisation">
 			<xsl:text>organisation,</xsl:text>
 		</xsl:if>
+		<xsl:if test="bankaccount">
+			<xsl:text>bankaccount,</xsl:text>
+		</xsl:if>
 		<xsl:if test="amount">
 			<xsl:text>amount,</xsl:text>
 		</xsl:if>
@@ -69,6 +72,10 @@
 		</xsl:if>
 		<xsl:if test="organisation">
 			<xsl:value-of select="organisation"/>
+			<xsl:text>','</xsl:text>
+		</xsl:if>
+		<xsl:if test="bankaccount">
+			<xsl:value-of select="bankaccount"/>
 			<xsl:text>','</xsl:text>
 		</xsl:if>
 		<xsl:if test="amount">

@@ -7,6 +7,7 @@
 			<transactdate>2013-04-01</transactdate>
 			<paymenttype>1</paymenttype>
 			<organisation>1</organisation>
+			<bankaccount>1000</bankaccount>
 			<amount>120.00</amount>
 			<description>a comment</description>
 		</salespayment>

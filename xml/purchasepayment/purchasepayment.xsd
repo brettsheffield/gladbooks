@@ -6,6 +6,7 @@
 		<xs:element name="transactdate" type="xs:date"/>
 		<xs:element name="paymenttype" type="xs:positiveInteger"/>
 		<xs:element name="organisation" type="xs:positiveInteger"/>
+		<xs:element name="bankaccount" type="xs:nonNegativeInteger"/>
 		<xs:element name="amount" type="xs:decimal" minOccurs="0"/>
 		<xs:element name="description" type="xs:string"/>
 	</xs:sequence>
