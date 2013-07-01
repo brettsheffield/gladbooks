@@ -127,7 +127,7 @@ CREATE TABLE bank (
 
 CREATE TABLE bankdetail (
 	id		SERIAL PRIMARY KEY,
-	bank		INT4 references bank(id) ON DELETE RESTRICT,
+	bank		INT4 references bank(id) ON DELETE RESTRICT NOT NULL,
 	transactdate	date NOT NULL,
 	description	TEXT,
 	account		INT4 references account(id) ON DELETE RESTRICT
@@ -333,6 +333,7 @@ CREATE TABLE purchasepaymentdetail (
 	purchasepayment	INT4 references purchasepayment(id) NOT NULL,
 	paymenttype	INT4 references paymenttype(id) NOT NULL,
 	organisation	INT4 references organisation(id) NOT NULL,
+	bank		INT4 references bank(id),
 	transactdate	date,
 	amount		NUMERIC,
 	description	TEXT,
@@ -503,6 +504,7 @@ CREATE TABLE salespaymentdetail (
 	salespayment	INT4 references salespayment(id) NOT NULL,
 	paymenttype	INT4 references paymenttype(id) NOT NULL,
 	organisation	INT4 references organisation(id) NOT NULL,
+	bank		INT4 references bank(id),
 	transactdate	date,
 	amount		NUMERIC,
 	description	TEXT,

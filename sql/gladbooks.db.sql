@@ -459,6 +459,81 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
+
+-- createpayment() - create a sales/purchasepayment from a bank entry --
+-- 	type:  'sales' or 'purchase'
+-- 	bank: id from bank table
+-- 	organisation: id from organisation table
+-- RETURNS INT4 id of new row
+CREATE OR REPLACE FUNCTION createpayment(type TEXT, bankid INT4, organisation INT4)
+RETURNS INT4 AS
+$$
+DECLARE
+	idtable		TEXT;
+	detailtable	TEXT;
+	bpaymenttype	INT4;
+	btransactdate	DATE;
+	bdescription	TEXT;
+	bdebit		NUMERIC;
+	bcredit		NUMERIC;
+	payment		NUMERIC;
+BEGIN
+	-- check arguments --
+	IF type <> 'sales' AND type <> 'purchase' THEN
+		RAISE EXCEPTION 'createpayment() called with invalid type';
+	END IF;
+	
+	idtable = type || 'payment';
+	detailtable = idtable || 'detail';
+
+	-- get bank entry details --
+	SELECT INTO
+		bpaymenttype, btransactdate, bdebit, bcredit, bdescription
+		paymenttype, transactdate, debit, credit, 
+		COALESCE(description, '')
+	FROM bankdetail
+	WHERE id IN (
+		SELECT MAX(id)
+		FROM bankdetail
+		GROUP BY bank
+	)
+	AND bank = bankid;
+
+	IF btransactdate IS NULL THEN
+		RAISE EXCEPTION 'createpayment() called with invalid bankid';
+	END IF;
+
+	-- calculate payment with correct sign --
+	IF type = 'sales' THEN
+		payment = COALESCE(bdebit, '0') - COALESCE(bcredit, '0');
+	ELSE
+		payment = COALESCE(bcredit, '0') - COALESCE(bdebit, '0');
+	END IF;
+
+	-- create payment entry --
+	EXECUTE format('INSERT INTO %I DEFAULT VALUES;', idtable);
+	--FIXME:
+	EXECUTE format('
+	INSERT INTO %I (
+		%I,
+		paymenttype,
+		organisation,
+		bank,
+		transactdate,
+		amount,
+		description
+	) VALUES (
+		currval(pg_get_serial_sequence(''%I'',''id'')),
+		''%s'', ''%s'', ''%s'', ''%s'', ''%s'', ''%s''
+	);', detailtable, idtable, idtable, bpaymenttype,
+	organisation, bankid, btransactdate, payment, bdescription
+	);
+
+	-- FIXME: return id of new payment entry --
+	RETURN '0';
+END;
+$$ LANGUAGE 'plpgsql';
+
 -- ---------------------------------------------------------------------------
 -- Gladbooks Default Org ID style 8+ char based on organisation name
 -- ---------------------------------------------------------------------------
