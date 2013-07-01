@@ -478,6 +478,7 @@ DECLARE
 	bcredit		NUMERIC;
 	payment		NUMERIC;
 	paymentid	INT4;
+	ifound		INT4;
 BEGIN
 	-- check arguments --
 	IF type <> 'sales' AND type <> 'purchase' THEN
@@ -502,6 +503,14 @@ BEGIN
 
 	IF btransactdate IS NULL THEN
 		RAISE EXCEPTION 'createpayment() called with invalid bankid';
+	END IF;
+
+	-- check that there isn't already an entry with this bankid --
+	EXECUTE format('SELECT id FROM %I WHERE id IN (SELECT MAX(id) FROM %I GROUP BY %I) AND bank=''%s'';', 
+	detailtable, detailtable, idtable, bankid);
+	GET DIAGNOSTICS ifound = ROW_COUNT;
+	IF ifound > 0 THEN
+		RAISE EXCEPTION 'bank entry already present';
 	END IF;
 
 	-- calculate payment with correct sign --
