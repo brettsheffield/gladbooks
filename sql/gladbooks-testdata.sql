@@ -60,4 +60,6 @@ INSERT INTO username (id, instance) VALUES ('alpha', 'test');
 
 INSERT INTO salespayment (authuser, clientip) VALUES ('testdata','127.0.0.1');INSERT INTO salespaymentdetail (salespayment,transactdate,paymenttype,organisation,amount,description,authuser,clientip) VALUES (currval(pg_get_serial_sequence('salespayment','id')),'2013-04-01','1','1','120.00','a comment','testdata','127.0.0.1');
 
+INSERT INTO purchasepayment (authuser, clientip) VALUES ('testdata','127.0.0.1');INSERT INTO purchasepaymentdetail (purchasepayment,transactdate,paymenttype,organisation,amount,description,authuser,clientip) VALUES (currval(pg_get_serial_sequence('purchasepayment','id')),'2013-04-01','1','1','120.00','a comment','testdata','127.0.0.1');
+
 COMMIT;
