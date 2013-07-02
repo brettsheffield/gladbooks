@@ -64,4 +64,9 @@ INSERT INTO salespaymentdetail (salespayment,transactdate,paymenttype,organisati
 INSERT INTO purchasepayment (authuser, clientip) VALUES ('testdata','127.0.0.1');
 INSERT INTO purchasepaymentdetail (purchasepayment,transactdate,paymenttype,organisation,bankaccount,amount,description,authuser,clientip) VALUES (currval(pg_get_serial_sequence('purchasepayment','id')),'2013-04-01','1','1','2000','120.00','a comment','testdata','127.0.0.1');
 
+INSERT INTO salesorder (organisation) VALUES ('1');
+INSERT INTO salesorderdetail (salesorder, cycle, start_date) VALUES (currval(pg_get_serial_sequence('salesorder','id')), '3', '2013-04-01');
+INSERT INTO salesorderitem DEFAULT VALUES;
+INSERT INTO salesorderitemdetail (salesorderitem, salesorder, product) VALUES (currval(pg_get_serial_sequence('salesorderitem','id')), currval(pg_get_serial_sequence('salesorder','id')), '1');
+
 COMMIT;

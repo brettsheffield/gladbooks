@@ -885,13 +885,118 @@ BEGIN
 		AND is_deleted = false
 		AND cycle > 0
 	LOOP
-		RAISE NOTICE 'Processing salesorder';
+		PERFORM process_salesorder(so.salesorder);
 		sos := sos + 1;
 	END LOOP;
 	
 	RETURN sos;
 END;
 $process_salesorders$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION process_salesorder(soid INT4)
+RETURNS boolean as $$
+DECLARE
+	so			RECORD;
+	so_due			INT4;
+	so_raised		INT4;
+BEGIN
+	RAISE NOTICE 'Processing salesorder';
+
+	-- fetch the salesorder and cycle info --
+	SELECT sod.*, c.years, c.months, c.days INTO so
+	FROM salesorderdetail sod
+	INNER JOIN cycle c ON sod.cycle = c.id
+	WHERE sod.id IN (
+	   SELECT MAX(id)
+	   FROM salesorderdetail
+	   WHERE salesorder=soid
+	);
+
+	-- figure out how many salesinvoices there should be --
+	IF so.cycle = '1' THEN
+		so_due := '1';
+	ELSE
+		so_due := periods_between(so.years,so.months,so.days,so.start_date, COALESCE(so.end_date, DATE(NOW())));
+	END IF;
+
+	-- fetch invoices already raised against this salesorder --
+	SELECT COUNT(*) INTO so_raised
+	FROM salesinvoicedetail
+	WHERE id IN (
+		SELECT MAX(id)
+		FROM salesinvoicedetail
+		GROUP BY salesinvoice
+	)
+	AND salesorder = soid;
+
+	RAISE NOTICE '% / % invoices raised', so_raised, so_due;
+
+	IF so_raised < so_due THEN
+		-- we have work to do --
+	END IF;
+
+	RETURN true;
+END;
+$$ LANGUAGE 'plpgsql';
+
+-- calculate the number of periods or part thereof 
+-- between start_date and end_date --
+-- RETURNS INT4    "    "    "       "         "            "      --
+CREATE OR REPLACE FUNCTION periods_between(years INT4, months INT4, days INT4, start_date DATE, end_date DATE)
+RETURNS INT4 as $$
+DECLARE
+	jump		DATE;
+	periods		INT4;
+	y_interval	TEXT;
+	m_interval	TEXT;
+	d_interval	TEXT;
+BEGIN
+
+	jump := start_date;
+	periods := 0;
+
+	y_interval := years || ' year';
+	m_interval := months ||' month';
+	d_interval := days || ' day';
+
+	WHILE jump < end_date LOOP
+		jump := jump + y_interval::interval;
+		jump := jump + m_interval::interval;
+		jump := jump + d_interval::interval;
+		periods := periods + 1;
+	END LOOP;
+
+	RETURN periods;
+END;
+$$ LANGUAGE 'plpgsql';
+
+-- taxpoint()
+-- calculate the taxpoint based on the start date and periods elapsed
+-- tax point for period 1 is the start date, otherwise jump forward 
+-- the appropriate number of periods to find the date
+-- RETURNS DATE taxpoint
+CREATE OR REPLACE FUNCTION taxpoint(years INT4, months INT4, days INT4, start_date DATE, period INT4)
+RETURNS DATE as $$
+DECLARE
+	taxpoint	DATE;
+	y_interval	TEXT;
+	m_interval	TEXT;
+	d_interval	TEXT;
+BEGIN
+	period := period - 1;
+	taxpoint := start_date;
+
+	y_interval := period * COALESCE(years, '0') || ' year';
+	m_interval := period * COALESCE(months, '0') || ' month';
+	d_interval := period * COALESCE(days, '0') || ' day';
+
+	taxpoint := taxpoint + y_interval::interval;
+	taxpoint := taxpoint + m_interval::interval;
+	taxpoint := taxpoint + d_interval::interval;
+
+	RETURN taxpoint;
+END;
+$$ LANGUAGE 'plpgsql';
 
 -- Numbers can be beautiful --
 CREATE OR REPLACE FUNCTION format_accounting(amount NUMERIC)
