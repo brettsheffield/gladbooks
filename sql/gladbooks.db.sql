@@ -59,25 +59,25 @@ BEGIN
                 AND bank = NEW.bank;
 
                 IF NEW.transactdate IS NULL THEN
-                        NEW.transactdate = otransactdate;
+                        NEW.transactdate := otransactdate;
                 END IF;
                 IF NEW.description IS NULL THEN
-                        NEW.description = odescription;
+                        NEW.description := odescription;
                 END IF;
                 IF NEW.account IS NULL THEN
-                        NEW.account = oaccount;
+                        NEW.account := oaccount;
                 END IF;
                 IF NEW.paymenttype IS NULL THEN
-                        NEW.paymenttype = opaymenttype;
+                        NEW.paymenttype := opaymenttype;
                 END IF;
                 IF NEW.journal IS NULL THEN
-                        NEW.journal = ojournal;
+                        NEW.journal := ojournal;
                 END IF;
                 IF NEW.debit IS NULL THEN
-                        NEW.debit = odebit;
+                        NEW.debit := odebit;
                 END IF;
                 IF NEW.credit IS NULL THEN
-                        NEW.credit = ocredit;
+                        NEW.credit := ocredit;
                 END IF;
         END IF;
         RETURN NEW;
@@ -318,39 +318,39 @@ BEGIN
                 AND organisation = NEW.organisation;
 
                 IF NEW.name IS NULL THEN
-                        NEW.name = oname;
+                        NEW.name := oname;
                 END IF;
                 IF NEW.terms IS NULL THEN
-                        NEW.terms = oterms;
+                        NEW.terms := oterms;
                 END IF;
                 IF NEW.billcontact IS NULL THEN
-                        NEW.billcontact = obillcontact;
+                        NEW.billcontact := obillcontact;
                 END IF;
                 IF NEW.is_active IS NULL THEN
-                        NEW.is_active = ois_active;
+                        NEW.is_active := ois_active;
                 END IF;
                 IF NEW.is_suspended IS NULL THEN
-                        NEW.is_suspended = ois_suspended;
+                        NEW.is_suspended := ois_suspended;
                 END IF;
                 IF NEW.is_vatreg IS NULL THEN
-                        NEW.is_vatreg = ois_vatreg;
+                        NEW.is_vatreg := ois_vatreg;
                 END IF;
                 IF NEW.vatnumber IS NULL THEN
-                        NEW.vatnumber = ovatnumber;
+                        NEW.vatnumber := ovatnumber;
                 END IF;
         ELSE
                 /* set defaults */
                 IF NEW.terms IS NULL THEN
-                        NEW.terms = 30;
+                        NEW.terms := 30;
                 END IF;
                 IF NEW.is_active IS NULL THEN
-                        NEW.is_active = 'true';
+                        NEW.is_active := 'true';
                 END IF;
                 IF NEW.is_suspended IS NULL THEN
-                        NEW.is_suspended = 'false';
+                        NEW.is_suspended := 'false';
                 END IF;
                 IF NEW.is_vatreg IS NULL THEN
-                        NEW.is_vatreg = 'false';
+                        NEW.is_vatreg := 'false';
                 END IF;
         END IF;
         RETURN NEW;
@@ -402,57 +402,57 @@ BEGIN
                 AND contact = NEW.contact;
 
                 IF NEW.is_active IS NULL THEN
-                        NEW.is_active = ois_active;
+                        NEW.is_active := ois_active;
                 END IF;
                 IF NEW.is_deleted IS NULL THEN
-                        NEW.is_deleted = ois_deleted;
+                        NEW.is_deleted := ois_deleted;
                 END IF;
                 IF NEW.name IS NULL THEN
-                        NEW.name = oname;
+                        NEW.name := oname;
                 END IF;
                 IF NEW.line_1 IS NULL THEN
-                        NEW.line_1 = oline_1;
+                        NEW.line_1 := oline_1;
                 END IF;
                 IF NEW.line_2 IS NULL THEN
-                        NEW.line_2 = oline_2;
+                        NEW.line_2 := oline_2;
                 END IF;
                 IF NEW.line_3 IS NULL THEN
-                        NEW.line_3 = oline_3;
+                        NEW.line_3 := oline_3;
                 END IF;
                 IF NEW.town IS NULL THEN
-                        NEW.town = otown;
+                        NEW.town := otown;
                 END IF;
                 IF NEW.county IS NULL THEN
-                        NEW.county = ocounty;
+                        NEW.county := ocounty;
                 END IF;
                 IF NEW.country IS NULL THEN
-                        NEW.country = ocountry;
+                        NEW.country := ocountry;
                 END IF;
                 IF NEW.postcode IS NULL THEN
-                        NEW.postcode = opostcode;
+                        NEW.postcode := opostcode;
                 END IF;
                 IF NEW.email IS NULL THEN
-                        NEW.email = oemail;
+                        NEW.email := oemail;
                 END IF;
                 IF NEW.phone IS NULL THEN
-                        NEW.phone = ophone;
+                        NEW.phone := ophone;
                 END IF;
                 IF NEW.phonealt IS NULL THEN
-                        NEW.phonealt = ophonealt;
+                        NEW.phonealt := ophonealt;
                 END IF;
                 IF NEW.mobile IS NULL THEN
-                        NEW.mobile = omobile;
+                        NEW.mobile := omobile;
                 END IF;
                 IF NEW.fax IS NULL THEN
-                        NEW.fax = ofax;
+                        NEW.fax := ofax;
                 END IF;
         ELSE
                 /* set defaults */
                 IF NEW.is_active IS NULL THEN
-                        NEW.is_active = 'true';
+                        NEW.is_active := 'true';
                 END IF;
                 IF NEW.is_deleted IS NULL THEN
-                        NEW.is_deleted = 'false';
+                        NEW.is_deleted := 'false';
                 END IF;
         END IF;
         RETURN NEW;
@@ -573,16 +573,16 @@ DECLARE
 BEGIN
 	-- type gives us which account code to post against --
 	IF type = 'sales' THEN
-		accountid = '1100'; -- 1100 = Debtors Control Account
+		accountid := '1100'; -- 1100 = Debtors Control Account
 	ELSIF type = 'purchase' THEN
-		accountid = '2100'; -- 2100 = Creditors Control Account
+		accountid := '2100'; -- 2100 = Creditors Control Account
 	ELSE
 		RAISE EXCEPTION 'postpayment() called with invalid type';
 	END IF;
 
 	-- which tables are we using? --
-	idtable = type || 'payment';
-	detailtable = idtable || 'detail';
+	idtable := type || 'payment';
+	detailtable := idtable || 'detail';
 
 	-- fetch details of payment --
 	EXECUTE 'SELECT transactdate, description, amount, bankaccount, bank ' ||
@@ -596,21 +596,21 @@ BEGIN
 		/* positive sales payments are credit
 		  (decrease the asset) */
 		IF amount > 0 THEN
-			dc1 = 'credit';
-			dc2 = 'debit';
+			dc1 := 'credit';
+			dc2 := 'debit';
 		ELSE
-			dc1 = 'debit';
-			dc2 = 'credit';
+			dc1 := 'debit';
+			dc2 := 'credit';
 		END IF;
 	ELSE 
 		/* positive purchase payments are debits 
 		   (decrease the liability) */
 		IF amount > 0 THEN
-			dc1 = 'debit';
-			dc2 = 'credit';
+			dc1 := 'debit';
+			dc2 := 'credit';
 		ELSE
-			dc1 = 'credit';
-			dc2 = 'debit';
+			dc1 := 'credit';
+			dc2 := 'debit';
 		END IF;
 	END IF;
 	
@@ -651,10 +651,10 @@ DECLARE
         conflicts       INT4;
         idlen           INT4;
 BEGIN
-        idlen = 8;
-        neworgcode = regexp_replace(organisation_name, '[^a-zA-Z0-9]+','','g');
-        neworgcode = substr(neworgcode, 1, idlen);
-        neworgcode = upper(neworgcode);
+        idlen := 8;
+        neworgcode := regexp_replace(organisation_name,'[^a-zA-Z0-9]+','','g');
+        neworgcode := substr(neworgcode, 1, idlen);
+        neworgcode := upper(neworgcode);
         SELECT INTO conflicts COUNT(id) FROM organisation
                 WHERE orgcode = neworgcode;
         WHILE conflicts != 0 OR char_length(neworgcode) < idlen LOOP
@@ -663,7 +663,7 @@ BEGIN
                 SELECT INTO conflicts COUNT(id) FROM organisation
                         WHERE orgcode LIKE neworgcode || '%';
                 IF conflicts > 25 THEN
-                        idlen = idlen + 1;
+                        idlen := idlen + 1;
                 END IF;
         END LOOP;
         RETURN neworgcode;
@@ -707,7 +707,7 @@ CREATE OR REPLACE FUNCTION set_organisation_purchaseorder()
 RETURNS TRIGGER AS
 $$
 BEGIN
-        NEW.ordernum = organisation_purchaseorder_next(NEW.organisation);
+        NEW.ordernum := organisation_purchaseorder_next(NEW.organisation);
         RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -732,7 +732,7 @@ CREATE OR REPLACE FUNCTION set_organisation_purchaseinvoice()
 RETURNS TRIGGER AS
 $$
 BEGIN
-        NEW.invoicenum = organisation_purchaseinvoice_next(NEW.organisation);
+        NEW.invoicenum := organisation_purchaseinvoice_next(NEW.organisation);
         RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -830,8 +830,8 @@ DECLARE
 	idtable		TEXT;
 	detailtable	TEXT;
 BEGIN
-	type = quote_ident(TG_ARGV[0]);
-	paymentid = NEW.payment;
+	type := quote_ident(TG_ARGV[0]);
+	paymentid := NEW.payment;
 
         -- check arguments --
 	IF type <> 'sales' AND type <> 'purchase' THEN
@@ -839,8 +839,8 @@ BEGIN
 	END IF;
 
 	-- find amount of payment --
-	idtable = type || 'payment';
-	detailtable = idtable || 'detail';
+	idtable := type || 'payment';
+	detailtable := idtable || 'detail';
 	EXECUTE format('SELECT amount FROM %I WHERE id IN ', detailtable) ||
 	format('(SELECT MAX(id) FROM %I GROUP BY %I) ',detailtable,idtable) ||
 	format('AND %I=''%s'';', idtable, paymentid)
@@ -848,7 +848,7 @@ BEGIN
 
 	-- how much have we allocated? --
 	idtable = type || 'paymentallocation';
-	detailtable = idtable || 'detail';
+	detailtable := idtable || 'detail';
 	EXECUTE 'SELECT SUM(amount) ' ||
 	format('FROM %I WHERE id IN ', detailtable) ||
 	format('(SELECT MAX(id) FROM %I GROUP BY %I) ',detailtable,idtable) ||
@@ -864,6 +864,36 @@ BEGIN
 END;
 $check_payment_allocation$ LANGUAGE plpgsql;
 
+-- process_salesorders() - create salesinvoices from open salesorders --
+-- RETURN INT4 number of salesorders processed --
+CREATE OR REPLACE FUNCTION process_salesorders()
+RETURNS INT4 as $process_salesorders$
+DECLARE
+	sos	INT4;
+	so	RECORD;
+BEGIN
+	sos := '0';
+
+	FOR so IN 
+		SELECT * FROM salesorderdetail
+		WHERE id IN (
+			SELECT MAX(id)
+			FROM salesorderdetail
+			GROUP BY salesorder
+		)
+		AND is_open = true
+		AND is_deleted = false
+		AND cycle > 0
+	LOOP
+		RAISE NOTICE 'Processing salesorder';
+		sos := sos + 1;
+	END LOOP;
+	
+	RETURN sos;
+END;
+$process_salesorders$ LANGUAGE 'plpgsql';
+
+-- Numbers can be beautiful --
 CREATE OR REPLACE FUNCTION format_accounting(amount NUMERIC)
 RETURNS TEXT AS
 $$
