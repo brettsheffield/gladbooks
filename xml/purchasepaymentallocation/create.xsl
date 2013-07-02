@@ -31,7 +31,7 @@
 		<xsl:text>INSERT INTO purchasepaymentallocationdetail (</xsl:text>
 		<xsl:text>purchasepaymentallocation,</xsl:text>
 		<xsl:if test="purchasepayment">
-			<xsl:text>purchasepayment,</xsl:text>
+			<xsl:text>payment,</xsl:text>
 		</xsl:if>
 		<xsl:if test="purchaseinvoice">
 			<xsl:text>purchaseinvoice,</xsl:text>

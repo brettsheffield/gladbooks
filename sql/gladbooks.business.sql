@@ -354,7 +354,7 @@ CREATE TABLE purchasepaymentallocation (
 CREATE TABLE purchasepaymentallocationdetail (
 	id		SERIAL PRIMARY KEY,
 	purchasepaymentallocation	INT4 references purchasepaymentallocation(id) NOT NULL,
-	purchasepayment	INT4 references purchasepayment(id) NOT NULL,
+	payment		INT4 references purchasepayment(id) NOT NULL,
 	purchaseinvoice	INT4 references purchaseinvoice(id) NOT NULL,
 	amount		NUMERIC,
 	updated		timestamp with time zone default now(),
@@ -526,7 +526,7 @@ CREATE TABLE salespaymentallocation (
 CREATE TABLE salespaymentallocationdetail (
 	id		SERIAL PRIMARY KEY,
 	salespaymentallocation	INT4 references salespaymentallocation(id) NOT NULL,
-	salespayment	INT4 references salespayment(id) NOT NULL,
+	payment		INT4 references salespayment(id) NOT NULL,
 	salesinvoice	INT4 references salesinvoice(id) NOT NULL,
 	amount		NUMERIC,
 	updated		timestamp with time zone default now(),
@@ -535,6 +535,22 @@ CREATE TABLE salespaymentallocationdetail (
 );
 
 -- TODO: trigger to ensure sum of amounts in salespaymentallocation do not exceed amount of salespayment --
+
+CREATE CONSTRAINT TRIGGER trig_check_purchasepayment_allocation
+	AFTER INSERT
+	ON purchasepaymentallocationdetail
+	DEFERRABLE INITIALLY DEFERRED
+	FOR EACH ROW
+	EXECUTE PROCEDURE check_payment_allocation('purchase')
+;
+
+CREATE CONSTRAINT TRIGGER trig_check_salespayment_allocation
+	AFTER INSERT
+	ON salespaymentallocationdetail
+	DEFERRABLE INITIALLY DEFERRED
+	FOR EACH ROW
+	EXECUTE PROCEDURE check_payment_allocation('sales')
+;
 
 CREATE TRIGGER set_organisation_purchaseorder BEFORE INSERT ON purchaseorder
 FOR EACH ROW EXECUTE PROCEDURE set_organisation_purchaseorder();
