@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:include schemaLocation="../types.xsd"/>
+
+<xs:complexType name="payment">
+	<xs:sequence>
+		<xs:element name="bankid" type="xs:positiveInteger"/>
+		<xs:element name="organisation" type="xs:positiveInteger"/>
+	</xs:sequence>
+	<xs:attribute name="type" type="paymenttype" use="required"/>
+</xs:complexType>
+
+</xs:schema>

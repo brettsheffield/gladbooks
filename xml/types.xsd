@@ -7,4 +7,11 @@
   </xs:restriction>
 </xs:simpleType>
 
+<xs:simpleType name="paymenttype">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="payment"/>
+    <xs:enumeration value="sales"/>
+  </xs:restriction>
+</xs:simpleType>
+
 </xs:schema>

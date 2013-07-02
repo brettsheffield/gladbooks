@@ -848,6 +848,14 @@ test("roundHalfEven() - bankers rounding", function() {
 
 });
 
+module("Payments");
+
+/* FIXME: can only use each bank entry once, so repeated tests fail
+test("create payment from bank entry", function() {
+	testXmlPost('payment', 8);
+});
+*/
+
 module("Products");
 
 test("create product", function() {
