@@ -893,12 +893,17 @@ BEGIN
 END;
 $process_salesorders$ LANGUAGE 'plpgsql';
 
+-- process_salesorder() - create missing salesinvoices for a given salesorder
+-- RETURN INT4 number of salesinvoices generated
 CREATE OR REPLACE FUNCTION process_salesorder(soid INT4)
-RETURNS boolean as $$
+RETURNS INT4 as $$
 DECLARE
 	so			RECORD;
 	so_due			INT4;
 	so_raised		INT4;
+	periods_issued		INT4[];
+	periods_unissued	INT4;
+	period			INT4;
 BEGIN
 	RAISE NOTICE 'Processing salesorder';
 
@@ -931,9 +936,41 @@ BEGIN
 
 	RAISE NOTICE '% / % invoices raised', so_raised, so_due;
 
-	IF so_raised < so_due THEN
-		-- we have work to do --
+	periods_unissued := so_due - so_raised;
+
+	IF periods_unissued > 0 THEN
+		-- first, work out which periods are missing --
+		FOR period IN
+			SELECT generate_series(1, so_due) AS period
+			EXCEPT
+			SELECT soid.period
+			FROM salesinvoicedetail soid
+			WHERE id IN (
+				SELECT MAX(id)
+				FROM salesinvoicedetail
+				GROUP BY salesinvoice
+			)
+			AND salesorder = so.salesorder
+			ORDER BY period 
+		LOOP
+			RAISE NOTICE 'Issue period: %', period;
+		END LOOP;
+	ELSIF periods_unissued < 0 THEN
+		RAISE EXCEPTION 'too many salesinvoices exist for salesorder %', soid;
 	END IF;
+
+	RETURN periods_unissued;
+END;
+$$ LANGUAGE 'plpgsql';
+
+-- create_salesinvoice()
+-- create a salesinvoice from a salesorder for the given period
+-- RETURNS BOOLEAN success/fail
+CREATE OR REPLACE FUNCTION create_salesinvoice(soid INT4, period INT4)
+RETURNS boolean AS $$
+DECLARE
+
+BEGIN
 
 	RETURN true;
 END;
@@ -995,6 +1032,32 @@ BEGIN
 	taxpoint := taxpoint + d_interval::interval;
 
 	RETURN taxpoint;
+END;
+$$ LANGUAGE 'plpgsql';
+
+-- periodenddate()
+-- last day of the period => tax point of next period, less one day --
+-- RETURNS DATE end_date
+CREATE OR REPLACE FUNCTION periodenddate(years INT4, months INT4, days INT4, start_date DATE, period INT4)
+RETURNS DATE as $$
+DECLARE
+	end_date	DATE;
+	y_interval	TEXT;
+	m_interval	TEXT;
+	d_interval	TEXT;
+BEGIN
+	end_date := start_date;
+
+	y_interval := period * COALESCE(years, '0') || ' year';
+	m_interval := period * COALESCE(months, '0') || ' month';
+	d_interval := period * COALESCE(days, '0') || ' day';
+
+	end_date := end_date + y_interval::interval;
+	end_date := end_date + m_interval::interval;
+	end_date := end_date + d_interval::interval;
+	end_date := end_date - interval '1 day';
+
+	RETURN end_date;
 END;
 $$ LANGUAGE 'plpgsql';
 
