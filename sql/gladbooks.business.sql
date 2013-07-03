@@ -485,36 +485,53 @@ WHERE id IN (
 )
 AND is_deleted = false;
 
+/*
+	SUM(COALESCE(soi.price, p.price_sell) * soi.qty) AS subtotal,
+	roundhalfeven(SUM(COALESCE(soi.price, p.price_sell) * soi.qty * tr.rate/100),2)
+	AS tax,
+	SUM(COALESCE(soi.price, p.price_sell) * soi.qty) +
+	roundhalfeven(SUM(COALESCE(soi.price, p.price_sell) * soi.qty * tr.rate/100),2)
+	AS total
+*/
+
 -- FIXME: taxrate needs to be worked out based on next expected invoice date,
 -- whatever that may be...
 CREATE OR REPLACE VIEW salesorder_current AS
-SELECT sod.*, so.organisation, so.ordernum,
-	SUM(COALESCE(soi.price, p.price_sell) * soi.qty) AS subtotal,
-	ROUND(SUM(COALESCE(soi.price, p.price_sell) * soi.qty * tr.rate/100),2)
-	AS tax,
-	SUM(COALESCE(soi.price, p.price_sell) * soi.qty) +
-	ROUND(SUM(COALESCE(soi.price, p.price_sell) * soi.qty * tr.rate/100),2)
-	AS total
-FROM salesorderdetail sod
-INNER JOIN salesorder so ON so.id = sod.salesorder
-LEFT JOIN salesorderitem_current soi ON so.id = soi.salesorder
-INNER JOIN product_current p ON p.product = soi.product
-LEFT JOIN (
-	SELECT * FROM product_tax 
-	WHERE is_applicable = true
-) pt ON p.product = pt.product
-LEFT JOIN (
-	SELECT * FROM taxrate_current
-	WHERE valid_from < NOW()
-	AND COALESCE(valid_to,NOW()) >= NOW()
-) tr ON pt.tax = tr.tax
-WHERE sod.id IN (
+SELECT 
+	s.*,
+	SUM(COALESCE(soi2.price, p2.price_sell) * soi2.qty) AS price,
+	tx.tax,
+	SUM(COALESCE(soi2.price, p2.price_sell) * soi2.qty) + tx.tax AS total
+FROM 
+(
+	SELECT 	so.id AS salesorder,
+		roundhalfeven(SUM(COALESCE(soi.price, p.price_sell, '0.00') * soi.qty * tr.rate/100),2) AS tax
+	FROM salesorderdetail sod
+	INNER JOIN salesorder so ON so.id = sod.salesorder
+	INNER JOIN salesorderitem_current soi ON so.id = soi.salesorder
+	INNER JOIN product_current p ON p.product = soi.product
+	INNER JOIN (
+		SELECT * FROM product_tax WHERE is_applicable = true
+	) pt ON p.product = pt.product
+	INNER JOIN taxrate_current tr ON tr.tax = pt.tax
+	WHERE sod.id IN (
+		SELECT MAX(id) FROM salesorderdetail GROUP BY salesorder
+	)
+	AND sod.is_deleted = false
+	AND (tr.valid_from <= NOW()::DATE OR tr.valid_from IS NULL)
+	AND (tr.valid_to >= NOW()::DATE OR tr.valid_to IS NULL)
+	GROUP BY so.id, so.organisation, so.ordernum
+) tx
+INNER JOIN salesorderdetail s ON s.salesorder = tx.salesorder
+INNER JOIN salesorderitem_current soi2 ON s.id = soi2.salesorder
+INNER JOIN product_current p2 ON p2.product = soi2.product
+WHERE s.id IN (
 	SELECT MAX(id)
 	FROM salesorderdetail
 	GROUP BY salesorder
 )
-AND sod.is_deleted = false
-GROUP BY sod.id, so.organisation, so.ordernum;
+GROUP BY s.id, tx.tax
+;
 
 /*  not used - intended for overriding taxes
 CREATE TABLE salesorderitem_tax (
@@ -594,6 +611,21 @@ WHERE id IN (
 )
 AND is_deleted = false;
 
+-- record taxes charged on an invoice as at the time it is issued --
+-- updated by trigger on salesinvoicedetail table --
+CREATE TABLE salesinvoice_tax (
+	id		SERIAL PRIMARY KEY,
+	salesinvoice	INT4 references salesinvoice(id) ON DELETE RESTRICT
+			NOT NULL,
+	taxname		TEXT,
+	rate		NUMERIC,
+	nett		NUMERIC,
+	total		NUMERIC,
+	updated		timestamp with time zone default now(),
+	authuser	TEXT,
+	clientip	TEXT
+);
+
 CREATE OR REPLACE VIEW salesinvoice_current AS
 SELECT sod.*, so.organisation, so.invoicenum,
         SUM(COALESCE(soi.price, p.price_sell) * soi.qty) AS subtotal,
@@ -610,23 +642,6 @@ LEFT JOIN (
 ) sit ON so.id = sit.salesinvoice
 INNER JOIN product_current p ON p.product = soi.product
 GROUP BY sod.id, so.organisation, so.invoicenum, sit.tax;
-
-SELECT SUM(sit.total) AS tax FROM salesinvoice_tax sit GROUP BY sit.salesinvoice;
-
--- record taxes charged on an invoice as at the time it is issued --
--- updated by trigger on salesinvoicedetail table --
-CREATE TABLE salesinvoice_tax (
-	id		SERIAL PRIMARY KEY,
-	salesinvoice	INT4 references salesinvoice(id) ON DELETE RESTRICT
-			NOT NULL,
-	taxname		TEXT,
-	rate		NUMERIC,
-	nett		NUMERIC,
-	total		NUMERIC,
-	updated		timestamp with time zone default now(),
-	authuser	TEXT,
-	clientip	TEXT
-);
 
 CREATE TABLE salespayment (
 	id		SERIAL PRIMARY KEY,

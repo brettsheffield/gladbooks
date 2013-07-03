@@ -201,6 +201,39 @@ WHERE id IN (
 	GROUP BY taxrate
 );
 
+-- Round half to even, aka. "bankers" rounding --
+-- amount: number to round
+-- dp: number of decimal places to round to
+-- RETURN NUMERIC rounded number
+CREATE OR REPLACE FUNCTION roundhalfeven(amount NUMERIC, dp INT4)
+RETURNS NUMERIC AS
+$$
+DECLARE
+	a	NUMERIC; /* somewhere to work */
+	lastp	NUMERIC; /* the decimal digit *after* the one to round */
+	penp	NUMERIC; /* the decimal digit we're rounding at */
+BEGIN
+	lastp := (trunc(amount, dp + 1) - trunc(amount, dp)) * power(10, dp + 1);
+	penp := (trunc(amount, dp) - trunc(amount, dp - 1)) * power(10, dp);
+	IF lastp = '5' THEN
+		IF penp % 2 <> 0 THEN
+			a := trunc(amount, dp) + power(10, -dp); /* round up */
+		ELSE
+			a := trunc(amount, dp); /* round down */
+		END IF;
+	ELSIF lastp < '5' THEN
+		a := trunc(amount, dp); /* no need to round, just truncate */
+	ELSE
+		a := trunc(amount, dp) + power(10, -dp); /* round up */
+	END IF;
+
+	/* return the requested number of decimal places */
+	a := a + ('0.' || rpad('0',dp,'0'))::NUMERIC;
+
+	RETURN a;
+END;
+$$ LANGUAGE 'plpgsql';
+
 -- contiguous sequences for account nominal codes - we don't want gaps
 -- also need to skip over preassigned codes
 CREATE OR REPLACE FUNCTION accountid_next(accounttypeid INT4)
@@ -1113,7 +1146,7 @@ BEGIN
 		t.name AS taxname,
 		tr.rate,
 		SUM(sii.price * sii.qty) AS nett,
-		ROUND(SUM(sii.price * sii.qty) * tr.rate/100, 2) AS total
+		roundhalfeven(SUM(sii.price * sii.qty) * tr.rate/100, 2) AS total
 	FROM
 		salesinvoice_current si
 		LEFT JOIN salesinvoiceitem_current sii 
