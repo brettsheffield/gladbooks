@@ -1083,6 +1083,25 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
+-- trigger to update totals and tax for salesinvoice
+CREATE OR REPLACE FUNCTION updatesalesinvoicetotals()
+RETURNS trigger AS $$
+DECLARE
+BEGIN
+	-- set subtotal for this invoice --
+	SELECT SUM(price * qty) INTO NEW.subtotal
+	FROM salesinvoiceitem_current
+	WHERE salesinvoice = NEW.salesinvoice;
+
+	-- TODO: taxes and total
+
+	NEW.total := NEW.subtotal + NEW.tax;
+
+        RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+
 -- calculate the number of periods or part thereof 
 -- between start_date and end_date --
 -- RETURNS INT4    "    "    "       "         "            "      --

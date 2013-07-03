@@ -578,7 +578,8 @@ WHERE id IN (
 	SELECT MAX(id)
 	FROM salesinvoiceitemdetail
 	GROUP BY salesinvoiceitem
-);
+)
+AND is_deleted = false;
 
 CREATE TABLE salesinvoiceitem_tax (
 	id		SERIAL PRIMARY KEY,
@@ -704,6 +705,13 @@ CREATE TRIGGER trig_check_salesorder_period
         ON salesinvoicedetail
         FOR EACH ROW
         EXECUTE PROCEDURE check_salesorder_period()
+;
+
+CREATE TRIGGER trig_updatesalesinvoicetotals
+	BEFORE INSERT OR UPDATE
+	ON salesinvoicedetail
+	FOR EACH ROW
+	EXECUTE PROCEDURE updatesalesinvoicetotals()
 ;
 
 -- views --
