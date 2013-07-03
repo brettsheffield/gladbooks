@@ -228,8 +228,8 @@ CREATE TABLE product (
 
 CREATE TABLE productdetail (
         id              SERIAL PRIMARY KEY,
-        product         INT4 references product(id) ON DELETE RESTRICT
-                        NOT NULL,
+        product         INT4 references product(id) ON DELETE RESTRICT NOT NULL
+		DEFAULT currval(pg_get_serial_sequence('product','id')),
         account         INT4 references account(id) ON DELETE RESTRICT
                         NOT NULL,
         shortname       TEXT NOT NULL,
@@ -454,16 +454,6 @@ CREATE TABLE salesorderdetail (
 	clientip	TEXT
 );
 
-CREATE OR REPLACE VIEW salesorder_current AS
-SELECT sod.*, so.organisation, so.ordernum
-FROM salesorderdetail sod
-INNER JOIN salesorder so ON so.id = sod.salesorder
-WHERE sod.id IN (
-	SELECT MAX(id)
-	FROM salesorderdetail
-	GROUP BY salesorder
-);
-
 CREATE TABLE salesorderitem (
 	id		SERIAL PRIMARY KEY,
 	updated		timestamp with time zone default now(),
@@ -492,7 +482,39 @@ WHERE id IN (
 	SELECT MAX(id)
 	FROM salesorderitemdetail
 	GROUP BY salesorderitem
-);
+)
+AND is_deleted = false;
+
+-- FIXME: taxrate needs to be worked out based on next expected invoice date,
+-- whatever that may be...
+CREATE OR REPLACE VIEW salesorder_current AS
+SELECT sod.*, so.organisation, so.ordernum,
+	SUM(COALESCE(soi.price, p.price_sell) * soi.qty) AS subtotal,
+	ROUND(SUM(COALESCE(soi.price, p.price_sell) * soi.qty * tr.rate/100),2)
+	AS tax,
+	SUM(COALESCE(soi.price, p.price_sell) * soi.qty) +
+	ROUND(SUM(COALESCE(soi.price, p.price_sell) * soi.qty * tr.rate/100),2)
+	AS total
+FROM salesorderdetail sod
+INNER JOIN salesorder so ON so.id = sod.salesorder
+LEFT JOIN salesorderitem_current soi ON so.id = soi.salesorder
+INNER JOIN product_current p ON p.product = soi.product
+LEFT JOIN (
+	SELECT * FROM product_tax 
+	WHERE is_applicable = true
+) pt ON p.product = pt.product
+LEFT JOIN (
+	SELECT * FROM taxrate_current
+	WHERE valid_from < NOW()
+	AND COALESCE(valid_to,NOW()) >= NOW()
+) tr ON pt.tax = tr.tax
+WHERE sod.id IN (
+	SELECT MAX(id)
+	FROM salesorderdetail
+	GROUP BY salesorder
+)
+AND sod.is_deleted = false
+GROUP BY sod.id, so.organisation, so.ordernum;
 
 CREATE TABLE salesorderitem_tax (
 	id		SERIAL PRIMARY KEY,

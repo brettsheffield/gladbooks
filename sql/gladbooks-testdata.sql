@@ -42,10 +42,12 @@ INSERT INTO account (accounttype, description) VALUES ('7000', 'Utilities');
 INSERT INTO account (accounttype, description) VALUES ('8000', 'Depreciation');
 
 INSERT INTO product DEFAULT VALUES;
-INSERT INTO productdetail (product, account, shortname, description, price_buy, price_sell) VALUES (currval(pg_get_serial_sequence('product','id')),'4000', 'Test Product', 'Description of Test Product', '4.50', '9.99');
+INSERT INTO productdetail (account, shortname, description, price_buy, price_sell) VALUES ('4000', 'Test Product', 'Description of Test Product', '4.50', '9.99');
+INSERT INTO product_tax (product, tax) VALUES (currval(pg_get_serial_sequence('product','id')), '1');
 
 INSERT INTO product DEFAULT VALUES;
-INSERT INTO productdetail (product, account, shortname, description, price_buy, price_sell) VALUES (currval(pg_get_serial_sequence('product','id')),'4000', 'A 2nd Test Product', 'Description of Test Product', '0.99', '1.33');
+INSERT INTO productdetail (account, shortname, description, price_buy, price_sell) VALUES ('4000', 'A 2nd Test Product', 'Description of Test Product', '0.99', '1.33');
+INSERT INTO product_tax (product, tax) VALUES (currval(pg_get_serial_sequence('product','id')), '1');
 
 INSERT INTO organisation VALUES (DEFAULT);
 INSERT INTO organisationdetail (organisation, name)
