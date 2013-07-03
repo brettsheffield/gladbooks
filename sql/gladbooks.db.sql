@@ -155,7 +155,8 @@ CREATE TABLE tax (
 
 CREATE TABLE taxdetail (
         id              SERIAL PRIMARY KEY,
-        tax             INT4 references tax(id) ON DELETE RESTRICT,
+        tax             INT4 references tax(id) ON DELETE RESTRICT NOT NULL
+		DEFAULT currval(pg_get_serial_sequence('tax','id')),
         account         INT4 references account(id) ON DELETE RESTRICT,
         name            TEXT NOT NULL,
         updated         timestamp with time zone default now(),
@@ -180,9 +181,10 @@ CREATE TABLE taxrate (
 
 CREATE TABLE taxratedetail (
         id              SERIAL PRIMARY KEY,
-        taxrate         INT4 references taxrate(id) ON DELETE RESTRICT
-                        NOT NULL,
-        tax             INT4 references tax(id) ON DELETE RESTRICT NOT NULL,
+        taxrate         INT4 references taxrate(id) ON DELETE RESTRICT NOT NULL
+		DEFAULT currval(pg_get_serial_sequence('taxrate','id')),
+        tax             INT4 references tax(id) ON DELETE RESTRICT NOT NULL
+		DEFAULT currval(pg_get_serial_sequence('tax','id')),
         rate            NUMERIC,
         valid_from      timestamp,
         valid_to        timestamp,
@@ -1010,14 +1012,13 @@ RETURNS boolean AS $$
 DECLARE
 	r_so		RECORD;
 	r_soi		RECORD;
+	r_tax		RECORD;
 	taxpoint	DATE;
 	endpoint	DATE;
 	due		DATE;
-	subtotal	NUMERIC;
-	tax		NUMERIC;
-	total		NUMERIC;
 	termdays	INT4;
 	terminterval	TEXT;
+	si_id		INT4;
 BEGIN
 	-- fetch the salesorder and cycle info --
 	-- FIXME: this is inefficient
@@ -1046,37 +1047,39 @@ BEGIN
 
 	-- salesinvoiceitem
 	--TODO: linetext macro substitution
-	INSERT INTO salesinvoiceitem DEFAULT VALUES;
-	INSERT INTO salesinvoiceitemdetail (
-		product,
-		linetext,
-		discount,
-		price,
-		qty
-	)
-	SELECT 
-		soi.product,
-		COALESCE(soi.linetext, p.description),
-		soi.discount,
-		COALESCE(soi.price, p.price_sell),
-		soi.qty
-	FROM salesorderitem_current soi
-	INNER JOIN product_current p ON p.id = soi.product
-	WHERE salesorder = so_id;
-
-	-- TODO: keep subtotal, tax and total up to date with trigger
-	subtotal := '0';
-	tax := '0';
-	total := subtotal + tax;
-
-	-- TODO: salesinvoiceitem_tax
+	FOR r_soi IN
+		SELECT 
+			soi.product,
+			COALESCE(soi.linetext, p.description) AS linetext,
+			soi.discount,
+			COALESCE(soi.price, p.price_sell) as price,
+			soi.qty
+		FROM salesorderitem_current soi
+		INNER JOIN product_current p ON p.id = soi.product
+		WHERE salesorder = so_id
+	LOOP
+		INSERT INTO salesinvoiceitem DEFAULT VALUES;
+		INSERT INTO salesinvoiceitemdetail (
+			product,
+			linetext,
+			discount,
+			price,
+			qty
+		) VALUES (
+			r_soi.product,
+			r_soi.linetext,
+			r_soi.discount,
+			r_soi.price,
+			r_soi.qty
+		);
+	END LOOP;
 
 	INSERT INTO salesinvoicedetail (
 		salesorder, period, ponumber, 
-		taxpoint, endpoint, due, subtotal, tax, total
+		taxpoint, endpoint, due
 	) VALUES (
 		so_id, period, r_so.ponumber, 
-		taxpoint, endpoint, due, subtotal, tax, total
+		taxpoint, endpoint, due
 	);
 
 	RETURN true;
@@ -1089,13 +1092,42 @@ RETURNS trigger AS $$
 DECLARE
 BEGIN
 	-- set subtotal for this invoice --
+	/*
 	SELECT SUM(price * qty) INTO NEW.subtotal
 	FROM salesinvoiceitem_current
 	WHERE salesinvoice = NEW.salesinvoice;
+	*/
 
-	-- TODO: taxes and total
+	-- salesinvoice_tax - record taxes charged for future reference
+	-- the rates and dates in the tax tables may change, and we want
+	-- a permanent record of what taxes were applied to *this* invoice
+	INSERT INTO salesinvoice_tax (
+		salesinvoice,
+		taxname,
+		rate,
+		nett,
+		total
+	) 
+	SELECT
+		sii.salesinvoice,
+		t.name AS taxname,
+		tr.rate,
+		SUM(sii.price * sii.qty) AS nett,
+		ROUND(SUM(sii.price * sii.qty) * tr.rate/100, 2) AS total
+	FROM
+		salesinvoice_current si
+		LEFT JOIN salesinvoiceitem_current sii 
+		ON si.salesinvoice = sii.salesinvoice
+		LEFT JOIN product_tax pt ON sii.product = pt.product
+		INNER JOIN tax_current t ON t.tax = pt.tax
+		INNER JOIN taxrate_current tr ON tr.tax = pt.tax
+	WHERE (tr.valid_from <= si.taxpoint OR tr.valid_from IS NULL)
+	AND (tr.valid_to >= si.taxpoint OR  tr.valid_to IS NULL)
+	AND si.salesinvoice = NEW.salesinvoice
+	GROUP BY sii.salesinvoice, t.name, tr.rate
+	;
 
-	NEW.total := NEW.subtotal + NEW.tax;
+	--NEW.total := NEW.subtotal + NEW.tax;
 
         RETURN NEW;
 END;

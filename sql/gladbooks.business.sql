@@ -516,6 +516,7 @@ WHERE sod.id IN (
 AND sod.is_deleted = false
 GROUP BY sod.id, so.organisation, so.ordernum;
 
+/*  not used - intended for overriding taxes
 CREATE TABLE salesorderitem_tax (
 	id		SERIAL PRIMARY KEY,
 	tax		INT4 references tax(id) NOT NULL,
@@ -526,6 +527,7 @@ CREATE TABLE salesorderitem_tax (
 	authuser	TEXT,
 	clientip	TEXT
 );
+*/
 
 CREATE TABLE salesinvoice (
 	id		SERIAL PRIMARY KEY,
@@ -548,9 +550,6 @@ CREATE TABLE salesinvoicedetail (
 	endpoint	date,
 	issued		timestamp with time zone default now(),
 	due		date,
-	subtotal	NUMERIC,
-	tax		NUMERIC,
-	total		NUMERIC,
 	pdf		TEXT,
 	emailtext	TEXT,
 	emailafter	timestamp with time zone default now(),
@@ -560,14 +559,6 @@ CREATE TABLE salesinvoicedetail (
 	updated		timestamp with time zone default now(),
 	authuser	TEXT,
 	clientip	TEXT
-);
-
-CREATE OR REPLACE VIEW salesinvoice_current AS
-SELECT * FROM salesinvoicedetail
-WHERE id IN (
-	SELECT MAX(id)
-	FROM salesinvoicedetail
-	GROUP BY salesinvoice
 );
 
 CREATE TABLE salesinvoiceitem (
@@ -603,12 +594,33 @@ WHERE id IN (
 )
 AND is_deleted = false;
 
-CREATE TABLE salesinvoiceitem_tax (
+CREATE OR REPLACE VIEW salesinvoice_current AS
+SELECT sod.*, so.organisation, so.invoicenum,
+        SUM(COALESCE(soi.price, p.price_sell) * soi.qty) AS subtotal,
+	sit.tax AS tax,
+	SUM(COALESCE(soi.price, p.price_sell) * soi.qty) + sit.tax
+	AS total
+FROM salesinvoicedetail sod
+INNER JOIN salesinvoice so ON so.id = sod.salesinvoice
+LEFT JOIN salesinvoiceitem_current soi ON so.id = soi.salesinvoice
+LEFT JOIN (
+	SELECT sit.salesinvoice, SUM(sit.total) AS tax 
+	FROM salesinvoice_tax sit 
+	GROUP BY sit.salesinvoice
+) sit ON so.id = sit.salesinvoice
+INNER JOIN product_current p ON p.product = soi.product
+GROUP BY sod.id, so.organisation, so.invoicenum, sit.tax;
+
+SELECT SUM(sit.total) AS tax FROM salesinvoice_tax sit GROUP BY sit.salesinvoice;
+
+-- record taxes charged on an invoice as at the time it is issued --
+-- updated by trigger on salesinvoicedetail table --
+CREATE TABLE salesinvoice_tax (
 	id		SERIAL PRIMARY KEY,
 	salesinvoice	INT4 references salesinvoice(id) ON DELETE RESTRICT
 			NOT NULL,
-	taxrate		INT4 references taxrate(id) ON DELETE RESTRICT
-			NOT NULL,
+	taxname		TEXT,
+	rate		NUMERIC,
 	nett		NUMERIC,
 	total		NUMERIC,
 	updated		timestamp with time zone default now(),
@@ -730,7 +742,7 @@ CREATE TRIGGER trig_check_salesorder_period
 ;
 
 CREATE TRIGGER trig_updatesalesinvoicetotals
-	BEFORE INSERT OR UPDATE
+	AFTER INSERT OR UPDATE
 	ON salesinvoicedetail
 	FOR EACH ROW
 	EXECUTE PROCEDURE updatesalesinvoicetotals()
