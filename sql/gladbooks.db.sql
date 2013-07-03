@@ -1119,6 +1119,54 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
+-- salesorder_nextissuedate() - return the date when the salesorder will next
+-- be issued
+-- RETURN DATE
+CREATE OR REPLACE FUNCTION salesorder_nextissuedate(so INT4)
+RETURNS DATE AS $$
+DECLARE
+	nextissue	DATE;
+	socycle		INT4;
+	lastperiod	INT4;
+	so_cycle	INT4;
+	so_start_date	DATE;
+	so_years	INT4;
+	so_months	INT4;
+	so_days		INT4;
+BEGIN
+	-- check which cycle this salesorder is on --
+	SELECT sod.cycle, sod.start_date, c.years, c.months, c.days 
+	INTO so_cycle, so_start_date, so_years, so_months, so_days
+	FROM salesorderdetail sod
+	INNER JOIN cycle c ON c.id = sod.cycle
+	WHERE sod.id IN (
+		SELECT MAX(id)
+		FROM salesorderdetail
+		GROUP BY salesorder
+	)
+	AND sod.salesorder = so;
+	IF NOT FOUND THEN
+		RETURN NULL;
+	END IF;
+
+	IF so_cycle = '0' THEN
+		RETURN NULL; 		/* never */
+	ELSIF so_cycle = '1' THEN
+		RETURN DATE(NOW()); 	/* once => today */
+	END IF;
+
+	-- recurring salesorder: which was the last period issued? --
+	SELECT MAX(period) INTO lastperiod
+	FROM salesinvoice_current
+	WHERE salesorder = so;
+
+	SELECT taxpoint(so_years, so_months, so_days, so_start_date, lastperiod + 1) INTO nextissue;
+
+	RETURN nextissue;
+END;
+$$ LANGUAGE 'plpgsql';
+
+
 -- trigger to update totals and tax for salesinvoice
 CREATE OR REPLACE FUNCTION updatesalesinvoicetotals()
 RETURNS trigger AS $$

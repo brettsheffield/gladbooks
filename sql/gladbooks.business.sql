@@ -485,17 +485,6 @@ WHERE id IN (
 )
 AND is_deleted = false;
 
-/*
-	SUM(COALESCE(soi.price, p.price_sell) * soi.qty) AS subtotal,
-	roundhalfeven(SUM(COALESCE(soi.price, p.price_sell) * soi.qty * tr.rate/100),2)
-	AS tax,
-	SUM(COALESCE(soi.price, p.price_sell) * soi.qty) +
-	roundhalfeven(SUM(COALESCE(soi.price, p.price_sell) * soi.qty * tr.rate/100),2)
-	AS total
-*/
-
--- FIXME: taxrate needs to be worked out based on next expected invoice date,
--- whatever that may be...
 CREATE OR REPLACE VIEW salesorder_current AS
 SELECT 
 	s.*,
@@ -520,8 +509,9 @@ FROM
 		SELECT MAX(id) FROM salesorderdetail GROUP BY salesorder
 	)
 	AND sod.is_deleted = false
-	AND (tr.valid_from <= NOW()::DATE OR tr.valid_from IS NULL)
-	AND (tr.valid_to >= NOW()::DATE OR tr.valid_to IS NULL)
+	AND (tr.valid_from <= salesorder_nextissuedate(so.id)
+		OR tr.valid_from IS NULL)
+	AND (tr.valid_to >= salesorder_nextissuedate(so.id) OR tr.valid_to IS NULL)
 	GROUP BY so.id, so.organisation, so.ordernum
 ) tx
 INNER JOIN salesorderdetail s ON s.salesorder = tx.salesorder
