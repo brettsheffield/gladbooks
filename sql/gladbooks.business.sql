@@ -499,6 +499,8 @@ AND is_deleted = false;
 CREATE OR REPLACE VIEW salesorder_current AS
 SELECT 
 	s.*,
+	s0.organisation,
+	s0.ordernum,
 	SUM(COALESCE(soi2.price, p2.price_sell) * soi2.qty) AS price,
 	tx.tax,
 	SUM(COALESCE(soi2.price, p2.price_sell) * soi2.qty) + tx.tax AS total
@@ -523,6 +525,7 @@ FROM
 	GROUP BY so.id, so.organisation, so.ordernum
 ) tx
 INNER JOIN salesorderdetail s ON s.salesorder = tx.salesorder
+INNER JOIN salesorder s0 ON s0.id = s.salesorder
 INNER JOIN salesorderitem_current soi2 ON s.id = soi2.salesorder
 INNER JOIN product_current p2 ON p2.product = soi2.product
 WHERE s.id IN (
@@ -530,7 +533,7 @@ WHERE s.id IN (
 	FROM salesorderdetail
 	GROUP BY salesorder
 )
-GROUP BY s.id, tx.tax
+GROUP BY s.id, s0.organisation, s0.ordernum, tx.tax
 ;
 
 /*  not used - intended for overriding taxes
