@@ -145,6 +145,14 @@ CREATE TABLE bankdetail (
 CREATE TRIGGER bankdetailupdate BEFORE INSERT ON bankdetail
 FOR EACH ROW EXECUTE PROCEDURE bankdetailupdate();
 
+CREATE OR REPLACE VIEW bank_current AS
+SELECT * FROM bankdetail
+WHERE id IN (
+	SELECT MAX(id)
+	FROM bankdetail
+	GROUP BY bank
+);
+
 CREATE TABLE email (
 	id		SERIAL PRIMARY KEY,
 	updated		timestamp with time zone default now(),
@@ -163,6 +171,14 @@ CREATE TABLE emaildetail (
 	updated		timestamp with time zone default now(),
 	authuser	TEXT,
 	clientip	TEXT
+);
+
+CREATE OR REPLACE VIEW email_current AS
+SELECT * FROM emaildetail
+WHERE id IN (
+	SELECT MAX(id)
+	FROM emaildetail
+	GROUP BY email
 );
 
 CREATE TABLE emailheader (
@@ -229,6 +245,14 @@ CREATE TABLE productdetail (
         clientip        TEXT
 );
 
+CREATE OR REPLACE VIEW product_current AS
+SELECT * FROM productdetail
+WHERE id IN (
+	SELECT MAX(id)
+	FROM productdetail
+	GROUP BY product
+);
+
 CREATE TABLE product_tax (
         id              SERIAL PRIMARY KEY,
         product         INT4 references product(id) ON DELETE RESTRICT
@@ -270,6 +294,14 @@ CREATE TABLE purchaseorderdetail (
 		FOREIGN KEY (cycle) REFERENCES cycle(id)
 );
 
+CREATE OR REPLACE VIEW product_current AS
+SELECT * FROM productdetail
+WHERE id IN (
+	SELECT MAX(id)
+	FROM productdetail
+	GROUP BY product
+);
+
 CREATE TABLE purchaseorderitem (
 	id		SERIAL PRIMARY KEY,
 	updated		timestamp with time zone default now(),
@@ -289,6 +321,14 @@ CREATE TABLE purchaseorderitemdetail (
 	updated		timestamp with time zone default now(),
 	authuser	TEXT,
 	clientip	TEXT
+);
+
+CREATE OR REPLACE VIEW purchaseorderitem_current AS
+SELECT * FROM purchaseorderitemdetail
+WHERE id IN (
+	SELECT MAX(id)
+	FROM purchaseorderitemdetail
+	GROUP BY purchaseorderitem
 );
 
 CREATE TABLE purchaseinvoice (
@@ -321,6 +361,14 @@ CREATE TABLE purchaseinvoicedetail (
 	clientip	TEXT
 );
 
+CREATE OR REPLACE VIEW purchaseinvoice_current AS
+SELECT * FROM purchaseinvoicedetail
+WHERE id IN (
+	SELECT MAX(id)
+	FROM purchaseinvoicedetail
+	GROUP BY purchaseinvoice
+);
+
 CREATE TABLE purchasepayment (
 	id		SERIAL PRIMARY KEY,
 	updated		timestamp with time zone default now(),
@@ -344,6 +392,14 @@ CREATE TABLE purchasepaymentdetail (
 	clientip	TEXT
 );
 
+CREATE OR REPLACE VIEW purchasepayment_current AS
+SELECT * FROM purchasepaymentdetail
+WHERE id IN (
+	SELECT MAX(id)
+	FROM purchasepaymentdetail
+	GROUP BY purchasepayment
+);
+
 CREATE TABLE purchasepaymentallocation (
 	id		SERIAL PRIMARY KEY,
 	updated		timestamp with time zone default now(),
@@ -364,6 +420,13 @@ CREATE TABLE purchasepaymentallocationdetail (
 
 -- TODO: trigger to ensure sum of amounts in purchasepaymentallocation do not exceed amount of purchasepayment --
 
+CREATE OR REPLACE VIEW purchasepaymentallocation_current AS
+SELECT * FROM purchasepaymentallocationdetail
+WHERE id IN (
+	SELECT MAX(id)
+	FROM purchasepaymentallocationdetail
+	GROUP BY purchasepaymentallocation
+);
 
 CREATE TABLE salesorder (
 	id		SERIAL PRIMARY KEY,
@@ -391,6 +454,16 @@ CREATE TABLE salesorderdetail (
 	clientip	TEXT
 );
 
+CREATE OR REPLACE VIEW salesorder_current AS
+SELECT sod.*, so.organisation, so.ordernum
+FROM salesorderdetail sod
+INNER JOIN salesorder so ON so.id = sod.salesorder
+WHERE sod.id IN (
+	SELECT MAX(id)
+	FROM salesorderdetail
+	GROUP BY salesorder
+);
+
 CREATE TABLE salesorderitem (
 	id		SERIAL PRIMARY KEY,
 	updated		timestamp with time zone default now(),
@@ -411,6 +484,14 @@ CREATE TABLE salesorderitemdetail (
 	updated		timestamp with time zone default now(),
 	authuser	TEXT,
 	clientip	TEXT
+);
+
+CREATE OR REPLACE VIEW salesorderitem_current AS
+SELECT * FROM salesorderitemdetail
+WHERE id IN (
+	SELECT MAX(id)
+	FROM salesorderitemdetail
+	GROUP BY salesorderitem
 );
 
 CREATE TABLE salesorderitem_tax (
@@ -436,7 +517,8 @@ CREATE TABLE salesinvoice (
 
 CREATE TABLE salesinvoicedetail (
 	id		SERIAL PRIMARY KEY,
-	salesinvoice	INT4 references salesinvoice(id) NOT NULL,
+	salesinvoice	INT4 references salesinvoice(id) NOT NULL
+		DEFAULT currval(pg_get_serial_sequence('salesinvoice','id')),
 	salesorder	INT4 references salesorder(id),
 	period		INT4,
 	ponumber	TEXT,
@@ -458,6 +540,14 @@ CREATE TABLE salesinvoicedetail (
 	clientip	TEXT
 );
 
+CREATE OR REPLACE VIEW salesinvoice_current AS
+SELECT * FROM salesinvoicedetail
+WHERE id IN (
+	SELECT MAX(id)
+	FROM salesinvoicedetail
+	GROUP BY salesinvoice
+);
+
 CREATE TABLE salesinvoiceitem (
 	id		SERIAL PRIMARY KEY,
 	updated		timestamp with time zone default now(),
@@ -467,8 +557,10 @@ CREATE TABLE salesinvoiceitem (
 
 CREATE TABLE salesinvoiceitemdetail (
 	id		SERIAL PRIMARY KEY,
-	salesinvoiceitem	INT4 references salesinvoiceitem(id) NOT NULL,
-	salesinvoice	INT4 references salesinvoice(id) NOT NULL,
+	salesinvoiceitem	INT4 references salesinvoiceitem(id) NOT NULL
+	    DEFAULT currval(pg_get_serial_sequence('salesinvoiceitem','id')),
+	salesinvoice	INT4 references salesinvoice(id) NOT NULL
+	    DEFAULT currval(pg_get_serial_sequence('salesinvoice','id')),
 	product		INT4 references product(id) NOT NULL,
 	linetext	TEXT,
 	discount	NUMERIC,
@@ -478,6 +570,14 @@ CREATE TABLE salesinvoiceitemdetail (
 	updated		timestamp with time zone default now(),
 	authuser	TEXT,
 	clientip	TEXT
+);
+
+CREATE OR REPLACE VIEW salesinvoiceitem_current AS
+SELECT * FROM salesinvoiceitemdetail
+WHERE id IN (
+	SELECT MAX(id)
+	FROM salesinvoiceitemdetail
+	GROUP BY salesinvoiceitem
 );
 
 CREATE TABLE salesinvoiceitem_tax (
@@ -516,6 +616,14 @@ CREATE TABLE salespaymentdetail (
 	clientip	TEXT
 );
 
+CREATE OR REPLACE VIEW salespayment_current AS
+SELECT * FROM salespaymentdetail
+WHERE id IN (
+	SELECT MAX(id)
+	FROM salespaymentdetail
+	GROUP BY salespayment
+);
+
 CREATE TABLE salespaymentallocation (
 	id		SERIAL PRIMARY KEY,
 	updated		timestamp with time zone default now(),
@@ -534,7 +642,15 @@ CREATE TABLE salespaymentallocationdetail (
 	clientip	TEXT
 );
 
--- TODO: trigger to ensure sum of amounts in salespaymentallocation do not exceed amount of salespayment --
+CREATE OR REPLACE VIEW salespaymentallocation_current AS
+SELECT * FROM salespaymentallocationdetail
+WHERE id IN (
+	SELECT MAX(id)
+	FROM salespaymentallocationdetail
+	GROUP BY salespaymentallocation
+);
+
+-- trigger to ensure sum of amounts in salespaymentallocation do not exceed amount of salespayment --
 
 CREATE CONSTRAINT TRIGGER trig_check_purchasepayment_allocation
 	AFTER INSERT
@@ -581,6 +697,13 @@ CREATE CONSTRAINT TRIGGER trig_check_transaction_balance
         DEFERRABLE INITIALLY DEFERRED
         FOR EACH ROW
         EXECUTE PROCEDURE check_transaction_balance()
+;
+
+CREATE TRIGGER trig_check_salesorder_period
+	BEFORE INSERT OR UPDATE
+        ON salesinvoicedetail
+        FOR EACH ROW
+        EXECUTE PROCEDURE check_salesorder_period()
 ;
 
 -- views --

@@ -75,6 +75,14 @@ CREATE TABLE contactdetail (
 CREATE TRIGGER contactdetailupdate BEFORE INSERT ON contactdetail
 FOR EACH ROW EXECUTE PROCEDURE contactdetailupdate();
 
+CREATE OR REPLACE VIEW contact_current AS
+SELECT * FROM contactdetail
+WHERE id IN (
+	SELECT MAX(id)
+	FROM contactdetail
+	GROUP BY contact
+);
+
 CREATE TABLE organisation (
         id              SERIAL PRIMARY KEY,
         orgcode         TEXT DEFAULT NULL,
@@ -109,6 +117,14 @@ FOR EACH ROW EXECUTE PROCEDURE set_orgcode();
 
 CREATE TRIGGER organisationdetailupdate BEFORE INSERT ON organisationdetail
 FOR EACH ROW EXECUTE PROCEDURE organisationdetailupdate();
+
+CREATE OR REPLACE VIEW organisation_current AS
+SELECT * FROM organisationdetail
+WHERE id IN (
+	SELECT MAX(id)
+	FROM organisationdetail
+	GROUP BY organisation
+);
 
 CREATE TABLE relationship (
 	id		SERIAL PRIMARY KEY,

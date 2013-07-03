@@ -163,6 +163,14 @@ CREATE TABLE taxdetail (
         clientip        TEXT
 );
 
+CREATE OR REPLACE VIEW tax_current AS
+SELECT * FROM taxdetail
+WHERE id IN (
+	SELECT MAX(id)
+	FROM taxdetail
+	GROUP BY tax
+);
+
 CREATE TABLE taxrate (
         id              SERIAL PRIMARY KEY,
         updated         timestamp with time zone default now(),
@@ -181,6 +189,14 @@ CREATE TABLE taxratedetail (
         updated         timestamp with time zone default now(),
         authuser        TEXT,
         clientip        TEXT
+);
+
+CREATE OR REPLACE VIEW taxrate_current AS
+SELECT * FROM taxratedetail
+WHERE id IN (
+	SELECT MAX(id)
+	FROM taxratedetail
+	GROUP BY taxrate
 );
 
 -- contiguous sequences for account nominal codes - we don't want gaps
@@ -864,6 +880,29 @@ BEGIN
 END;
 $check_payment_allocation$ LANGUAGE plpgsql;
 
+-- trigger to ensure each period is only issued once per salesorder
+CREATE OR REPLACE FUNCTION check_salesorder_period()
+RETURNS trigger AS $$
+DECLARE
+BEGIN
+	PERFORM id
+	FROM salesinvoicedetail
+	WHERE id IN (
+		SELECT MAX(id)
+		FROM salesinvoicedetail
+		GROUP BY salesinvoice
+	)
+	AND period = NEW.period
+	AND salesorder = NEW.salesorder;
+	IF FOUND THEN
+		RAISE EXCEPTION 'salesinvoice with period % already exists for salesorder %', NEW.period, NEW.salesorder;
+	END IF;
+
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+
 -- process_salesorders() - create salesinvoices from open salesorders --
 -- RETURN INT4 number of salesorders processed --
 CREATE OR REPLACE FUNCTION process_salesorders()
@@ -901,7 +940,6 @@ DECLARE
 	so			RECORD;
 	so_due			INT4;
 	so_raised		INT4;
-	periods_issued		INT4[];
 	periods_unissued	INT4;
 	period			INT4;
 BEGIN
@@ -954,6 +992,7 @@ BEGIN
 			ORDER BY period 
 		LOOP
 			RAISE NOTICE 'Issue period: %', period;
+			PERFORM create_salesinvoice(soid, period);
 		END LOOP;
 	ELSIF periods_unissued < 0 THEN
 		RAISE EXCEPTION 'too many salesinvoices exist for salesorder %', soid;
@@ -966,11 +1005,79 @@ $$ LANGUAGE 'plpgsql';
 -- create_salesinvoice()
 -- create a salesinvoice from a salesorder for the given period
 -- RETURNS BOOLEAN success/fail
-CREATE OR REPLACE FUNCTION create_salesinvoice(soid INT4, period INT4)
+CREATE OR REPLACE FUNCTION create_salesinvoice(so_id INT4, period INT4)
 RETURNS boolean AS $$
 DECLARE
-
+	r_so		RECORD;
+	r_soi		RECORD;
+	taxpoint	DATE;
+	endpoint	DATE;
+	due		DATE;
+	subtotal	NUMERIC;
+	tax		NUMERIC;
+	total		NUMERIC;
+	termdays	INT4;
+	terminterval	TEXT;
 BEGIN
+	-- fetch the salesorder and cycle info --
+	-- FIXME: this is inefficient
+	-- - we had this information in process_salesorder()
+	SELECT so.*, c.years, c.months, c.days INTO r_so
+	FROM salesorder_current so
+	INNER JOIN cycle c ON so.cycle = c.id
+	WHERE so.salesorder=so_id;
+
+	taxpoint := taxpoint(r_so.years, r_so.months, r_so.days, r_so.start_date, period);
+	endpoint := periodenddate(r_so.years, r_so.months, r_so.days, r_so.start_date, period);
+
+	RAISE NOTICE 'Start Date is: %', r_so.start_date;
+	RAISE NOTICE 'Period is: %', period;
+	RAISE NOTICE 'Tax Point is: %', taxpoint;
+	RAISE NOTICE 'Period End Date is: %', endpoint;
+
+	-- fetch terms for organisation --
+	SELECT terms INTO termdays FROM organisation_current
+	WHERE organisation = r_so.organisation;
+
+	terminterval := termdays || ' days';
+	due := taxpoint + terminterval::interval;
+
+	INSERT INTO salesinvoice (organisation) VALUES (r_so.organisation);
+
+	-- salesinvoiceitem
+	--TODO: linetext macro substitution
+	INSERT INTO salesinvoiceitem DEFAULT VALUES;
+	INSERT INTO salesinvoiceitemdetail (
+		product,
+		linetext,
+		discount,
+		price,
+		qty
+	)
+	SELECT 
+		soi.product,
+		COALESCE(soi.linetext, p.description),
+		soi.discount,
+		COALESCE(soi.price, p.price_sell),
+		soi.qty
+	FROM salesorderitem_current soi
+	INNER JOIN product_current p ON p.id = soi.product
+	WHERE salesorder = so_id;
+
+	-- TODO: keep subtotal, tax and total up to date with trigger
+	subtotal := '0';
+	tax := '0';
+	total := subtotal + tax;
+
+	-- TODO: salesinvoiceitem_tax
+
+	INSERT INTO salesinvoicedetail (
+		salesorder, period, ponumber, 
+		taxpoint, endpoint, due, subtotal, tax, total
+	) VALUES (
+		so_id, period, r_so.ponumber, 
+		taxpoint, endpoint, due, subtotal, tax, total
+	);
 
 	RETURN true;
 END;
@@ -1020,6 +1127,16 @@ DECLARE
 	m_interval	TEXT;
 	d_interval	TEXT;
 BEGIN
+	IF start_date IS NULL THEN
+		IF COALESCE(years, '0') <> '0' 
+		OR COALESCE(months, '0') <> '0' 
+		OR COALESCE(days, '0') <> '0' 
+		THEN
+			RAISE EXCEPTION 'start_date is null on recurring salesorder';
+		END IF;
+		RETURN DATE(NOW()); -- no start date, tax point is today
+	END IF;
+
 	period := period - 1;
 	taxpoint := start_date;
 
