@@ -164,6 +164,65 @@ CREATE TABLE organisation_organisation (
 	PRIMARY KEY (organisation, related, relationship)
 );
 
+CREATE TABLE tag (
+	id		TEXT PRIMARY KEY,
+        updated         timestamp with time zone default now(),
+        authuser        TEXT,
+        clientip        TEXT
+);
+
+CREATE TABLE mimetype (
+	id		TEXT PRIMARY KEY,
+        updated         timestamp with time zone default now(),
+        authuser        TEXT,
+        clientip        TEXT
+);
+
+CREATE TABLE document (
+	id		SERIAL PRIMARY KEY,
+        updated         timestamp with time zone default now(),
+        authuser        TEXT,
+        clientip        TEXT
+);
+
+CREATE TABLE documentdetail (
+	id		SERIAL PRIMARY KEY,
+	document	INT4 references document(id) ON DELETE RESTRICT
+			NOT NULL,
+	src		TEXT,
+	path		TEXT,
+	title		TEXT,
+	subject		TEXT,
+	description	TEXT,
+	mimetype	TEXT references mimetype(id) ON DELETE RESTRICT,
+	owner		INT4 references contact(id) ON DELETE CASCADE
+			NOT NULL,
+	permissions	BIT(8),
+        is_deleted      boolean DEFAULT false,
+        updated         timestamp with time zone default now(),
+        authuser        TEXT,
+        clientip        TEXT
+);
+
+CREATE TABLE document_tag (
+	document	INT4 references document(id) ON DELETE CASCADE
+			NOT NULL,
+	tag		TEXT references tag(id) ON DELETE CASCADE
+			NOT NULL
+);
+
+CREATE TABLE document_author (
+	document	INT4 references document(id) ON DELETE CASCADE
+			NOT NULL,
+	author		INT4 references contact(id) ON DELETE CASCADE
+			NOT NULL,
+	PRIMARY KEY (document, author)
+);
+
+
+
+-- TODO: trigger to generate/verify sha1 on document table on INSERT --
+
 -- views --
 CREATE OR REPLACE VIEW contactdetailview AS
 SELECT
