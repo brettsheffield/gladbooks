@@ -560,6 +560,9 @@ CREATE TABLE salesinvoicedetail (
 	endpoint	date,
 	issued		timestamp with time zone default now(),
 	due		date,
+	subtotal	NUMERIC,
+	tax		NUMERIC,
+	total		NUMERIC,
 	pdf		TEXT,
 	emailtext	TEXT,
 	emailafter	timestamp with time zone default now(),
@@ -620,11 +623,21 @@ CREATE TABLE salesinvoice_tax (
 );
 
 CREATE OR REPLACE VIEW salesinvoice_current AS
-SELECT sod.*, so.organisation, so.invoicenum,
-        SUM(COALESCE(soi.price, p.price_sell) * soi.qty) AS subtotal,
-	sit.tax AS tax,
-	SUM(COALESCE(soi.price, p.price_sell) * soi.qty) + sit.tax
-	AS total
+SELECT 	sod.id,
+	sod.salesinvoice,
+	sod.salesorder,
+	sod.period,
+	sod.ponumber,
+	sod.taxpoint,
+	sod.endpoint,
+	sod.issued,
+	sod.due,
+	so.organisation,
+	so.invoicenum,
+        COALESCE(sod.subtotal, SUM(COALESCE(soi.price, p.price_sell) * soi.qty)) AS subtotal,
+	COALESCE(sod.tax, sit.tax) AS tax,
+	COALESCE(sod.total, SUM(COALESCE(soi.price, p.price_sell) * soi.qty)
+	+ COALESCE(sod.tax, sit.tax)) AS total
 FROM salesinvoicedetail sod
 INNER JOIN salesinvoice so ON so.id = sod.salesinvoice
 LEFT JOIN salesinvoiceitem_current soi ON so.id = soi.salesinvoice
