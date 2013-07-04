@@ -1,8 +1,0 @@
-# To setup/reset a fresh gladbooks database:
-dropdb gladbooks
-createdb gladbooks
-psql gladbooks < gladbooks.db.sql 
-psql gladbooks < gladbooks.instance.sql
-psql gladbooks < gladbooks.business.sql
-psql gladbooks < gladbooks.business.data.sql
-psql gladbooks < gladbooks-testdata.sql

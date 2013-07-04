@@ -1,4 +1,6 @@
 *.swp
+*.so
+*.o
 .sass-cache/
 .gladd.lock
 gladd.conf
