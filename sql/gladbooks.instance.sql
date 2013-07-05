@@ -16,15 +16,6 @@ EXECUTE 'CREATE SCHEMA ' || quote_ident('gladbooks_' || instance);
 
 EXECUTE 'SET search_path TO ' || quote_ident('gladbooks_' || instance) || ',gladbooks';
 
--- a business represents a distinct set of accounting ledgers
-CREATE TABLE business (
-	id              SERIAL PRIMARY KEY,
-	name		TEXT UNIQUE NOT NULL,
-	instance	VARCHAR(63) references instance(id) ON DELETE RESTRICT,
-	entered         timestamp with time zone default now()
-);
-CREATE RULE nodel_business AS ON DELETE TO business DO NOTHING;
-
 -- each instance can create and modify its own default charts which 
 -- are used when creating businesses for this instance
 CREATE TABLE chart (
@@ -99,7 +90,8 @@ CREATE TABLE organisation (
 CREATE TABLE organisationdetail (
         id              SERIAL PRIMARY KEY,
         organisation    INT4 references organisation(id)
-                        ON DELETE RESTRICT,
+                        ON DELETE RESTRICT DEFAULT 
+			currval(pg_get_serial_sequence('organisation','id')),
         name            TEXT NOT NULL,
         terms           INT4 NOT NULL,
         billcontact     INT4 references contact(id) ON DELETE RESTRICT,
@@ -163,6 +155,21 @@ CREATE TABLE organisation_organisation (
         clientip        TEXT,
 	PRIMARY KEY (organisation, related, relationship)
 );
+
+-- a business represents a distinct set of accounting ledgers
+CREATE TABLE business (
+	id              SERIAL PRIMARY KEY,
+	name		TEXT UNIQUE NOT NULL,
+	instance	VARCHAR(63) references instance(id) ON DELETE RESTRICT,
+	organisation	INT4 references organisation(id) ON DELETE RESTRICT 
+			NOT NULL,
+	vatcashbasis	boolean NOT NULL DEFAULT false,
+	entered         timestamp with time zone default now()
+);
+CREATE RULE nodel_business AS ON DELETE TO business DO NOTHING;
+
+CREATE TRIGGER trig_businessorganisation BEFORE INSERT ON business
+FOR EACH ROW EXECUTE PROCEDURE businessorganisation();
 
 CREATE TABLE tag (
 	id		TEXT PRIMARY KEY,

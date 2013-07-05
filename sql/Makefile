@@ -26,4 +26,4 @@ functions:
 dropdb:
 	dropdb gladbooks
 
-reset: dropdb db
+reset: dropdb all

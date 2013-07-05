@@ -510,6 +510,23 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
+-- trigger to ensure business has a related organisation, 
+-- creating one if required
+CREATE OR REPLACE FUNCTION businessorganisation()
+RETURNS TRIGGER AS
+$$
+DECLARE
+BEGIN
+	IF NEW.organisation IS NULL THEN
+		INSERT INTO organisation DEFAULT VALUES;
+		INSERT INTO organisationdetail(name) VALUES (NEW.name);
+		NEW.organisation = 
+			currval(pg_get_serial_sequence('organisation','id'));
+	END IF;
+
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
 
 -- createpayment() - create a sales/purchasepayment from a bank entry --
 -- 	type:  'sales' or 'purchase'
