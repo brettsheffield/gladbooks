@@ -24,14 +24,17 @@ PKGLIBDIR=`pg_config --pkglibdir`
 INCLUDES=-I`pg_config --includedir-server`
 LIBNAME=gladbooks
 
-${LIBNAME}.so: ${LIBNAME}.c
-	gcc -Wall -fpic ${INCLUDES} -c ${LIBNAME}.c
-	gcc -Wall -shared -o ${LIBNAME}.so ${LIBNAME}.o
+${LIBNAME}.so: ${LIBNAME}.c string.o
+	gcc ${CFLAGS} -fpic ${INCLUDES} -c ${LIBNAME}.c
+	gcc ${CFLAGS} -shared -o ${LIBNAME}.so ${LIBNAME}.o string.o
+
+string.o: string.c string.h
+	gcc ${CFLAGS} -fpic -c string.c
 
 .PHONY: clean install
 
 clean:
-	rm ${LIBNAME}.so ${LIBNAME}.o
+	rm ${LIBNAME}.so ${LIBNAME}.o string.o
 
 install: gladbooks.so
 	ln -sf `pwd`/${LIBNAME}.so ${PKGLIBDIR}

@@ -633,6 +633,7 @@ SELECT 	sod.id,
 	sod.issued,
 	sod.due,
 	so.organisation,
+	o.orgcode,
 	so.invoicenum,
         COALESCE(sod.subtotal, SUM(COALESCE(soi.price, p.price_sell) * soi.qty)) AS subtotal,
 	COALESCE(sod.tax, sit.tax) AS tax,
@@ -647,7 +648,8 @@ LEFT JOIN (
 	GROUP BY sit.salesinvoice
 ) sit ON so.id = sit.salesinvoice
 INNER JOIN product_current p ON p.product = soi.product
-GROUP BY sod.id, so.organisation, so.invoicenum, sit.tax;
+INNER JOIN organisation o ON o.id = so.organisation
+GROUP BY sod.id, so.organisation, so.invoicenum, sit.tax, o.orgcode;
 
 CREATE TABLE salespayment (
 	id		SERIAL PRIMARY KEY,

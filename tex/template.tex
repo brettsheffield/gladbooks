@@ -1,0 +1,24 @@
+\documentclass{simple}
+\begin{document}
+\customertable
+{{{CUSTOMERTABLE}}}
+
+\gsdocheading{Sales Invoice}
+
+\gsdocmeta
+{{{DOCMETA}}}
+    
+\gsfixedwidth
+\begin{longtable}{|p{460pt}|r|}
+\hline
+\bf Item & \bf Amount \\
+\hline\hline
+{{{LINEITEMS}}}
+\hline
+Subtotal & {{{SUBTOTAL}}} \\
+{{{TAXES}}}
+\hline\hline
+Total Amount Due By {{{DUEDATE}}} & {{{TOTAL}}} \\
+\hline
+\end{longtable}
+\end{document}
