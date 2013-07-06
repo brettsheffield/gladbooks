@@ -615,7 +615,9 @@ SELECT
 	COALESCE(siid.linetext, p.description) as linetext,
 	siid.discount,
 	COALESCE(siid.price, p.price_sell) as price,
-	siid.qty
+	siid.qty,
+	roundhalfeven(COALESCE(siid.price, p.price_sell) * siid.qty, 2)
+		as linetotal
 FROM salesinvoiceitem_current siid
 INNER JOIN product_current p ON p.product = siid.product
 ;

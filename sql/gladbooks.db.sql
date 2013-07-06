@@ -1166,7 +1166,8 @@ BEGIN
 	SELECT * FROM salesinvoiceitem_display WHERE id=si_id
 	LOOP
 		lineitems := lineitems || item.qty || ' x ' || 
-			item.linetext || ' & ' || item.price || '\\' || E'\n';
+			item.linetext || ' @' || item.price || 
+			' & ' || item.linetotal || '\\' || E'\n';
 	END LOOP;
 	IF NOT FOUND THEN
 		RAISE EXCEPTION 'No lineitems for invoice %', si_id; 
@@ -1177,7 +1178,7 @@ BEGIN
 	FOR item IN
 	SELECT * FROM salesinvoice_tax WHERE salesinvoice=si_id
 	LOOP
-		taxes := taxes || item.taxname || ' (' || item.rate || '%)' 
+		taxes := taxes || item.taxname || ' (' || item.rate || '\%)' 
 		|| ' on ' || item.nett || ' & ' || item.total || '\\' || E'\n';
 	END LOOP;
 
@@ -1190,9 +1191,24 @@ BEGIN
 		SELECT name FROM organisation_current 
 		WHERE organisation = r.organisation
 		INTO item;
-		customer := E'\t' || '{' || item.name || '}' || E'\n';
+		customer := E'\t' || '{' || item.name || '}' || E'\n' ||
+			E'\t' || '{}' || E'\n' ||
+			E'\t' || '{}' || E'\n' ||
+			E'\t' || '{}' || E'\n' ||
+			E'\t' || '{}' || E'\n' ||
+			E'\t' || '{}' || E'\n' ||
+			E'\t' || '{}' || E'\n' ||
+			E'\t' || '{}' || E'\n';
 	ELSE
-		customer := E'\t' || '{' || item.name || '}' || E'\n';
+		/* TODO: fill in full customer details */
+		customer := E'\t' || '{' || item.name || '}' || E'\n' ||
+			E'\t' || '{}' || E'\n' ||
+			E'\t' || '{}' || E'\n' ||
+			E'\t' || '{}' || E'\n' ||
+			E'\t' || '{}' || E'\n' ||
+			E'\t' || '{}' || E'\n' ||
+			E'\t' || '{}' || E'\n' ||
+			E'\t' || '{}' || E'\n';
 	END IF;
 
 	/* write the .tex file to disk */
