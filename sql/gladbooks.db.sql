@@ -1086,7 +1086,7 @@ BEGIN
 	WHERE organisation = r_so.organisation;
 
 	terminterval := termdays || ' days';
-	due := taxpoint + terminterval::interval;
+	due := DATE(NOW()) + terminterval::interval;
 
 	INSERT INTO salesinvoice (organisation) VALUES (r_so.organisation)
 	RETURNING currval(pg_get_serial_sequence('salesinvoice','id')) 
@@ -1163,7 +1163,7 @@ BEGIN
 	/* fetch lineitems */
 	lineitems := '';
 	FOR item IN
-	SELECT * FROM salesinvoiceitem_display WHERE id=si_id
+	SELECT * FROM salesinvoiceitem_display WHERE salesinvoice=si_id
 	LOOP
 		lineitems := lineitems || item.qty || ' x ' || 
 			item.linetext || ' @' || item.price || 
