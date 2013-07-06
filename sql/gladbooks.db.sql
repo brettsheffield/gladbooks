@@ -1132,7 +1132,7 @@ BEGIN
 	PERFORM create_salesinvoice_tex(si_id);
 
 	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Failed to write .tex';
+		RAISE EXCEPTION 'Failed to create .tex';
 	END IF;
 
 	RETURN true;
@@ -1168,26 +1168,24 @@ BEGIN
 	/* TODO: fetch customer billing contact */
 	customer := '\t{Mr Bill Recipient} \\\n\tSomeville \\';
 
-	RAISE INFO 'About to write .tex';
-
 	/* write the .tex file to disk */
-	/* FIXME: tex not being written */
-	SELECT write_salesinvoice_tex(
+	PERFORM write_salesinvoice_tex(
 		r.orgcode,
 		r.invoicenum,
-		to_char(r.taxpoint, 'DD Month YYYY'),
-		to_char(r.issued, 'DD Month YYYY'),
-		to_char(r.due, 'DD Month YYYY'),
-		r.ponumber,
+		to_char(r.taxpoint, 'DD Mon YYYY'),
+		to_char(r.issued, 'DD Mon YYYY'),
+		to_char(r.due, 'DD Mon YYYY'),
+		COALESCE(r.ponumber, ''),
 		to_char(r.subtotal, '9G999D90'),
 		to_char(r.tax, '9G999D90'),
 		to_char(r.total, '9G999D90'),
 		lineitems,
 		taxes,
 		customer
-	) INTO tex;
-
-	RAISE INFO '.tex written: %', tex;
+	);
+	IF NOT FOUND THEN
+		RAISE EXCEPTION 'Failed to write .tex';
+	END IF;
 
 	RETURN '0';
 END;

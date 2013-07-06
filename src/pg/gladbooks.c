@@ -49,20 +49,18 @@ char * text_to_char(text *txt);
 
 Datum test(PG_FUNCTION_ARGS)
 {
+        char *ref = text_to_char(PG_GETARG_TEXT_P(0));
+
         /* log something, and return */
         openlog("GLADBOOKS", LOG_PID, LOG_DAEMON);
         setlogmask(LOG_UPTO(LOG_DEBUG));
-        syslog(LOG_DEBUG, "test");
+        syslog(LOG_DEBUG, "Invoice: %s", ref);
         closelog();
         PG_RETURN_INT32(8080);
 }
 
 Datum write_salesinvoice_tex(PG_FUNCTION_ARGS)
 {
-        openlog("GLADBOOKS", LOG_PID, LOG_DAEMON);
-        setlogmask(LOG_UPTO(LOG_DEBUG));
-        syslog(LOG_DEBUG, "write_salesinvoice_tex()");
-
         char *filename;
         char *tfile;
         char *tex = NULL;
@@ -87,6 +85,9 @@ Datum write_salesinvoice_tex(PG_FUNCTION_ARGS)
         char *taxes = text_to_char(PG_GETARG_TEXT_P(10));
         char *customer = text_to_char(PG_GETARG_TEXT_P(11));
 
+        openlog("GLADBOOKS", LOG_PID, LOG_DAEMON);
+        setlogmask(LOG_UPTO(LOG_DEBUG));
+        syslog(LOG_DEBUG, "write_salesinvoice_tex()");
 
         asprintf(&ref, "SI/%s/%04i", orgcode, (int)invoicenum);
 
@@ -153,9 +154,9 @@ Datum write_salesinvoice_tex(PG_FUNCTION_ARGS)
         /* close file */
         close(f);
 
-        closelog();
-
         syslog(LOG_DEBUG, "all done");
+
+        closelog();
 
         PG_RETURN_INT32(0);
 }
