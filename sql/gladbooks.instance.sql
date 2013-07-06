@@ -126,6 +126,12 @@ CREATE TABLE relationship (
         clientip        TEXT
 );
 
+CREATE OR REPLACE VIEW contact_billing AS
+SELECT c.*, o.organisation
+FROM contact_current c
+INNER JOIN organisation_current o ON c.contact = o.billcontact
+;
+
 --INSERT INTO relationship (id, name) VALUES (0, 'contact');
 --INSERT INTO relationship (name) VALUES ('billing');
 --INSERT INTO relationship (name) VALUES ('shipping');

@@ -607,6 +607,19 @@ WHERE id IN (
 )
 AND is_deleted = false;
 
+CREATE OR REPLACE VIEW salesinvoiceitem_display AS
+SELECT 
+	salesinvoiceitem as id,
+	salesinvoice,
+	siid.product,
+	COALESCE(siid.linetext, p.description) as linetext,
+	siid.discount,
+	COALESCE(siid.price, p.price_sell) as price,
+	siid.qty
+FROM salesinvoiceitem_current siid
+INNER JOIN product_current p ON p.product = siid.product
+;
+
 -- record taxes charged on an invoice as at the time it is issued --
 -- updated by trigger on salesinvoicedetail table --
 CREATE TABLE salesinvoice_tax (

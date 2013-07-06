@@ -1146,6 +1146,7 @@ CREATE OR REPLACE FUNCTION create_salesinvoice_tex(si_id INT4)
 RETURNS INT4 AS $$
 DECLARE
 	r		RECORD;
+	item		RECORD;
 	lineitems	TEXT;
 	taxes		TEXT;
 	customer	TEXT;
@@ -1159,14 +1160,40 @@ BEGIN
 		RAISE EXCEPTION 'Invoice id % does not exist', si_id;
 	END IF;
 
-	/* TODO: fetch lineitems */
-	lineitems := 'Consultancy & 100.00 \\';
+	/* fetch lineitems */
+	lineitems := '';
+	FOR item IN
+	SELECT * FROM salesinvoiceitem_display WHERE id=si_id
+	LOOP
+		lineitems := lineitems || item.qty || ' x ' || 
+			item.linetext || ' & ' || item.price || '\\' || E'\n';
+	END LOOP;
+	IF NOT FOUND THEN
+		RAISE EXCEPTION 'No lineitems for invoice %', si_id; 
+	END IF;
 
-	/* TODO: fetch taxes */
-	taxes := 'Standard Rate VAT & 20.00 \\';
+	/* fetch taxes */
+	taxes := '';
+	FOR item IN
+	SELECT * FROM salesinvoice_tax WHERE salesinvoice=si_id
+	LOOP
+		taxes := taxes || item.taxname || ' (' || item.rate || '%)' 
+		|| ' on ' || item.nett || ' & ' || item.total || '\\' || E'\n';
+	END LOOP;
 
-	/* TODO: fetch customer billing contact */
-	customer := '\t{Mr Bill Recipient} \\\n\tSomeville \\';
+	/* fetch customer billing contact */
+	SELECT * FROM contact_billing WHERE organisation=r.organisation
+	INTO item;
+	IF NOT FOUND THEN
+		RAISE INFO 'No billcontact set for organisation %', 
+			r.orgcode;
+		SELECT name FROM organisation_current 
+		WHERE organisation = r.organisation
+		INTO item;
+		customer := E'\t' || '{' || item.name || '}' || E'\n';
+	ELSE
+		customer := E'\t' || '{' || item.name || '}' || E'\n';
+	END IF;
 
 	/* write the .tex file to disk */
 	PERFORM write_salesinvoice_tex(
