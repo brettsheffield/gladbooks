@@ -47,6 +47,7 @@ PG_FUNCTION_INFO_V1(write_salesinvoice_tex);
 char * process_template_line(char *tex, char *line);
 char * text_to_char(text *txt);
 char * texquote(char *raw);
+int xelatex(char *filename);
 
 Datum test(PG_FUNCTION_ARGS)
 {
@@ -140,22 +141,21 @@ Datum write_salesinvoice_tex(PG_FUNCTION_ARGS)
         elog(INFO, "%s", filename);
 
         /* create and open file for writing */
+        umask(022);
         f = creat(filename, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-        free(filename);
 
         syslog(LOG_DEBUG, "about to write .tex");
 
         /* speak friend, and enter */
         write(f, tex, strlen(tex));
 
-        syslog(LOG_DEBUG, ".tex written, fixing perms");
-        /* fix permissions */
-        if (fchmod(f, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)) {
-                elog(ERROR, "Couldn't set file permissions");
-        }
-
         /* close file */
         close(f);
+
+        /* create pdf */
+        xelatex(filename);
+        
+        free(filename);
 
         syslog(LOG_DEBUG, "all done");
 
@@ -206,4 +206,26 @@ char * texquote(char *raw)
         s = replaceall(raw, "%", "\%");
 
         return s;
+}
+
+/* fork and exec xelatex to create pdf */
+int xelatex(char *filename)
+{
+        pid_t pid;
+        char **environ;
+        char *env_args[] = { "TEXINPUTS=/tmp:", NULL };
+
+        environ = env_args;
+
+        syslog(LOG_DEBUG, "generating pdf");
+
+        pid = vfork();
+        if (pid == -1) elog(ERROR, "Failed to fork()");
+        if (pid == 0) {
+                umask(022);
+                execlp("xelatex", "xelatex", "-interaction=batchmode",
+                        "-output-directory=/tmp", filename, NULL);
+        }
+
+        return 0;
 }

@@ -1166,7 +1166,7 @@ BEGIN
 	SELECT * FROM salesinvoiceitem_display WHERE salesinvoice=si_id
 	LOOP
 		lineitems := lineitems || item.qty || ' x ' || 
-			item.linetext || ' @' || item.price || 
+			item.linetext || ' @ ' || item.price || 
 			' & ' || item.linetotal || '\\' || E'\n';
 	END LOOP;
 	IF NOT FOUND THEN
