@@ -23,6 +23,7 @@ CFLAGS=-g -Wall -Werror
 PKGLIBDIR=`pg_config --pkglibdir`
 INCLUDES=-I`pg_config --includedir-server`
 LIBNAME=gladbooks
+SPOOLDIR=/var/spool/${LIBNAME}
 
 ${LIBNAME}.so: ${LIBNAME}.c string.o
 	gcc ${CFLAGS} -fpic ${INCLUDES} -c ${LIBNAME}.c
@@ -36,5 +37,11 @@ string.o: string.c string.h
 clean:
 	rm ${LIBNAME}.so ${LIBNAME}.o string.o
 
-install: gladbooks.so
+install: gladbooks.so | ${SPOOLDIR}
 	ln -sf `pwd`/${LIBNAME}.so ${PKGLIBDIR}
+
+${SPOOLDIR}: 
+	mkdir -p ${SPOOLDIR}
+	chown -R postgres.postgres ${SPOOLDIR}
+	chmod -R 0755 ${SPOOLDIR}
+	
