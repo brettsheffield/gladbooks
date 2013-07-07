@@ -1077,6 +1077,12 @@ BEGIN
 	FROM salesorder_current so
 	INNER JOIN cycle c ON so.cycle = c.id
 	WHERE so.salesorder=so_id;
+	IF NOT FOUND THEN
+		RAISE EXCEPTION 'salesorder details not found';
+	END IF;
+	IF r_so.organisation IS NULL THEN
+		RAISE EXCEPTION 'organisation for salesorder cannot be null';
+	END IF;
 
 	taxpoint := taxpoint(r_so.years, r_so.months, r_so.days, r_so.start_date, period);
 	endpoint := periodenddate(r_so.years, r_so.months, r_so.days, r_so.start_date, period);
@@ -1091,6 +1097,10 @@ BEGIN
 	INSERT INTO salesinvoice (organisation) VALUES (r_so.organisation)
 	RETURNING currval(pg_get_serial_sequence('salesinvoice','id')) 
 	INTO si_id;
+
+	IF si_id IS NULL THEN
+		RAISE EXCEPTION 'Failed to INSERT salesinvoice';
+	END IF;
 
 	-- salesinvoiceitem
 	--TODO: linetext macro substitution
@@ -1154,10 +1164,10 @@ DECLARE
 BEGIN
 
 	/* salesinvoice data */
-	SELECT * FROM salesinvoice_current WHERE id=si_id INTO r;
+	SELECT * FROM salesinvoice_current WHERE salesinvoice=si_id INTO r;
 
 	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Invoice id % does not exist', si_id;
+		RAISE EXCEPTION 'Invoice id % exist', si_id;
 	END IF;
 
 	/* fetch lineitems */
@@ -1212,7 +1222,8 @@ BEGIN
 	END IF;
 
 	/* write the .tex file to disk */
-	/* TODO: fetch template and spooldir from database */
+	/* TODO: fetch template and spooldir from database, 
+	 * dependant on business */
 	PERFORM write_salesinvoice_tex(
 		'/var/spool/gladbooks',
 		'/home/bacs/dev/gladbooks-ui/tex/template.tex',

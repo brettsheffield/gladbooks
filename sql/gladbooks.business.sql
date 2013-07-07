@@ -485,36 +485,38 @@ WHERE id IN (
 )
 AND is_deleted = false;
 
+CREATE OR REPLACE VIEW salesorder_tax AS
+SELECT 	so.id AS salesorder,
+	roundhalfeven(SUM(COALESCE(soi.price, p.price_sell, '0.00') * soi.qty * tr.rate/100),2) AS tax
+FROM salesorder so
+INNER JOIN salesorderdetail sod ON so.id = sod.salesorder
+INNER JOIN salesorderitem_current soi ON so.id = soi.salesorder
+INNER JOIN product_current p ON p.product = soi.product
+LEFT JOIN (
+	SELECT * FROM product_tax WHERE is_applicable = true
+) pt ON p.product = pt.product
+LEFT JOIN taxrate_current tr ON tr.tax = pt.tax
+WHERE sod.id IN (
+	SELECT MAX(id) FROM salesorderdetail GROUP BY salesorder
+)
+AND sod.is_deleted = false
+AND (tr.valid_from <= salesorder_nextissuedate(so.id)
+	OR tr.valid_from IS NULL)
+AND (tr.valid_to >= salesorder_nextissuedate(so.id) OR tr.valid_to IS NULL)
+GROUP BY so.id, so.organisation, so.ordernum;
+
+
 CREATE OR REPLACE VIEW salesorder_current AS
 SELECT 
 	s.*,
 	s0.organisation,
 	s0.ordernum,
 	SUM(COALESCE(soi2.price, p2.price_sell) * soi2.qty) AS price,
-	tx.tax,
-	SUM(COALESCE(soi2.price, p2.price_sell) * soi2.qty) + tx.tax AS total
-FROM 
-(
-	SELECT 	so.id AS salesorder,
-		roundhalfeven(SUM(COALESCE(soi.price, p.price_sell, '0.00') * soi.qty * tr.rate/100),2) AS tax
-	FROM salesorderdetail sod
-	INNER JOIN salesorder so ON so.id = sod.salesorder
-	INNER JOIN salesorderitem_current soi ON so.id = soi.salesorder
-	INNER JOIN product_current p ON p.product = soi.product
-	INNER JOIN (
-		SELECT * FROM product_tax WHERE is_applicable = true
-	) pt ON p.product = pt.product
-	INNER JOIN taxrate_current tr ON tr.tax = pt.tax
-	WHERE sod.id IN (
-		SELECT MAX(id) FROM salesorderdetail GROUP BY salesorder
-	)
-	AND sod.is_deleted = false
-	AND (tr.valid_from <= salesorder_nextissuedate(so.id)
-		OR tr.valid_from IS NULL)
-	AND (tr.valid_to >= salesorder_nextissuedate(so.id) OR tr.valid_to IS NULL)
-	GROUP BY so.id, so.organisation, so.ordernum
-) tx
-INNER JOIN salesorderdetail s ON s.salesorder = tx.salesorder
+	COALESCE(tx.tax, '0.00') as tax,
+	SUM(COALESCE(soi2.price, p2.price_sell) * soi2.qty) + 
+		COALESCE(tx.tax, '0.00') AS total
+FROM salesorderdetail s
+LEFT JOIN salesorder_tax tx ON s.salesorder = tx.salesorder
 INNER JOIN salesorder s0 ON s0.id = s.salesorder
 INNER JOIN salesorderitem_current soi2 ON s.id = soi2.salesorder
 INNER JOIN product_current p2 ON p2.product = soi2.product
