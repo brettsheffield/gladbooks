@@ -6,6 +6,8 @@ CREATE FUNCTION test(TEXT) RETURNS INT4
 	LANGUAGE C STRICT;
 
 CREATE OR REPLACE FUNCTION write_salesinvoice_tex(
+	spooldir	TEXT,
+	template	TEXT,
 	orgcode		TEXT,
 	invoicenum      INT4,
 	taxpoint	TEXT,

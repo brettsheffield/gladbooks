@@ -1212,7 +1212,10 @@ BEGIN
 	END IF;
 
 	/* write the .tex file to disk */
+	/* TODO: fetch template and spooldir from database */
 	PERFORM write_salesinvoice_tex(
+		'/var/spool/gladbooks',
+		'/home/bacs/dev/gladbooks-ui/tex/template.tex',
 		r.orgcode,
 		r.invoicenum,
 		to_char(r.taxpoint, 'DD Mon YYYY'),

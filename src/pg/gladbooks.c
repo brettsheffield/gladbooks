@@ -47,7 +47,7 @@ PG_FUNCTION_INFO_V1(write_salesinvoice_tex);
 char * process_template_line(char *tex, char *line);
 char * text_to_char(text *txt);
 char * texquote(char *raw);
-int xelatex(char *filename);
+int xelatex(char *filename, char *spooldir);
 
 Datum test(PG_FUNCTION_ARGS)
 {
@@ -64,7 +64,6 @@ Datum test(PG_FUNCTION_ARGS)
 Datum write_salesinvoice_tex(PG_FUNCTION_ARGS)
 {
         char *filename;
-        char *tfile;
         char *tex = NULL;
         char *docmeta;
         char *ref;
@@ -74,18 +73,20 @@ Datum write_salesinvoice_tex(PG_FUNCTION_ARGS)
         FILE *fd;
 
         /* Will that be the five minute argument, or the full half hour? */
-        char *orgcode = text_to_char(PG_GETARG_TEXT_P(0));
-        int32 invoicenum = PG_GETARG_INT32(1);
-        char *taxpoint = text_to_char(PG_GETARG_TEXT_P(2));
-        char *issued = text_to_char(PG_GETARG_TEXT_P(3));
-        char *due = text_to_char(PG_GETARG_TEXT_P(4));
-        char *ponumber = text_to_char(PG_GETARG_TEXT_P(5));
-        char *subtotal = text_to_char(PG_GETARG_TEXT_P(6));
-        char *tax = text_to_char(PG_GETARG_TEXT_P(7));
-        char *total = text_to_char(PG_GETARG_TEXT_P(8));
-        char *lineitems = text_to_char(PG_GETARG_TEXT_P(9));
-        char *taxes = text_to_char(PG_GETARG_TEXT_P(10));
-        char *customer = text_to_char(PG_GETARG_TEXT_P(11));
+        char *spooldir = text_to_char(PG_GETARG_TEXT_P(0));
+        char *template = text_to_char(PG_GETARG_TEXT_P(1));
+        char *orgcode = text_to_char(PG_GETARG_TEXT_P(2));
+        int32 invoicenum = PG_GETARG_INT32(3);
+        char *taxpoint = text_to_char(PG_GETARG_TEXT_P(4));
+        char *issued = text_to_char(PG_GETARG_TEXT_P(5));
+        char *due = text_to_char(PG_GETARG_TEXT_P(6));
+        char *ponumber = text_to_char(PG_GETARG_TEXT_P(7));
+        char *subtotal = text_to_char(PG_GETARG_TEXT_P(8));
+        char *tax = text_to_char(PG_GETARG_TEXT_P(9));
+        char *total = text_to_char(PG_GETARG_TEXT_P(10));
+        char *lineitems = text_to_char(PG_GETARG_TEXT_P(11));
+        char *taxes = text_to_char(PG_GETARG_TEXT_P(12));
+        char *customer = text_to_char(PG_GETARG_TEXT_P(13));
 
         openlog("GLADBOOKS", LOG_PID, LOG_DAEMON);
         setlogmask(LOG_UPTO(LOG_DEBUG));
@@ -94,14 +95,11 @@ Datum write_salesinvoice_tex(PG_FUNCTION_ARGS)
         asprintf(&ref, "SI/%s/%04i", orgcode, (int)invoicenum);
 
         /* open & read template */
-        /*FIXME: remove hardcoded path */
-        asprintf(&tfile, "/home/bacs/dev/gladbooks-ui/tex/template.tex");
-        fd = fopen(tfile, "r");
+        fd = fopen(template, "r");
         if (fd == NULL) {
                 int errsv = errno;
-                elog(ERROR, "Error opening template '%s': %s", tfile,
+                elog(ERROR, "Error opening template '%s': %s", template,
                         strerror(errsv));
-                free(tfile);
                 return -1;
         }
 
@@ -133,9 +131,12 @@ Datum write_salesinvoice_tex(PG_FUNCTION_ARGS)
         /* close file */
         fclose(fd);
 
-        /* get temp filename */
-        asprintf(&filename, "/tmp/XXXXXXXX");
-        filename = mktemp(filename);
+        /* build filename from invoice ref */
+        size_t len = strlen(spooldir) + strlen(ref) + 6;
+        filename = palloc(len + 1);
+        char *iref = replaceall(ref, "/", "-");
+        snprintf(filename, len, "%s/%s.tex", spooldir, iref);
+        free(iref);
 
         /* log the temp filename back to the pg console */
         elog(INFO, "%s", filename);
@@ -153,9 +154,9 @@ Datum write_salesinvoice_tex(PG_FUNCTION_ARGS)
         close(f);
 
         /* create pdf */
-        xelatex(filename);
+        xelatex(filename, spooldir);
         
-        free(filename);
+        pfree(filename);
 
         syslog(LOG_DEBUG, "all done");
 
@@ -209,11 +210,20 @@ char * texquote(char *raw)
 }
 
 /* fork and exec xelatex to create pdf */
-int xelatex(char *filename)
+int xelatex(char *filename, char *spooldir)
 {
         pid_t pid;
         char **environ;
-        char *env_args[] = { "TEXINPUTS=/tmp:", NULL };
+        char *env_args[] = { "TEXINPUTS=/var/spool/gladbooks/:", NULL };
+        char *outputdir;
+        char outputdirswitch[] = "-output-directory=";
+
+        outputdir = palloc(sizeof(spooldir) + 1);
+        snprintf(outputdir, strlen(spooldir) + strlen(outputdirswitch) + 1,
+                "%s%s", outputdirswitch, spooldir);
+
+
+        elog(INFO, "switch: %s, spool: %s", outputdir, spooldir);
 
         environ = env_args;
 
@@ -224,7 +234,7 @@ int xelatex(char *filename)
         if (pid == 0) {
                 umask(022);
                 execlp("xelatex", "xelatex", "-interaction=batchmode",
-                        "-output-directory=/tmp", filename, NULL);
+                        outputdir, filename, NULL);
         }
 
         return 0;
