@@ -1941,7 +1941,10 @@ function submitFormError(object, action, id) {
 /******************************************************************************/
 /* return the singular object name for a given collection */
 function collectionObject(c) {
-	if (c.substring(c.length - 2) == 'es') {
+	if (c == 'salesinvoices') {
+		return 'salesinvoice';
+	}
+	else if (c.substring(c.length - 2) == 'es') {
 		/* plural ending in 'es' */
 		return c.substring(0, c.length - 2);
 	}
@@ -2132,6 +2135,9 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 		event.preventDefault();
 		if (collection == 'accounts') {
 			var id = $(this).find('td.xml-nominalcode').text();
+		}
+		else if (collection == 'salesinvoices') {
+			var id = $(this).find('td.xml-ref').text();
 		}
 		else {
 			var id = $(this).find('td.xml-id').text();
