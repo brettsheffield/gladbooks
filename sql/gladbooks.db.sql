@@ -1176,8 +1176,9 @@ BEGIN
 	SELECT * FROM salesinvoiceitem_display WHERE salesinvoice=si_id
 	LOOP
 		lineitems := lineitems || item.qty || ' x ' || 
-			item.linetext || ' @ ' || item.price || 
-			' & ' || item.linetotal || '\\' || E'\n';
+			item.linetext || ' @ ' || 
+			to_char(item.price, '9G999D90') || ' & ' || 
+			to_char(item.linetotal, '9G999D90' ) || '\\' || E'\n';
 	END LOOP;
 	IF NOT FOUND THEN
 		RAISE EXCEPTION 'No lineitems for invoice %', si_id; 
@@ -1189,7 +1190,8 @@ BEGIN
 	SELECT * FROM salesinvoice_tax WHERE salesinvoice=si_id
 	LOOP
 		taxes := taxes || item.taxname || ' (' || item.rate || '\%)' 
-		|| ' on ' || item.nett || ' & ' || item.total || '\\' || E'\n';
+		|| ' on ' || to_char(item.nett, '9G999D90') || ' & ' || 
+		to_char(item.total, '9G999D90') || '\\' || E'\n';
 	END LOOP;
 
 	/* fetch customer billing contact */
@@ -1229,9 +1231,9 @@ BEGIN
 		'/home/bacs/dev/gladbooks-ui/tex/template.tex',
 		r.orgcode,
 		r.invoicenum,
-		to_char(r.taxpoint, 'DD Mon YYYY'),
-		to_char(r.issued, 'DD Mon YYYY'),
-		to_char(r.due, 'DD Mon YYYY'),
+		to_char(r.taxpoint, 'DD Month YYYY'),
+		to_char(r.issued, 'DD Month YYYY'),
+		to_char(r.due, 'DD Month YYYY'),
 		COALESCE(r.ponumber, ''),
 		to_char(r.subtotal, '9G999D90'),
 		to_char(r.tax, '9G999D90'),
