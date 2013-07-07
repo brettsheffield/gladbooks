@@ -422,6 +422,8 @@ td {
 .xml-debit,
 .xml-credit,
 .xml-amount,
+.xml-subtotal,
+.xml-tax,
 .xml-total {
   text-align: right;
   white-space: pre;

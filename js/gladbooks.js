@@ -2107,7 +2107,8 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 			}
 			/* if this is a numeric value, and positive, add trailing space */
 			if ((this.tagName == 'debit') || (this.tagName == 'credit') 
-			 || (this.tagName == 'total') || (this.tagName == 'amount'))
+			 || (this.tagName == 'total') || (this.tagName == 'amount')
+			 || (this.tagName == 'tax') || (this.tagName == 'subtotal'))
 			{
 				if ($(this).text().substr(-1) != ')') {
 					$t += ' ';
