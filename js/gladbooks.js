@@ -520,6 +520,9 @@ function clickMenu(event) {
 	else if ($(this).attr("href") == '#salesorder.create') {
 		getForm('salesorder', 'create', 'New Sales Order');
 	}
+	else if ($(this).attr("href") == '#salesinvoices') {
+		showQuery('salesinvoices', 'Sales Invoices', true);
+	}
 	else if ($(this).attr("href") == '#help') {
 		addTab("Help", "<h2>Help</h2>", true);
 	}
