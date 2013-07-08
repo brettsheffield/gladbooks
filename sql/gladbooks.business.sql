@@ -100,7 +100,7 @@ CREATE RULE nodel_ledger_pk_counter AS ON DELETE TO ledger_pk_counter
 CREATE TABLE ledger (
 	id		INT4 DEFAULT ledger_id_next(),
 	journal		INT4 references journal(id) ON DELETE RESTRICT
-			NOT NULL,
+			NOT NULL DEFAULT journal_id_last(),
 	account		INT4 references account(id) ON DELETE RESTRICT
 			NOT NULL,
 	division	INT4 references division(id) ON DELETE RESTRICT
@@ -630,6 +630,7 @@ CREATE TABLE salesinvoice_tax (
 	id		SERIAL PRIMARY KEY,
 	salesinvoice	INT4 references salesinvoice(id) ON DELETE RESTRICT
 			NOT NULL,
+	account		NUMERIC,
 	taxname		TEXT,
 	rate		NUMERIC,
 	nett		NUMERIC,
@@ -652,6 +653,7 @@ SELECT 	sod.id,
 	so.organisation,
 	o.orgcode,
 	so.invoicenum,
+	o.orgcode || '/' || to_char(invoicenum, 'FM0000') AS ref,
         roundhalfeven(COALESCE(sod.subtotal, 
 	SUM(COALESCE(soi.price, p.price_sell) * soi.qty)),2) AS subtotal,
 	COALESCE(sod.tax, sit.tax, '0.00') AS tax,

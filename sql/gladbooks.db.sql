@@ -1145,6 +1145,8 @@ BEGIN
 		RAISE EXCEPTION 'Failed to create .tex';
 	END IF;
 
+	PERFORM post_salesinvoice(si_id);
+
 	RETURN true;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -1250,6 +1252,82 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
+-- post_salesinvoice() - post salesinvoice to journal
+-- RETURN INT4, 0=success
+CREATE OR REPLACE FUNCTION post_salesinvoice(si_id INT4)
+RETURNS INT4 AS $$
+DECLARE
+	r_si		RECORD;
+	r_tax		RECORD;
+	r_item		RECORD;
+	d		NUMERIC;
+	c		NUMERIC;
+BEGIN
+	-- fetch salesinvoice details
+	SELECT si.salesinvoice, si.taxpoint, si.subtotal, si.total, si.ref
+	INTO r_si
+	FROM salesinvoice_current si
+	WHERE si.salesinvoice=si_id;
+
+	-- create journal entry
+	INSERT INTO journal (transactdate, description) 
+	VALUES (r_si.taxpoint, 'Sales Invoice ' || r_si.ref);
+
+	IF (r_si.total > 0) THEN
+		d = r_si.total;
+		c = '0.00';
+	ELSE
+		d = '0.00';
+		c = r_si.total;
+	END IF;
+
+	-- TODO: divisions and departments
+
+	-- 1100 = Debtors Control Account
+	RAISE INFO 'Account: % Debit: % Credit %', '1100', d, c;
+	INSERT INTO ledger (account, debit, credit) VALUES ('1100', d, c);
+	
+	-- post tax details to ledger
+	FOR r_tax IN
+	SELECT sit.salesinvoice, sit.account, sit.total
+	FROM salesinvoice_tax sit WHERE sit.salesinvoice=si_id
+	LOOP
+		IF (r_tax.total < 0) THEN
+			d = r_tax.total;
+			c = '0.00';
+		ELSE
+			d = '0.00';
+			c = r_tax.total;
+		END IF;
+		RAISE INFO 'Account: % Debit: % Credit %',r_tax.account, d, c;
+		INSERT INTO ledger (account, debit, credit) 
+		VALUES (r_tax.account, d, c);
+	END LOOP;
+
+
+	-- post product details to ledger
+	FOR r_item IN
+	SELECT sii.salesinvoice, p.account, sii.linetotal
+	FROM salesinvoiceitem_display sii
+	RIGHT JOIN product_current p ON p.product = sii.product
+	WHERE sii.salesinvoice=si_id
+	LOOP
+		IF (r_item.linetotal < 0) THEN
+			d = r_item.linetotal;
+			c = '0.00';
+		ELSE
+			d = '0.00';
+			c = r_item.linetotal;
+		END IF;
+		RAISE INFO 'Account: % Debit: % Credit %',r_item.account,d,c;
+		INSERT INTO ledger (account, debit, credit) 
+		VALUES (r_item.account, d, c);
+	END LOOP;
+
+	RETURN '0';
+END;
+$$ LANGUAGE 'plpgsql';
+
 -- salesorder_nextissuedate() - return the date when the salesorder will next
 -- be issued
 -- RETURN DATE
@@ -1315,6 +1393,7 @@ BEGIN
 	-- a permanent record of what taxes were applied to *this* invoice
 	INSERT INTO salesinvoice_tax (
 		salesinvoice,
+		account,
 		taxname,
 		rate,
 		nett,
@@ -1322,6 +1401,7 @@ BEGIN
 	) 
 	SELECT
 		sii.salesinvoice,
+		t.account,
 		t.name AS taxname,
 		tr.rate,
 		SUM(sii.price * sii.qty) AS nett,
@@ -1336,7 +1416,7 @@ BEGIN
 	WHERE (tr.valid_from <= si.taxpoint OR tr.valid_from IS NULL)
 	AND (tr.valid_to >= si.taxpoint OR  tr.valid_to IS NULL)
 	AND si.salesinvoice = NEW.salesinvoice
-	GROUP BY sii.salesinvoice, t.name, tr.rate
+	GROUP BY sii.salesinvoice, t.name, t.account, tr.rate
 	;
 
 	--NEW.total := NEW.subtotal + NEW.tax;
