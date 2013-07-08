@@ -2119,6 +2119,14 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 			}
 			$t += '</td>';
 		});
+		/* quick hack to add pdf link */
+		if (collection == 'salesinvoices') {
+			var ref = $(this).find('ref').text();
+			$t += '<td class="xml-pdf">';
+			$t += '<a href="/pdf/';
+			$t += 'SI-' + ref.replace('/','-') + '.pdf">[PDF]</a>';
+			$t += '</td>';
+		}
 		$t += "</tr>";
 	});
 	$t += "</tbody>";
@@ -2132,17 +2140,21 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 
 	/* attach click event */
 	$t.find('tr').click(function(event) {
-		event.preventDefault();
-		if (collection == 'accounts') {
-			var id = $(this).find('td.xml-nominalcode').text();
+		if (collection != 'salesinvoices') {
+			event.preventDefault();
+			if (collection == 'accounts') {
+				var id = $(this).find('td.xml-nominalcode').text();
+			}
+			/*
+			else if (collection == 'salesinvoices') {
+				var id = $(this).find('td.xml-ref').text();
+			}
+			*/
+			else {
+				var id = $(this).find('td.xml-id').text();
+			}
+			displayElement(collection, id);
 		}
-		else if (collection == 'salesinvoices') {
-			var id = $(this).find('td.xml-ref').text();
-		}
-		else {
-			var id = $(this).find('td.xml-id').text();
-		}
-		displayElement(collection, id);
 	});
 
 	if (tab) {
