@@ -652,10 +652,11 @@ SELECT 	sod.id,
 	so.organisation,
 	o.orgcode,
 	so.invoicenum,
-        COALESCE(sod.subtotal, SUM(COALESCE(soi.price, p.price_sell) * soi.qty)) AS subtotal,
+        roundhalfeven(COALESCE(sod.subtotal, 
+	SUM(COALESCE(soi.price, p.price_sell) * soi.qty)),2) AS subtotal,
 	COALESCE(sod.tax, sit.tax, '0.00') AS tax,
-	COALESCE(sod.total, SUM(COALESCE(soi.price, p.price_sell) * soi.qty)
-	+ COALESCE(sod.tax, sit.tax, '0.00')) AS total
+	roundhalfeven(COALESCE(sod.total, SUM(COALESCE(soi.price, p.price_sell)
+	* soi.qty) + COALESCE(sod.tax, sit.tax, '0.00')),2) AS total
 FROM salesinvoicedetail sod
 INNER JOIN salesinvoice so ON so.id = sod.salesinvoice
 LEFT JOIN salesinvoiceitem_current soi ON so.id = soi.salesinvoice

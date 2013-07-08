@@ -1126,7 +1126,7 @@ BEGIN
 			r_soi.product,
 			r_soi.linetext,
 			r_soi.discount,
-			r_soi.price,
+			roundhalfeven(r_soi.price, 2),
 			r_soi.qty
 		);
 	END LOOP;
