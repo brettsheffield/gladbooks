@@ -520,6 +520,9 @@ function clickMenu(event) {
 	else if ($(this).attr("href") == '#salesorder.create') {
 		getForm('salesorder', 'create', 'New Sales Order');
 	}
+	else if ($(this).attr("href") == '#salesorders.process') {
+		getForm('salesorder', 'process', 'Manual Billing Run');
+	}
 	else if ($(this).attr("href") == '#salesinvoices') {
 		showQuery('salesinvoices', 'Sales Invoices', true);
 	}
@@ -914,10 +917,10 @@ function validateForm(object, action, id) {
 	if (object == 'account') {
 		return validateFormAccount(action, id);
 	}
-	if (object == 'product') {
+	else if (object == 'product') {
 		return validateFormProduct(action, id);
 	}
-	else if (object == 'salesorder') {
+	else if ((object == 'salesorder') && (action != 'process')) {
 		return validateFormSalesOrder(action, id);
 	}
 	return true;
@@ -1905,7 +1908,12 @@ function escapeHTML(html) {
 
 /******************************************************************************/
 function submitFormSuccess(object, action, id, collection) {
-	statusMessage(object + ' saved', STATUS_INFO, 5000);
+	if ((object == 'salesorder') && (action == 'process')) {
+		statusMessage('Billing run successful', STATUS_INFO, 5000);
+	}
+	else {
+		statusMessage(object + ' saved', STATUS_INFO, 5000);
+	}
 
 	if (object == 'business') {
 		prepBusinessSelector();
@@ -1935,7 +1943,12 @@ function submitFormSuccess(object, action, id, collection) {
 /******************************************************************************/
 function submitFormError(object, action, id) {
 	hideSpinner();
-	statusMessage('Error saving ' + object, STATUS_CRIT);
+	if ((object == 'salesorder' && action == 'process')) {
+		statusMessage('Billing run failed', STATUS_CRIT);
+	}
+	else {
+		statusMessage('Error saving ' + object, STATUS_CRIT);
+	}
 }
 
 /******************************************************************************/
