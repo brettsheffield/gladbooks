@@ -511,6 +511,9 @@ function clickMenu(event) {
 	else if ($(this).attr("href") == '#rpt_balancesheet') {
 		showQuery('reports/balancesheet', 'Balance Sheet', false);
 	}
+	else if ($(this).attr("href") == '#rpt_trialbalance') {
+		showQuery('reports/trialbalance', 'Trial Balance', false);
+	}
 	else if ($(this).attr("href") == '#rpt_profitandloss') {
 		showQuery('reports/profitandloss', 'Profit and Loss', false);
 	}
