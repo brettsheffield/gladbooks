@@ -126,12 +126,6 @@ CREATE TABLE relationship (
         clientip        TEXT
 );
 
-CREATE OR REPLACE VIEW contact_billing AS
-SELECT c.*, o.organisation
-FROM contact_current c
-INNER JOIN organisation_current o ON c.contact = o.billcontact
-;
-
 --INSERT INTO relationship (id, name) VALUES (0, 'contact');
 --INSERT INTO relationship (name) VALUES ('billing');
 --INSERT INTO relationship (name) VALUES ('shipping');
@@ -161,6 +155,22 @@ CREATE TABLE organisation_organisation (
         clientip        TEXT,
 	PRIMARY KEY (organisation, related, relationship)
 );
+
+/* FIXME: contact_billing should use billcontact, once we start
+ * populating that field */
+CREATE OR REPLACE VIEW contact_billing AS
+SELECT c.*, oc.organisation
+FROM contact_current c
+INNER JOIN organisation_contact oc ON c.contact = oc.contact
+WHERE oc.relationship = '1';
+/*
+SELECT c.*, o.organisation
+FROM contact_current c
+INNER JOIN organisation_current o ON c.contact = o.billcontact
+;
+*/
+
+
 
 -- a business represents a distinct set of accounting ledgers
 CREATE TABLE business (

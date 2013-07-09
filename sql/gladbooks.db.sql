@@ -1163,6 +1163,7 @@ DECLARE
 	taxes		TEXT;
 	customer	TEXT;
 	tex		INT4;
+	fieldcount	INT4;
 BEGIN
 
 	/* salesinvoice data */
@@ -1215,14 +1216,47 @@ BEGIN
 			E'\t' || '{}' || E'\n';
 	ELSE
 		/* TODO: fill in full customer details */
-		customer := E'\t' || '{' || item.name || '}' || E'\n' ||
-			E'\t' || '{}' || E'\n' ||
-			E'\t' || '{}' || E'\n' ||
-			E'\t' || '{}' || E'\n' ||
-			E'\t' || '{}' || E'\n' ||
-			E'\t' || '{}' || E'\n' ||
-			E'\t' || '{}' || E'\n' ||
-			E'\t' || '{}' || E'\n';
+		customer := E'\t' || '{' || item.name || '}' || E'\n';
+		fieldcount := 1;
+		IF item.line_1 IS NOT NULL THEN
+			customer := customer || E'\t' || '{' ||
+				item.line_1 || '}' || E'\n';
+			fieldcount := fieldcount + 1;
+		END IF;
+		IF item.line_2 IS NOT NULL THEN
+			customer := customer || E'\t' || '{' ||
+				item.line_2 || '}' || E'\n';
+			fieldcount := fieldcount + 1;
+		END IF;
+		IF item.line_3 IS NOT NULL THEN
+			customer := customer || E'\t' || '{' ||
+				item.line_3 || '}' || E'\n';
+			fieldcount := fieldcount + 1;
+		END IF;
+		IF item.town IS NOT NULL THEN
+			customer := customer || E'\t' || '{' ||
+				item.town || '}' || E'\n';
+			fieldcount := fieldcount + 1;
+		END IF;
+		IF item.county IS NOT NULL THEN
+			customer := customer || E'\t' || '{' ||
+				item.county || '}' || E'\n';
+			fieldcount := fieldcount + 1;
+		END IF;
+		IF item.country IS NOT NULL THEN
+			customer := customer || E'\t' || '{' ||
+				item.country || '}' || E'\n';
+			fieldcount := fieldcount + 1;
+		END IF;
+		IF item.postcode IS NOT NULL THEN
+			customer := customer || E'\t' || '{' ||
+				item.postcode || '}' || E'\n';
+			fieldcount := fieldcount + 1;
+		END IF;
+		WHILE fieldcount < 8 LOOP
+			customer := customer || E'\t' || '{}' || E'\n';
+			fieldcount := fieldcount + 1;
+		END LOOP;
 	END IF;
 
 	/* write the .tex file to disk */
