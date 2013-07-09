@@ -27,6 +27,7 @@
 
 #include <fcntl.h>
 #include <limits.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -228,7 +229,7 @@ int xelatex(char *filename, char *spooldir)
         environ = env_args;
 
         syslog(LOG_DEBUG, "generating pdf");
-
+        signal(SIGCHLD, SIG_IGN);
         pid = vfork();
         if (pid == -1) elog(ERROR, "Failed to fork()");
         if (pid == 0) {
