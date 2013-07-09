@@ -1877,7 +1877,13 @@ function submitForm(object, action, id) {
 	xml += '</' + object + '>';
 	xml += '</data></request>';
 
-	showSpinner('Saving ' + object + '...'); /* tell user to wait */
+	/* tell user to wait */
+	if ((action == 'create') || (action == 'update')) {
+		showSpinner('Saving ' + object + '...');
+	}
+	else {
+		showSpinner(); 
+	}
 
 	/* send request */
     $.ajax({
