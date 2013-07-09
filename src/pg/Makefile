@@ -19,7 +19,7 @@
 # If not, see <http://www.gnu.org/licenses/>.
 
 CC=gcc
-CFLAGS=-g -Wall -Werror -Wno-unused-but-set-variable
+CFLAGS=-g -Wall -Werror
 PKGLIBDIR=`pg_config --pkglibdir`
 INCLUDES=-I`pg_config --includedir-server`
 LIBNAME=gladbooks

@@ -210,33 +210,37 @@ char * texquote(char *raw)
         return s;
 }
 
-/* fork and exec xelatex to create pdf */
+/* execute xelatex to create pdf, waiting for it to finish */
 int xelatex(char *filename, char *spooldir)
 {
-        pid_t pid;
         char **environ;
         char *env_args[] = { "TEXINPUTS=/var/spool/gladbooks/:", NULL };
         char *outputdir;
+        char *command;
         char outputdirswitch[] = "-output-directory=";
+        int len;
 
-        outputdir = palloc(sizeof(spooldir) + 1);
-        snprintf(outputdir, strlen(spooldir) + strlen(outputdirswitch) + 1,
-                "%s%s", outputdirswitch, spooldir);
-
+        len = strlen(outputdirswitch) + strlen(spooldir) + 1;
+        outputdir = palloc(len + 1);
+        snprintf(outputdir, len, "%s%s", outputdirswitch, spooldir);
 
         elog(INFO, "switch: %s, spool: %s", outputdir, spooldir);
 
         environ = env_args;
 
         syslog(LOG_DEBUG, "generating pdf");
-        signal(SIGCHLD, SIG_IGN);
-        pid = vfork();
-        if (pid == -1) elog(ERROR, "Failed to fork()");
-        if (pid == 0) {
-                umask(022);
-                execlp("xelatex", "xelatex", "-interaction=batchmode",
-                        outputdir, filename, NULL);
-        }
+        umask(022);
+
+        len = strlen("xelatex -interaction=batchmode ") 
+                        + strlen(outputdir) + strlen(filename) + 2;
+        command = palloc(len + 1);
+        snprintf(command, len, "xelatex -interaction=batchmode %s %s",
+                outputdir, filename);
+        syslog(LOG_DEBUG, "command: %s", command);
+        system(command);
+
+        pfree(command);
+        pfree(outputdir);
 
         return 0;
 }
