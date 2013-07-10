@@ -12,6 +12,10 @@ There's a demo site available at https://demo.gladbooks.com/ (self-signed certif
 Username: demouser
 Password: pass
 
+Please run the test suite:
+ https://demo.gladbooks.com/html/tests.html
+and report a bug if any of the tests fail on your browser.  Please include details of your O/S and Browser version and which test(s) failed.
+
 == Architecture ==
 
 For a linux system daemon, I chose c - I don't believe there is a better or more widely used choice available in that space.  That program has been released separately under the name gladd[1].  It's fast, does what it needs to and nothing else.
