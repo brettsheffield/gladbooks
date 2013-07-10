@@ -2057,7 +2057,8 @@ function getHTML(url) {
 	});
 }
 /******************************************************************************/
-function getXML(url, async=true) {
+function getXML(url, async) {
+	async = async === undefined ? true : false; /* default to true */
 	return $.ajax({
 		url: url,
 		type: 'GET',
