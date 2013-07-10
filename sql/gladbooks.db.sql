@@ -1215,7 +1215,7 @@ BEGIN
 			E'\t' || '{}' || E'\n' ||
 			E'\t' || '{}' || E'\n';
 	ELSE
-		/* TODO: fill in full customer details */
+		/* fill in full customer details */
 		customer := E'\t' || '{' || item.name || '}' || E'\n';
 		fieldcount := 1;
 		IF item.line_1 IS NOT NULL THEN
