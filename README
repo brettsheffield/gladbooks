@@ -6,13 +6,19 @@ A flexible, extensible, open source accounting system with a RESTful API
 
 Gladbooks is still in development and is incomplete.  Once all the basic accounting functions for purchasing, sales and banking are complete a release will be prepared.  The code is here for reference and discussion only.  Feel free to comment, test and raise bugs but be mindful of its incomplete status.  It is NOT ready for production use yet.  It has sharp edges.  Documentation is almost non-existent.  You have been warned.
 
+== Demo ==
+There's a demo site available at https://demo.gladbooks.com/ (self-signed certificate, so ignore the warning).  It's early alpha, but have a poke.  Feel free to raise bugs, ask questions etc on github or by email.
+
+Username: demouser
+Password: pass
+
 == Architecture ==
 
 For a linux system daemon, I chose c - I don't believe there is a better or more widely used choice available in that space.  That program has been released separately under the name gladd[1].  It's fast, does what it needs to and nothing else.
 
 For the gui, I've chosen js, because it is realistically the only choice for a web front end - every modern browser supports it, and nothing else.  I'm using the jquery libraries to make it easier to work with, and work across multiple browsers/platforms with minimal problems.
 
-The GUI is styled in CSS3, and the structure is HTML5.  To complete the AJAX stack, I've implemented a RESTful API, which communicates using XML over HTTP(s).  To validate the XML, I use XSD (XML schemas).  The database is PostgreSQL, although it would be easy to use another database.  Previous (not publically released versions of Gladbooks used MySQL).  To translate XML into SQL, I use XSLT, which is specifically designed to do the job of handling XML and turning it into either HTML or plain text outputs.  This gets around one of my pet peeves: mixing up languages.  Building SQL inside another program inevitably gets messy.
+The GUI is styled in CSS3, and the structure is HTML5.  To complete the AJAX stack, I've implemented a RESTful API, which communicates using XML over HTTP(s).  To validate the XML, I use XSD (XML schemas).  The database is PostgreSQL, and makes use of a fair bit of plpgsql and some c functions, but it could be ported to another database fairly easily if someone was sufficiently motivated.  Previous (not publically released versions) of Gladbooks used MySQL.  To translate XML into SQL, I use XSLT, which is specifically designed to do the job of handling XML and turning it into either HTML or plain text outputs.  This gets around one of my pet peeves: mixing up languages.  Building SQL inside another program inevitably gets messy.
 
 It sounds like a lot, but it is a complex system comprising several programs.  At every turn, I've tried to make the "correct" and maintainable choice, and to keep the components separate.  eg.  Rather than try and build an HTML form in js which is inevitably messy, I just GET a html document from the server, some XML data to pre-populate it, and then use js to display one in the other.  This means you edit html in a html document, js in .js etc.  Keeps your syntax highlighter happy :-)  Performance is plenty good enough, and there is a lot I can do to optimise when/if I need to.
 
