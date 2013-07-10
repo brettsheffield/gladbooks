@@ -110,7 +110,7 @@ function auth_check()
 		url: g_authurl + g_username,
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(data) { loginok(data); },
-		error: function(data) { loginfailed(); },
+		error: function(data) { loginfailed(); }
 	});
 }
 
@@ -418,7 +418,7 @@ function getMenu() {
 		url: g_authurl + g_username +  ".xml",
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) { setMenu(xml); },
-		error: function(xml) { setMenu(xml); },
+		error: function(xml) { setMenu(xml); }
 	});
 }
 
@@ -1438,7 +1438,7 @@ function relationshipUpdate(organisation, contact, relationships, refresh) {
 			if (refresh) {
 				loadSubformData('organisation_contacts', organisation);
 			}
-		},
+		}
 	});
 }
 
@@ -1465,7 +1465,7 @@ function taxProduct(product, tax, refresh, tab) {
 			if (refresh) {
 				loadSubformData('product_taxes', product, tab);
 			}
-		},
+		}
 	});
 }
 
@@ -1567,7 +1567,7 @@ function addSubformEvent(object, view, parentid, tab) {
 		},
 		error: function(xml) {
 			console.log('ERROR adding row to subform');
-		},
+		}
 	});
 }
 
@@ -1798,7 +1798,7 @@ function btnClickRemoveRow(view, parentid, trow) {
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		complete: function(xml) {
 			trow.parent().remove();
-		},
+		}
 	});
 }
 
@@ -1893,7 +1893,7 @@ function submitForm(object, action, id) {
         contentType: 'text/xml',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
         success: function(xml) { submitFormSuccess(object, action, id, collection); },
-        error: function(xml) { submitFormError(object, action, id); },
+        error: function(xml) { submitFormError(object, action, id); }
     });
 }
 
@@ -1905,7 +1905,7 @@ function escapeHTML(html) {
 		'&': '&amp;',
 		'<': '&lt;',
 		'>': '&gt;',
-		'"': '&quot;',
+		'"': '&quot;'
 	};
 
 	for (x in hchars) {
@@ -2053,7 +2053,7 @@ function getHTML(url) {
 		url: url,
 		type: 'GET',
 		dataType: 'html',
-		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		beforeSend: function (xhr) { setAuthHeader(xhr); }
 	});
 }
 /******************************************************************************/
@@ -2064,7 +2064,7 @@ function getXML(url, async) {
 		type: 'GET',
 		async: async,
 		dataType: 'xml',
-		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		beforeSend: function (xhr) { setAuthHeader(xhr); }
 	});
 }
 
@@ -2549,7 +2549,7 @@ function submitJournalEntry(event, form) {
         contentType: 'text/xml',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
         success: function(xml) { submitJournalEntrySuccess(xml); },
-        error: function(xml) { submitJournalEntryError(xml); },
+        error: function(xml) { submitJournalEntryError(xml); }
     });
 }
 
