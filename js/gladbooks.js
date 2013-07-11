@@ -2397,17 +2397,15 @@ function validateJournalEntry(form) {
 	var creditxml = '';
 
 	$(form).find('p.journalstatus').text("");
+
+	/* ensure we have a description */
+	if ($(form).find('.description').val().trim().length == 0) {
+		statusMessage('A description is required', STATUS_WARN);
+		xml = false;
+		return false;
+	}
 	$(form).find('fieldset').children().each(function() {
 		if ($(this).hasClass('description')) {
-			/* ensure we have a description */
-			if ($(this).val().trim().length == 0) {
-				$(form).find('p.journalstatus').text(
-					"A description is required"
-				);
-				$(form).find('p.journalstatus').fadeIn(300);
-				xml = false;
-				return false;
-			}
 			xml = createRequestXml();
 			xml += '<journal ';
 			xml += 'transactdate="' + $(form).find('.transactdate').val()
@@ -2459,13 +2457,11 @@ function validateJournalEntry(form) {
 	console.log('debits=' + debits);
 	console.log('credits=' + credits);
 	if (!(decimalEqual(debits, credits))) {
-		$(form).find('p.journalstatus').text("Transaction is unbalanced");
-		$(form).find('p.journalstatus').fadeIn(300);
+		statusMessage('Transaction is unbalanced', STATUS_WARN);
 		xml = false;
 	}
 	if (decimalEqual(decimalAdd(debits, credits), 0)) {
-		$(form).find('p.journalstatus').text("Transaction is zero");
-		$(form).find('p.journalstatus').fadeIn(300);
+		statusMessage('Transaction is zero', STATUS_WARN);
 		xml = false;
 	}
 
@@ -2556,18 +2552,16 @@ function submitJournalEntry(event, form) {
 /******************************************************************************/
 /* journal was posted successfully */
 function submitJournalEntrySuccess(xml) {
-	$('p.journalstatus').text("Journal posted");
-	$('p.journalstatus').fadeIn(300);
 	var activeForm = $('.tablet.active');
 	setupJournalForm(activeForm);
+	statusMessage('Journal posted', STATUS_INFO);
 	hideSpinner();
 }
 
 /******************************************************************************/
 /* problem posting journal */
 function submitJournalEntryError(xml) {
-	$('p.journalstatus').text("Error posting journal");
-	$('p.journalstatus').fadeIn(300);
+	statusMessage('Error posting journal', STATUS_ERROR);
 	hideSpinner();
 }
 
