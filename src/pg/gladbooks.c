@@ -36,19 +36,12 @@
 #include <syslog.h>
 #include <unistd.h>
 
+#include "gladbooks.h"
 #include "string.h"
 
 #ifdef PG_MODULE_MAGIC
 PG_MODULE_MAGIC;
 #endif
-
-PG_FUNCTION_INFO_V1(test);
-PG_FUNCTION_INFO_V1(write_salesinvoice_tex);
-
-char * process_template_line(char *tex, char *line);
-char * text_to_char(text *txt);
-char * texquote(char *raw);
-int xelatex(char *filename, char *spooldir);
 
 Datum test(PG_FUNCTION_ARGS)
 {

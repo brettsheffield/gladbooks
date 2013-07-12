@@ -25,7 +25,7 @@ INCLUDES=-I`pg_config --includedir-server`
 LIBNAME=gladbooks
 SPOOLDIR=/var/spool/${LIBNAME}
 
-${LIBNAME}.so: ${LIBNAME}.c string.o
+${LIBNAME}.so: ${LIBNAME}.c ${LIBNAME}.h string.o
 	gcc ${CFLAGS} -fpic ${INCLUDES} -c ${LIBNAME}.c
 	gcc ${CFLAGS} -shared -o ${LIBNAME}.so ${LIBNAME}.o string.o
 
