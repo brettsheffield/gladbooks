@@ -3,8 +3,8 @@ CFLAGS=-g -Wall -Werror
 PROGRAM=clerkd
 TESTPROGRAM=${PROGRAM}_test
 LIBS=
-TESTOBJECTS=test.o server_test.o
-MAINOBJECTS=server.o
+TESTOBJECTS=test.o client_test.o server_test.o
+MAINOBJECTS=client.o server.o
 OBJECTFILES=${TESTOBJECTS} ${MAINOBJECTS}
 
 ${PROGRAM}: ${MAINOBJECTS} main.o
@@ -15,6 +15,9 @@ ${TESTPROGRAM}: ${OBJECTFILES}
 
 main.o: main.c main.h
 	${CC} ${CFLAGS} -c main.c
+
+client.o: client.c client.h
+	${CC} ${CFLAGS} -c client.c
 
 server.o: server.c server.h
 	${CC} ${CFLAGS} -c server.c
@@ -29,4 +32,8 @@ clean:
 
 test:
 	make clean || true
-	make ${TESTPROGRAM} && ./${TESTPROGRAM} || true
+	make ${TESTPROGRAM} && valgrind -q ./${TESTPROGRAM} || true
+
+
+leakcheck:
+	valgrind -v --leak-check=full --show-reachable=yes ./clerkd_test

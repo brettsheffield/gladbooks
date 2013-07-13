@@ -25,6 +25,7 @@
 #include <string.h>
 #include "test.h"
 #include "server_test.h"
+#include "client_test.h"
  
 int tests_run = 0;
 
@@ -42,6 +43,8 @@ static char * all_tests()
         printf("Running tests\n");
         printline("*", 80);
         mu_run_test(test_server_start);
+        mu_run_test(test_client_connect);
+        mu_run_test(test_server_stop);
         printline("*", 80);
         return 0;
 }
