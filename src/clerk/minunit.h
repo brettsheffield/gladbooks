@@ -2,7 +2,7 @@
  * minunit.h - simple unit testing macros
  * based on code from http://www.jera.com/techinfo/jtns/jtn002.html
  *
- * this file is part of GLADD
+ * this file is part of GLADBOOKS
  *
  * Copyright (c) 2012, 2013 Brett Sheffield <brett@gladserv.com>
  *
