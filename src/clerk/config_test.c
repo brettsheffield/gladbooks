@@ -80,6 +80,9 @@ char *test_config_defaults()
         mu_assert("Ensure default daemon=0", config->daemon == 0);
         mu_assert("Ensure default listenaddr=localhost", 
                 strcmp(config->listenaddr, "localhost") == 0);
+        mu_assert("Ensure default smtpserver=localhost", 
+                strcmp(config->smtpserver, "localhost") == 0);
+        mu_assert("Ensure default smtpport=25", config->smtpport == 25);
         return 0;
 }
 
@@ -92,5 +95,8 @@ char *test_config_set()
         mu_assert("Ensure daemon is set from config", config->daemon == 1);
         mu_assert("Ensure listenaddr is set from config", 
                 strcmp(config->listenaddr, "::1") == 0);
+        mu_assert("Ensure smtpserver is set from config", 
+                strcmp(config->smtpserver, "::1") == 0);
+        mu_assert("Ensure smtpport is set from config",config->smtpport == 465);
         return 0;
 }

@@ -35,7 +35,9 @@ config_t config_default = {
         .daemon         = 0,
         .debug          = 0,
         .port           = 3141,
-        .listenaddr     = "localhost"
+        .listenaddr     = "localhost",
+        .smtpserver     = "localhost",
+        .smtpport       = 25
 };
 
 config_t *config;
@@ -45,6 +47,8 @@ config_t *config_new;
 void free_config()
 {
         config_new = NULL;
+        free(config->listenaddr);
+        free(config->smtpserver);
 }
 
 /* free keyvalue struct */
@@ -119,6 +123,10 @@ int process_config_line(char *line)
                         return set_config_long(&config_new->port, 
                                                 "port", i, 1, 65535);
                 }
+                else if (strcmp(key, "smtpport") == 0) {
+                        return set_config_long(&config_new->smtpport, 
+                                                "smtpport", i, 1, 65535);
+                }
                 else if (strcmp(key, "daemon") == 0) {
                         return set_config_long(&config_new->daemon, 
                                                 "port", i, 0, 1);
@@ -133,6 +141,9 @@ int process_config_line(char *line)
                 }
                 else if (strcmp(key, "listenaddr") == 0) {
                         return asprintf(&config->listenaddr, "%s", value);
+                }
+                else if (strcmp(key, "smtpserver") == 0) {
+                        return asprintf(&config->smtpserver, "%s", value);
                 }
                 else {
                         fprintf(stderr, "unknown config directive '%s'\n", 

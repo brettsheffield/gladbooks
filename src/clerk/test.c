@@ -28,6 +28,7 @@
 #include "args_test.h"
 #include "client_test.h"
 #include "config_test.h"
+#include "email_test.h"
 #include "server_test.h"
  
 int tests_run = 0;
@@ -47,7 +48,11 @@ static char * all_tests()
         printline("*", 80);
         printf("Running tests\n");
         printline("*", 80);
+        mu_run_test(test_email_add_header);
+        mu_run_test(test_email_append_header);
         mu_run_test(test_server_start);
+        mu_run_test(test_client);
+        mu_run_test(test_server_stop);
         mu_run_test(test_args);
         mu_run_test(test_config_skip_comment);
         mu_run_test(test_config_skip_blank);
@@ -56,8 +61,7 @@ static char * all_tests()
         mu_run_test(test_config_open_fail);
         mu_run_test(test_config_defaults);
         mu_run_test(test_config_set);
-        mu_run_test(test_client);
-        mu_run_test(test_server_stop);
+        mu_run_test(test_email);
         printline("*", 80);
         return 0;
 }

@@ -32,6 +32,8 @@ typedef struct config_t {
         long debug;
         long port;
         char *listenaddr;
+        char *smtpserver;
+        long smtpport;
 } config_t;
 
 typedef struct keyval_t {
