@@ -23,7 +23,7 @@ CFLAGS=-g -Wall -Werror
 PROGRAM=clerkd
 TESTPROGRAM=${PROGRAM}_test
 LIBS=
-TESTOBJECTS=test.o client_test.o server_test.o
+TESTOBJECTS=test.o args_test.o client_test.o server_test.o
 MAINOBJECTS=args.o client.o help.o lockfile.o server.o signals.o
 OBJECTFILES=${TESTOBJECTS} ${MAINOBJECTS}
 
