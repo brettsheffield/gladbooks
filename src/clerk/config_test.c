@@ -78,6 +78,8 @@ char *test_config_defaults()
         mu_assert("Ensure default debug=0", config->debug == 0);
         mu_assert("Ensure default port=3141", config->port == 3141);
         mu_assert("Ensure default daemon=0", config->daemon == 0);
+        mu_assert("Ensure default listenaddr=localhost", 
+                strcmp(config->listenaddr, "localhost") == 0);
         return 0;
 }
 
@@ -88,5 +90,7 @@ char *test_config_set()
         mu_assert("Ensure debug is set from config", config->debug == 1);
         mu_assert("Ensure port is set from config", config->port == 3000);
         mu_assert("Ensure daemon is set from config", config->daemon == 1);
+        mu_assert("Ensure listenaddr is set from config", 
+                strcmp(config->listenaddr, "::1") == 0);
         return 0;
 }

@@ -31,6 +31,7 @@ typedef struct config_t {
         long daemon;         /* 0 = daemonise (default), 1 = don't detach */
         long debug;
         long port;
+        char *listenaddr;
 } config_t;
 
 typedef struct keyval_t {

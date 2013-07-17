@@ -20,7 +20,10 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define _GNU_SOURCE
+
 #include "args.h"
+#include "config.h"
 #include "main.h"
 #include "server.h"
 #include "signals.h"
@@ -37,6 +40,8 @@ extern int g_signal;
 int main(int argc, char **argv)
 {
         int pid = 0;
+        int ret;
+        char *service;
 
         /* set up signal handlers */
         if (sighandlers() == -1) {
@@ -48,6 +53,15 @@ int main(int argc, char **argv)
         if (process_args(argc, argv) == -1)
                 exit(EXIT_FAILURE);
 
-        /* TODO: pull settings from config file */
-        return server_start("::1", "3141", 1, &pid);
+        /* read config */
+        if (read_config(DEFAULT_CONFIG) != 0) {
+                fprintf(stderr, "Failed to read config. Exiting.\n");
+                exit(EXIT_FAILURE);
+        }
+
+        asprintf(&service, "%li", config->port);
+        ret = server_start(config->listenaddr, service, config->daemon, &pid);
+        free(service);
+
+        return ret;
 }

@@ -35,6 +35,7 @@ config_t config_default = {
         .daemon         = 0,
         .debug          = 0,
         .port           = 3141,
+        .listenaddr     = "localhost"
 };
 
 config_t *config;
@@ -129,6 +130,9 @@ int process_config_line(char *line)
                          * call this function again */
                         asprintf(&multi, "%s ", value);
                         return 0;
+                }
+                else if (strcmp(key, "listenaddr") == 0) {
+                        return asprintf(&config->listenaddr, "%s", value);
                 }
                 else {
                         fprintf(stderr, "unknown config directive '%s'\n", 
