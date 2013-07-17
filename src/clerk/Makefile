@@ -23,8 +23,8 @@ CFLAGS=-g -Wall -Werror
 PROGRAM=clerkd
 TESTPROGRAM=${PROGRAM}_test
 LIBS=
-TESTOBJECTS=test.o args_test.o client_test.o server_test.o
-MAINOBJECTS=args.o client.o help.o lockfile.o server.o signals.o
+TESTOBJECTS=test.o args_test.o client_test.o config_test.o server_test.o
+MAINOBJECTS=args.o client.o config.o help.o lockfile.o server.o signals.o
 OBJECTFILES=${TESTOBJECTS} ${MAINOBJECTS}
 
 ${PROGRAM}: ${MAINOBJECTS} main.o
@@ -41,6 +41,9 @@ args.o: args.c args.h
 
 client.o: client.c client.h
 	${CC} ${CFLAGS} -c client.c
+
+config.o: config.c config.h
+	${CC} ${CFLAGS} -c config.c
 
 help.o: help.c help.h
 	${CC} ${CFLAGS} -c help.c
