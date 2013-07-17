@@ -24,7 +24,7 @@ PROGRAM=clerkd
 TESTPROGRAM=${PROGRAM}_test
 LIBS=
 TESTOBJECTS=test.o client_test.o server_test.o
-MAINOBJECTS=client.o server.o
+MAINOBJECTS=args.o client.o help.o lockfile.o server.o signals.o
 OBJECTFILES=${TESTOBJECTS} ${MAINOBJECTS}
 
 ${PROGRAM}: ${MAINOBJECTS} main.o
@@ -36,11 +36,23 @@ ${TESTPROGRAM}: ${OBJECTFILES}
 main.o: main.c main.h
 	${CC} ${CFLAGS} -c main.c
 
+args.o: args.c args.h
+	${CC} ${CFLAGS} -c args.c
+
 client.o: client.c client.h
 	${CC} ${CFLAGS} -c client.c
 
+help.o: help.c help.h
+	${CC} ${CFLAGS} -c help.c
+
+lockfile.o: lockfile.c lockfile.h
+	${CC} ${CFLAGS} -c lockfile.c
+
 server.o: server.c server.h
 	${CC} ${CFLAGS} -c server.c
+
+signals.o: signals.c signals.h
+	${CC} ${CFLAGS} -c signals.c
 
 test.o: test.c test.h
 	${CC} ${CFLAGS} -c test.c

@@ -20,10 +20,34 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "args.h"
 #include "main.h"
+#include "server.h"
+#include "signals.h"
 
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/file.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+
+extern int g_signal;
 
 int main(int argc, char **argv)
 {
-        return 0;
+        int pid = 0;
+
+        /* set up signal handlers */
+        if (sighandlers() == -1) {
+                fprintf(stderr, "Failed to set up signals. Exiting.\n");
+                exit(EXIT_FAILURE);
+        }
+
+        /* check commandline args */
+        if (process_args(argc, argv) == -1)
+                exit(EXIT_FAILURE);
+
+        /* TODO: pull settings from config file */
+        return server_start("::1", "3141", 1, &pid);
 }

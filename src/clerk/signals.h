@@ -1,5 +1,5 @@
 /*
- * client_test.c
+ * signals.h - handle process signals
  *
  * this file is part of GLADBOOKS
  *
@@ -20,27 +20,19 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "client_test.h"
-#include "client.h"
-#include "minunit.h"
+#ifndef __GLADBOOKS_SIGNALS_H__
+#define __GLADBOOKS_SIGNALS_H__ 1
 
-#include <limits.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+#include <signal.h>
 
-char *test_client()
-{
-        int sock = 0;
-        ssize_t len;
-        char buf[LINE_MAX] = "";
+int sighandlers();
+void sigchld_handler (int signo);
+void sigint_handler (int signo);
+void sigterm_handler (int signo);
+void sighup_handler (int signo);
+void sigusr1_handler (int signo, siginfo_t *si, void *ucontext);
+void sigusr2_handler (int signo, siginfo_t *si, void *ucontext);
+int signal_daemon (int lockfd);
+void signal_wait();
 
-        mu_assert("Client connecting to server", 
-                client_connect("localhost", "3141", &sock) == 0);
-
-        len = read(sock, &buf, LINE_MAX);
-        mu_assert("Read from socket", len > 0);
-        mu_assert("Expect OK", strcmp(buf, "OK\n") == 0);
-
-        return 0;
-}
+#endif /* __GLADBOOKS_SIGNALS_H__ */

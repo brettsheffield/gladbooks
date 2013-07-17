@@ -20,6 +20,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "lockfile.h"
 #include "server.h"
 
 #include <errno.h>
@@ -36,6 +37,7 @@
 #include <unistd.h>
 
 int p = 0;
+int hits = 0;
 
 int server_start(char *host, char *service, int daemonize, int *pid)
 {
@@ -43,17 +45,21 @@ int server_start(char *host, char *service, int daemonize, int *pid)
         struct sockaddr_storage their_addr;
         socklen_t addr_size;
         int status;
-        int sock;
         int yes=1;
         int errsv;
         int new_fd;
+        int havelock = 0;
+        int lockfd;
+        char buf[sizeof(long)];
 
         memset(&hints, 0, sizeof hints);           /* zero memory */
         hints.ai_family = AF_UNSPEC;               /* ipv4/ipv6 agnostic */
         hints.ai_socktype = SOCK_STREAM;           /* TCP stream sockets */
         hints.ai_flags = AI_PASSIVE;               /* ips we can bind to */
 
-        /* TODO: set up signal handlers */
+        /* obtain lockfile */
+        if ((havelock = obtain_lockfile(&lockfd)) != 0)
+                exit(havelock);
 
         if ((status = getaddrinfo(NULL, service, &hints, &servinfo)) != 0){
                 fprintf(stderr, "getaddrinfo error: %s\n",
@@ -137,12 +143,20 @@ int server_start(char *host, char *service, int daemonize, int *pid)
                 syslog(LOG_DEBUG, "Daemon started");
         }
 
+        /* write pid to lockfile */
+        snprintf(buf, sizeof(long), "%ld\n", (long) getpid());
+        if (write(lockfd, buf, strlen(buf)) != strlen(buf)) {
+                fprintf(stderr, "Error writing to pidfile\n");
+                exit(EXIT_FAILURE);
+        }
+
         for (;;) {
                 new_fd = accept(sock, (struct sockaddr *)&their_addr, 
                         &addr_size);
                 /* TODO: fork to handle connection */
-                write(new_fd, "OK", 2);
+                write(new_fd, "OK\n", 3);
                 close(new_fd);
+                ++hits; /* increment hit counter */
         }
 
         return 0;
@@ -152,3 +166,9 @@ int server_stop()
 {
         return kill(p, SIGTERM);
 }
+
+int server_hits()
+{
+        return hits;
+}
+

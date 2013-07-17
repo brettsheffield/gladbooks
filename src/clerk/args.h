@@ -1,5 +1,5 @@
 /*
- * client_test.c
+ * args.h - handle commandline arguments
  *
  * this file is part of GLADBOOKS
  *
@@ -20,27 +20,10 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "client_test.h"
-#include "client.h"
-#include "minunit.h"
+#ifndef __GLADBOOKS_ARGS_H__
+#define __GLADBOOKS_ARGS_H__ 1
 
-#include <limits.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+int argue(int argc, char *arg);
+int process_args(int argc, char **argv);
 
-char *test_client()
-{
-        int sock = 0;
-        ssize_t len;
-        char buf[LINE_MAX] = "";
-
-        mu_assert("Client connecting to server", 
-                client_connect("localhost", "3141", &sock) == 0);
-
-        len = read(sock, &buf, LINE_MAX);
-        mu_assert("Read from socket", len > 0);
-        mu_assert("Expect OK", strcmp(buf, "OK\n") == 0);
-
-        return 0;
-}
+#endif /* __GLADBOOKS_ARGS_H__ */

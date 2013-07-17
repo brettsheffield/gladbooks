@@ -1,7 +1,7 @@
-/*
- * client_test.c
+/* 
+ * args_test.h - unit tests for args.c
  *
- * this file is part of GLADBOOKS
+ * this file is part of GLADD
  *
  * Copyright (c) 2012, 2013 Brett Sheffield <brett@gladserv.com>
  *
@@ -20,27 +20,9 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "client_test.h"
-#include "client.h"
-#include "minunit.h"
+#ifndef __GLADD_ARGS_TEST_H__
+#define __GLADD_ARGS_TEST_H__ 1
 
-#include <limits.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+char *test_args();
 
-char *test_client()
-{
-        int sock = 0;
-        ssize_t len;
-        char buf[LINE_MAX] = "";
-
-        mu_assert("Client connecting to server", 
-                client_connect("localhost", "3141", &sock) == 0);
-
-        len = read(sock, &buf, LINE_MAX);
-        mu_assert("Read from socket", len > 0);
-        mu_assert("Expect OK", strcmp(buf, "OK\n") == 0);
-
-        return 0;
-}
+#endif /* __GLADD_ARGS_TEST_H__ */

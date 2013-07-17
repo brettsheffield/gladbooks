@@ -25,8 +25,13 @@
 
 #define BACKLOG 10  /* how many pending connectiong to hold in queue */
 #define PROGRAM "clerkd"
+#define LOCKFILE_USER ".gladbooks.pid"
+#define LOCKFILE_ROOT "/var/run/gladbooks.pid"
+
+int sock;
 
 int server_start(char *host, char *service, int daemonize, int *pid);
 int server_stop();
+int server_hits();
 
 #endif /* __GLADBOOKS_SERVER_H__ */
