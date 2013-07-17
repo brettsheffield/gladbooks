@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include "test.h"
 #include "args_test.h"
 #include "client_test.h"
@@ -40,6 +41,8 @@ static void printline(char *c, int len)
 
 static char * all_tests()
 {
+        /* close stderr to keep output tidy */
+        close(2);
         /* run the tests */
         printline("*", 80);
         printf("Running tests\n");

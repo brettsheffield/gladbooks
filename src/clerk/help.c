@@ -26,5 +26,5 @@
 #include "server.h"
 
 void help() {
-        printf("Usage: %s [start|stop|reload|status]\n", PROGRAM);
+        fprintf(stderr, "Usage: %s [start|stop|reload|status]\n", PROGRAM);
 }
