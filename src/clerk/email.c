@@ -190,7 +190,6 @@ int send_email(char *sender, char *subject, char *msg, smtp_recipient_t *r,
                   "%s\r\n\r\n", boundary);
                 write_socket(sockfd, NULL,
                   "This is a message with multiple parts in MIME format.\r\n");
-                write_socket(sockfd, NULL, "--%s\r\n", boundary);
         }
 
         /* plaintext message body */
@@ -201,6 +200,8 @@ int send_email(char *sender, char *subject, char *msg, smtp_recipient_t *r,
 
         /* loop through attachments */
         while (attach != NULL) {
+                write_socket(sockfd, NULL, "--%s\r\n", boundary);
+
                 char *mimetype;
                 mimetype = mime_type(attach->filepath);
                 write_socket(sockfd, NULL,
