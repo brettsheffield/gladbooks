@@ -32,6 +32,9 @@ typedef struct smtp_attach_t {
         struct smtp_attach_t *next;
 } smtp_attach_t;
 
+/* length of mime boundary marker (max: 70) */
+#define BOUNDARY_LENGTH 32
+
 /* recipient flags */
 #define EMAIL_BCC 0x0
 #define EMAIL_TO  0x1
@@ -68,6 +71,9 @@ int add_recipient(smtp_recipient_t **r, char *name, char* email,
 
 /* append_header() - build smtp header */
 int *append_header(char **header, char *headstring, smtp_recipient_t *r);
+
+/* boundary_string() - return random ascii string with length len */
+char *boundary_string(int len);
 
 /* encode64() - base64 encode file and output to socket 
  *  infile      - file to encode

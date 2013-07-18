@@ -33,10 +33,9 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <time.h>
 #include <unistd.h>
 
-/* TODO: make random boundary string */
-#define BOUNDARY "x9ni95gF5Hcjtys9" /* arbritary string */
 #define SIZE 100        /* arbitrary buffer size */
 #define SMTP_LINE_MAX 998
 #define MIMECMD "file --mime-type"
@@ -85,6 +84,7 @@ int send_email(char *sender, char *subject, char *msg, smtp_recipient_t *r,
         char *header_to = NULL;
         char *header_cc = NULL;
         char *smtpport = "";
+        char *boundary;
 
         memset(&hints, 0, sizeof hints);
         hints.ai_family = AF_UNSPEC;
@@ -183,20 +183,21 @@ int send_email(char *sender, char *subject, char *msg, smtp_recipient_t *r,
 
         /* set up for multipart MIME if we're attaching files */
         if (attach) {
+                boundary = boundary_string(BOUNDARY_LENGTH);
                 write_socket(sockfd, NULL, "MIME-Version: 1.0\r\n");
                 write_socket(sockfd, NULL,
                   "Content-Type: multipart/mixed; boundary="
-                  "%s\r\n\r\n", BOUNDARY);
+                  "%s\r\n\r\n", boundary);
                 write_socket(sockfd, NULL,
                   "This is a message with multiple parts in MIME format.\r\n");
-                write_socket(sockfd, NULL, "--%s\r\n", BOUNDARY);
+                write_socket(sockfd, NULL, "--%s\r\n", boundary);
         }
 
         /* plaintext message body */
         write_socket(sockfd, NULL, "Content-Type: text/plain\r\n");
         write_socket(sockfd, NULL, "\r\n%s\r\n", msg);
 
-        if (attach) write_socket(sockfd, NULL, "--%s\r\n", BOUNDARY);
+        if (attach) write_socket(sockfd, NULL, "--%s\r\n", boundary);
 
         /* loop through attachments */
         while (attach != NULL) {
@@ -228,7 +229,10 @@ int send_email(char *sender, char *subject, char *msg, smtp_recipient_t *r,
                 attach = attach->next;
 
                 /* final boundary - note two trailing hyphens */
-                if (!attach) write_socket(sockfd, NULL, "--%s--\r\n",BOUNDARY);
+                if (!attach) {
+                        write_socket(sockfd, NULL, "--%s--\r\n",boundary);
+                        free(boundary);
+                }
         }
 
         /* lone period signals end of body */
@@ -433,4 +437,25 @@ char *mime_type(char *filepath)
         free(command);
 
         return mimetype;
+}
+
+char *boundary_string(int len)
+{
+        char *str;
+        int i;
+        unsigned int r;
+        char *digest =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        srand((unsigned)time(NULL)); /* seed random */
+        str = malloc(len + 1); /* allocate string */
+
+        for(i=0; i<len; i++) {
+                r = rand() % strlen(digest);
+                str[i] = digest[r];
+        }
+
+        str[i] = '\0'; /* null terminate string */
+
+        return str;
 }

@@ -48,6 +48,7 @@ static char * all_tests()
         printline("*", 80);
         printf("Running tests\n");
         printline("*", 80);
+        mu_run_test(test_email_boundary_string);
         mu_run_test(test_email_add_header);
         mu_run_test(test_email_append_header);
         mu_run_test(test_server_start);

@@ -116,3 +116,15 @@ char *test_email_add_header()
 
         return 0;
 }
+
+char *test_email_boundary_string()
+{
+        char *boundary;
+
+        boundary = boundary_string(32);
+        printf("%s\n", boundary);
+        mu_assert("boundary_string() - check length", strlen(boundary) == 32);
+        free(boundary);
+
+        return 0;
+}

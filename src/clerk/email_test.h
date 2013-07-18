@@ -26,5 +26,6 @@
 char *test_email();
 char *test_email_append_header();
 char *test_email_add_header();
+char *test_email_boundary_string();
 
 #endif /* __GLADBOOKS_EMAIL_TEST_H__ */
