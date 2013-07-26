@@ -667,7 +667,7 @@ LEFT JOIN (
 	FROM salesinvoice_tax sit 
 	GROUP BY sit.salesinvoice
 ) sit ON so.id = sit.salesinvoice
-INNER JOIN product_current p ON p.product = soi.product
+LEFT JOIN product_current p ON p.product = soi.product
 INNER JOIN organisation o ON o.id = so.organisation
 GROUP BY sod.id, so.organisation, so.invoicenum, sit.tax, o.orgcode;
 
