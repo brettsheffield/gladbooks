@@ -850,7 +850,13 @@ CREATE OR REPLACE FUNCTION set_organisation_salesinvoice()
 RETURNS TRIGGER AS
 $$
 BEGIN
-        NEW.invoicenum = organisation_salesinvoice_next(NEW.organisation);
+	IF NEW.invoicenum IS NULL THEN
+            NEW.invoicenum = organisation_salesinvoice_next(NEW.organisation);
+	ELSE
+	    UPDATE organisation
+	    SET salesinvoice = GREATEST(NEW.invoicenum,salesinvoice)
+	    	WHERE id = NEW.organisation;
+	END IF;
         RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';

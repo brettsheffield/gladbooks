@@ -38,12 +38,23 @@ function processData(src, xml) {
     products.data = xml[1];
     createObjects(products, true);
 
+	/* handle salesinvoices with no parent salesorder.  
+	 * These get posted as direct children of the organisation, 
+	 * before salesorders */
+	var salesinvoices_detached = new ImportSchema();
+	salesinvoices_detached.object = 'salesinvoice';
+	salesinvoices_detached.attributes = ['import_id', 'invoicenum'];
+	salesinvoices_detached.source = src;
+	salesinvoices_detached.fields = ['id', 'period', 'taxpoint', 'issued', 'due', 'subtotal', 'tax', 'total', 'pdf', 'emailtext'];
+	salesinvoices_detached.fieldmap = {'id':'import_id'};
+
 	var salesinvoices = new ImportSchema();
 	salesinvoices.object = 'salesinvoice';
 	salesinvoices.source = src;
-	salesinvoices.attributes = ['salesorder'];
-	salesinvoices.fields = ['period', 'taxpoint', 'issued', 'due', 'subtotal', 'tax', 'total', 'pdf', 'ponumber', 'emailtext'];
-	salesinvoices.fieldmap = {};
+	salesinvoices.attributes = ['salesorder', 'import_id', 'invoicenum'];
+	//salesinvoices.fields = ['period', 'taxpoint', 'issued', 'due', 'subtotal', 'tax', 'total', 'pdf', 'ponumber', 'emailtext'];
+	salesinvoices.fields = ['id', 'period', 'taxpoint', 'issued', 'due', 'subtotal', 'tax', 'total', 'pdf', 'emailtext'];
+	salesinvoices.fieldmap = {'id':'import_id'};
 
 	var salesorderitems = new ImportSchema();
     salesorderitems.object = 'salesorderitem';
@@ -56,7 +67,8 @@ function processData(src, xml) {
     salesorders.object = 'salesorder';
     salesorders.source = src;
     salesorders.attributes = ['salesorder', 'is_open'];
-    salesorders.fields = ['organisation', 'ponumber', 'cycle', 'start_date', 'end_date'];
+    //salesorders.fields = ['organisation', 'ponumber', 'cycle', 'start_date', 'end_date'];
+    salesorders.fields = ['organisation', 'cycle', 'start_date', 'end_date'];
     salesorders.fieldmap = {};
 	salesorders.children = [ salesorderitems, salesinvoices ];
 	if (src == 'gladserv') {
@@ -81,7 +93,7 @@ function processData(src, xml) {
     organisations.fields = ['name', 'terms', 'vatnumber'];
     organisations.fieldmap = {'account':'orgcode', 'organisation':'orgcode'};
     organisations.data = xml[0];
-    organisations.children = [ contacts, salesorders ];
+    organisations.children = [ contacts, salesinvoices_detached, salesorders ];
     createObjects(organisations, true);
 
 }

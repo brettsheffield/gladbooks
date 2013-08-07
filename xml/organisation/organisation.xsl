@@ -4,6 +4,7 @@
 
 	<xsl:include href="../contact/contact.xsl"/>
 	<xsl:include href="../salesorder/salesorder.xsl"/>
+	<xsl:include href="../salesinvoice/salesinvoice.xsl"/>
 
 	<xsl:template match="organisation">
 		<xsl:call-template name="setSearchPath"/>
@@ -25,6 +26,7 @@
                 </xsl:if>
 
                 <xsl:apply-templates select="contact"/>
+                <xsl:apply-templates select="salesinvoice"/>
                 <xsl:apply-templates select="salesorder"/>
 
 		<xsl:text>INSERT INTO organisationdetail (organisation,</xsl:text>

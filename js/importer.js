@@ -226,4 +226,3 @@ function postDoc(object, doc) {
 	});
 	return d;
 }
-

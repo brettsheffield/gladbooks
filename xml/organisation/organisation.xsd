@@ -3,6 +3,7 @@
 
 <xs:include schemaLocation="../contact/contact.xsd"/>
 <xs:include schemaLocation="../salesorder/salesorder.xsd"/>
+<xs:include schemaLocation="../salesinvoice/salesinvoice.xsd"/>
 
 <xs:complexType name="organisation">
 		<xs:sequence>
@@ -11,6 +12,7 @@
 			<xs:element name="billcontact" type="xs:positiveInteger" minOccurs="0"/>
 			<xs:element name="vatnumber" type="xs:string" minOccurs="0"/>
 			<xs:element name="contact" type="contact" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="salesinvoice" type="salesinvoice" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="salesorder" type="salesorder" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="orgcode" type="xs:string"/>

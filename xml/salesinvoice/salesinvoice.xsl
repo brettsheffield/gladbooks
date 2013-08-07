@@ -8,15 +8,35 @@
 		<xsl:call-template name="setSearchPath"/>
 
                 <xsl:if test="not(@id)">
-                        <xsl:text>INSERT INTO salesinvoice (organisation, authuser, clientip) VALUES (</xsl:text>
+                        <xsl:text>INSERT INTO salesinvoice (organisation, invoicenum, import_id, authuser, clientip) VALUES (</xsl:text>
 			<xsl:choose>
 				<xsl:when test="organisation">
 					<xsl:text>'</xsl:text>
 					<xsl:value-of select="organisation"/>
+					<xsl:text>',</xsl:text>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:text>currval(pg_get_serial_sequence('organisation','id')),</xsl:text>
+				</xsl:otherwise>
+			</xsl:choose>
+			<xsl:choose>
+				<xsl:when test="@invoicenum">
+					<xsl:text>'</xsl:text>
+					<xsl:value-of select="@invoicenum"/>
+					<xsl:text>',</xsl:text>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:text>NULL,</xsl:text>
+				</xsl:otherwise>
+			</xsl:choose>
+			<xsl:choose>
+				<xsl:when test="@import_id">
+					<xsl:text>'</xsl:text>
+					<xsl:value-of select="@import_id"/>
 					<xsl:text>','</xsl:text>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:text>currval(pg_get_serial_sequence('organisation','id')),'</xsl:text>
+					<xsl:text>NULL,'</xsl:text>
 				</xsl:otherwise>
 			</xsl:choose>
                         <xsl:copy-of select="$authuser"/>

@@ -20,6 +20,8 @@
 		<xs:element name="salesitem" type="salesitem" minOccurs="0" maxOccurs="unbounded"/>
 	</xs:sequence>
 	<xs:attribute name="salesorder" type="xs:string"/>
+	<xs:attribute name="import_id" type="xs:string"/>
+	<xs:attribute name="invoicenum" type="xs:positiveInteger"/>
 </xs:complexType>
 
 </xs:schema>

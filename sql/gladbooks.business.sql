@@ -545,6 +545,7 @@ CREATE TABLE salesinvoice (
 	id		SERIAL PRIMARY KEY,
 	organisation	INT4 references organisation(id) NOT NULL,
 	invoicenum	INT4 NOT NULL,
+	import_id	TEXT,
 	updated		timestamp with time zone default now(),
 	authuser	TEXT,
 	clientip	TEXT,
