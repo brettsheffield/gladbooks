@@ -52,7 +52,6 @@ function processData(src, xml) {
 	salesinvoices.object = 'salesinvoice';
 	salesinvoices.source = src;
 	salesinvoices.attributes = ['salesorder', 'import_id', 'invoicenum'];
-	//salesinvoices.fields = ['period', 'taxpoint', 'issued', 'due', 'subtotal', 'tax', 'total', 'pdf', 'ponumber', 'emailtext'];
 	salesinvoices.fields = ['id', 'period', 'taxpoint', 'issued', 'due', 'subtotal', 'tax', 'total', 'pdf', 'emailtext'];
 	salesinvoices.fieldmap = {'id':'import_id'};
 
@@ -67,7 +66,6 @@ function processData(src, xml) {
     salesorders.object = 'salesorder';
     salesorders.source = src;
     salesorders.attributes = ['salesorder', 'is_open'];
-    //salesorders.fields = ['organisation', 'ponumber', 'cycle', 'start_date', 'end_date'];
     salesorders.fields = ['organisation', 'cycle', 'start_date', 'end_date'];
     salesorders.fieldmap = {};
 	salesorders.children = [ salesorderitems, salesinvoices ];
