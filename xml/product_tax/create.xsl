@@ -13,7 +13,7 @@
 
         <xsl:template match="request">
 		<xsl:text>BEGIN;</xsl:text>
-		<xsl:apply-templates select="data/product_tax"/>
+		<xsl:apply-templates select="data/tax"/>
 		<xsl:text>COMMIT;</xsl:text>
 	</xsl:template>
 

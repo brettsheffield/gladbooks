@@ -881,7 +881,7 @@ test("create product", function() {
 
 test("tax product (add)", function() {
 	var xml = createRequestXml();
-	xml += '<product>1</product><tax>1</tax></data></request>';
+	xml += '<tax id="1"><product>1</product></tax></data></request>';
 
     stop();
     $.ajax({
