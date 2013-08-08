@@ -1307,7 +1307,7 @@ $$ LANGUAGE 'plpgsql';
 
 -- post_salesinvoice() - post salesinvoice to journal
 -- RETURN INT4, 0=success
-CREATE OR REPLACE FUNCTION post_salesinvoice(si_id INT4)
+CREATE OR REPLACE FUNCTION post_salesinvoice(si_id INT8)
 RETURNS INT4 AS $$
 DECLARE
 	r_si		RECORD;

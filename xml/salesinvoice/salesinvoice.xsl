@@ -180,7 +180,7 @@
 		<xsl:text>');</xsl:text>
 
 		<!-- post salesinvoice -->
-		<xsl:text>PERFORM post_salesinvoice(currval(pg_get_serial_sequence('salesinvoice','id')));</xsl:text>
+		<xsl:text>SELECT post_salesinvoice(currval(pg_get_serial_sequence('salesinvoice','id')));</xsl:text>
 
 	</xsl:template>
 
