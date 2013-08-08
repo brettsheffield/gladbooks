@@ -5,6 +5,7 @@
 	<data>
 		<business>
 			<name>Name of Business"</name>
+			<period_start>2013-04-01</period_start>
 		</business>
 	</data>
 </request>

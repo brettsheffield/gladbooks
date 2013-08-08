@@ -29,13 +29,22 @@ function fetchData(src) {
 
 function processData(src, xml) {
     /* import products */
+    var producttaxes = new ImportSchema();
+	producttaxes.object = 'tax';
+	producttaxes.source = src;
+	producttaxes.attributes = ['id'];
+    producttaxes.fields = ['tax'];
+    producttaxes.fieldmap = {'tax':'id'};
+
     var products = new ImportSchema();
     products.object = 'product';
+	products.id = 'import_id';
     products.source = src;
     products.attributes = ['import_id'];
     products.fields = ['product', 'account', 'nominalcode', 'shortname', 'description', 'price_buy', 'price_sell', 'price'];
     products.fieldmap = {'product':'import_id', 'nominalcode': 'account', 'price': 'price_sell'};
     products.data = xml[1];
+	products.children = [ producttaxes ]
     createObjects(products, true);
 
 	/* handle salesinvoices with no parent salesorder.  

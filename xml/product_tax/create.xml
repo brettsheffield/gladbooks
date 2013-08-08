@@ -3,7 +3,9 @@
   <instance>default</instance>
   <business>1</business>	
 	<data>
-		<product>1</product>
-		<tax>1</tax>
+		<product_tax>
+			<product>1</product>
+			<tax>1</tax>
+		</product_tax>
 	</data>
 </request>

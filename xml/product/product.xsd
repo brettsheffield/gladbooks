@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
+<xs:include schemaLocation="../product_tax/product_tax.xsd"/>
+
 <xs:complexType name="product">
 	<xs:sequence>
 		<xs:element name="account" type="xs:nonNegativeInteger"/>
@@ -8,15 +10,10 @@
 		<xs:element name="description" type="xs:string"/>
 		<xs:element name="price_buy" type="xs:decimal" minOccurs="0"/>
 		<xs:element name="price_sell" type="xs:decimal" minOccurs="0"/>
-		<xs:element name="tax" type="tax" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:element name="tax" type="product_tax" minOccurs="0" maxOccurs="unbounded"/>
 	</xs:sequence>
 	<xs:attribute name="id" type="xs:nonNegativeInteger"/>
 	<xs:attribute name="import_id" type="xs:positiveInteger"/>
-</xs:complexType><!--product-->
-
-
-<xs:complexType name="tax">
-		<xs:attribute name="id" type="xs:positiveInteger" use="required"/>
-</xs:complexType><!--tax-->
+</xs:complexType>
 
 </xs:schema>

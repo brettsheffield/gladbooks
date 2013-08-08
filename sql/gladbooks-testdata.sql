@@ -21,7 +21,7 @@ SET search_path TO gladbooks_test,gladbooks;
 
 BEGIN;
 
-SELECT create_business('test', 'test');
+SELECT create_business('test', 'test', '2013-04-01');
 
 END;
 

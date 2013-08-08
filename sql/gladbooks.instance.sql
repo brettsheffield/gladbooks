@@ -187,6 +187,19 @@ CREATE RULE nodel_business AS ON DELETE TO business DO NOTHING;
 CREATE TRIGGER trig_businessorganisation BEFORE INSERT ON business
 FOR EACH ROW EXECUTE PROCEDURE businessorganisation();
 
+-- accounting period (not always exactly a year)
+CREATE TABLE business_year (
+	id		SERIAL PRIMARY KEY,
+	business	INT4 references business(id) ON DELETE RESTRICT,
+	period_start	DATE NOT NULL,
+	period_end	DATE NOT NULL,
+	entered         timestamp with time zone default now(),
+        authuser        TEXT,
+        clientip        TEXT
+);
+CREATE TRIGGER trig_business_year BEFORE INSERT ON business_year
+FOR EACH ROW EXECUTE PROCEDURE business_year_end();
+
 CREATE TABLE tag (
 	id		TEXT PRIMARY KEY,
         updated         timestamp with time zone default now(),

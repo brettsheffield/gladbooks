@@ -3,7 +3,7 @@
 SET search_path TO gladbooks;
 
 -- wrap business creation in a function for convenience --
-CREATE OR REPLACE FUNCTION create_business(instance VARCHAR(63), business VARCHAR(63))
+CREATE OR REPLACE FUNCTION create_business(instance VARCHAR(63), business VARCHAR(63), period_start DATE)
 RETURNS TEXT AS
 $$
 DECLARE
@@ -13,6 +13,8 @@ BEGIN
 --
 
 INSERT INTO business (name, instance) VALUES (business, instance);
+INSERT INTO business_year (business, period_start) 
+VALUES (currval(pg_get_serial_sequence('business', 'id')), period_start);
 SELECT INTO business_id currval(pg_get_serial_sequence('business', 'id'));
 
 EXECUTE 'CREATE SCHEMA gladbooks_' || instance || '_' || business_id;

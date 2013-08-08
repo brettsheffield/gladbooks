@@ -861,6 +861,19 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
+CREATE OR REPLACE FUNCTION business_year_end()
+RETURNS TRIGGER AS
+$$
+BEGIN
+	IF NEW.period_end IS NULL THEN
+		-- default period_end to one year after period_start
+		NEW.period_end
+		    = NEW.period_start + INTERVAL '1 year' - INTERVAL '1 day';
+	END IF;
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
 -- ensure ledger table debits and credits are in balance
 CREATE OR REPLACE FUNCTION check_ledger_balance()
 RETURNS trigger AS $check_ledger_balance$

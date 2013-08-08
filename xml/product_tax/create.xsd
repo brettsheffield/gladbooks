@@ -9,9 +9,16 @@
       <xs:element name="data">
         <xs:complexType>
           <xs:sequence>
+						<xs:element name="product_tax">
+							<xs:complexType>
+								<xs:sequence>
 
-						<xs:element name="product" type="xs:positiveInteger"/>
-						<xs:element name="tax" type="xs:positiveInteger"/>
+									<xs:element name="product" type="xs:positiveInteger"/>
+									<xs:element name="tax" type="xs:positiveInteger"/>
+
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element><!--product_tax-->
 
           </xs:sequence>
         </xs:complexType>

@@ -45,6 +45,12 @@
                         <xsl:text>');</xsl:text>
                 </xsl:if>
 
+		<!-- add any salesitems -->
+		<xsl:apply-templates select="salesitem">
+			<xsl:with-param name="parentobject" select="'salesinvoice'" />
+		</xsl:apply-templates>
+
+		<!-- write detail last, so triggers work correctly -->
 		<xsl:text>INSERT INTO salesinvoicedetail (</xsl:text>
 		<xsl:text>salesinvoice,salesorder,</xsl:text>
 
@@ -173,10 +179,9 @@
 		<xsl:copy-of select="$clientip"/>
 		<xsl:text>');</xsl:text>
 
-		<!-- add any salesitems -->
-		<xsl:apply-templates select="salesitem">
-			<xsl:with-param name="parentobject" select="'salesinvoice'" />
-		</xsl:apply-templates>
+		<!-- post salesinvoice -->
+		<xsl:text>PERFORM post_salesinvoice(currval(pg_get_serial_sequence('salesinvoice','id')));</xsl:text>
+
 	</xsl:template>
 
 </xsl:stylesheet>

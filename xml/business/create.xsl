@@ -32,6 +32,8 @@
 				<xsl:value-of select="name"/>
 			</xsl:with-param>
 		</xsl:call-template>
+		<xsl:text>','</xsl:text>
+		<xsl:value-of select="period_start"/>
 		<xsl:text>');</xsl:text>
 
 		<xsl:text>COMMIT;</xsl:text>
