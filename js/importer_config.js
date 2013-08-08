@@ -45,7 +45,15 @@ function processData(src, xml) {
     products.fieldmap = {'product':'import_id', 'nominalcode': 'account', 'price': 'price_sell'};
     products.data = xml[1];
 	products.children = [ producttaxes ]
+	products.fixValue = fixPFAccount;
     createObjects(products, true);
+
+    var salesitems = new ImportSchema();
+	salesitems.object = 'salesitem';
+	salesitems.source = src;
+	salesitems.attributes = ['id'];
+    salesitems.fields = ['tax'];
+    salesitems.fieldmap = {'tax':'id'};
 
 	/* handle salesinvoices with no parent salesorder.  
 	 * These get posted as direct children of the organisation, 
@@ -117,6 +125,16 @@ function fixValueGladserv(field, value) {
 	if ((field == 'cycle') && (value >=2) && (! isNaN(value))) {
 		/* cycles above 2 are off by one in old GS system */
 		return (Number(value) - 1).toString();
+	}
+	else {
+		return value;
+	}
+}
+
+function fixPFAccount(field, value) {
+	if (field == 'account') {
+		/* account codes in PF system have 5 digits instead of 4 */
+		return (Number(value.substring(0,2) + value.substring(3))+1).toString();
 	}
 	else {
 		return value;
