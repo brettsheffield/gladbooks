@@ -654,7 +654,9 @@ module("Business");
 
 test("create business", function() {
 	var xml = createRequestXml();
-	xml += '<business><name>' + UUID() +'</name></business></data></request>';
+	xml += '<business><name>' + UUID() +'</name>';
+	xml += '<period_start>2013-04-01</period_start>';
+	xml += '</business></data></request>';
 
 	stop();
 	$.ajax({
