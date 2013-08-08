@@ -1393,11 +1393,18 @@ DECLARE
 	c		NUMERIC;
 BEGIN
 	-- fetch salesinvoice details
-	SELECT si.salesinvoice, si.taxpoint, si.subtotal, si.tax, si.total,
-	       si.ref
+	SELECT si.salesinvoice, 
+	       COALESCE(si.taxpoint,si.issued) AS taxpoint,
+	       si.subtotal, si.tax, si.total, si.ref
 	INTO r_si
 	FROM salesinvoice_current si
 	WHERE si.salesinvoice=si_id;
+
+	-- only post invoices from current period
+	-- TODO: pull this date from business.period_start
+	IF r_si.taxpoint < '2013-04-01' THEN
+		RETURN 0;
+	END IF;
 
 	-- create journal entry
 	INSERT INTO journal (transactdate, description) 
