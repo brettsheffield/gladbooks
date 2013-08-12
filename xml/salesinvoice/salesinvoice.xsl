@@ -107,7 +107,7 @@
                                 <xsl:value-of select="@id"/>
                                 <xsl:text>','</xsl:text>
                         </xsl:when>
-			<xsl:when test="@import_id">
+			<xsl:when test="@import_id and @salesorder">
                                 <xsl:text>currval(pg_get_serial_sequence('salesorder','id')),'</xsl:text>
 			</xsl:when>
                         <xsl:otherwise>

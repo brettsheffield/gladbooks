@@ -1066,7 +1066,7 @@ BEGIN
 			PERFORM create_salesinvoice(soid, period);
 		END LOOP;
 	ELSIF periods_unissued < 0 THEN
-		RAISE EXCEPTION 'too many salesinvoices exist for salesorder %', soid;
+		RAISE NOTICE 'too many salesinvoices exist for salesorder %', soid;
 	END IF;
 
 	RETURN periods_unissued;

@@ -159,6 +159,9 @@ function appendXMLFields(doc, obj, schema, is_attribute) {
 		f = appendXMLTag;
 		fields = schema.fields;
 	}
+	if (schema.fixRecord) {
+		schema.fixRecord(obj);
+	}
 	for (i=0; i<fields.length; i++) {
 		if (schema.fixValue) {
 			obj[fields[i]] = schema.fixValue(fields[i], obj[fields[i]]);
