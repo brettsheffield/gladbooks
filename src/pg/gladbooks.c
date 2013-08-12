@@ -102,8 +102,6 @@ Datum write_salesinvoice_tex(PG_FUNCTION_ARGS)
         asprintf(&docmeta, "\t{%s}\n\t{%s}\n\t{%s}\n\t{%s}\n\t{%s}\n", 
                 taxpoint, issued, due, ref, ponumber);
 
-        /* TODO: make sure we quote any LaTeX characters properly */
-
         syslog(LOG_DEBUG, "about to process lines");
         while (fgets(line, LINE_MAX, fd) != NULL) {
                 l = replaceall(line, "{{{DOCMETA}}}", texquote(docmeta));

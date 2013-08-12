@@ -1170,6 +1170,86 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
+-- replace %%%MACRO%%% macros in document
+CREATE OR REPLACE FUNCTION replacemacros(rawstr TEXT, taxpoint TIMESTAMP, endpoint TIMESTAMP)
+RETURNS TEXT AS $$
+DECLARE
+	cooked	TEXT;
+BEGIN
+
+	-- %%%DAY%%%
+	cooked = replace(rawstr, '%%%DAY%%%', to_char(taxpoint, 'DD'));
+
+	-- %%%MONTH%%%
+	cooked = replace(cooked, '%%%MONTH-2%%%',
+		to_char(taxpoint - interval '2 months', 'Month'));
+	cooked = replace(cooked, '%%%MONTH-1%%%',
+		to_char(taxpoint - interval '1 month', 'Month'));
+	cooked = replace(cooked, '%%%MONTH%%%', to_char(taxpoint, 'Month'));
+	cooked = replace(cooked, '%%%MONTH+1%%%',
+		to_char(taxpoint + interval '1 month', 'Month'));
+	cooked = replace(cooked, '%%%MONTH+2%%%',
+		to_char(taxpoint + interval '2 months', 'Month'));
+	cooked = replace(cooked, '%%%MONTH+3%%%',
+		to_char(taxpoint + interval '3 months', 'Month'));
+	cooked = replace(cooked, '%%%MONTH+4%%%',
+		to_char(taxpoint + interval '4 months', 'Month'));
+	cooked = replace(cooked, '%%%MONTH+6%%%',
+		to_char(taxpoint + interval '5 months', 'Month'));
+	cooked = replace(cooked, '%%%MONTH+7%%%',
+		to_char(taxpoint + interval '7 months', 'Month'));
+	cooked = replace(cooked, '%%%MONTH+8%%%',
+		to_char(taxpoint + interval '8 months', 'Month'));
+	cooked = replace(cooked, '%%%MONTH+9%%%',
+		to_char(taxpoint + interval '9 months', 'Month'));
+	cooked = replace(cooked, '%%%MONTH+10%%%',
+		to_char(taxpoint + interval '10 months', 'Month'));
+	cooked = replace(cooked, '%%%MONTH+11%%%',
+		to_char(taxpoint + interval '11 months', 'Month'));
+	cooked = replace(cooked, '%%%MONTH+12%%%',
+		to_char(taxpoint + interval '12 months', 'Month'));
+
+	-- %%%YEAR%%%
+	cooked = replace(cooked, '%%%YEAR-1%%%',
+		to_char(taxpoint - interval '1 year', 'YYYY'));
+	cooked = replace(cooked, '%%%YEAR%%%', to_char(taxpoint, 'YYYY'));
+	cooked = replace(cooked, '%%%YEAR+1%%%',
+		to_char(taxpoint + interval '1 year', 'YYYY'));
+	cooked = replace(cooked, '%%%YEAR+2%%%',
+		to_char(taxpoint + interval '2 years', 'YYYY'));
+	cooked = replace(cooked, '%%%YEAR+3%%%',
+		to_char(taxpoint + interval '3 years', 'YYYY'));
+
+	-- %%%PERIOD%%%
+	cooked = replace(cooked, '%%%PERIOD%%%', to_char(taxpoint, 'YYYY-MM-DD') || ' to ' || to_char(endpoint, 'YYYY-MM-DD'));
+
+
+	RETURN cooked;
+END;
+$$ LANGUAGE 'plpgsql';
+
+-- quote special characters in LaTeX string
+CREATE OR REPLACE FUNCTION texquote(rawstr TEXT)
+RETURNS TEXT AS $$
+DECLARE
+	cooked	TEXT;
+BEGIN
+	cooked = replace(rawstr, '\', '\\');
+	cooked = replace(cooked, '$', '\$');
+	cooked = replace(cooked, '%', '\%');
+	cooked = replace(cooked, '^', '\^');
+	cooked = replace(cooked, '&', '\&');
+	cooked = replace(cooked, '~', '\~');
+	cooked = replace(cooked, '#', '\#');
+	cooked = replace(cooked, '{', '\{');
+	cooked = replace(cooked, '}', '\}');
+
+	-- TODO: handle directional quotes
+
+	RETURN cooked;
+END;
+$$ LANGUAGE 'plpgsql';
+
 -- create_salesinvoice_tex()
 -- create xelatex source from salesinvoice
 -- RETURNS TEXT tex source
@@ -1198,9 +1278,9 @@ BEGIN
 	SELECT * FROM salesinvoiceitem_display WHERE salesinvoice=si_id
 	LOOP
 		lineitems := lineitems || item.qty || ' x ' || 
-			item.linetext || ' @ ' || 
-			to_char(item.price, '9G999D90') || ' & ' || 
-			to_char(item.linetotal, '9G999D90' ) || '\\' || E'\n';
+		texquote(replacemacros(item.linetext, r.taxpoint, r.endpoint))
+		|| ' @ ' || to_char(item.price, '9G999D90') || ' & ' || 
+		to_char(item.linetotal, '9G999D90' ) || '\\' || E'\n';
 	END LOOP;
 	IF NOT FOUND THEN
 		RAISE EXCEPTION 'No lineitems for invoice %', si_id; 
