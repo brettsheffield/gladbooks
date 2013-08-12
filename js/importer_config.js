@@ -44,8 +44,10 @@ function processData(src, xml) {
     products.fields = ['product', 'account', 'nominalcode', 'shortname', 'description', 'price_buy', 'price_sell', 'price'];
     products.fieldmap = {'product':'import_id', 'nominalcode': 'account', 'price': 'price_sell'};
     products.data = xml[1];
-	products.children = [ producttaxes ]
-	products.fixValue = fixPFAccount;
+	products.children = [ producttaxes ];
+	if (src == 'penguinfactory') {
+		products.fixValue = fixPFAccount;
+	}
     createObjects(products, true);
 
     var salesitems = new ImportSchema();
