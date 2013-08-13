@@ -13,6 +13,7 @@ CREATE OR REPLACE FUNCTION create_business_dirs(
 
 CREATE OR REPLACE FUNCTION write_salesinvoice_tex(
 	spooldir	TEXT,
+	configdir	TEXT,
 	template	TEXT,
 	orgcode		TEXT,
 	invoicenum      INT4,

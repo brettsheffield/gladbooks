@@ -1255,6 +1255,21 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
+-- return orgcode of organisation for current business
+CREATE OR REPLACE FUNCTION current_business_code()
+RETURNS TEXT AS $$
+DECLARE
+	businesscode	TEXT;
+BEGIN
+	SELECT o.orgcode INTO businesscode 
+	FROM organisation o
+	INNER JOIN business b ON o.id = b.organisation
+	WHERE b.id = current_business();
+
+	RETURN businesscode;
+END;
+$$ LANGUAGE 'plpgsql';
+
 -- create_salesinvoice_tex()
 -- create xelatex source from salesinvoice
 -- RETURNS TEXT tex source
@@ -1268,6 +1283,7 @@ DECLARE
 	customer	TEXT;
 	tex		INT4;
 	fieldcount	INT4;
+	businesscode	TEXT;
 BEGIN
 
 	/* salesinvoice data */
@@ -1365,11 +1381,11 @@ BEGIN
 	END IF;
 
 	/* write the .tex file to disk */
-	/* TODO: fetch template and spooldir from database, 
-	 * dependant on business */
 	PERFORM write_salesinvoice_tex(
-		'/var/spool/gladbooks',
-		'/home/bacs/dev/gladbooks-ui/tex/template.tex',
+		'/var/spool/gladbooks/' || current_business_code(),
+		'/etc/gladbooks/conf.d/' || current_business_code(),
+		'/etc/gladbooks/conf.d/' || current_business_code()
+		|| '/SI-template.tex',
 		r.orgcode,
 		r.invoicenum,
 		to_char(r.taxpoint, 'DD Month YYYY'),
@@ -1386,6 +1402,33 @@ BEGIN
 	IF NOT FOUND THEN
 		RAISE EXCEPTION 'Failed to write .tex';
 	END IF;
+
+	RETURN '0';
+END;
+$$ LANGUAGE 'plpgsql';
+
+-- for testing only
+CREATE OR REPLACE FUNCTION delete_invoice(si_id INT8)
+RETURNS INT8 AS $$
+BEGIN
+	-- TODO: delete from journal & ledger
+
+	DELETE FROM salesinvoiceitemdetail WHERE salesinvoice=si_id;
+	DELETE FROM salesinvoicedetail WHERE salesinvoice=si_id;
+	DELETE FROM salesinvoice WHERE id=si_id;
+
+	RETURN '0';
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION delete_all_invoices()
+RETURNS INT8 AS $$
+BEGIN
+	-- TODO: delete from journal & ledger
+
+	DELETE FROM salesinvoiceitemdetail;
+	DELETE FROM salesinvoicedetail;
+	DELETE FROM salesinvoice;
 
 	RETURN '0';
 END;

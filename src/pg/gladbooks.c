@@ -66,6 +66,7 @@ Datum create_business_dirs(PG_FUNCTION_ARGS)
         setlogmask(LOG_UPTO(LOG_DEBUG));
 
         /* create spool directory */
+        /* TODO: pull directories from config */
         asprintf(&dir, "/var/spool/gladbooks/%s", orgcode);
         syslog(LOG_DEBUG, "Creating directory: %s", dir);
         umask(022);
@@ -101,19 +102,20 @@ Datum write_salesinvoice_tex(PG_FUNCTION_ARGS)
 
         /* Will that be the five minute argument, or the full half hour? */
         char *spooldir = text_to_char(PG_GETARG_TEXT_P(0));
-        char *template = text_to_char(PG_GETARG_TEXT_P(1));
-        char *orgcode = text_to_char(PG_GETARG_TEXT_P(2));
-        int32 invoicenum = PG_GETARG_INT32(3);
-        char *taxpoint = text_to_char(PG_GETARG_TEXT_P(4));
-        char *issued = text_to_char(PG_GETARG_TEXT_P(5));
-        char *due = text_to_char(PG_GETARG_TEXT_P(6));
-        char *ponumber = text_to_char(PG_GETARG_TEXT_P(7));
-        char *subtotal = text_to_char(PG_GETARG_TEXT_P(8));
-        char *tax = text_to_char(PG_GETARG_TEXT_P(9));
-        char *total = text_to_char(PG_GETARG_TEXT_P(10));
-        char *lineitems = text_to_char(PG_GETARG_TEXT_P(11));
-        char *taxes = text_to_char(PG_GETARG_TEXT_P(12));
-        char *customer = text_to_char(PG_GETARG_TEXT_P(13));
+        char *configdir = text_to_char(PG_GETARG_TEXT_P(1));
+        char *template = text_to_char(PG_GETARG_TEXT_P(2));
+        char *orgcode = text_to_char(PG_GETARG_TEXT_P(3));
+        int32 invoicenum = PG_GETARG_INT32(4);
+        char *taxpoint = text_to_char(PG_GETARG_TEXT_P(5));
+        char *issued = text_to_char(PG_GETARG_TEXT_P(6));
+        char *due = text_to_char(PG_GETARG_TEXT_P(7));
+        char *ponumber = text_to_char(PG_GETARG_TEXT_P(8));
+        char *subtotal = text_to_char(PG_GETARG_TEXT_P(9));
+        char *tax = text_to_char(PG_GETARG_TEXT_P(10));
+        char *total = text_to_char(PG_GETARG_TEXT_P(11));
+        char *lineitems = text_to_char(PG_GETARG_TEXT_P(12));
+        char *taxes = text_to_char(PG_GETARG_TEXT_P(13));
+        char *customer = text_to_char(PG_GETARG_TEXT_P(14));
 
         openlog("GLADBOOKS", LOG_PID, LOG_DAEMON);
         setlogmask(LOG_UPTO(LOG_DEBUG));
@@ -179,7 +181,7 @@ Datum write_salesinvoice_tex(PG_FUNCTION_ARGS)
         close(f);
 
         /* create pdf */
-        xelatex(filename, spooldir);
+        xelatex(filename, spooldir, configdir);
         
         pfree(filename);
 
@@ -235,10 +237,8 @@ char * texquote(char *raw)
 }
 
 /* execute xelatex to create pdf, waiting for it to finish */
-int xelatex(char *filename, char *spooldir)
+int xelatex(char *filename, char *spooldir, char *configdir)
 {
-        char **environ;
-        char *env_args[] = { "TEXINPUTS=/var/spool/gladbooks/:", NULL };
         char *outputdir;
         char *command;
         char outputdirswitch[] = "-output-directory=";
@@ -250,20 +250,14 @@ int xelatex(char *filename, char *spooldir)
 
         elog(INFO, "switch: %s, spool: %s", outputdir, spooldir);
 
-        environ = env_args;
-
         syslog(LOG_DEBUG, "generating pdf");
         umask(022);
 
-        len = strlen("xelatex -interaction=batchmode ") 
-                        + strlen(outputdir) + strlen(filename) + 2;
-        command = palloc(len + 1);
-        snprintf(command, len, "xelatex -interaction=batchmode %s %s",
-                outputdir, filename);
+        asprintf(&command, "TEXINPUTS=%s: xelatex -interaction=batchmode %s %s", configdir, outputdir, filename);
         syslog(LOG_DEBUG, "command: %s", command);
         system(command);
 
-        pfree(command);
+        free(command);
         pfree(outputdir);
 
         return 0;
