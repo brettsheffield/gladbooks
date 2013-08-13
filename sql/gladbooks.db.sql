@@ -1316,7 +1316,8 @@ BEGIN
 	ELSE
 		/* fill in full customer details */
 		customer := E'\t' || '{' || item.name || '}' || E'\n';
-		fieldcount := 1;
+		customer := E'\t' || '{' || item.orgname || '}' || E'\n';
+		fieldcount := 2;
 		IF item.line_1 IS NOT NULL THEN
 			customer := customer || E'\t' || '{' ||
 				item.line_1 || '}' || E'\n';
@@ -1352,7 +1353,7 @@ BEGIN
 				item.postcode || '}' || E'\n';
 			fieldcount := fieldcount + 1;
 		END IF;
-		WHILE fieldcount < 8 LOOP
+		WHILE fieldcount < 9 LOOP
 			customer := customer || E'\t' || '{}' || E'\n';
 			fieldcount := fieldcount + 1;
 		END LOOP;
@@ -1737,6 +1738,30 @@ BEGIN
                 pretty = pretty || ' ';
         END IF;
         RETURN pretty;
+END;
+$$ LANGUAGE 'plpgsql';
+
+-- Return currently selected business (determined by search_path)
+CREATE OR REPLACE FUNCTION current_business()
+RETURNS INT4 AS
+$$
+DECLARE
+	i	INT4;
+BEGIN
+	SELECT business INTO i FROM settings;
+	RETURN i;
+END;
+$$ LANGUAGE 'plpgsql';
+
+-- Return currently selected instance (determined by search_path)
+CREATE OR REPLACE FUNCTION current_instance()
+RETURNS TEXT AS
+$$
+DECLARE
+	i	TEXT;
+BEGIN
+	SELECT instance INTO i FROM settings;
+	RETURN i;
 END;
 $$ LANGUAGE 'plpgsql';
 

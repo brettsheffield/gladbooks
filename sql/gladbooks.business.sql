@@ -22,6 +22,14 @@ EXECUTE 'CREATE SCHEMA gladbooks_' || instance || '_' || business_id;
 EXECUTE 'SET search_path TO gladbooks_' || instance || '_' || business_id || ',gladbooks_' || instance || ',gladbooks';
 
 --
+-- settings table - provides a bookmark as to which instance and business we are operating on in the current search_path
+CREATE TABLE settings (
+	business	INT4 NOT NULL references business(id)
+			ON DELETE RESTRICT,
+	instance	TEXT NOT NULL references instance(id)
+			ON DELETE RESTRICT
+);
+INSERT INTO settings (business, instance) VALUES (business, instance);
 
 CREATE TABLE accounttype (
 	id		SERIAL PRIMARY KEY,
