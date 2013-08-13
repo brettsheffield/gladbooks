@@ -1,4 +1,4 @@
-SET search_path TO gladbooks_bacs_1;
+SET search_path TO gladbooks_bacs_2;
 INSERT INTO account (id, accounttype, description)
         VALUES ('4001', '4000', 'Consultancy Services');
 INSERT INTO account (id, accounttype, description)
