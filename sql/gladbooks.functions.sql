@@ -5,6 +5,12 @@ CREATE FUNCTION test(TEXT) RETURNS INT4
 	AS 'gladbooks', 'test'
 	LANGUAGE C STRICT;
 
+CREATE OR REPLACE FUNCTION create_business_dirs(
+	orgcode		TEXT
+) RETURNS INT4
+	AS 'gladbooks', 'create_business_dirs'
+	LANGUAGE C STRICT;
+
 CREATE OR REPLACE FUNCTION write_salesinvoice_tex(
 	spooldir	TEXT,
 	template	TEXT,

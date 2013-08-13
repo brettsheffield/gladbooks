@@ -29,7 +29,7 @@ CREATE TABLE settings (
 	instance	TEXT NOT NULL references instance(id)
 			ON DELETE RESTRICT
 );
-INSERT INTO settings (business, instance) VALUES (business, instance);
+INSERT INTO settings (business, instance) VALUES (business_id, instance);
 
 CREATE TABLE accounttype (
 	id		SERIAL PRIMARY KEY,

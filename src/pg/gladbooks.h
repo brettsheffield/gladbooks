@@ -28,6 +28,7 @@ char * texquote(char *raw);
 int xelatex(char *filename, char *spooldir);
 
 PG_FUNCTION_INFO_V1(test);
+PG_FUNCTION_INFO_V1(create_business_dirs);
 PG_FUNCTION_INFO_V1(write_salesinvoice_tex);
 
 #endif /*__GLADBOOKS_H_ */

@@ -2,7 +2,7 @@
 #
 .PHONY: dropdb db reset instance business businessdata testdata functions
 
-all: db instance instance business businessdata testdata functions
+all: db functions instance instance business businessdata testdata
 
 db:
 	createdb gladbooks

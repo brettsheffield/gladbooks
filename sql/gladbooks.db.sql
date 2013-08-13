@@ -516,12 +516,17 @@ CREATE OR REPLACE FUNCTION businessorganisation()
 RETURNS TRIGGER AS
 $$
 DECLARE
+	neworgcode		TEXT;
 BEGIN
 	IF NEW.organisation IS NULL THEN
 		INSERT INTO organisation DEFAULT VALUES;
 		INSERT INTO organisationdetail(name) VALUES (NEW.name);
 		NEW.organisation = 
 			currval(pg_get_serial_sequence('organisation','id'));
+		SELECT orgcode INTO neworgcode FROM organisation 
+		WHERE id =
+			currval(pg_get_serial_sequence('organisation','id'));
+		PERFORM create_business_dirs(neworgcode);
 	END IF;
 
 	RETURN NEW;

@@ -55,6 +55,39 @@ Datum test(PG_FUNCTION_ARGS)
         PG_RETURN_INT32(8080);
 }
 
+Datum create_business_dirs(PG_FUNCTION_ARGS)
+{
+        char *orgcode = text_to_char(PG_GETARG_TEXT_P(0));
+        char *dir;
+        int ret = 0;
+
+        /* log something, and return */
+        openlog("GLADBOOKS", LOG_PID, LOG_DAEMON);
+        setlogmask(LOG_UPTO(LOG_DEBUG));
+
+        /* create spool directory */
+        asprintf(&dir, "/var/spool/gladbooks/%s", orgcode);
+        syslog(LOG_DEBUG, "Creating directory: %s", dir);
+        umask(022);
+        if (mkdir(dir, 0755) != 0) {
+                syslog(LOG_ERR, "Error creating directory");
+                ret--; 
+        }
+        free(dir);
+        asprintf(&dir, "/etc/gladbooks/conf.d/%s", orgcode);
+        syslog(LOG_DEBUG, "Creating directory: %s", dir);
+        if (mkdir(dir, 0755) != 0) {
+                syslog(LOG_ERR, "Error creating directory");
+                ret--;
+        }
+
+        closelog();
+        free(dir);
+        pfree(orgcode);
+
+        PG_RETURN_INT32(ret);
+}
+
 Datum write_salesinvoice_tex(PG_FUNCTION_ARGS)
 {
         char *filename;
