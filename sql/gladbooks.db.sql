@@ -1646,7 +1646,7 @@ BEGIN
 	m_interval := months ||' month';
 	d_interval := days || ' day';
 
-	WHILE jump < end_date LOOP
+	WHILE jump <= end_date LOOP
 		jump := jump + y_interval::interval;
 		jump := jump + m_interval::interval;
 		jump := jump + d_interval::interval;
