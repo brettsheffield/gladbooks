@@ -1796,7 +1796,7 @@ $$
 DECLARE
 	i	INT4;
 BEGIN
-	SELECT business INTO i FROM settings;
+	EXECUTE 'SELECT business FROM settings' INTO i;
 	RETURN i;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -1808,7 +1808,7 @@ $$
 DECLARE
 	i	TEXT;
 BEGIN
-	SELECT instance INTO i FROM settings;
+	EXECUTE 'SELECT instance FROM settings' INTO i;
 	RETURN i;
 END;
 $$ LANGUAGE 'plpgsql';
