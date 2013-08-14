@@ -42,5 +42,10 @@ char *test_client()
         mu_assert("Read from socket", len > 0);
         mu_assert("Expect OK", strcmp(buf, "OK\n") == 0);
 
+        write(sock, "NOOP", 4);
+        mu_assert("Read from socket", len > 0);
+        mu_assert("Expect OK", strcmp(buf, "OK\n") == 0);
+        //mu_assert("NOOP", write_socket(sock, "OK", "NOOP\n") == 0);
+
         return 0;
 }

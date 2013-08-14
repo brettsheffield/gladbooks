@@ -47,7 +47,7 @@ int server_start(char *host, char *service, int daemonize, int *pid)
         int status;
         int yes=1;
         int errsv;
-        int new_fd;
+        int conn;
         int havelock = 0;
         int lockfd;
         char buf[sizeof(long)];
@@ -151,11 +151,23 @@ int server_start(char *host, char *service, int daemonize, int *pid)
         }
 
         for (;;) {
-                new_fd = accept(sock, (struct sockaddr *)&their_addr, 
-                        &addr_size);
-                /* TODO: fork to handle connection */
-                write(new_fd, "OK\n", 3);
-                close(new_fd);
+                conn = accept(sock, (struct sockaddr *)&their_addr,&addr_size);
+                /* fork to handle connection */
+                p = fork();
+                if (p == -1) {
+                        /* fork() failed */
+                        errsv = errno;
+                        fprintf(stderr, "ERROR: %s\n", strerror(errsv));
+                        return -1;
+                }
+                else if (p == 0) {
+                        /* child */
+                        close(sock); /* children don't listen */
+                        write(conn, "OK\n", 3);
+                        close(conn);
+                        exit(EXIT_SUCCESS);
+                }
+                close(conn); /* parent closes connection */
                 ++hits; /* increment hit counter */
         }
 
