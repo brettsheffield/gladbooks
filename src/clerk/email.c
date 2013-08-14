@@ -219,6 +219,10 @@ int send_email(char *sender, char *subject, char *msg, smtp_recipient_t *r,
 
                 /* open attachment for reading */
                 fin = fopen(attach->filepath, "r");
+                if (fin == NULL) {
+                        perror("error opening attachment");
+                        return -1;
+                }
 
                 /* base64 encode attachment and write to socket */
                 encode64(fin, sockfd);
