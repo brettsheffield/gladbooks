@@ -172,7 +172,8 @@ CREATE TABLE email (
 
 CREATE TABLE emaildetail (
 	id		SERIAL PRIMARY KEY,
-	email		INT4 references email(id) ON DELETE RESTRICT,
+	email		INT4 references email(id) ON DELETE RESTRICT
+			DEFAULT currval(pg_get_serial_sequence('email','id')),
 	sender		TEXT,
 	body		TEXT,
 	emailafter	timestamp with time zone default now(),
@@ -193,7 +194,8 @@ WHERE id IN (
 
 CREATE TABLE emailheader (
 	id		SERIAL PRIMARY KEY,
-	email		INT4 references email(id) ON DELETE RESTRICT,
+	email		INT4 references email(id) ON DELETE RESTRICT
+			DEFAULT currval(pg_get_serial_sequence('email','id')),
 	header		TEXT NOT NULL,
 	value		TEXT NOT NULL,
 	is_deleted	boolean DEFAULT false,
@@ -204,7 +206,8 @@ CREATE TABLE emailheader (
 
 CREATE TABLE emailpart (
 	id		SERIAL PRIMARY KEY,
-	email		INT4 references email(id) ON DELETE RESTRICT,
+	email		INT4 references email(id) ON DELETE RESTRICT
+			DEFAULT currval(pg_get_serial_sequence('email','id')),
 	file		TEXT,
 	is_deleted	boolean DEFAULT false,
 	updated		timestamp with time zone default now(),
@@ -212,12 +215,12 @@ CREATE TABLE emailpart (
 	clientip	TEXT
 );
 
--- NOTE: references contactdetail, NOT contact, so we keep a record of the
--- actual email address that was used at the time of sending.
 CREATE TABLE emailrecipient (
 	id		SERIAL PRIMARY KEY,
-	email		INT4 references email(id) ON DELETE RESTRICT,
-	contactdetail	INT4 references contactdetail(id) ON DELETE RESTRICT,
+	email		INT4 references email(id) ON DELETE RESTRICT
+			DEFAULT currval(pg_get_serial_sequence('email','id')),
+	contact		INT4 references contact(id) ON DELETE RESTRICT,
+	emailaddress	TEXT NOT NULL,
 	is_to		boolean DEFAULT false,
 	is_cc		boolean DEFAULT false,
 	is_bcc		boolean DEFAULT false,

@@ -1169,9 +1169,53 @@ BEGIN
 		RAISE EXCEPTION 'Failed to create .tex';
 	END IF;
 
-	PERFORM post_salesinvoice(si_id);
+	PERFORM post_salesinvoice(si_id);  -- post to ledger
+	PERFORM mail_salesinvoice(si_id);  -- email pdf
 
 	RETURN true;
+END;
+$$ LANGUAGE 'plpgsql';
+
+-- email PDF of salesinvoice to billing contacts
+-- create email table entries, then trigger clerkd
+-- TODO: check settings table to determine if autobilling on
+CREATE OR REPLACE FUNCTION mail_salesinvoice(si_id INT4)
+RETURNS INT4 AS $$
+DECLARE
+	billingemail	TEXT;
+	bodytext	TEXT;
+	filename	TEXT;
+	r		RECORD;
+BEGIN
+	SELECT * INTO r FROM salesinvoice_current WHERE salesinvoice=si_id;
+
+	-- select sender from business table
+	SELECT billsender INTO billingemail 
+	FROM business WHERE id = current_business();
+
+	-- TODO: include content of invoice in body
+	bodytext := 'Your invoice is attached';
+
+	INSERT INTO email DEFAULT VALUES;
+	INSERT INTO emaildetail (sender, body) VALUES (billingemail, bodytext);
+	INSERT INTO emailheader (header, value)
+	VALUES ('Subject', 'Sales Invoice ' || r.ref);
+	INSERT INTO emailheader (header, value)
+	VALUES ('From', billingemail);
+	INSERT INTO emailheader (header, value)
+	VALUES ('X-Gladbooks-SalesInvoice', r.ref);
+
+	-- attach file
+	filename := '/var/spool/gladbooks/' || r.orgcode || '/SI-' || 
+		r.orgcode || to_char(r.invoicenum, '0000') || '.pdf';
+	INSERT INTO emailpart (file) VALUES (filename);
+
+	-- TODO: add billing contacts
+	--INSERT INTO emailrecipient (contact, is_to) (contact, 'true');
+	INSERT INTO emailrecipient (emailaddress, is_to) 
+	VALUES (billingemail, 'true');
+
+	RETURN '0';
 END;
 $$ LANGUAGE 'plpgsql';
 
