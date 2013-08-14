@@ -1448,8 +1448,9 @@ function taxProduct(product, tax, refresh, tab) {
 	console.log('Taxing product');
 	var xml = createRequestXml();
 
+    xml += '<tax id="' + tax + '">';
     xml += '<product>' + product + '</product>';
-    xml += '<tax>' + tax + '</tax>';
+	xml += '</tax>';
 	xml += '</data></request>';
 
 	var url = collection_url('product_taxes');
