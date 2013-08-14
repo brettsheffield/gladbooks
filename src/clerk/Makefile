@@ -24,7 +24,7 @@ PROGRAM=clerkd
 TESTPROGRAM=${PROGRAM}_test
 LIBS=-lb64
 TESTOBJECTS=test.o args_test.o client_test.o config_test.o email_test.o server_test.o
-MAINOBJECTS=args.o client.o config.o email.o help.o lockfile.o server.o signals.o
+MAINOBJECTS=args.o client.o config.o email.o handler.o help.o lockfile.o server.o signals.o
 OBJECTFILES=${TESTOBJECTS} ${MAINOBJECTS}
 
 ${PROGRAM}: ${MAINOBJECTS} main.o
@@ -47,6 +47,9 @@ config.o: config.c config.h
 
 email.o: email.c email.h
 	${CC} ${CFLAGS} -c email.c
+
+handler.o: handler.c handler.h
+	${CC} ${CFLAGS} -c handler.c
 
 help.o: help.c help.h
 	${CC} ${CFLAGS} -c help.c

@@ -22,6 +22,7 @@
 
 #include "lockfile.h"
 #include "server.h"
+#include "handler.h"
 
 #include <errno.h>
 #include <fcntl.h>
@@ -163,9 +164,7 @@ int server_start(char *host, char *service, int daemonize, int *pid)
                 else if (p == 0) {
                         /* child */
                         close(sock); /* children don't listen */
-                        write(conn, "OK\n", 3);
-                        close(conn);
-                        exit(EXIT_SUCCESS);
+                        handle_connection(conn);
                 }
                 close(conn); /* parent closes connection */
                 ++hits; /* increment hit counter */
