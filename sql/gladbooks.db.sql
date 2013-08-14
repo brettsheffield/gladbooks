@@ -1160,7 +1160,7 @@ BEGIN
 		taxpoint, endpoint, due
 	) VALUES (
 		so_id, period, r_so.ponumber, 
-		taxpoint, endpoint, due
+		taxpoint, COALESCE(endpoint,taxpoint), due
 	);
 
 	PERFORM create_salesinvoice_tex(si_id);
