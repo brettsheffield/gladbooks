@@ -192,6 +192,62 @@ WHERE id IN (
 	GROUP BY email
 );
 
+CREATE OR REPLACE VIEW email_unsent AS
+SELECT * FROM email_current
+WHERE sent IS NULL;
+
+CREATE OR REPLACE FUNCTION emailupdate()
+RETURNS TRIGGER AS
+$$
+DECLARE
+	priorentries    INT4;
+	osender		TEXT;
+	obody		TEXT;
+	oemailafter	timestamp with time zone;
+	osent		timestamp with time zone;
+	ois_deleted	boolean;
+BEGIN
+	SELECT INTO priorentries COUNT(id) FROM emaildetail
+		WHERE email=NEW.email;
+	IF priorentries > 0 THEN
+		-- This isn't our first time, so use previous values
+		SELECT INTO osender, obody, oemailafter, osent, ois_deleted
+			sender, body, emailafter, sent, is_deleted
+		FROM email_current
+		WHERE email=NEW.email;
+	END IF;
+
+	IF NEW.sender IS NULL THEN
+		NEW.sender := osender;
+	END IF;
+	IF NEW.body IS NULL THEN
+		NEW.body := obody;
+	END IF;
+	IF NEW.emailafter IS NULL THEN
+		NEW.emailafter := oemailafter;
+	END IF;
+	IF NEW.sent IS NULL THEN
+		NEW.sent := osent;
+	END IF;
+	IF NEW.is_deleted IS NULL THEN
+		NEW.is_deleted := ois_deleted;
+	END IF;
+
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION email_sent(
+	email INT4,
+	senttime TIMESTAMP default now()
+) RETURNS INT4 AS $$
+DECLARE
+BEGIN
+	INSERT INTO emaildetail (email, sent) VALUES (senttime);
+	RETURN '0';
+END;
+$$ LANGUAGE 'plpgsql';
+
 CREATE TABLE emailheader (
 	id		SERIAL PRIMARY KEY,
 	email		INT4 references email(id) ON DELETE RESTRICT

@@ -24,6 +24,8 @@
 #include "batch.h"
 #include "config.h"
 #include "handler.h"
+#include <limits.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -31,11 +33,11 @@
 
 int batch_mail(int conn, char *command)
 {
-        char *sql = "";
         char instance[63] = "";
         int business = 0;
         row_t *rows = NULL;
         int rowc;
+        int count = 0;
 
         if (sscanf(command, "MAIL %[^.].%i\n", instance, &business) != 2) {
                 chat(conn, "ERROR: Invalid syntax\n");
@@ -46,19 +48,24 @@ int batch_mail(int conn, char *command)
         chat(conn, CLERK_RESP_OK);
 
         /* fetch emails to send */
-        asprintf(&sql, "SELECT * FROM email"); /* TODO: create view */
-        rowc = batch_fetch_rows(instance, business, sql, rows);
-        free(sql);
+        /* TODO: lock email table */
+        rowc = batch_fetch_rows(instance, business, 
+                "SELECT * FROM email_unsent", rows);
 
         row_t *r = rows;
         while (r != NULL) {
+                chat(conn, "Sending email\n");
                 
                 /* TODO: send email */
 
                 /* TODO: update email with sent time */
+                batch_exec_sql(instance, business, "SELECT email_sent(NULL);");
                 
+                count++;
                 r = r->next;
         }
+        /* TODO: unlock email table */
+        chat(conn, "%i emails sent\n", count);
 
         return 0;
 }
@@ -69,25 +76,51 @@ int batch_run(int conn)
         return 0;
 }
 
+int batch_exec_sql(char *instance, int business, char *sql)
+{
+        char *execsql;
+
+        execsql = prepend_search_path(instance, business, sql);
+        db_exec_sql(config->dbs, sql);
+        free(execsql);
+
+        return 0;
+}
+
 int batch_fetch_rows(char *instance, int business, char *sql, row_t *rows)
 {
         int rowc = 0;
         char *execsql;
 
-        /* prepend search path to sql, so we're in the correct schema */
-        asprintf(&execsql,
-                "SET search_path = gladbooks_%s_%i,gladbooks_%s,gladbooks;%s",
-                instance, business, instance, sql);
+        execsql = prepend_search_path(instance, business, sql);
         db_connect(config->dbs);
         db_fetch_all(config->dbs, execsql, NULL, &rows, &rowc);
         db_disconnect(config->dbs);
-
         free(execsql);
 
         return rowc;
 }
 
-int chat(int conn, char *msg)
+/* prepend search path to sql, so we're in the correct schema */
+char * prepend_search_path(char *instance, int business, char *sql)
 {
-        return write(conn, msg, strlen(msg));
+        char *newsql;
+
+        asprintf(&newsql,
+                "SET search_path = gladbooks_%s_%i,gladbooks_%s,gladbooks;%s",
+                instance, business, instance, sql);
+
+        return newsql;
+}
+
+int chat(int conn, char *msg, ...)
+{
+        char fmsg[LINE_MAX];
+        va_list args;
+
+        va_start(args, msg);
+        vsnprintf(fmsg, LINE_MAX, msg, args);
+        va_end(args);
+
+        return write(conn, fmsg, strlen(fmsg));
 }
