@@ -1,0 +1,43 @@
+README
+
+The clerk daemon (clerkd) is part of gladbooks, and exists to run various periodic and triggered tasks.  clerkd listens on a TCP socket (Default: localhost, port 3141).
+
+== Status ==
+
+Like the rest of gladbooks, clerkd is still under development and is incomplete.
+
+== Access Control ==
+
+There isn't any - yet.  clerkd will accept commands from anyone able to connect.  Either listen only on localhost or control access using a firewall.  This isn't a big concern, as clerkd doesn't accept arbitrary commands, only triggers.  When triggered, clerkd connects to the gladbooks database to determine what, if anything, it should do.
+
+== Command-line arguments ==
+
+clerkd start
+- start the daemon, listening on the ip/port specified in the config.
+
+clerkd stop
+- stop the daemon.
+
+clerkd status
+- report whether the daemon is running, and how many hits (connections) it has handled.
+
+== Commands ==
+
+When connected to clerkd (telnet to the host/port where it is listening), the following TEXT commands (followed by a newline) are understood:
+
+NOOP - do nothing, successfully
+QUIT - close connection with clerkd
+GO   - triggers a batch run.  clerkd will connect to the gladbooks database and figure out what, if anything, it needs to do.
+
+== Building and Installing ==
+
+make
+
+make test 
+- (optional) runs tests
+
+make leakcheck
+- (optional) runs test suite under valgrind to check for leaks and errors
+
+make install
+- install clerkd to /usr/local/bin

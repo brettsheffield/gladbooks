@@ -22,6 +22,7 @@ CC=gcc
 CFLAGS=-g -Wall -Werror
 PROGRAM=clerkd
 TESTPROGRAM=${PROGRAM}_test
+INSTALLDIR=/usr/local/bin
 LIBS=-lb64
 TESTOBJECTS=test.o args_test.o client_test.o config_test.o email_test.o server_test.o
 MAINOBJECTS=args.o client.o config.o email.o handler.o help.o lockfile.o server.o signals.o
@@ -77,3 +78,6 @@ test:
 
 leakcheck: test
 	valgrind -v --leak-check=full --show-reachable=yes --track-origins=yes ./clerkd_test
+
+install: ${PROGRAM}
+	cp ${PROGRAM} ${INSTALLDIR}
