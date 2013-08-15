@@ -64,6 +64,8 @@ static char * all_tests()
         mu_run_test(test_config_set);
         mu_run_test(test_email);
         printline("*", 80);
+
+        free_config();
         return 0;
 }
  

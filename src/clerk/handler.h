@@ -23,6 +23,16 @@
 #ifndef __GLADBOOKS_HANDLER_H__
 #define __GLADBOOKS_HANDLER_H__ 1
 
+int handle_command(int conn, char *command);
 void handle_connection(int conn);
+
+#define GREET_STRING "Gladbooks Clerk Daemon\n"
+
+#define CLERK_CMD_NOOP "NOOP"
+#define CLERK_CMD_QUIT "QUIT"
+#define CLERK_CMD_BAD "BADCOMMAND"
+#define CLERK_RESP_OK "OK\n"
+#define CLERK_RESP_ERROR "ERROR\n"
+#define CLERK_RESP_BYE "BYE\n"
 
 #endif /* __GLADBOOKS_HANDLER_H__ */

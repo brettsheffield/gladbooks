@@ -25,7 +25,7 @@
 #include <syslog.h>
 #include <sys/wait.h>
 #include <unistd.h>
-//#include "config.h"
+#include "config.h"
 #include "args.h"
 #include "main.h"
 #include "server.h"
@@ -74,7 +74,7 @@ void sigterm_handler (int signo)
         close(sock);
         syslog(LOG_INFO, "Received SIGTERM.  Shutting down.");
         closelog();
-        //free_config();
+        free_config();
         exit(EXIT_SUCCESS);
 }
 
