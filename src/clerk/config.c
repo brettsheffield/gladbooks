@@ -27,6 +27,7 @@
 #include <string.h>
 #include <syslog.h>
 #include <unistd.h>
+#include <gladdb/db.h>
 
 #include "config.h"
 
@@ -131,6 +132,8 @@ int add_db (char *value)
 void free_config()
 {
         config_new = NULL;
+        db_free(config->dbs);
+        prevdb = NULL;
         free(config->listenaddr);
         free(config->smtpserver);
 }

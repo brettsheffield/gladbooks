@@ -40,7 +40,7 @@ typedef struct config_t {
 
 extern config_t *config;
 
-int add_db (char *value);
+int     add_db (char *value);
 void    free_config();
 void    free_keyval(keyval_t *h);
 FILE   *open_config(char *configfile);

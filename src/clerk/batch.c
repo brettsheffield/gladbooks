@@ -22,19 +22,69 @@
 
 #define _GNU_SOURCE
 #include "batch.h"
-#include <gladdb/db.h>
+#include "config.h"
+#include "handler.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-int batch_run(int conn)
+int batch_mail(int conn, char *command)
 {
-        chat(conn, "Starting batch run\n");
-        sleep(2);
-        chat(conn, "Batch run complete\n");
+        char *sql = "";
+        char instance[63] = "";
+        int business = 0;
+        row_t *rows = NULL;
+        int rowc;
+
+        if (sscanf(command, "MAIL %[^.].%i\n", instance, &business) != 2) {
+                chat(conn, "ERROR: Invalid syntax\n");
+                return 0;
+        }
+        /* TODO: verify instance and business exist */
+
+        chat(conn, CLERK_RESP_OK);
+
+        /* fetch emails to send */
+        asprintf(&sql, "SELECT * FROM email"); /* TODO: create view */
+        rowc = batch_fetch_rows(instance, business, sql, rows);
+        free(sql);
+
+        row_t *r = rows;
+        while (r != NULL) {
+                
+                /* TODO: send email */
+
+                /* TODO: update email with sent time */
+                
+                r = r->next;
+        }
 
         return 0;
+}
+
+int batch_run(int conn)
+{
+        /* TODO: check for jobs in clerk table */
+        return 0;
+}
+
+int batch_fetch_rows(char *instance, int business, char *sql, row_t *rows)
+{
+        int rowc = 0;
+        char *execsql;
+
+        /* prepend search path to sql, so we're in the correct schema */
+        asprintf(&execsql,
+                "SET search_path = gladbooks_%s_%i,gladbooks_%s,gladbooks;%s",
+                instance, business, instance, sql);
+        db_connect(config->dbs);
+        db_fetch_all(config->dbs, execsql, NULL, &rows, &rowc);
+        db_disconnect(config->dbs);
+
+        free(execsql);
+
+        return rowc;
 }
 
 int chat(int conn, char *msg)

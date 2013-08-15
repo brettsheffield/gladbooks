@@ -22,6 +22,7 @@
 
 #include "handler.h"
 #include "batch.h"
+#include "config.h"
 
 #include <limits.h>
 #include <stdlib.h>
@@ -41,6 +42,7 @@ void handle_connection(int conn)
                 ok = handle_command(conn, buf);
         } while ((bytes > 0) && (ok == 0));
         close(conn);
+        free_config(config);
         _exit(EXIT_SUCCESS);
 }
 
@@ -52,6 +54,9 @@ int handle_command(int conn, char *command)
         else if (strncmp(command, CLERK_CMD_RUN, strlen(CLERK_CMD_RUN)) == 0) {
                 chat(conn, CLERK_RESP_OK);
                 return batch_run(conn);
+        }
+        else if (strncmp(command, CLERK_CMD_MAIL,strlen(CLERK_CMD_MAIL)) == 0){
+                return batch_mail(conn, command);
         }
         else if (strncmp(command,CLERK_CMD_QUIT,strlen(CLERK_CMD_QUIT)) == 0) {
                 chat(conn, CLERK_RESP_BYE);

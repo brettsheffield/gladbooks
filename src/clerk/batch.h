@@ -23,6 +23,10 @@
 #ifndef __GLADBOOKS_BATCH_H__
 #define __GLADBOOKS_BATCH_H__ 1
 
+#include <gladdb/db.h>
+
+int batch_fetch_rows(char *instance, int business, char *sql, row_t *rows);
+int batch_mail(int conn, char *command);
 int batch_run(int conn);
 int chat(int conn, char *msg);
 
