@@ -43,6 +43,90 @@ config_t config_default = {
 config_t *config;
 config_t *config_new;
 
+db_t   *prevdb;         /* pointer to last db  */
+
+/* store database config */
+int add_db (char *value)
+{
+        db_t *newdb;
+        char alias[LINE_MAX] = "";
+        char type[LINE_MAX] = "";
+        char host[LINE_MAX] = "";
+        char db[LINE_MAX] = "";
+        char user[LINE_MAX] = "";
+        char pass[LINE_MAX] = "";
+
+        /* mysql/ldap config lines may have 6 args, postgres has 4 */
+        if (sscanf(value, "%s %s %s %s %s %s", alias, type, host, db,
+                                                            user, pass) != 6)
+        {
+                if (sscanf(value, "%s %s %s %s", alias, type, host, db) != 4) {
+                        /* config line didn't match expected patterns */
+                        return -1;
+                }
+        }
+
+        newdb = malloc(sizeof(struct db_t));
+
+        if (strcmp(type, "pg") == 0) {
+                newdb->alias = strndup(alias, LINE_MAX);
+                newdb->type = strndup(type, LINE_MAX);
+                newdb->host = strndup(host, LINE_MAX);
+                newdb->db = strndup(db, LINE_MAX);
+                newdb->user=NULL;
+                newdb->pass=NULL;
+                newdb->conn=NULL;
+                newdb->next=NULL;
+        }
+        else if (strcmp(type, "my") == 0) {
+                newdb->alias = strndup(alias, LINE_MAX);
+                newdb->type = strndup(type, LINE_MAX);
+                newdb->host = strndup(host, LINE_MAX);
+                newdb->db = strndup(db, LINE_MAX);
+                newdb->user = strndup(user, LINE_MAX);
+                newdb->pass = strndup(pass, LINE_MAX);
+                newdb->conn=NULL;
+                newdb->next=NULL;
+        }
+        else if (strcmp(type, "tds") == 0) {
+                newdb->alias = strndup(alias, LINE_MAX);
+                newdb->type = strndup(type, LINE_MAX);
+                newdb->host = strndup(host, LINE_MAX);
+                newdb->db = strndup(db, LINE_MAX);
+                newdb->user = strndup(user, LINE_MAX);
+                newdb->pass = strndup(pass, LINE_MAX);
+                newdb->conn=NULL;
+                newdb->next=NULL;
+        }
+        else if (strcmp(type, "ldap") == 0) {
+                newdb->alias = strndup(alias, LINE_MAX);
+                newdb->type = strndup(type, LINE_MAX);
+                newdb->host = strndup(host, LINE_MAX);
+                newdb->db = strndup(db, LINE_MAX);
+                newdb->user = strlen(user) == 0 ? NULL:strndup(user,LINE_MAX);
+                newdb->pass = strlen(pass) == 0 ? NULL:strndup(pass,LINE_MAX);
+                newdb->conn=NULL;
+                newdb->next=NULL;
+        }
+        else {
+                fprintf(stderr, "Invalid database type\n");
+                return -1;
+        }
+
+        if (prevdb != NULL) {
+                /* update ->next ptr in previous db
+                 * to point to new */
+                prevdb->next = newdb;
+        }
+        else {
+                /* no previous db, 
+                 * so set first ptr in config */
+                config_new->dbs = newdb;
+        }
+        prevdb = newdb;
+        return 0;
+}
+
 /* free config memory */
 void free_config()
 {
@@ -145,6 +229,10 @@ int process_config_line(char *line)
                 else if (strcmp(key, "smtpserver") == 0) {
                         return asprintf(&config->smtpserver, "%s", value);
                 }
+                else if (strcmp(key, "db") == 0) {
+                        return add_db(value);
+                }
+
                 else {
                         fprintf(stderr, "unknown config directive '%s'\n", 
                                                                         key);

@@ -27,7 +27,11 @@ When connected to clerkd (telnet to the host/port where it is listening), the fo
 
 NOOP - do nothing, successfully
 QUIT - close connection with clerkd
-GO   - triggers a batch run.  clerkd will connect to the gladbooks database and figure out what, if anything, it needs to do.
+RUN  - triggers a batch run.  clerkd will connect to the gladbooks database and figure out what, if anything, it needs to do.
+
+clerkd isn't very chatty.  You'll get one of two responses:
+OK    - message received and understood
+ERROR - command not understood
 
 == Building and Installing ==
 

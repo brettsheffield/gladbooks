@@ -98,5 +98,21 @@ char *test_config_set()
         mu_assert("Ensure smtpserver is set from config", 
                 strcmp(config->smtpserver, "::1") == 0);
         mu_assert("Ensure smtpport is set from config",config->smtpport == 465);
+
+        /* check database details */
+        mu_assert("Ensure database details are read from config",
+                config->dbs != NULL);
+        mu_assert("Check database details (alias)",
+                strcmp(config->dbs->alias, "db_test") == 0);
+        mu_assert("Check database details (host)",
+                strcmp(config->dbs->host, "localhost") == 0);
+        mu_assert("Check database details (type)",
+                strcmp(config->dbs->type, "pg") == 0);
+        mu_assert("Check database details (db)",
+                strcmp(config->dbs->db, "gladbooks_test") == 0);
+        /* ensure no more dbs */
+        mu_assert("Ensure final db->next returns NULL",
+                config->dbs->next == NULL);
+
         return 0;
 }

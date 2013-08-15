@@ -1,5 +1,5 @@
-/* 
- * config.h
+/*
+ * batch.c
  *
  * this file is part of GLADBOOKS
  *
@@ -20,34 +20,24 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GLADBOOKS_CONFIG_H__
-#define __GLADBOOKS_CONFIG_H__ 1
-
-#include <stdio.h>
+#define _GNU_SOURCE
+#include "batch.h"
 #include <gladdb/db.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
-#define DEFAULT_CONFIG "/etc/gladbooks.conf"
+int batch_run(int conn)
+{
+        chat(conn, "Starting batch run\n");
+        sleep(2);
+        chat(conn, "Batch run complete\n");
 
-typedef struct config_t {
-        long daemon;         /* 0 = daemonise (default), 1 = don't detach */
-        long debug;
-        long port;
-        char *listenaddr;
-        char *smtpserver;
-        long smtpport;
-        struct db_t *dbs;
-} config_t;
+        return 0;
+}
 
-extern config_t *config;
-
-int add_db (char *value);
-void    free_config();
-void    free_keyval(keyval_t *h);
-FILE   *open_config(char *configfile);
-int     process_config_line(char *line);
-int     read_config(char *configfile);
-int     set_config_defaults();
-int     set_config_long(long *confset, char *keyname, long i, long min,
-                long max);
-
-#endif /* __GLADBOOKS_CONFIG_H__ */
+int chat(int conn, char *msg)
+{
+        return write(conn, msg, strlen(msg));
+}

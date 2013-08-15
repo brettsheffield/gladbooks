@@ -21,6 +21,7 @@
  */
 
 #include "handler.h"
+#include "batch.h"
 
 #include <limits.h>
 #include <stdlib.h>
@@ -33,7 +34,7 @@ void handle_connection(int conn)
         size_t bytes = 0;
         int ok = 0;
 
-        write(conn, GREET_STRING, strlen(GREET_STRING));
+        chat(conn, GREET_STRING);
 
         do {
                 bytes = read(conn, buf, LINE_MAX);
@@ -46,14 +47,18 @@ void handle_connection(int conn)
 int handle_command(int conn, char *command)
 {
         if (strncmp(command, CLERK_CMD_NOOP, strlen(CLERK_CMD_NOOP)) == 0) {
-                write(conn, CLERK_RESP_OK, strlen(CLERK_RESP_OK));
+                chat(conn, CLERK_RESP_OK);
+        }
+        else if (strncmp(command, CLERK_CMD_RUN, strlen(CLERK_CMD_RUN)) == 0) {
+                chat(conn, CLERK_RESP_OK);
+                return batch_run(conn);
         }
         else if (strncmp(command,CLERK_CMD_QUIT,strlen(CLERK_CMD_QUIT)) == 0) {
-                write(conn, CLERK_RESP_BYE, strlen(CLERK_RESP_BYE));
+                chat(conn, CLERK_RESP_BYE);
                 return 1;
         }
         else {
-                write(conn, CLERK_RESP_ERROR, strlen(CLERK_RESP_ERROR));
+                chat(conn, CLERK_RESP_ERROR);
         }
         return 0;
 }
