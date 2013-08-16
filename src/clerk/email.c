@@ -215,10 +215,12 @@ int send_email(char *sendername, char *sendermail, char *msg,
         }
 
         /* plaintext message body */
-        write_socket(sockfd, NULL, "Content-Type: text/plain\r\n");
-        write_socket(sockfd, NULL, "\r\n%s\r\n", msg);
-
         if (attach) write_socket(sockfd, NULL, "--%s\r\n", boundary);
+        write_socket(sockfd, NULL,
+            "Content-Type: text/plain; charset=UTF-8; format=flowed\r\n");
+        write_socket(sockfd, NULL, "Content-Transfer-Encoding: 8bit\r\n");
+        write_socket(sockfd, NULL, "\r\n%s\r\n\r\n", msg);
+
 
         /* loop through attachments */
         syslog(LOG_DEBUG, "attachments");

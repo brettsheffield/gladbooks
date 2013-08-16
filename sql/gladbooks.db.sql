@@ -1217,7 +1217,7 @@ BEGIN
 	-- add billing contacts
 	FOR r_to IN
 		SELECT contact, name, email FROM contact_current
-		WHERE id IN (
+		WHERE contact IN (
 			SELECT contact
 			FROM organisation_contact
 			WHERE relationship='1'
