@@ -29,6 +29,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <syslog.h>
 #include <unistd.h>
 
 int batch_mail(int conn, char *command)
@@ -44,11 +45,31 @@ int batch_mail(int conn, char *command)
                 chat(conn, "ERROR: Invalid syntax\n");
                 return 0;
         }
-        /* TODO: verify instance and business exist */
-
-        chat(conn, CLERK_RESP_OK);
 
         db_connect(config->dbs);
+
+        /* verify instance and business exist */
+        asprintf(&sql, "SELECT * FROM instance WHERE id='%s';", instance);
+        rowc = batch_fetch_rows(NULL, 0, sql, &rows);
+        free(sql);
+        if (rowc == 0) {
+                chat(conn, "ERROR: instance '%s' does not exist\n", instance);
+                db_disconnect(config->dbs);
+                return 0;
+        }
+        rows = NULL;
+        asprintf(&sql, "SELECT * FROM business WHERE id='%i';", business);
+        rowc = batch_fetch_rows(instance, 0, sql, &rows);
+        free(sql);
+        if (rowc == 0) {
+                chat(conn, "ERROR: business '%s.%i' does not exist\n",
+                        instance, business);
+                db_disconnect(config->dbs);
+                return 0;
+        }
+        rows = NULL;
+
+        chat(conn, CLERK_RESP_OK);
 
         /* lock emaildetail table */
         batch_exec_sql(instance, business,
@@ -57,8 +78,6 @@ int batch_mail(int conn, char *command)
         /* fetch emails to send */
         rowc = batch_fetch_rows(instance, business, 
                 "SELECT * FROM email_unsent", &rows);
-
-        chat(conn, "%i rows fetched\n", rowc);
 
         row_t *r = rows;
         while (r != NULL) {
@@ -85,7 +104,7 @@ int batch_mail(int conn, char *command)
         batch_exec_sql(instance, business, "COMMIT WORK;");
         db_disconnect(config->dbs);
 
-        chat(conn, "%i emails sent\n", count);
+        chat(conn, "%i/%i emails sent\n", count, rowc);
 
         return 0;
 }
@@ -113,6 +132,7 @@ int batch_fetch_rows(char *instance, int business, char *sql, row_t **rows)
         char *execsql;
 
         execsql = prepend_search_path(instance, business, sql);
+        syslog(LOG_DEBUG, "batch_fetch_rows: %s", execsql);
         db_fetch_all(config->dbs, execsql, NULL, rows, &rowc);
         free(execsql);
 
@@ -124,9 +144,18 @@ char * prepend_search_path(char *instance, int business, char *sql)
 {
         char *newsql;
 
+        if (instance && business > 0) {
         asprintf(&newsql,
-                "SET search_path = gladbooks_%s_%i,gladbooks_%s,gladbooks;%s",
+                "SET search_path=gladbooks_%s_%i,gladbooks_%s,gladbooks;%s",
                 instance, business, instance, sql);
+        }
+        else if (instance) {
+                asprintf(&newsql,
+                "SET search_path=gladbooks_%s,gladbooks;%s", instance, sql);
+        }
+        else {
+                asprintf(&newsql, "SET search_path=gladbooks;%s", sql);
+        }
 
         return newsql;
 }
