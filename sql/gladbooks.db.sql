@@ -1885,13 +1885,23 @@ BEGIN
                 NEW.body := obody;
         END IF;
         IF NEW.emailafter IS NULL THEN
-                NEW.emailafter := oemailafter;
+		IF priorentries > 0 THEN
+	                NEW.emailafter := oemailafter;
+		ELSE
+			-- default
+			NEW.emailafter := NOW();
+		END IF;
         END IF;
         IF NEW.sent IS NULL THEN
                 NEW.sent := osent;
         END IF;
         IF NEW.is_deleted IS NULL THEN
-                NEW.is_deleted := ois_deleted;
+		IF priorentries > 0 THEN
+	                NEW.is_deleted := ois_deleted;
+		ELSE
+			-- default
+			NEW.is_deleted := false;
+        	END IF;
         END IF;
 
         RETURN NEW;

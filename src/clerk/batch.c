@@ -67,7 +67,7 @@ int batch_mail(int conn, char *command)
                 
                 /* TODO: send email */
 
-                /* TODO: update email with sent time */
+                /* update email with sent time */
                 asprintf(&sql, "SELECT email_sent(%s);", email);
                 chat(conn, "sql: %s\n", sql);
                 batch_exec_sql(instance, business, sql);

@@ -176,9 +176,9 @@ CREATE TABLE emaildetail (
 			DEFAULT currval(pg_get_serial_sequence('email','id')),
 	sender		TEXT,
 	body		TEXT,
-	emailafter	timestamp with time zone default now(),
+	emailafter	timestamp with time zone,
 	sent		timestamp with time zone,
-	is_deleted	boolean DEFAULT false,
+	is_deleted	boolean,
 	updated		timestamp with time zone default now(),
 	authuser	TEXT,
 	clientip	TEXT
