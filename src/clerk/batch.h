@@ -26,7 +26,7 @@
 #include <gladdb/db.h>
 
 int batch_exec_sql(char *instance, int business, char *sql);
-int batch_fetch_rows(char *instance, int business, char *sql, row_t *rows);
+int batch_fetch_rows(char *instance, int business, char *sql, row_t **rows);
 int batch_mail(int conn, char *command);
 int batch_run(int conn);
 int chat(int conn, char *msg, ...);

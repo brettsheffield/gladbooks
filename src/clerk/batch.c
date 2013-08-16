@@ -38,6 +38,7 @@ int batch_mail(int conn, char *command)
         row_t *rows = NULL;
         int rowc;
         int count = 0;
+        char *sql;
 
         if (sscanf(command, "MAIL %[^.].%i\n", instance, &business) != 2) {
                 chat(conn, "ERROR: Invalid syntax\n");
@@ -50,16 +51,27 @@ int batch_mail(int conn, char *command)
         /* fetch emails to send */
         /* TODO: lock email table */
         rowc = batch_fetch_rows(instance, business, 
-                "SELECT * FROM email_unsent", rows);
+                "SELECT * FROM email_unsent", &rows);
+
+        chat(conn, "%i rows fetched\n", rowc);
 
         row_t *r = rows;
         while (r != NULL) {
                 chat(conn, "Sending email\n");
+
+                /* id of email */
+                char *email = NULL;
+                email = db_field(r, "email")->fvalue;
+                if (email == NULL) continue;
+                chat(conn, "ID: %s\n", email);
                 
                 /* TODO: send email */
 
                 /* TODO: update email with sent time */
-                batch_exec_sql(instance, business, "SELECT email_sent(NULL);");
+                asprintf(&sql, "SELECT email_sent(%s);", email);
+                chat(conn, "sql: %s\n", sql);
+                batch_exec_sql(instance, business, sql);
+                free(sql);
                 
                 count++;
                 r = r->next;
@@ -81,20 +93,22 @@ int batch_exec_sql(char *instance, int business, char *sql)
         char *execsql;
 
         execsql = prepend_search_path(instance, business, sql);
-        db_exec_sql(config->dbs, sql);
+        db_connect(config->dbs);
+        db_exec_sql(config->dbs, execsql);
+        db_disconnect(config->dbs);
         free(execsql);
 
         return 0;
 }
 
-int batch_fetch_rows(char *instance, int business, char *sql, row_t *rows)
+int batch_fetch_rows(char *instance, int business, char *sql, row_t **rows)
 {
         int rowc = 0;
         char *execsql;
 
         execsql = prepend_search_path(instance, business, sql);
         db_connect(config->dbs);
-        db_fetch_all(config->dbs, execsql, NULL, &rows, &rowc);
+        db_fetch_all(config->dbs, execsql, NULL, rows, &rowc);
         db_disconnect(config->dbs);
         free(execsql);
 
