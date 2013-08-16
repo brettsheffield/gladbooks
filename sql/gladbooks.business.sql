@@ -197,7 +197,7 @@ WHERE id IN (
 
 CREATE OR REPLACE VIEW email_unsent AS
 SELECT * FROM email_current
-WHERE sent IS NULL;
+WHERE sent IS NULL AND emailafter < NOW();
 
 CREATE TABLE emailheader (
 	id		SERIAL PRIMARY KEY,

@@ -48,8 +48,13 @@ int batch_mail(int conn, char *command)
 
         chat(conn, CLERK_RESP_OK);
 
+        db_connect(config->dbs);
+
+        /* lock emaildetail table */
+        batch_exec_sql(instance, business,
+                "BEGIN WORK; LOCK TABLE emaildetail IN EXCLUSIVE MODE");
+
         /* fetch emails to send */
-        /* TODO: lock email table */
         rowc = batch_fetch_rows(instance, business, 
                 "SELECT * FROM email_unsent", &rows);
 
@@ -76,7 +81,10 @@ int batch_mail(int conn, char *command)
                 count++;
                 r = r->next;
         }
-        /* TODO: unlock email table */
+        /* commit changes and unlock emaildetail table */
+        batch_exec_sql(instance, business, "COMMIT WORK;");
+        db_disconnect(config->dbs);
+
         chat(conn, "%i emails sent\n", count);
 
         return 0;
@@ -93,9 +101,7 @@ int batch_exec_sql(char *instance, int business, char *sql)
         char *execsql;
 
         execsql = prepend_search_path(instance, business, sql);
-        db_connect(config->dbs);
         db_exec_sql(config->dbs, execsql);
-        db_disconnect(config->dbs);
         free(execsql);
 
         return 0;
@@ -107,9 +113,7 @@ int batch_fetch_rows(char *instance, int business, char *sql, row_t **rows)
         char *execsql;
 
         execsql = prepend_search_path(instance, business, sql);
-        db_connect(config->dbs);
         db_fetch_all(config->dbs, execsql, NULL, rows, &rowc);
-        db_disconnect(config->dbs);
         free(execsql);
 
         return rowc;
