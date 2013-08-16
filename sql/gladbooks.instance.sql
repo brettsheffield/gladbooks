@@ -181,7 +181,8 @@ CREATE TABLE business (
 	organisation	INT4 references organisation(id) ON DELETE RESTRICT 
 			NOT NULL,
 	vatcashbasis	boolean NOT NULL DEFAULT false,
-	billsender	TEXT DEFAULT 'Billing <>',
+	billsendername	TEXT DEFAULT 'Billing',
+	billsendermail	TEXT DEFAULT '',
 	entered         timestamp with time zone default now()
 );
 CREATE RULE nodel_business AS ON DELETE TO business DO NOTHING;

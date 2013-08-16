@@ -33,6 +33,7 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <syslog.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -73,8 +74,8 @@ int write_socket(int sockfd, char *expect, char *msg, ...) {
         return 0;
 }
 
-int send_email(char *sender, char *subject, char *msg, smtp_recipient_t *r,
-        smtp_header_t* headers, smtp_attach_t *attach)
+int send_email(char *sendername, char *sendermail, char *msg, 
+        smtp_recipient_t *r, smtp_header_t* headers, smtp_attach_t *attach)
 {
         int sockfd;
         int retval = -1;
@@ -86,6 +87,8 @@ int send_email(char *sender, char *subject, char *msg, smtp_recipient_t *r,
         char *smtpport = "";
         char *boundary;
 
+        syslog(LOG_DEBUG, "send_email()");
+
         memset(&hints, 0, sizeof hints);
         hints.ai_family = AF_UNSPEC;
         hints.ai_socktype = SOCK_STREAM;
@@ -96,9 +99,9 @@ int send_email(char *sender, char *subject, char *msg, smtp_recipient_t *r,
         != 0)
         {
                 /* lookup failure */
-                fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
+                syslog(LOG_ERR, "getaddrinfo: %s\n", gai_strerror(rv));
                 free(smtpport);
-                exit(EXIT_FAILURE);
+                return -1;
         }
         free(smtpport);
 
@@ -121,27 +124,41 @@ int send_email(char *sender, char *subject, char *msg, smtp_recipient_t *r,
         }
 
         if (p == NULL) {
-                fprintf(stderr, "failed to connect\n");
-                exit(EXIT_FAILURE);
+                syslog(LOG_ERR, "failed to connect");
+                return -1;
         }
+        
+        syslog(LOG_DEBUG, "connected to smtp server");
 
         /* see http://tools.ietf.org/html/rfc2821 */
 
         /* wait for 220 from server */
-        if (write_socket(sockfd, "220", NULL) != 0)
+        if (write_socket(sockfd, "220", NULL) != 0) {
+                syslog(LOG_DEBUG, "ERROR: 220 not received");
                 goto close_socket;
-        if (write_socket(sockfd, "250", "HELO localhost\r\n") != 0)
+        }
+        if (write_socket(sockfd, "250", "HELO localhost\r\n") != 0) {
+                syslog(LOG_DEBUG, "ERROR: 250 expected for HELO");
                 goto close_socket;
-        if (write_socket(sockfd, "250", "MAIL FROM: <%s>\r\n", sender) != 0)
+        }
+        if (write_socket(sockfd,
+                "250", "MAIL FROM: %s <%s>\r\n", sendername, sendermail) != 0) 
+        {
+                syslog(LOG_DEBUG, "ERROR: 250 expected for MAIL");
                 goto close_socket;
+        }
 
         /* loop through recipients */
         int recipients = 0;
         while (r != NULL) {
                 if (r->email == NULL)
                         break;
-                if (write_socket(sockfd,"250","RCPT TO: <%s>\r\n",r->email))
+                if (write_socket(sockfd,"250","RCPT TO: %s <%s>\r\n",
+                        r->name, r->email)) 
+                {
+                        syslog(LOG_DEBUG, "ERROR: 250 expected for RCPT");
                         goto close_socket;
+                }
                 recipients++;
                 if (r->flags & EMAIL_TO) /* build To: header */
                         append_header(&header_to, "To", r);
@@ -149,19 +166,24 @@ int send_email(char *sender, char *subject, char *msg, smtp_recipient_t *r,
                         append_header(&header_cc, "Cc", r);
                 r = r->next;
         }
-        if (recipients == 0)
+        if (recipients == 0) {
+                syslog(LOG_DEBUG, "ERROR: No recipients");
                 goto close_socket; /* Noone to send to */
+        }
 
-        if (write_socket(sockfd, "354", "DATA\r\n") != 0)
+        if (write_socket(sockfd, "354", "DATA\r\n") != 0) {
+                syslog(LOG_DEBUG, "ERROR: 354 expected for DATA");
                 goto close_socket;
+        }
 
         /* send headers */
-        if (write_socket(sockfd, NULL, "From: %s\r\n", sender) !=0)
+        if (write_socket(sockfd, NULL, "From: %s <%s>\r\n",
+                sendername, sendermail) !=0) 
+        {
+                syslog(LOG_DEBUG, "ERROR: From header");
                 goto close_socket;
+        }
                 
-        if (write_socket(sockfd, NULL, "Subject: %s\r\n", subject) !=0)
-                goto close_socket;
-
         /* drop trailing commas from destination headers and write to socket */
         if (header_to) {
                 *(header_to + strlen(header_to) - 1) = 0;
@@ -199,6 +221,7 @@ int send_email(char *sender, char *subject, char *msg, smtp_recipient_t *r,
         if (attach) write_socket(sockfd, NULL, "--%s\r\n", boundary);
 
         /* loop through attachments */
+        syslog(LOG_DEBUG, "attachments");
         while (attach != NULL) {
                 write_socket(sockfd, NULL, "--%s\r\n", boundary);
 
@@ -220,7 +243,8 @@ int send_email(char *sender, char *subject, char *msg, smtp_recipient_t *r,
                 /* open attachment for reading */
                 fin = fopen(attach->filepath, "r");
                 if (fin == NULL) {
-                        perror("error opening attachment");
+                        syslog(LOG_ERR, "error opening attachment '%s'", 
+                                attach->filepath);
                         return -1;
                 }
 
@@ -245,9 +269,9 @@ int send_email(char *sender, char *subject, char *msg, smtp_recipient_t *r,
         write_socket(sockfd, "250", "QUIT\r\n");
 
         retval = 0;
+        syslog(LOG_DEBUG, "Email sent");
 
 close_socket:
-        fprintf(stderr, "Closing socket.\n");
 
         close(sockfd); /* close socket */
 

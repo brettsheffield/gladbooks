@@ -23,7 +23,9 @@
 #define _GNU_SOURCE
 #include "batch.h"
 #include "config.h"
+#include "email.h"
 #include "handler.h"
+#include <libgen.h>
 #include <limits.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -37,9 +39,19 @@ int batch_mail(int conn, char *command)
         char instance[63] = "";
         int business = 0;
         row_t *rows = NULL;
+        row_t *row = NULL;
+        row_t *rr = NULL;
         int rowc;
         int count = 0;
+        int flags = 0;
         char *sql;
+        char *email = NULL;
+        char *file;
+        char *filename;
+        char *tmp = NULL;
+        smtp_recipient_t *r = NULL;
+        smtp_header_t *h = NULL;
+        smtp_attach_t *a = NULL;
 
         if (sscanf(command, "MAIL %[^.].%i\n", instance, &business) != 2) {
                 chat(conn, "ERROR: Invalid syntax\n");
@@ -79,26 +91,81 @@ int batch_mail(int conn, char *command)
         rowc = batch_fetch_rows(instance, business, 
                 "SELECT * FROM email_unsent", &rows);
 
-        row_t *r = rows;
-        while (r != NULL) {
+        row = rows;
+        while (row != NULL) {
                 chat(conn, "Sending email\n");
 
-                /* id of email */
-                char *email = NULL;
-                email = db_field(r, "email")->fvalue;
+                /* get id of email */
+                email = db_field(row, "email")->fvalue;
                 if (email == NULL) continue;
-                chat(conn, "ID: %s\n", email);
                 
-                /* TODO: send email */
-
-                /* update email with sent time */
-                asprintf(&sql, "SELECT email_sent(%s);", email);
-                chat(conn, "sql: %s\n", sql);
-                batch_exec_sql(instance, business, sql);
+                /* loop through recipients */
+                asprintf(&sql, "SELECT * FROM emailrecipient WHERE email=%s", 
+                        email);
+                rowc = batch_fetch_rows(instance, business, sql, &rr);
                 free(sql);
-                
-                count++;
-                r = r->next;
+                if (rowc == 0) { /* skip email with no recipients */
+                        syslog(LOG_DEBUG, "Skipping email with no recipients");
+                        row = row->next;
+                        continue;
+                }
+                flags = 0;
+                while (rr != NULL) {
+                        if (strcmp(db_field(rr, "is_to")->fvalue, "t") == 0)
+                                flags += EMAIL_TO;
+                        if (strcmp(db_field(rr, "is_cc")->fvalue, "t") == 0)
+                                flags += EMAIL_CC;
+                        add_recipient(&r, "",
+                                db_field(rr, "emailaddress")->fvalue, flags);
+                        rr = rr->next;
+                }
+
+                /* loop through headers */
+                asprintf(&sql, "SELECT * FROM emailheader WHERE email=%s", 
+                        email);
+                rowc = batch_fetch_rows(instance, business, sql, &rr);
+                free(sql);
+                while (rr != NULL) {
+                        add_header(&h, db_field(rr, "header")->fvalue,
+                                db_field(rr, "value")->fvalue);
+                        rr = rr->next;
+                }
+
+                /* loop through attachments */
+                asprintf(&sql, "SELECT * FROM emailpart WHERE email=%s", 
+                        email);
+                rowc = batch_fetch_rows(instance, business, sql, &rr);
+                free(sql);
+                while (rr != NULL) {
+                        file = db_field(rr, "file")->fvalue;
+                        tmp = strdup(file);
+                        filename = basename(tmp);
+                        add_attach(&a, file, filename);
+                        free(tmp);
+                        rr = rr->next;
+                }
+
+                /* send email */
+                /* FIXME: this will quietly crash if db_field returns NULL */
+                if (send_email(
+                        db_field(row, "sendername")->fvalue, 
+                        db_field(row, "sendermail")->fvalue, 
+                        db_field(row, "body")->fvalue, 
+                        r, h, a) == 0)
+                {
+                        /* update email with sent time */
+                        asprintf(&sql, "SELECT email_sent(%s);", email);
+                        chat(conn, "sql: %s\n", sql);
+                        batch_exec_sql(instance, business, sql);
+                        free(sql);
+                        count++;
+                }
+
+                free_recipient(r); r = NULL;
+                free_header(h); h = NULL;
+                free_attach(a); a = NULL;
+
+                row = row->next;
         }
         /* commit changes and unlock emaildetail table */
         batch_exec_sql(instance, business, "COMMIT WORK;");

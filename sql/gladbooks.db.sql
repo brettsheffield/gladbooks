@@ -1182,22 +1182,25 @@ $$ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION mail_salesinvoice(si_id INT4)
 RETURNS INT4 AS $$
 DECLARE
+	billingname	TEXT;
 	billingemail	TEXT;
 	bodytext	TEXT;
 	filename	TEXT;
 	r		RECORD;
+	r_to		RECORD;
 BEGIN
 	SELECT * INTO r FROM salesinvoice_current WHERE salesinvoice=si_id;
 
 	-- select sender from business table
-	SELECT billsender INTO billingemail 
+	SELECT billsendername, billsendermail INTO billingname, billingemail
 	FROM business WHERE id = current_business();
 
 	-- TODO: include content of invoice in body
 	bodytext := 'Your invoice is attached';
 
 	INSERT INTO email DEFAULT VALUES;
-	INSERT INTO emaildetail (sender, body) VALUES (billingemail, bodytext);
+	INSERT INTO emaildetail (sendername, sendermail, body) 
+	VALUES (billingname, billingemail, bodytext);
 	INSERT INTO emailheader (header, value)
 	VALUES ('Subject', 'Sales Invoice ' || r.ref);
 	INSERT INTO emailheader (header, value)
@@ -1206,14 +1209,25 @@ BEGIN
 	VALUES ('X-Gladbooks-SalesInvoice', r.ref);
 
 	-- attach file
-	filename := '/var/spool/gladbooks/' || r.orgcode || '/SI-' || 
-		r.orgcode || to_char(r.invoicenum, '0000') || '.pdf';
+	filename := '/var/spool/gladbooks/' || current_business_code() ||
+		'/SI-'|| r.orgcode || '-' || to_char(r.invoicenum, 'FM0000') ||
+		'.pdf';
 	INSERT INTO emailpart (file) VALUES (filename);
 
-	-- TODO: add billing contacts
-	--INSERT INTO emailrecipient (contact, is_to) (contact, 'true');
-	INSERT INTO emailrecipient (emailaddress, is_to) 
-	VALUES (billingemail, 'true');
+	-- add billing contacts
+	FOR r_to IN
+		SELECT contact, name, email FROM contact_current
+		WHERE id IN (
+			SELECT contact
+			FROM organisation_contact
+			WHERE relationship='1'
+			AND organisation=r.organisation
+		)
+	LOOP
+		INSERT INTO emailrecipient (
+			contact, emailname, emailaddress, is_to
+		) VALUES (r_to.contact, r_to.name, r_to.email, 'true');
+	END LOOP;
 
 	RETURN '0';
 END;
@@ -1862,7 +1876,8 @@ RETURNS TRIGGER AS
 $$
 DECLARE
         priorentries    INT4;
-        osender         TEXT;
+        osendername     TEXT;
+        osendermail     TEXT;
         obody           TEXT;
         oemailafter     timestamp with time zone;
         osent           timestamp with time zone;
@@ -1872,14 +1887,17 @@ BEGIN
                 WHERE email=NEW.email;
         IF priorentries > 0 THEN
                 -- This isn't our first time, so use previous values
-                SELECT INTO osender, obody, oemailafter, osent, ois_deleted
-                        sender, body, emailafter, sent, is_deleted
+                SELECT INTO osendername, osendermail, obody, oemailafter, osent, ois_deleted
+                        sendername, sendermail, body, emailafter, sent, is_deleted
                 FROM email_current
                 WHERE email=NEW.email;
         END IF;
 
-        IF NEW.sender IS NULL THEN
-                NEW.sender := osender;
+        IF NEW.sendername IS NULL THEN
+                NEW.sendername:= osendername;
+        END IF;
+        IF NEW.sendermail IS NULL THEN
+                NEW.sendermail:= osendermail;
         END IF;
         IF NEW.body IS NULL THEN
                 NEW.body := obody;

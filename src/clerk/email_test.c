@@ -66,12 +66,13 @@ char *test_email()
         add_recipient(&r, "Second Contact", "null@gladserv.com", EMAIL_TO);
 
         add_header(&h, "Organisation", "Blogge Ltd");
+        add_header(&h, "Subject", "Test message");
 
         add_attach(&a, "/var/spool/gladbooks/SI-TESTACCT-0001.pdf",
                 "SI-TESTACCT-0001.pdf");
 
         mu_assert("Send test email", send_email("null@example.com",
-                "test", "Test message", r, h, a) == 0);
+                "test", r, h, a) == 0);
 
         free_recipient(r);
         free_header(h);

@@ -94,14 +94,14 @@ void free_recipient(smtp_recipient_t *r);
 char *mime_type(char *filepath);
 
 /* send_email() - send email
- *  sender      - envelope sender (also used for From header)
- *  subject     - text of Subject header
+ *  sendername  - envelope sender (also used for From header)
+ *  sendermail  - envelope sender (also used for From header)
  *  r           - linked list of recipients
  *  headers     - linked list of additional headers
  *  attach      - linked list of file attachments
  */
-int send_email(char *sender, char * subject, char *msg, smtp_recipient_t *r,
-        smtp_header_t* headers, smtp_attach_t *attach);
+int send_email(char *sendername, char *sendermail, char *msg,
+        smtp_recipient_t *r, smtp_header_t* headers, smtp_attach_t *attach);
 
 /* 
  * write_socket() - write to a socket and check the response
