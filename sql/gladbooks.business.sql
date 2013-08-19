@@ -239,6 +239,16 @@ CREATE TABLE emailrecipient (
 	clientip	TEXT
 );
 
+-- whilst organisations exist at an instance level, sequences such as 
+-- salesinvoice ids are individual to each business.  We track them here.
+CREATE TABLE organisationsequence (
+	id              INT4 PRIMARY KEY references organisation(id),
+	purchaseorder   INT4 NOT NULL DEFAULT 0,
+	purchaseinvoice INT4 NOT NULL DEFAULT 0,
+	salesorder      INT4 NOT NULL DEFAULT 0,
+	salesinvoice    INT4 NOT NULL DEFAULT 0
+);
+
 CREATE TABLE product (
         id              SERIAL PRIMARY KEY,
 	import_id	INT4,

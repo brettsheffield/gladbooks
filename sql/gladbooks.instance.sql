@@ -77,10 +77,6 @@ WHERE id IN (
 CREATE TABLE organisation (
         id              SERIAL PRIMARY KEY,
         orgcode         TEXT DEFAULT NULL,
-        purchaseorder   INT4 NOT NULL DEFAULT 0,
-        purchaseinvoice INT4 NOT NULL DEFAULT 0,
-        salesorder      INT4 NOT NULL DEFAULT 0,
-        salesinvoice    INT4 NOT NULL DEFAULT 0,
         updated         timestamp with time zone default now(),
         authuser        TEXT,
         clientip        TEXT,

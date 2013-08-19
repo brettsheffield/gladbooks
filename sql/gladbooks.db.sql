@@ -768,9 +768,16 @@ $$
 DECLARE
         next_pk INT4;
 BEGIN
-        UPDATE organisation SET purchaseorder = purchaseorder + 1
+	-- create entry in organisationsequence if not exists
+        SELECT INTO next_pk id FROM organisationsequence
                 WHERE id = organisation_id;
-        SELECT INTO next_pk purchaseorder FROM organisation
+	IF next_pk IS NULL THEN
+		INSERT INTO organisationsequence(id) VALUES (organisation_id);
+	END IF;
+
+        UPDATE organisationsequence SET purchaseorder = purchaseorder + 1
+                WHERE id = organisation_id;
+        SELECT INTO next_pk purchaseorder FROM organisationsequence
                 WHERE id = organisation_id;
         RETURN next_pk;
 END;
@@ -793,9 +800,16 @@ $$
 DECLARE
         next_pk INT4;
 BEGIN
-        UPDATE organisation SET purchaseinvoice = purchaseinvoice + 1
+	-- create entry in organisationsequence if not exists
+        SELECT INTO next_pk id FROM organisationsequence
                 WHERE id = organisation_id;
-        SELECT INTO next_pk purchaseinvoice FROM organisation
+	IF next_pk IS NULL THEN
+		INSERT INTO organisationsequence(id) VALUES (organisation_id);
+	END IF;
+
+        UPDATE organisationsequence SET purchaseinvoice = purchaseinvoice + 1
+                WHERE id = organisation_id;
+        SELECT INTO next_pk purchaseinvoice FROM organisationsequence
                 WHERE id = organisation_id;
         RETURN next_pk;
 END;
@@ -818,9 +832,16 @@ $$
 DECLARE
         next_pk INT4;
 BEGIN
-        UPDATE organisation SET salesorder = salesorder + 1
+	-- create entry in organisationsequence if not exists
+        SELECT INTO next_pk id FROM organisationsequence
                 WHERE id = organisation_id;
-        SELECT INTO next_pk salesorder FROM organisation
+	IF next_pk IS NULL THEN
+		INSERT INTO organisationsequence(id) VALUES (organisation_id);
+	END IF;
+
+        UPDATE organisationsequence SET salesorder = salesorder + 1
+                WHERE id = organisation_id;
+        SELECT INTO next_pk salesorder FROM organisationsequence
                 WHERE id = organisation_id;
         RETURN next_pk;
 END;
@@ -843,9 +864,16 @@ $$
 DECLARE
         next_pk INT4;
 BEGIN
-        UPDATE organisation SET salesinvoice = salesinvoice + 1
+	-- create entry in organisationsequence if not exists
+        SELECT INTO next_pk id FROM organisationsequence
                 WHERE id = organisation_id;
-        SELECT INTO next_pk salesinvoice FROM organisation
+	IF next_pk IS NULL THEN
+		INSERT INTO organisationsequence(id) VALUES (organisation_id);
+	END IF;
+
+        UPDATE organisationsequence SET salesinvoice = salesinvoice + 1
+                WHERE id = organisation_id;
+        SELECT INTO next_pk salesinvoice FROM organisationsequence
                 WHERE id = organisation_id;
         RETURN next_pk;
 END;
@@ -858,7 +886,7 @@ BEGIN
 	IF NEW.invoicenum IS NULL THEN
             NEW.invoicenum = organisation_salesinvoice_next(NEW.organisation);
 	ELSE
-	    UPDATE organisation
+	    UPDATE organisationsequence
 	    SET salesinvoice = GREATEST(NEW.invoicenum,salesinvoice)
 	    	WHERE id = NEW.organisation;
 	END IF;
