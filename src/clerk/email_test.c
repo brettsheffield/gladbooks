@@ -71,7 +71,7 @@ char *test_email()
         add_attach(&a, "/var/spool/gladbooks/SI-TESTACCT-0001.pdf",
                 "SI-TESTACCT-0001.pdf");
 
-        mu_assert("Send test email", send_email("null@example.com",
+        mu_assert("Send test email", send_email("Noone", "null@example.com",
                 "test", r, h, a) == 0);
 
         free_recipient(r);
