@@ -199,6 +199,11 @@ CREATE TABLE business_year (
 CREATE TRIGGER trig_business_year BEFORE INSERT ON business_year
 FOR EACH ROW EXECUTE PROCEDURE business_year_end();
 
+CREATE OR REPLACE VIEW businessview AS
+SELECT b.*, o.orgcode FROM business b
+INNER JOIN organisation o ON o.id = b.organisation
+;
+
 CREATE TABLE tag (
 	id		TEXT PRIMARY KEY,
         updated         timestamp with time zone default now(),

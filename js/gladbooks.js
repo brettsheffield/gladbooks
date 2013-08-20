@@ -30,6 +30,7 @@ var g_loggedin = false;
 var g_max_ledgers_per_journal=7;
 var g_frmLedger;
 var g_tabid = 0;
+var g_xml_business = ''
 var g_xml_relationships = '';
 
 var STATUS_INFO = 1;
@@ -2147,7 +2148,7 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 		if (collection == 'salesinvoices') {
 			var ref = $(this).find('ref').text();
 			$t += '<td class="xml-pdf">';
-			$t += '<a href="/pdf/';
+			$t += '<a href="/pdf/' + g_orgcode + '/';
 			$t += 'SI-' + ref.replace('/','-') + '.pdf">[PDF]</a>';
 			$t += '</td>';
 		}
@@ -2603,6 +2604,8 @@ function showBusinessSelector(xml) {
 	select = $('select.businessselect');
 	select.empty();
 
+	g_xml_business = xml;
+
 	$(xml).find('row').each(function() {
 		var id = $(this).find('id').text();
 		var name = $(this).find('name').text();
@@ -2614,6 +2617,7 @@ function showBusinessSelector(xml) {
 	});
 
 	$('select.businessselect').val(g_business);
+	switchBusiness(g_business);
 }
 
 /******************************************************************************/
@@ -2629,6 +2633,13 @@ function switchBusiness(business) {
 
 	/* switch business */
 	g_business = business;
+
+	/* find orgcode for this business */
+	$(g_xml_business).find('row').each(function() {
+		if ($(this).find('id').text() == business) {
+			g_orgcode = $(this).find('orgcode').text();
+		}
+	});
 
 	/* unhide tabs for new business */
 	$('.tabhead.business' + g_business).each(function() {
