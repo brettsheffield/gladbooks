@@ -31,6 +31,7 @@ void handle_connection(int conn);
 #define CLERK_CMD_NOOP "NOOP"
 #define CLERK_CMD_QUIT "QUIT"
 #define CLERK_CMD_RUN "RUN"
+#define CLERK_CMD_MAIL_ALL "MAIL ALL"
 #define CLERK_CMD_MAIL "MAIL"
 #define CLERK_CMD_BAD "BADCOMMAND"
 #define CLERK_RESP_OK "OK\n"

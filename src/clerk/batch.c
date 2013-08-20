@@ -58,6 +58,9 @@ int batch_mail(int conn, char *command)
                 return 0;
         }
 
+        chat(conn, "Sending email batch for instance '%s', business '%i' ... ",
+                instance, business);
+
         db_connect(config->dbs);
 
         /* verify instance and business exist */
@@ -93,8 +96,6 @@ int batch_mail(int conn, char *command)
 
         row = rows;
         while (row != NULL) {
-                chat(conn, "Sending email\n");
-
                 /* get id of email */
                 email = db_field(row, "email")->fvalue;
                 if (email == NULL) continue;
@@ -172,6 +173,53 @@ int batch_mail(int conn, char *command)
         db_disconnect(config->dbs);
 
         chat(conn, "%i/%i emails sent\n", count, rowc);
+
+        return 0;
+}
+
+/* perform a batch mail run for every business in every instance */
+int batch_mail_all(int conn)
+{
+        char *bus;
+        char *command;
+        char *inst;
+        char *sql;
+        int rowc;
+        row_t *business = NULL;
+        row_t *instance = NULL;
+
+        db_connect(config->dbs);
+
+        /* fetch list of instances */
+        asprintf(&sql,
+                "SELECT * FROM instance WHERE id NOT IN ('default', 'test');");
+        rowc = batch_fetch_rows(NULL, 0, sql, &instance);
+        free(sql);
+        if (rowc == 0) {
+                chat(conn, "No instances found.  Stopping batch run.\n");
+                db_disconnect(config->dbs);
+                return 0;
+        }
+        while (instance != NULL) {
+                /* find businesses for this instance */
+                inst = db_field(instance, "id")->fvalue;
+                asprintf(&sql, "SELECT * FROM business;");
+                rowc = batch_fetch_rows(inst, 0, sql, &business);
+                free(sql);
+                if (rowc > 0) {
+                        /* perform mail run for each business */
+                        while (business != NULL) {
+                                bus = db_field(business, "id")->fvalue;
+                                asprintf(&command, "MAIL %s.%s", inst, bus);
+                                batch_mail(conn, command);
+                                free(command);
+                                business = business->next;
+                        }
+                }
+                instance = instance->next;
+        }
+
+        db_disconnect(config->dbs);
 
         return 0;
 }

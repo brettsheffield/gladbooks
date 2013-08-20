@@ -55,6 +55,11 @@ int handle_command(int conn, char *command)
                 chat(conn, CLERK_RESP_OK);
                 return batch_run(conn);
         }
+        else if (strncmp(command, CLERK_CMD_MAIL_ALL,
+        strlen(CLERK_CMD_MAIL_ALL)) == 0)
+        {
+                return batch_mail_all(conn);
+        }
         else if (strncmp(command, CLERK_CMD_MAIL,strlen(CLERK_CMD_MAIL)) == 0){
                 return batch_mail(conn, command);
         }
