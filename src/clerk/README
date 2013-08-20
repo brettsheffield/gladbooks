@@ -27,11 +27,12 @@ When connected to clerkd (telnet to the host/port where it is listening), the fo
 
 NOOP - do nothing, successfully
 QUIT - close connection with clerkd
-RUN  - triggers a batch run.  clerkd will connect to the gladbooks database and figure out what, if anything, it needs to do.
+MAIL <instance>.<business> - perform a batch mail run for a specific business
+MAIL ALL - perform a batch mail run for all businesses in all instances
 
 clerkd isn't very chatty.  You'll get one of two responses:
 OK    - message received and understood
-ERROR - command not understood
+ERROR - command not understood, or something went wrong.  Usually clerkd will give you a hint as to what went wrong.
 
 == Building and Installing ==
 
