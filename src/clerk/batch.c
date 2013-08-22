@@ -25,6 +25,7 @@
 #include "config.h"
 #include "email.h"
 #include "handler.h"
+#include "scheduler.h"
 #include <libgen.h>
 #include <limits.h>
 #include <signal.h>
@@ -83,6 +84,7 @@ int batch_at(int conn, char *command)
         chat(conn, CLERK_RESP_OK);
 
         /* schedule the command */
+        syslog(LOG_DEBUG, "batch sees scheduler process %i", sched_proc);
         //signal(SIGUSR1, handle_usr1); // TODO: handle signal
         evp.sigev_value.sival_ptr = &timerid;
         evp.sigev_notify = SIGEV_SIGNAL;

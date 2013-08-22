@@ -28,6 +28,7 @@
 #include "config.h"
 #include "args.h"
 #include "main.h"
+#include "scheduler.h"
 #include "server.h"
 #include "signals.h"
 
@@ -73,6 +74,7 @@ void sigterm_handler (int signo)
 {
         close(sock);
         syslog(LOG_INFO, "Received SIGTERM.  Shutting down.");
+        kill(sched_proc, SIGTERM); /* kill scheduler */
         closelog();
         free_config();
         exit(EXIT_SUCCESS);

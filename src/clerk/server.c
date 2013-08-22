@@ -21,6 +21,7 @@
  */
 
 #include "lockfile.h"
+#include "scheduler.h"
 #include "server.h"
 #include "handler.h"
 
@@ -148,6 +149,12 @@ int server_start(char *host, char *service, int daemonize, int *pid)
         snprintf(buf, sizeof(long), "%ld\n", (long) getpid());
         if (write(lockfd, buf, strlen(buf)) != strlen(buf)) {
                 fprintf(stderr, "Error writing to pidfile\n");
+                exit(EXIT_FAILURE);
+        }
+
+        /* fork() scheduler process */
+        if (start_scheduler() != 0) {
+                fprintf(stderr, "Failed to start scheduler\n");
                 exit(EXIT_FAILURE);
         }
 

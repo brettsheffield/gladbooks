@@ -23,10 +23,12 @@
 #include "handler.h"
 #include "batch.h"
 #include "config.h"
+#include "scheduler.h"
 
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
+#include <syslog.h>
 #include <unistd.h>
 
 void handle_connection(int conn)
@@ -34,6 +36,8 @@ void handle_connection(int conn)
         char buf[LINE_MAX] = "";
         size_t bytes = 0;
         int ok = 0;
+
+        syslog(LOG_DEBUG, "handle_connection() sees scheduler process %i", sched_proc);
 
         chat(conn, GREET_STRING);
 
