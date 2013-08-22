@@ -28,14 +28,17 @@ void handle_connection(int conn);
 
 #define GREET_STRING "Gladbooks Clerk Daemon\n"
 
+#define CLERK_CMD_AT "AT"
+#define CLERK_CMD_BAD "BADCOMMAND"
+#define CLERK_CMD_CANCEL "CANCEL"
+#define CLERK_CMD_MAIL "MAIL"
+#define CLERK_CMD_MAIL_ALL "MAIL ALL"
 #define CLERK_CMD_NOOP "NOOP"
 #define CLERK_CMD_QUIT "QUIT"
 #define CLERK_CMD_RUN "RUN"
-#define CLERK_CMD_MAIL_ALL "MAIL ALL"
-#define CLERK_CMD_MAIL "MAIL"
-#define CLERK_CMD_BAD "BADCOMMAND"
-#define CLERK_RESP_OK "OK\n"
-#define CLERK_RESP_ERROR "ERROR\n"
+#define CLERK_CMD_TIMER "TIMER"
 #define CLERK_RESP_BYE "BYE\n"
+#define CLERK_RESP_ERROR "ERROR\n"
+#define CLERK_RESP_OK "OK\n"
 
 #endif /* __GLADBOOKS_HANDLER_H__ */

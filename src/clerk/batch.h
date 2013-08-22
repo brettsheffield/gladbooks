@@ -25,12 +25,35 @@
 
 #include <gladdb/db.h>
 
+/* Schedule a batch command to run at a specific time */
+int batch_at(int conn, char *command);
+
+/* Cancel a scheduled batch run */
+int batch_cancel(int conn, char *command);
+
+/* Execute some SQL on an open db connection */
 int batch_exec_sql(char *instance, int business, char *sql);
+
+/* Execute some SQL on an open db connection and
+ * populate **rows with the results */
 int batch_fetch_rows(char *instance, int business, char *sql, row_t **rows);
+
+/* perform a batch mail run for a specified instance and business */
 int batch_mail(int conn, char *command);
+
+/* perform a batch mail run for every business in every instance */
 int batch_mail_all(int conn);
+
+/* TODO: not implemented - check for jobs in clerk table and execute */
 int batch_run(int conn);
+
+/* Report status on a scheduled batch run */
+int batch_timer(int conn, char *command);
+
+/* Write something to the open socket */
 int chat(int conn, char *msg, ...);
+
+/* prepend search path to sql, so we're in the correct schema */
 char * prepend_search_path(char *instance, int business, char *sql);
 
 #endif /* __GLADBOOKS_BATCH_H__ */

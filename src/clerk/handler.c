@@ -63,6 +63,19 @@ int handle_command(int conn, char *command)
         else if (strncmp(command, CLERK_CMD_MAIL,strlen(CLERK_CMD_MAIL)) == 0){
                 return batch_mail(conn, command);
         }
+        else if (strncmp(command, CLERK_CMD_AT,strlen(CLERK_CMD_AT)) == 0){
+                return batch_at(conn, command);
+        }
+        else if (strncmp(command, CLERK_CMD_CANCEL,
+        strlen(CLERK_CMD_CANCEL)) == 0)
+        {
+                return batch_cancel(conn, command);
+        }
+        else if (strncmp(command, CLERK_CMD_TIMER,
+        strlen(CLERK_CMD_TIMER)) == 0)
+        {
+                return batch_timer(conn, command);
+        }
         else if (strncmp(command,CLERK_CMD_QUIT,strlen(CLERK_CMD_QUIT)) == 0) {
                 chat(conn, CLERK_RESP_BYE);
                 return 1;
