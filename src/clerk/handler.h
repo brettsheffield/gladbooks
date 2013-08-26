@@ -31,6 +31,7 @@ void handle_connection(int conn);
 #define CLERK_CMD_AT "AT"
 #define CLERK_CMD_BAD "BADCOMMAND"
 #define CLERK_CMD_CANCEL "CANCEL"
+#define CLERK_CMD_LIST "LIST"
 #define CLERK_CMD_MAIL "MAIL"
 #define CLERK_CMD_MAIL_ALL "MAIL ALL"
 #define CLERK_CMD_NOOP "NOOP"

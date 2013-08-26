@@ -23,11 +23,57 @@
 #ifndef __GLADBOOKS_SCHEDULER_H__
 #define __GLADBOOKS_SCHEDULER_H__ 1
 
+#include <limits.h>
+#include <time.h>
+
+#define IPCENTER_QUEUE "/tmp/ipcenter"
+
+struct sched_msgbuf {
+        long mtype; /* pid of destination */
+        struct sched_info {
+                long pid; /* pid of sender */
+                char command[LINE_MAX];
+        } info;
+};
+
+struct sched_timer {
+        int     id;
+        timer_t timerid;
+        char    *command;
+        struct sched_timer *next;
+};
+
 int start_scheduler();
+void stop_scheduler();
 void scheduler();
 void handle_term(int signum);
 void handle_usr1(int signum);
+int send_reply(long mtype, char *msg, ...);
 
-int sched_proc;
+/* Schedule a batch command to run at a specific time */
+int schedule_at(struct sched_msgbuf msg);
+
+/* Cancel a scheduled batch run */
+int schedule_cancel(struct sched_msgbuf msg);
+
+/* handle incoming commands */
+int schedule_command(struct sched_msgbuf msg);
+
+/* Report status on a scheduled batch run */
+int schedule_timer(struct sched_msgbuf msg);
+
+/* List all timers */
+int schedule_list(struct sched_msgbuf msg);
+
+/* return ptr to struct with timer details for id */
+timer_t get_sched_timer(int id);
+
+/* store timer details */
+int set_sched_timer(timer_t timerid, char *command);
+
+/* delete timer from list */
+void del_sched_timer(int id);
+
+int sched_proc; /* pid of scheduler */
 
 #endif /* __GLADBOOKS_SCHEDULER_H__ */

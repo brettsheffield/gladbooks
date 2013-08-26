@@ -25,11 +25,8 @@
 
 #include <gladdb/db.h>
 
-/* Schedule a batch command to run at a specific time */
-int batch_at(int conn, char *command);
-
-/* Cancel a scheduled batch run */
-int batch_cancel(int conn, char *command);
+/* Pass command on to scheduler */
+int batch_schedule(int conn, char *command);
 
 /* Execute some SQL on an open db connection */
 int batch_exec_sql(char *instance, int business, char *sql);
@@ -46,9 +43,6 @@ int batch_mail_all(int conn);
 
 /* TODO: not implemented - check for jobs in clerk table and execute */
 int batch_run(int conn);
-
-/* Report status on a scheduled batch run */
-int batch_timer(int conn, char *command);
 
 /* Write something to the open socket */
 int chat(int conn, char *msg, ...);

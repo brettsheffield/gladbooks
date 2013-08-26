@@ -26,6 +26,7 @@
 #include "email.h"
 #include "handler.h"
 #include "scheduler.h"
+#include <fcntl.h>
 #include <libgen.h>
 #include <limits.h>
 #include <signal.h>
@@ -33,98 +34,43 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <syslog.h>
 #include <time.h>
 #include <unistd.h>
 
-int batch_at(int conn, char *command)
+int batch_schedule(int conn, char *command)
 {
-        char *batchcmd = NULL;
-        char *strctime;
-        int ret;
-        int year, month, day;
-        int hour, minute, second;
-        long interval = 0;
-        struct itimerspec ts;
-        struct sigevent evp;
-        struct tm *event;
-        time_t now;
-        time_t then;
-        timer_t timerid;
+        key_t key;
+        pid_t pid = getpid();
+        int msqid;
+        struct sched_msgbuf *msgin;
+        struct sched_msgbuf *msgout;
+        size_t size = sizeof(struct sched_msgbuf)-sizeof(long);
 
-        if (sscanf(command, "AT %4d-%2d-%2d %2d:%2d:%2d %m[^\n]", 
-        &year, &month, &day, &hour, &minute, &second, &batchcmd) != 7)
-        {
-                chat(conn, "ERROR: Invalid syntax\n");
-                return 0;
-        }
-        
-        now = time(NULL);
-        event = malloc(sizeof (struct tm));
-        event->tm_year = year - 1900;
-        event->tm_mon = month - 1;
-        event->tm_mday = day;
-        event->tm_hour = hour;
-        event->tm_min = minute;
-        event->tm_sec = second;
-        interval = difftime(mktime(event), time(NULL));
+        /* connect to scheduler msg queue */
+        key = ftok(IPCENTER_QUEUE, 'a');
+        msqid = msgget(key, 0666 | IPC_CREAT);
 
-        if (interval < 0) {
-                chat(conn, "ERROR: time has past\n");
-                return 0;
+        /* send msg to scheduler */
+        msgout = calloc(1, sizeof(struct sched_msgbuf));
+        msgout->mtype = sched_proc; /* set mtype to pid of scheduler */
+        msgout->info.pid = pid;
+        strcpy(msgout->info.command, command);
+        msgsnd(msqid, msgout, size, 0);
+        free(msgout);
+
+        /* read replies */
+        msgin = malloc(sizeof(struct sched_msgbuf));
+        while (msgrcv(msqid, msgin, size, pid, 0) > 0) {
+                if (strcmp(msgin->info.command, "EOF") == 0) break;
+                chat(conn, "SCHEDULER: %s\n", msgin->info.command);
         }
 
-        then = mktime(event);
-        strctime = ctime(&then);
-
-        chat(conn, "Scheduling job\n");
-        chat(conn, "Date/Time:    %s\n", strctime);
-        chat(conn, "Command: %s\n", batchcmd);
-        chat(conn, "Delay: %lis\n", interval);
-        chat(conn, CLERK_RESP_OK);
-
-        /* schedule the command */
-        syslog(LOG_DEBUG, "batch sees scheduler process %i", sched_proc);
-        //signal(SIGUSR1, handle_usr1); // TODO: handle signal
-        evp.sigev_value.sival_ptr = &timerid;
-        evp.sigev_notify = SIGEV_SIGNAL;
-        evp.sigev_signo = SIGUSR1;
-
-        ret = timer_create(CLOCK_REALTIME, &evp, &timerid);
-        if (ret)
-                perror("timer_create()");
-
-        ts.it_interval.tv_sec = interval;
-        ts.it_interval.tv_nsec = 0;
-        ts.it_value.tv_sec = interval;
-        ts.it_value.tv_nsec = 0;
-        ret = timer_settime(timerid, 0, &ts, NULL);
-        if (ret)
-                perror("timer_settime()");
-        
-        chat(conn, "TIMER %i set\n", timerid);
-
-        free(batchcmd);
-        free(event);
-
-        return 0;
-}
-
-int batch_cancel(int conn, char *command)
-{
-        long int timerid;
-
-        if (sscanf(command, "CANCEL %li", &timerid) != 1) {
-                chat(conn, "ERROR: Invalid syntax\n");
-                return 0;
-        }
-
-        if (timer_delete((timer_t) timerid) == -1) {
-                chat(conn, "ERROR: Invalid timer id\n");
-                return 0;
-        }
-
-        chat(conn, CLERK_RESP_OK);
+        free(msgin);
 
         return 0;
 }
@@ -322,29 +268,6 @@ int batch_mail_all(int conn)
 int batch_run(int conn)
 {
         /* TODO: check for jobs in clerk table */
-        return 0;
-}
-
-int batch_timer(int conn, char *command)
-{
-        long int timerid;
-        struct itimerspec ts;
-
-        if (sscanf(command, "TIMER %li", &timerid) != 1) {
-                chat(conn, "ERROR: Invalid syntax\n");
-                return 0;
-        }
-
-        if (timer_gettime((timer_t) timerid, &ts) == -1) {
-                chat(conn, "ERROR: Invalid timer id\n");
-                return 0;
-        }
-
-        chat(conn, CLERK_RESP_OK);
-
-        chat(conn, "Timer %li set to run in %lds\n",
-                timerid, ts.it_value.tv_sec);
-
         return 0;
 }
 

@@ -23,7 +23,7 @@ CFLAGS=-g -Wall -Werror
 PROGRAM=clerkd
 TESTPROGRAM=${PROGRAM}_test
 MYSQLFLAGS=`mysql_config --cflags --libs`
-LIBS=-L/usr/lib/x86_64-linux-gnu -lpq ${MYSQLFLAGS} -lsybdb -lmysqlclient -lldap -lb64 -lgladdb
+LIBS=-L/usr/lib/x86_64-linux-gnu -lpq ${MYSQLFLAGS} -lsybdb -lmysqlclient -lldap -lb64 -lgladdb -lrt
 INSTALLDIR=/usr/local/bin
 TESTOBJECTS=test.o args_test.o client_test.o config_test.o email_test.o server_test.o
 MAINOBJECTS=args.o batch.o client.o config.o email.o handler.o help.o lockfile.o scheduler.o server.o signals.o
@@ -62,8 +62,8 @@ help.o: help.c help.h
 lockfile.o: lockfile.c lockfile.h
 	${CC} ${CFLAGS} -c lockfile.c
 
-scheulder.o: scheulder.c scheulder.h
-	${CC} ${CFLAGS} -c scheulder.c
+scheduler.o: scheduler.c scheduler.h
+	${CC} ${CFLAGS} -c scheduler.c -lrt
 
 server.o: server.c server.h
 	${CC} ${CFLAGS} -c server.c

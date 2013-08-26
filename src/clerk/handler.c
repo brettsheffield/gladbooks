@@ -59,6 +59,9 @@ int handle_command(int conn, char *command)
                 chat(conn, CLERK_RESP_OK);
                 return batch_run(conn);
         }
+        else if (strncmp(command, CLERK_CMD_LIST,strlen(CLERK_CMD_LIST)) == 0){
+                return batch_schedule(conn, command);
+        }
         else if (strncmp(command, CLERK_CMD_MAIL_ALL,
         strlen(CLERK_CMD_MAIL_ALL)) == 0)
         {
@@ -68,17 +71,17 @@ int handle_command(int conn, char *command)
                 return batch_mail(conn, command);
         }
         else if (strncmp(command, CLERK_CMD_AT,strlen(CLERK_CMD_AT)) == 0){
-                return batch_at(conn, command);
+                return batch_schedule(conn, command);
         }
         else if (strncmp(command, CLERK_CMD_CANCEL,
         strlen(CLERK_CMD_CANCEL)) == 0)
         {
-                return batch_cancel(conn, command);
+                return batch_schedule(conn, command);
         }
         else if (strncmp(command, CLERK_CMD_TIMER,
         strlen(CLERK_CMD_TIMER)) == 0)
         {
-                return batch_timer(conn, command);
+                return batch_schedule(conn, command);
         }
         else if (strncmp(command,CLERK_CMD_QUIT,strlen(CLERK_CMD_QUIT)) == 0) {
                 chat(conn, CLERK_RESP_BYE);
