@@ -836,6 +836,28 @@ INNER JOIN accounttype at ON at.id = a.accounttype
 ORDER by a.id ASC
 ;
 
+CREATE VIEW assetaccountlist AS
+SELECT
+        a.id as nominalcode,
+        a.description as account,
+        at.name as type
+FROM account a
+INNER JOIN accounttype at ON at.id = a.accounttype
+WHERE a.accounttype = '1000'
+ORDER by a.id ASC
+;
+
+CREATE VIEW revenueaccountlist AS
+SELECT
+        a.id as nominalcode,
+        a.description as account,
+        at.name as type
+FROM account a
+INNER JOIN accounttype at ON at.id = a.accounttype
+WHERE a.accounttype = '4000'
+ORDER by a.id ASC
+;
+
 CREATE OR REPLACE VIEW balancesheet AS
 	-- assets
         SELECT

@@ -1,0 +1,28 @@
+<div class="salespayment create">
+	<div class="statusmsg clearfix"/>
+	<h2>Enter Sales Payment</h2>
+	<form method="post" action="salespayments">
+	  <table class="datatable">
+			<thead>
+				<tr>
+					<th>Date</th>
+					<th>Payment Type</th>
+					<th>Customer</th>
+					<th>Account</th>
+					<th>Amount</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><input name="transactdate" class="datefield" autocomplete="off"/></td>
+					<td><a class="datasource" href="paymenttype"></a><select name="paymenttype" class="paymenttype populate" data-placeholder="Select Payment Type" title="Select Payment Type"></select></td>
+					<td><a class="datasource" href="organisations"></a><select name="organisation" class="organisations populate" data-placeholder="Select Customer" title="You must select a customer to post this payment against"></select></td>
+					<td><a class="datasource" href="accounts.asset"></a><select name="bankaccount" class="account populate" data-placeholder="Select account" title="You must select an account to post this product against"></select></td>
+					<td><input class="amount" type="text" name="amount" placeholder="0.00" title="amount paid"/></td>
+				</tr>
+			</tbody>
+	  </table>
+		<button class="submit formsubmit">Save</button>
+		<button class="reset formreset">Reset</button>
+	</form>
+</div>

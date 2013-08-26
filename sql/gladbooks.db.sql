@@ -2060,3 +2060,9 @@ INSERT INTO taxratedetail (taxrate, tax, rate, valid_from, valid_to) VALUES (cur
 INSERT INTO relationship (id, name) VALUES (0, 'contact');
 INSERT INTO relationship (name) VALUES ('billing');
 INSERT INTO relationship (name) VALUES ('shipping');
+
+-- Payment Types
+INSERT INTO paymenttype (name) VALUES ('cash');
+INSERT INTO paymenttype (name) VALUES ('cheque');
+INSERT INTO paymenttype (name) VALUES ('bank transfer');
+

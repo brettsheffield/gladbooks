@@ -8,7 +8,7 @@
 		<xs:element name="organisation" type="xs:positiveInteger"/>
 		<xs:element name="bankaccount" type="xs:nonNegativeInteger"/>
 		<xs:element name="amount" type="xs:decimal" minOccurs="0"/>
-		<xs:element name="description" type="xs:string"/>
+		<xs:element name="description" type="xs:string"  minOccurs="0"/>
 	</xs:sequence>
 	<xs:attribute name="id" type="xs:positiveInteger"/>
 </xs:complexType><!--salespayment-->

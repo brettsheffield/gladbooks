@@ -530,6 +530,12 @@ function clickMenu(event) {
 	else if ($(this).attr("href") == '#salesinvoices') {
 		showQuery('salesinvoices', 'Sales Invoices', true);
 	}
+	else if ($(this).attr("href") == '#salespayments') {
+		showQuery('salespayments', 'Sales Payments', true);
+	}
+	else if ($(this).attr("href") == '#salespayment.create') {
+		getForm('salespayment', 'create', 'Enter Sales Payment');
+	}
 	else if ($(this).attr("href") == '#help') {
 		addTab("Help", "<h2>Help</h2>", true);
 	}
@@ -589,12 +595,17 @@ function fetchFormData(object, action) {
 		d.push(getXML(collection_url('accounttypes')));
 	}
 	else if (object == 'product') {
-		d.push(getXML(collection_url('accounts')));
+		d.push(getXML(collection_url('accounts.revenue')));
 	}
 	else if (object == 'salesorder') {
 		d.push(getXML(collection_url('organisations')));
 		d.push(getXML(collection_url('cycles')));
 		d.push(getXML(collection_url('products')));
+	}
+	else if (object == 'salespayment') {
+		d.push(getXML(collection_url('paymenttype')));
+		d.push(getXML(collection_url('organisations')));
+		d.push(getXML(collection_url('accounts.asset')));
 	}
 	else {
 		d.push($.Deferred().resolve()); /* succeed at nothing */
@@ -1267,7 +1278,10 @@ function populateCombo(xml, combo, tab) {
 		if (combo.attr('name') == 'cycle') {
 			var name = $(this).find('cyclename').text();
 		}
-		else if (combo.attr('name') == 'account') {
+		else if ((combo.attr('name') == 'account') ||
+		(combo.attr('name') == 'bankaccount')
+		)
+		{
    			var id = $(this).find('nominalcode').text();
 			id = padString(id, 4);  /* pad nominal code to 4 digits */
 			var name = id + " - " + $(this).find('account').text();
