@@ -392,7 +392,7 @@ BEGIN
         ELSE
                 /* set defaults */
                 IF NEW.terms IS NULL THEN
-                        NEW.terms := 30;
+                        NEW.terms := 14;
                 END IF;
                 IF NEW.is_active IS NULL THEN
                         NEW.is_active := 'true';
