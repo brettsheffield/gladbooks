@@ -152,7 +152,6 @@ int schedule_at(struct sched_msgbuf msg)
         long interval = 0;
         struct itimerspec ts;
         struct sigevent evp;
-        time_t now;
         time_t then;
         timer_t timerid;
         struct tm *event;
@@ -167,7 +166,6 @@ int schedule_at(struct sched_msgbuf msg)
                 return 0;
         }
 
-        now = time(NULL);
         event = malloc(sizeof (struct tm));
         event->tm_year = year - 1900;
         event->tm_mon = month - 1;
