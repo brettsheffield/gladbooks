@@ -219,7 +219,8 @@ int batch_mail(int conn, char *command)
 }
 
 /* perform a batch mail run for every business in every instance */
-int batch_mail_all(int conn)
+//int batch_mail_all(int conn)
+int batch_all(int conn, char *cmd)
 {
         char *bus;
         char *command;
@@ -248,11 +249,11 @@ int batch_mail_all(int conn)
                 rowc = batch_fetch_rows(inst, 0, sql, &business);
                 free(sql);
                 if (rowc > 0) {
-                        /* perform mail run for each business */
+                        /* perform command run for each business */
                         while (business != NULL) {
                                 bus = db_field(business, "id")->fvalue;
-                                asprintf(&command, "MAIL %s.%s", inst, bus);
-                                batch_mail(conn, command);
+                                asprintf(&command, "%s %s.%s", cmd, inst, bus);
+                                handle_command(conn, command);
                                 free(command);
                                 business = business->next;
                         }
@@ -268,6 +269,63 @@ int batch_mail_all(int conn)
 int batch_run(int conn)
 {
         /* TODO: check for jobs in clerk table */
+        return 0;
+}
+
+int batch_si(int conn, char *command)
+{
+        char instance[63] = "";
+        int business = 0;
+        char *sql;
+        int rowc;
+        row_t *rows = NULL;
+
+        if (sscanf(command, "SI %[^.].%i\n", instance, &business) != 2) {
+                chat(conn, "ERROR: Invalid syntax\n");
+                return 0;
+        }
+
+        chat(conn, "Performing SalesInvoice batch run for instance '%s', business '%i' ... ",
+                instance, business);
+
+        db_connect(config->dbs);
+
+        /* verify instance and business exist */
+        asprintf(&sql, "SELECT * FROM instance WHERE id='%s';", instance);
+        rowc = batch_fetch_rows(NULL, 0, sql, &rows);
+        free(sql);
+        if (rowc == 0) {
+                chat(conn, "ERROR: instance '%s' does not exist\n", instance);
+                db_disconnect(config->dbs);
+                return 0;
+        }
+        rows = NULL;
+        asprintf(&sql, "SELECT * FROM business WHERE id='%i';", business);
+        rowc = batch_fetch_rows(instance, 0, sql, &rows);
+        free(sql);
+        if (rowc == 0) {
+                chat(conn, "ERROR: business '%s.%i' does not exist\n",
+                        instance, business);
+                db_disconnect(config->dbs);
+                return 0;
+        }
+        rows = NULL;
+
+        chat(conn, CLERK_RESP_OK);
+
+        /* lock salesinvoice table */
+        batch_exec_sql(instance, business,
+                "BEGIN WORK; LOCK TABLE salesinvoice IN EXCLUSIVE MODE");
+
+        /* generate salesinvoices */
+        batch_exec_sql(instance, business, "SELECT process_salesorders();");
+
+        /* commit changes and release lock */
+        batch_exec_sql(instance, business, "COMMIT WORK;");
+        db_disconnect(config->dbs);
+
+        chat(conn, CLERK_RESP_OK);
+
         return 0;
 }
 

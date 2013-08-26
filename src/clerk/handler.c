@@ -65,10 +65,18 @@ int handle_command(int conn, char *command)
         else if (strncmp(command, CLERK_CMD_MAIL_ALL,
         strlen(CLERK_CMD_MAIL_ALL)) == 0)
         {
-                return batch_mail_all(conn);
+                return batch_all(conn, CLERK_CMD_MAIL);
         }
         else if (strncmp(command, CLERK_CMD_MAIL,strlen(CLERK_CMD_MAIL)) == 0){
                 return batch_mail(conn, command);
+        }
+        else if (strncmp(command, CLERK_CMD_SI_ALL,
+        strlen(CLERK_CMD_SI_ALL)) == 0)
+        {
+                return batch_all(conn, CLERK_CMD_SI);
+        }
+        else if (strncmp(command, CLERK_CMD_SI,strlen(CLERK_CMD_SI)) == 0){
+                return batch_si(conn, command);
         }
         else if (strncmp(command, CLERK_CMD_AT,strlen(CLERK_CMD_AT)) == 0){
                 return batch_schedule(conn, command);

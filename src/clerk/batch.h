@@ -44,6 +44,12 @@ int batch_mail_all(int conn);
 /* TODO: not implemented - check for jobs in clerk table and execute */
 int batch_run(int conn);
 
+/* perform a batch salesinvoice run a specified business */
+int batch_si(int conn, char *command);
+
+/* perform a batch command run for every business in every instance */
+int batch_all(int conn, char *cmd);
+
 /* Write something to the open socket */
 int chat(int conn, char *msg, ...);
 
