@@ -733,7 +733,8 @@ WHERE id IN (
 	SELECT MAX(id)
 	FROM salespaymentdetail
 	GROUP BY salespayment
-);
+)
+ORDER BY id ASC;
 
 CREATE TABLE salespaymentallocation (
 	id		SERIAL PRIMARY KEY,
