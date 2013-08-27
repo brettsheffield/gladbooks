@@ -877,7 +877,8 @@ CREATE OR REPLACE VIEW balancesheet AS
         SELECT
                 account as sort,
                 description || ' (' || account || ')' AS description,
-		format_accounting(sum(debit) - sum(credit)) as total
+		format_accounting(COALESCE(sum(debit), 0)
+		- COALESCE(sum(credit), 0)) as total
         FROM ledger l
         INNER JOIN account a ON a.id=l.account
 	WHERE account BETWEEN 0 AND 1999
@@ -887,7 +888,9 @@ UNION
 	SELECT 
                 1999 as sort,
                 text 'TOTAL ASSETS' AS description,
-		format_accounting(sum(debit) - sum(credit)) as total
+		format_accounting(
+			COALESCE(sum(debit), 0) - COALESCE(sum(credit), 0)
+		) as total
         FROM ledger l
 	WHERE account BETWEEN 0 AND 1999
 UNION
@@ -895,7 +898,9 @@ UNION
         SELECT
                 account as sort,
                 description || ' (' || account || ')' AS description,
-		format_accounting(sum(credit) - sum(debit)) as total
+		format_accounting(
+			COALESCE(sum(credit), 0) - COALESCE(sum(debit), 0)
+		) as total
         FROM ledger l
         INNER JOIN account a ON a.id=l.account
 	WHERE account BETWEEN 2000 AND 2999
@@ -905,7 +910,9 @@ UNION
 	SELECT 
                 2999 as sort,
                 text 'TOTAL LIABILITIES' AS description,
-		format_accounting(sum(credit) - sum(debit)) as total
+		format_accounting(
+			COALESCE(sum(credit), 0) - COALESCE(sum(debit), 0)
+		) as total
         FROM ledger l
 	WHERE account BETWEEN 2000 AND 2999
 UNION
@@ -913,7 +920,9 @@ UNION
         SELECT
                 account as sort,
                 description || ' (' || account || ')' AS description,
-		format_accounting(sum(credit) - sum(debit)) as total
+		format_accounting(
+			COALESCE(sum(credit), 0) - COALESCE(sum(debit), 0)
+		) as total
         FROM ledger l
         INNER JOIN account a ON a.id=l.account
 	WHERE account BETWEEN 3000 AND 3999
@@ -923,7 +932,9 @@ UNION
         SELECT
                 3200 as sort,
                 'Earnings (Current Period)' AS description,
-		format_accounting(sum(credit) - sum(debit)) as total
+		format_accounting(
+			COALESCE(sum(credit), 0) - COALESCE(sum(debit), 0)
+		) as total
         FROM ledger l
 	WHERE account BETWEEN 4000 AND 9999
         GROUP BY account, description, division, department
@@ -932,14 +943,18 @@ UNION
 	SELECT 
                 3999 as sort,
                 text 'TOTAL CAPITAL' AS description,
-		format_accounting(sum(credit) - sum(debit)) as total
+		format_accounting(
+			COALESCE(sum(credit), 0) - COALESCE(sum(debit), 0)
+		) as total
 	FROM ledger l
 		WHERE account BETWEEN 3000 AND 9999
 UNION
         SELECT
                 NULL as account,
                 text 'TOTAL LIABILITES AND CAPITAL' AS description,
-		format_accounting(sum(credit) - sum(debit)) as total
+		format_accounting(
+			COALESCE(sum(credit), 0) - COALESCE(sum(debit), 0)
+		) as total
         FROM ledger l
 	WHERE account BETWEEN 2000 AND 9999
 ORDER BY sort ASC
