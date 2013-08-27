@@ -95,6 +95,7 @@
 		<xsl:text>','</xsl:text>
 		<xsl:copy-of select="$clientip"/>
 		<xsl:text>');</xsl:text>
+		<xsl:text>SELECT postpayment(CAST('sales' AS TEXT), CAST(currval(pg_get_serial_sequence('salespayment','id')) AS INT4));</xsl:text>
 		<xsl:text>COMMIT;</xsl:text>
 	</xsl:template>
 

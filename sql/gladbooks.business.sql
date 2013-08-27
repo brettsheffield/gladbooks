@@ -1041,6 +1041,21 @@ ORDER BY lineorder, account ASC
 ) a
 ;
 
+CREATE OR REPLACE VIEW generalledger AS
+SELECT
+	l.id,
+	j.id AS journal,
+	j.transactdate as date,
+	j.description AS narrative,
+	a.description || '(' || l.account || ')' as account,
+	l.division, l.department,
+	format_accounting(l.debit) AS debit,
+	format_accounting(l.credit) AS credit
+FROM ledger l
+INNER JOIN journal j ON j.id = l.journal
+INNER JOIN account a ON a.id = l.account
+;
+
 CREATE OR REPLACE VIEW productlist AS
 SELECT
         product as id,

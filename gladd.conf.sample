@@ -139,21 +139,7 @@ end sql org_contact_del
 sql division		SELECT * FROM gladbooks_$0_$1.division
 sql instances		SELECT * FROM gladbooks.instance
 sql journal		SELECT * FROM gladbooks_$0_$1.journal
-
-begin sql ledger
-	SELECT 
-		l.id,
-		j.id AS journal,
-		j.transactdate as date,
-		j.description AS narrative,
-		a.description || '(' || l.account || ')' as account,
-		l.division, l.department,
-		l.debit, l.credit
-	FROM gladbooks_$0_$1.ledger l
-	INNER JOIN gladbooks_$0_$1.journal j ON j.id = l.journal
-	INNER JOIN gladbooks_$0_$1.account a ON a.id = l.account
-end sql ledger
-
+sql ledger              SELECT * FROM gladbooks_$0_$1.generalledger
 sql organisationlist	SELECT * FROM gladbooks_$0.organisationlist
 
 begin sql org_contact	
