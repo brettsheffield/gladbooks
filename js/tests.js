@@ -994,6 +994,37 @@ test("allocate sales payment", function() {
 });
 */
 
+/* fetch two urls and ensure they are the same */
+function testXmlGet(url1, url2) {
+
+    stop();
+
+	var d = new Array(); /* array of deferreds */
+
+	d.push($.ajax({
+		url: url1,
+		type: 'GET',
+		beforeSend: function (xhr) { setAuthHeader(xhr); }
+	}));
+
+	d.push($.ajax({
+		url: url2,
+		type: 'GET',
+		beforeSend: function (xhr) { setAuthHeader(xhr); }
+	}));
+
+	$.when.apply(null, d)
+	.done(function(html) {
+		var args = Array.prototype.splice.call(arguments, 0);
+		equal(args[0][0], args[1][0], "html documents match");
+		start();
+	})
+	.fail(function() {
+		ok(false, 'testXmlGet(): failed to fetch test urls');
+		start();
+	});
+}
+
 function testXmlPost(object, testid) {
 
     stop();
@@ -1044,5 +1075,12 @@ test("padString() - add leading zeros", function() {
 
 
 	equal(padString(rawstring, 4), cookedstring, "Pad string with leading zeros");
+});
+
+module("XSLT");
+
+test("xslt GET()", function() {
+	
+	testXmlGet('/testxslt/', '/testdata/testxslt.html');
 
 });

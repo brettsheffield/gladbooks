@@ -80,6 +80,8 @@ url	xslpost POST /*/*/products/*			gb product
 url	xslpost POST /*/*/product_taxes/*		gb product_tax
 url	xslpost POST /*/*/salesorders/*			gb salesorder
 
+url    	xslt    GET  /testxslt/*                        gb testxslt
+
 ###############################################################################
 # acls (tried in order of appearance)
 ###############################################################################
@@ -88,6 +90,8 @@ acl     GET     /js/*                           allow   *
 acl     GET     /html/*                         allow   *
 acl     GET     /media/*                        allow   *
 acl     GET     /img/*                          allow   *
+acl     GET     /testxslt/*                     allow   *
+acl     GET     /testdata/*                     allow   *
 acl     GET     /*/*/*                          sufficient      *
 acl     POST    /*/*/*                          sufficient      *
 acl     GET     /auth/*                         sufficient      *
@@ -208,6 +212,7 @@ begin sql tax
 end sql tax
 
 sql test		SELECT * FROM test
+sql testxslt SELECT * FROM gladbooks.instance
 
 sql ld_auth		ou=people
 sql ld_group		ou=group
