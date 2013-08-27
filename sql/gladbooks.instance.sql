@@ -107,8 +107,12 @@ CREATE TRIGGER organisationdetailupdate BEFORE INSERT ON organisationdetail
 FOR EACH ROW EXECUTE PROCEDURE organisationdetailupdate();
 
 CREATE OR REPLACE VIEW organisation_current AS
-SELECT * FROM organisationdetail
-WHERE id IN (
+SELECT
+	od.*,
+	o.orgcode
+FROM organisationdetail od
+INNER JOIN organisation o ON o.id = od.organisation
+WHERE od.id IN (
 	SELECT MAX(id)
 	FROM organisationdetail
 	GROUP BY organisation

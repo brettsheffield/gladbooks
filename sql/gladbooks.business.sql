@@ -736,6 +736,18 @@ WHERE id IN (
 )
 ORDER BY id ASC;
 
+CREATE OR REPLACE VIEW salespaymentlist AS
+SELECT 
+	sp.salespayment AS id,
+	sp.transactdate AS date,
+	o.orgcode,
+	sp.bankaccount as account,
+	sp.amount,
+	sp.updated
+
+FROM salespayment_current sp
+INNER JOIN organisation_current o ON o.organisation = sp.organisation;
+
 CREATE TABLE salespaymentallocation (
 	id		SERIAL PRIMARY KEY,
 	updated		timestamp with time zone default now(),
