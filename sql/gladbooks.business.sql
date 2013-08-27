@@ -746,7 +746,8 @@ SELECT
 	sp.updated
 
 FROM salespayment_current sp
-INNER JOIN organisation_current o ON o.organisation = sp.organisation;
+INNER JOIN organisation_current o ON o.organisation = sp.organisation
+ORDER BY sp.id ASC;
 
 CREATE TABLE salespaymentallocation (
 	id		SERIAL PRIMARY KEY,
