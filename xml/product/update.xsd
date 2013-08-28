@@ -11,7 +11,7 @@
       <xs:element name="data">
         <xs:complexType>
           <xs:sequence>
-						<xs:element name="product" type="product" maxOccurs="1">
+						<xs:element name="product" type="product" maxOccurs="1"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element><!--data-->
