@@ -543,10 +543,10 @@ SELECT
 	s.*,
 	s0.organisation,
 	s0.ordernum,
-	SUM(COALESCE(soi2.price, p2.price_sell) * soi2.qty) AS price,
-	COALESCE(tx.tax, '0.00') as tax,
-	SUM(COALESCE(soi2.price, p2.price_sell) * soi2.qty) + 
-		COALESCE(tx.tax, '0.00') AS total
+	roundhalfeven(SUM(COALESCE(soi2.price, p2.price_sell) * soi2.qty),2) AS price,
+	roundhalfeven(COALESCE(tx.tax, '0.00'),2) as tax,
+	roundhalfeven(SUM(COALESCE(soi2.price, p2.price_sell) * soi2.qty) + 
+		COALESCE(tx.tax, '0.00'),2) AS total
 FROM salesorderdetail s
 LEFT JOIN salesorder_tax tx ON s.salesorder = tx.salesorder
 INNER JOIN salesorder s0 ON s0.id = s.salesorder
