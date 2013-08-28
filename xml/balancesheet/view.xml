@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <row>
+    <sort>1000</sort>
+    <description>Current Account (1000)</description>
+    <total>147.50</total>
+  </row>
+  <row>
+    <sort>1001</sort>
+    <description>Savings Account (1001)</description>
+    <total>2516.32</total>
+  </row>
+  <row>
+    <sort>1100</sort>
+    <description>Debtors Control Account (1100)</description>
+    <total>617.25</total>
+  </row>
+  <row>
+    <sort>1999</sort>
+    <description>TOTAL ASSETS</description>
+    <total>3281.07</total>
+  </row>
+  <row>
+    <sort>2202</sort>
+    <description>VAT Liability Account (2202)</description>
+    <total>999.97</total>
+  </row>
+  <row>
+    <sort>2999</sort>
+    <description>TOTAL LIABILITIES</description>
+    <total>999.97</total>
+  </row>
+  <row>
+    <sort>3999</sort>
+    <description>TOTAL CAPITAL</description>
+    <total>4500.00</total>
+  </row>
+  <row>
+    <sort></sort>
+    <description>TOTAL LIABILITES AND CAPITAL</description>
+    <total>5499.97</total>
+  </row>
+</resources>

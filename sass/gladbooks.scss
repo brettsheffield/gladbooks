@@ -705,3 +705,22 @@ tr.contact.link {
 tr.contact.link > td {
 	padding: 5px;
 }
+
+/* reports */
+
+div.report.balancesheet {
+	background-color: $color-even;
+	border: solid 1px black;
+	margin: 50px;
+	min-height: 500px;
+	padding: 20px;
+}
+div.report.balancesheet * div.bsaccount {
+	float: left;
+}
+div.report.balancesheet * div.bsamount {
+	float: right;
+}
+div.report.balancesheet * div.linespace {
+	min-height: 20px;
+}

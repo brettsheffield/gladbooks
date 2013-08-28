@@ -86,4 +86,15 @@ select.account {
 	width: 200px;
 }
 
+/* report panels */
+div.panel.left {
+	float: left;
+	width: 300px;
+}
+
+div.panel.right {
+	float: right;
+	width: 300px;
+}
+
 }

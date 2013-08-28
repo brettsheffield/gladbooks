@@ -510,7 +510,7 @@ function clickMenu(event) {
 		getForm('product', 'create', 'Add New Product');
 	}
 	else if ($(this).attr("href") == '#rpt_balancesheet') {
-		showQuery('reports/balancesheet', 'Balance Sheet', false);
+		showHTML(collection_url('reports/balancesheet'),'Balance Sheet',false);
 	}
 	else if ($(this).attr("href") == '#rpt_trialbalance') {
 		showQuery('reports/trialbalance', 'Trial Balance', false);
@@ -559,6 +559,34 @@ function showQuery(collection, title, sort, tab) {
 		},
 		error: function(xml) {
 			displayResultsGeneric(xml, collection, title);
+		}
+	});
+}
+
+/******************************************************************************/
+/* Fetch HTML fragment and display in new tab */
+function showHTML(url, title, tab) {
+	showSpinner();
+	$.ajax({
+		url: url,
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(html) {
+			if (tab) {
+				tab = updateTab(tab, html);
+			}
+			else {
+				tab = addTab(title, html, true);
+			}
+			hideSpinner();
+		},
+		error: function() {
+			if (tab) {
+				tab = updateTab(tab, 'Not found.');
+			}
+			else {
+				tab = addTab(title, 'Not found.', false);
+			}
+			hideSpinner();
 		}
 	});
 }

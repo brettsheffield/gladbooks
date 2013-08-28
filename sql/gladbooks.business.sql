@@ -950,7 +950,7 @@ UNION
 		WHERE account BETWEEN 3000 AND 9999
 UNION
         SELECT
-                NULL as account,
+                99999 as account,
                 text 'TOTAL LIABILITES AND CAPITAL' AS description,
 		format_accounting(
 			COALESCE(sum(credit), 0) - COALESCE(sum(debit), 0)

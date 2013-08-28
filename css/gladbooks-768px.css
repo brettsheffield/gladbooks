@@ -22,4 +22,13 @@
   /* map */
   .map-canvas {
     height: 350px;
-    width: 350px; } }
+    width: 350px; }
+
+  /* report panels */
+  div.panel.left {
+    float: left;
+    width: 500px; }
+
+  div.panel.right {
+    float: right;
+    width: 600px; } }
