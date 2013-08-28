@@ -937,7 +937,7 @@ UNION
 		) as total
         FROM ledger l
 	WHERE account BETWEEN 4000 AND 9999
-        GROUP BY account, description, division, department
+        GROUP BY sort, description, division, department
 UNION
 	-- total capital
 	SELECT 
