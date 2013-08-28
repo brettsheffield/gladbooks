@@ -2026,11 +2026,13 @@ function collectionObject(c) {
 
 /******************************************************************************/
 /* Fetch an individual element of a collection for display / editing */
-function displayElement(collection, id) {
-	console.log('displayElement(' + collection + ',' + id + ')');
+function displayElement(collection, id, title) {
+	console.log('displayElement(' + collection + ',' + id + ',' + title + ')');
 	var object = collectionObject(collection);
-	var title = 'Edit ' + object.substring(0,1).toUpperCase()
+	if (!title) {
+		var title = 'Edit ' + object.substring(0,1).toUpperCase()
 		+ object.substring(1) + ' ' + id;
+	}
 	if (id) {
 		var action = 'update';
 	}
@@ -2039,7 +2041,7 @@ function displayElement(collection, id) {
 	}
 
 	if (collection.substring(0, 8) == 'reports/') {
-		showHTML(collection_url(collection) + id, 'Statement', false);
+		showHTML(collection_url(collection) + id, title, false);
 		return;
 	}
 
@@ -2231,7 +2233,13 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 			else {
 				var id = $(this).find('td.xml-id').text();
 			}
-			displayElement(collection, id);
+			if (collection == 'reports/accountsreceivable') {
+				var title = 'Statement: ' + $(this).find('td.xml-orgcode').text();
+			}
+			else {
+				var title = null;
+			}
+			displayElement(collection, id, title);
 		}
 	});
 
