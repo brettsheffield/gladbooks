@@ -11,9 +11,6 @@
 </div>
 </xsl:template>
 <xsl:template match="row">
-	<xsl:if test="account=''">
-		<div class="linespace"/>
-	</xsl:if>
 	<xsl:choose>
 		<xsl:when test="description='Revenue'">
 			<h3>Revenue</h3>
@@ -22,6 +19,7 @@
 			<h3>Expenditure</h3>
 		</xsl:when>
 		<xsl:when test="description='Total Profit / (Loss)'">
+			<div class="linespace"/>
 			<div class="clearfix">
 				<b>
 				<div class="bsaccount">
@@ -34,6 +32,9 @@
 			</div>
 		</xsl:when>
 		<xsl:otherwise>
+			<xsl:if test="account=''">
+				<div class="linespace"/>
+			</xsl:if>
 			<div class="clearfix">
 				<div class="bsaccount">
 					<xsl:value-of select="description"/>
