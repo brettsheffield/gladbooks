@@ -2140,6 +2140,9 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 		else if (collection == 'organisations') {
 			getForm('organisation', 'create', 'Add New Organisation');
 		}
+		else if (collection == 'products') {
+			getForm('product', 'create', 'Add New Product');
+		}
 		else {
 			addTab(title, "<p>Nothing found</p>", true);
 		}
