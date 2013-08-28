@@ -516,7 +516,7 @@ function clickMenu(event) {
 		showQuery('reports/trialbalance', 'Trial Balance', false);
 	}
 	else if ($(this).attr("href") == '#rpt_profitandloss') {
-		showQuery('reports/profitandloss', 'Profit and Loss', false);
+		showHTML(collection_url('reports/profitandloss'),'Profit &amp; Loss',false);
 	}
 	else if ($(this).attr("href") == '#salesorders') {
 		showQuery('salesorders', 'Sales Orders', true);
