@@ -1151,6 +1151,68 @@ WHERE soid.id IN (
 AND soid.is_deleted = 'false'
 ;
 
+CREATE OR REPLACE VIEW salesstatement AS
+SELECT
+	'SI' as type,
+	si.organisation,
+	si.salesinvoice,
+	DATE(si.taxpoint) AS taxpoint,
+	si.issued,
+	si.due,
+	si.ref,
+	format_accounting(si.subtotal) AS subtotal,
+	format_accounting(si.tax) AS tax,
+	format_accounting(si.total) AS total
+FROM salesinvoice_current si
+UNION
+SELECT
+	'SP' AS type,
+	sp.organisation,
+	NULL AS salesinvoice,
+	DATE(transactdate) AS taxpoint,
+	NULL AS issued,
+	NULL AS due,
+	description AS ref,
+	NULL AS subtotal,
+	NULL AS tax,
+	format_accounting(amount) AS total
+FROM salespayment_current sp
+UNION
+SELECT
+	'TOTAL' AS type,
+	o.id AS organisation,
+	NULL AS salesinvoice,
+	DATE(NOW()) AS taxpoint,
+	NULL AS issued,
+	NULL AS due,
+	'Total Amount Due' AS ref,
+	NULL AS subtotal,
+	NULL AS tax,
+	format_accounting(
+		SUM(COALESCE(si.total, 0)) - SUM(COALESCE(sp.amount,0))
+	) AS total
+FROM organisation o
+LEFT JOIN salesinvoice_current si ON o.id = si.organisation
+LEFT JOIN salespayment_current sp ON o.id = sp.organisation
+GROUP BY o.id, si.organisation
+ORDER BY taxpoint ASC
+;
+
+CREATE OR REPLACE VIEW accountsreceivable AS
+SELECT
+	o.organisation,
+	o.name,
+	o.orgcode,
+	format_accounting(
+		SUM(COALESCE(si.total, 0)) - SUM(COALESCE(sp.amount,0))
+	) AS total
+FROM organisation_current o
+LEFT JOIN salesinvoice_current si ON o.id = si.organisation
+LEFT JOIN salespayment_current sp ON o.id = sp.organisation
+GROUP BY o.organisation, o.name, o.orgcode
+ORDER BY o.organisation ASC
+;
+
 EXECUTE 'SELECT default_data(''' || instance || ''',''' || business_id || ''')';
 
 RETURN business;

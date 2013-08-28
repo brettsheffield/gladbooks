@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <row>
+    <account></account>
+    <description>Revenue</description>
+    <amount></amount>
+  </row>
+  <row>
+    <account>4000</account>
+    <description>General Revenues</description>
+    <amount>9,000.00</amount>
+  </row>
+  <row>
+    <account></account>
+    <description>Total Revenue</description>
+    <amount>9,000.00</amount>
+  </row>
+  <row>
+    <account></account>
+    <description>Expenditure</description>
+    <amount></amount>
+  </row>
+  <row>
+    <account>5100</account>
+    <description>Shipping</description>
+    <amount>246.30</amount>
+  </row>
+  <row>
+    <account></account>
+    <description>Total Expenditure</description>
+    <amount>246.30</amount>
+  </row>
+  <row>
+    <account></account>
+    <description>Total Profit / (Loss)</description>
+    <amount>8,753.70</amount>
+  </row>
+</resources>

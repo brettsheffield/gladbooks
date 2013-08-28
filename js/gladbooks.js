@@ -518,6 +518,9 @@ function clickMenu(event) {
 	else if ($(this).attr("href") == '#rpt_profitandloss') {
 		showHTML(collection_url('reports/profitandloss'),'Profit &amp; Loss',false);
 	}
+	else if ($(this).attr("href") == '#rpt_accountsreceivable') {
+		showQuery('reports/accountsreceivable', 'Accounts Receivable', true);
+	}
 	else if ($(this).attr("href") == '#salesorders') {
 		showQuery('salesorders', 'Sales Orders', true);
 	}
