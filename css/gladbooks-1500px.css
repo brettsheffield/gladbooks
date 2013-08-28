@@ -9,4 +9,12 @@
   /* map */
   .map-canvas {
     height: 600px;
-    width: 600px; } }
+    width: 600px; }
+
+  /* report panels */
+  div.report.balancesheet {
+    width: 999px; }
+
+  div.report.profitandloss,
+  div.report.statement {
+    width: 700px; } }

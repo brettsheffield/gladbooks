@@ -34,14 +34,17 @@ ul li a {
 }
 
 /* report panels */
+div.report {
+	font-size: 75%;
+}
 div.panel.left {
-        float: left;
-        width: 500px;
+	float: left;
+        width: 340px;
 }
 
 div.panel.right {
-        float: right;
-        width: 600px;
+	float: right;
+        width: 340px;
 }
 
 

@@ -708,19 +708,26 @@ tr.contact.link > td {
 
 /* reports */
 
-div.report.balancesheet {
+div.report {
 	background-color: $color-even;
 	border: solid 1px black;
-	margin: 50px;
-	min-height: 500px;
+	font-size: 50%;
 	padding: 20px;
 }
-div.report.balancesheet * div.bsaccount {
+div.report * div.linespace {
+	min-height: 20px;
+}
+div.report * div.bsaccount {
 	float: left;
 }
-div.report.balancesheet * div.bsamount {
+div.report * div.bsamount {
 	float: right;
 }
-div.report.balancesheet * div.linespace {
-	min-height: 20px;
+div.panel.left {
+	font-size: 80%;
+        font-family: monospace;
+}
+div.panel.right {
+	font-size: 80%;
+        font-family: monospace;
 }

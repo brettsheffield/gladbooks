@@ -3,48 +3,43 @@
 <xsl:output method="xml" encoding="UTF-8" indent="yes" />
 
 <xsl:template match="resources">
-<div class="report balancesheet">
-	<h2>Profit &amp; Loss</h2>
-	<div class="panel left">
+<div class="report statement">
 	<xsl:apply-templates select="row"/>
-	</div>
+	<xsl:text disable-output-escaping="yes"><![CDATA[</div>]]></xsl:text>
 </div>
 </xsl:template>
+
 <xsl:template match="row">
-	<xsl:choose>
-		<xsl:when test="description='Revenue'">
-			<h3>Revenue</h3>
-		</xsl:when>
-		<xsl:when test="description='Expenditure'">
-			<h3>Expenditure</h3>
-		</xsl:when>
-		<xsl:when test="description='Total Profit / (Loss)'">
-			<div class="linespace"/>
-			<div class="clearfix">
-				<b>
-				<div class="bsaccount">
-					<xsl:value-of select="description"/>
-				</div>
-				<div class="bsamount">
-					<xsl:value-of select="amount"/>
-				</div>
-				</b>
-			</div>
-		</xsl:when>
-		<xsl:otherwise>
-			<xsl:if test="account=''">
-				<div class="linespace"/>
-			</xsl:if>
-			<div class="clearfix">
-				<div class="bsaccount">
-					<xsl:value-of select="description"/>
-				</div>
-				<div class="bsamount">
-					<xsl:value-of select="amount"/>
-				</div>
-			</div>
-		</xsl:otherwise>
-	</xsl:choose>
+	<xsl:if test="type='ORG_NAME'">
+		<h2>Statement</h2>
+		<h3><xsl:value-of select="ref"/></h3>
+		<xsl:text disable-output-escaping="yes">
+		<![CDATA[<div class="panel left">]]>
+		</xsl:text>
+	</xsl:if>
+	<xsl:if test="type='TOTAL'">
+		<div class="linespace"/>
+		<b>
+		<div class="bsaccount">
+			<xsl:value-of select="ref"/>
+		</div>
+		<div class="bsamount">
+			<xsl:value-of select="total"/>
+		</div>
+		</b>
+	</xsl:if>
+	
+	<xsl:if test="type='SI' or type='SP'">
+		<div class="bsaccount">
+			<xsl:value-of select="taxpoint"/>
+			&#160;&#160;&#160;&#160;
+			<xsl:value-of select="ref"/>
+		</div>
+		<div class="bsamount">
+			<xsl:value-of select="total"/>
+		</div>
+	</xsl:if>
+	<div class="clearfix"/>
 </xsl:template>
 
 </xsl:stylesheet>

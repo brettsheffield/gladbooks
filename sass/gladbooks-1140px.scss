@@ -26,4 +26,18 @@
 	width: 450px;
 } 
 
+/* report panels */
+div.report {
+	font-size: 100%;
+}
+div.panel.left {
+        float: left;
+        width: 600px;
+}
+div.panel.right {
+        float: right;
+        width: 600px;
+}
+
+
 }

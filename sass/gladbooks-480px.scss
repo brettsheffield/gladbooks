@@ -87,14 +87,18 @@ select.account {
 }
 
 /* report panels */
+div.report {
+	font-size: 75%;
+	margin: 50px;
+	min-height: 500px;
+}
 div.panel.left {
-	float: left;
-	width: 300px;
+	font-size: 100%;
+        width: 250px;
 }
 
 div.panel.right {
-	float: right;
-	width: 300px;
+	font-size: 100%;
+        width: 250px;
 }
-
 }

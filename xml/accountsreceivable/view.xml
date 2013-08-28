@@ -1,38 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <row>
-    <account></account>
-    <description>Revenue</description>
-    <amount></amount>
+    <type>ORG_NAME</type>
+    <id></id>
+    <salesinvoice></salesinvoice>
+    <taxpoint>0001-01-01</taxpoint>
+		<issued></issued>
+		<due></due>
+		<ref>Big Customer</ref>
+		<subtotal></subtotal>
+		<tax></tax>
+		<total></total>
   </row>
   <row>
-    <account>4000</account>
-    <description>General Revenues</description>
-    <amount>9,000.00</amount>
+    <type>SI</type>
+    <id>2</id>
+    <salesinvoice>1</salesinvoice>
+    <taxpoint>2013-07-28</taxpoint>
+		<issued>2013-07-28 06:00:19.420587+01</issued>
+		<due>2013-08-11</due>
+		<ref>BIGCUSTO/0001</ref>
+		<subtotal>5,120.00</subtotal>
+		<tax>1,024.00</tax>
+		<total>6,144.00</total>
   </row>
   <row>
-    <account></account>
-    <description>Total Revenue</description>
-    <amount>9,000.00</amount>
+    <type>SI</type>
+    <id>2</id>
+    <salesinvoice>1</salesinvoice>
+    <taxpoint>2013-08-28</taxpoint>
+		<issued>2013-08-28 11:23:19.420587+01</issued>
+		<due>2013-09-11</due>
+		<ref>BIGCUSTO/0002</ref>
+		<subtotal>5,120.00</subtotal>
+		<tax>1,024.00</tax>
+		<total>6,144.00</total>
   </row>
   <row>
-    <account></account>
-    <description>Expenditure</description>
-    <amount></amount>
+    <type>SP</type>
+    <id>2</id>
+    <salesinvoice></salesinvoice>
+    <taxpoint>2013-08-30</taxpoint>
+		<issued></issued>
+		<due></due>
+		<ref>Payment Received</ref>
+		<subtotal></subtotal>
+		<tax></tax>
+		<total>6,144.00</total>
   </row>
   <row>
-    <account>5100</account>
-    <description>Shipping</description>
-    <amount>246.30</amount>
-  </row>
-  <row>
-    <account></account>
-    <description>Total Expenditure</description>
-    <amount>246.30</amount>
-  </row>
-  <row>
-    <account></account>
-    <description>Total Profit / (Loss)</description>
-    <amount>8,753.70</amount>
+    <type>TOTAL</type>
+    <id>2</id>
+    <salesinvoice></salesinvoice>
+    <taxpoint>2013-08-30</taxpoint>
+		<issued></issued>
+		<due></due>
+		<ref>Total Amount Due</ref>
+		<subtotal></subtotal>
+		<tax></tax>
+		<total>6,144.00</total>
   </row>
 </resources>

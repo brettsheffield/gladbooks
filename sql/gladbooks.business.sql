@@ -1153,13 +1153,26 @@ AND soid.is_deleted = 'false'
 
 CREATE OR REPLACE VIEW salesstatement AS
 SELECT
+	'ORG_NAME' as type,
+	o.organisation AS id,
+	NULL AS salesinvoice,
+	'0001-01-01' AS taxpoint,
+	NULL AS issued,
+	NULL AS due,
+	o.name || ' (' || o.orgcode || ')' AS ref,
+	NULL AS subtotal,
+	NULL AS tax,
+	NULL AS total
+FROM organisation_current o
+UNION
+SELECT
 	'SI' as type,
-	si.organisation,
+	si.organisation AS id,
 	si.salesinvoice,
 	DATE(si.taxpoint) AS taxpoint,
 	si.issued,
 	si.due,
-	si.ref,
+	'Invoice: ' || si.ref AS ref,
 	format_accounting(si.subtotal) AS subtotal,
 	format_accounting(si.tax) AS tax,
 	format_accounting(si.total) AS total
@@ -1167,12 +1180,12 @@ FROM salesinvoice_current si
 UNION
 SELECT
 	'SP' AS type,
-	sp.organisation,
+	sp.organisation AS id,
 	NULL AS salesinvoice,
 	DATE(transactdate) AS taxpoint,
 	NULL AS issued,
 	NULL AS due,
-	description AS ref,
+	'Payment Received' AS ref,
 	NULL AS subtotal,
 	NULL AS tax,
 	format_accounting(amount) AS total
@@ -1180,9 +1193,9 @@ FROM salespayment_current sp
 UNION
 SELECT
 	'TOTAL' AS type,
-	o.id AS organisation,
+	o.id AS id,
 	NULL AS salesinvoice,
-	DATE(NOW()) AS taxpoint,
+	NULL AS taxpoint,
 	NULL AS issued,
 	NULL AS due,
 	'Total Amount Due' AS ref,
@@ -1200,7 +1213,7 @@ ORDER BY taxpoint ASC
 
 CREATE OR REPLACE VIEW accountsreceivable AS
 SELECT
-	o.organisation,
+	o.organisation AS id,
 	o.name,
 	o.orgcode,
 	format_accounting(

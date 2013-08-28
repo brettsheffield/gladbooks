@@ -3,7 +3,7 @@
 <xsl:output method="xml" encoding="UTF-8" indent="yes" />
 
 <xsl:template match="resources">
-<div class="report balancesheet">
+<div class="report profitandloss">
 	<h2>Profit &amp; Loss</h2>
 	<div class="panel left">
 	<xsl:apply-templates select="row"/>

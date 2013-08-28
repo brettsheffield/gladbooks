@@ -2038,6 +2038,11 @@ function displayElement(collection, id) {
 		var action = 'create';
 	}
 
+	if (collection.substring(0, 8) == 'reports/') {
+		showHTML(collection_url(collection) + id, 'Statement', false);
+		return;
+	}
+
 	showSpinner(); /* tell user to wait */
 
 	/* fetch the xml and html we need, then display the form */
