@@ -1,0 +1,35 @@
+/* 
+ * gladbooks-800px.scss
+ * sass file for Gladbooks base styles
+ */
+@media only screen and (min-width: 800px) {
+  /* define some colours to use in our stylesheets */
+  body {
+    font-size: 12pt; }
+
+  #logo {
+    margin-left: 3%; }
+
+  #pagearea {
+    min-height: 425px; }
+
+  .tablet {
+    min-height: 400px; }
+
+  ul li a {
+    padding: 10px 15px; }
+
+  /* map */
+  .map-canvas {
+    height: 350px;
+    width: 350px; }
+
+  /* report panels */
+  div.report {
+    font-size: 75%; }
+
+  div.panel.left {
+    width: 340px; }
+
+  div.panel.right {
+    width: 340px; } }

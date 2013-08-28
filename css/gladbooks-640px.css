@@ -1,8 +1,8 @@
 /* 
- * gladbooks-480.scss
+ * gladbooks-640px.scss
  * sass file for Gladbooks base styles
  */
-@media only screen and (min-width: 480px) {
+@media only screen and (min-width: 640px) {
   /* define some colours to use in our stylesheets */
   body {
     font-size: 8pt; }

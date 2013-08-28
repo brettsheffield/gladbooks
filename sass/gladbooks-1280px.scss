@@ -1,10 +1,10 @@
 /* 
- * gladbooks-1140.scss
+ * gladbooks-1280px.scss
  * sass file for Gladbooks base styles
  * Large screen edition
  */
 
-@media only screen and (min-width: 1140px) {
+@media only screen and (min-width: 1280px) {
 
 @import "sass/gladbooks-color.scss";
 
@@ -28,16 +28,15 @@
 
 /* report panels */
 div.report {
-	font-size: 100%;
+	font-size: 80%;
 }
 div.panel.left {
         float: left;
-        width: 600px;
+        width: 450px;
 }
 div.panel.right {
         float: right;
-        width: 600px;
+        width: 450px;
 }
-
 
 }

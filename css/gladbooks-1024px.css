@@ -1,8 +1,8 @@
 /* 
- * gladbooks-768.scss
+ * gladbooks-1024px.scss
  * sass file for Gladbooks base styles
  */
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 1024px) {
   /* define some colours to use in our stylesheets */
   body {
     font-size: 12pt; }
@@ -30,8 +30,8 @@
 
   div.panel.left {
     float: left;
-    width: 340px; }
+    width: 350px; }
 
   div.panel.right {
     float: right;
-    width: 340px; } }
+    width: 350px; } }
