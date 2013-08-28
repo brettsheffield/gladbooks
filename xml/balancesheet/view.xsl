@@ -12,7 +12,7 @@
 </div>
 </xsl:template>
 <xsl:template match="row">
-	<xsl:if test="sort=1999 or sort=2999 or sort=3999 or sort=''">
+	<xsl:if test="sort=1999 or sort=2999 or sort=3999 or sort=99999">
 		<div class="linespace"/>
 	</xsl:if>
 	<div class="clearfix">
