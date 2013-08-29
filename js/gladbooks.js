@@ -546,7 +546,7 @@ function clickMenu(event) {
 		getForm('salespayment', 'create', 'Enter Sales Payment');
 	}
 	else if ($(this).attr("href") == '#help') {
-		addTab("Help", "<h2>Help</h2>", true);
+		showHTML('help/index.html', 'Help', false);
 	}
 	else if ($(this).attr("href") == '#') {
 		console.log('Doing nothing, successfully');
