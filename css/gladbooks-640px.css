@@ -80,4 +80,8 @@
 
   div.panel.right {
     font-size: 100%;
-    width: 250px; } }
+    width: 250px; }
+
+  /* help screens */
+  div.help {
+    padding: 0 0 1% 1%; } }

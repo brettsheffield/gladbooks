@@ -479,6 +479,9 @@ function clickMenu(event) {
 	else if ($(this).attr("href") == '#chartadd') {
 		getForm('account', 'create', 'Add New Account');
 	}
+	else if ($(this).attr("href") == '#banking') {
+		showHTML('help/banking.html', 'Banking', false);
+	}
 	else if ($(this).attr("href") == '#contacts') {
 		showQuery('contacts', 'Contacts', true);
 	}
@@ -502,6 +505,9 @@ function clickMenu(event) {
 	}
 	else if ($(this).attr("href") == '#organisation.create') {
 		getForm('organisation', 'create', 'Add New Organisation');
+	}
+	else if ($(this).attr("href") == '#payables') {
+		showHTML('help/payables.html', 'Payables', false);
 	}
 	else if ($(this).attr("href") == '#products') {
 		showQuery('products', 'Products', true);
