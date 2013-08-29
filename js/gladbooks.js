@@ -936,7 +936,7 @@ function recalculateLineTotal(parentrow, tab) {
 	t = decimalPad(roundHalfEven(t, 2), 2);
 	var inputtotal = parentrow.find('input.total');
 	var oldval = inputtotal.val();
-	inputtotal.val(t);
+	inputtotal.val(formatThousands(t));
 	if (oldval != t) {
 		updateSalesOrderTotals(tab);
 	}
@@ -1088,7 +1088,8 @@ function updateSalesOrderTotals(tab) {
 
 	mytab.find('input.total:not(.clone)').each(function() 
 	{
-		x = $(this).val();
+		/* get line total, stripping commas */
+		x = $(this).val().replace(',', '');
 		if ((! isNaN(x)) && (x != '')) {
 			subtotal = subtotal.plus(Big(x));
 		}
@@ -1100,15 +1101,23 @@ function updateSalesOrderTotals(tab) {
 	subtotal = decimalPad(subtotal, 2);
 	mytab.find('table.totals').find('td.subtotal').each(function() 
 	{
-		$(this).text(subtotal);
+		$(this).text(formatThousands(subtotal));
 	});
 
 	/* update grand total */
 	gtotal = decimalPad(gtotal, 2);
 	mytab.find('table.totals').find('td.gtotal').each(function() 
 	{
-		$(this).text(gtotal);
+		$(this).text(formatThousands(gtotal));
 	});
+}
+
+/* comma separate thousands
+ * TODO: make locale dependent */
+function formatThousands(x) {
+	var parts = x.toString().split(".");
+	parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	return parts.join(".");
 }
 
 /******************************************************************************/
