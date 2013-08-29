@@ -1921,6 +1921,11 @@ function submitForm(object, action, id) {
 		}
 	});
 
+	/* TODO: temp - add Standard Rate VAT to products by default */
+	if (object == 'product') {
+		xml += '<tax id="1"/>';
+	}
+
 	xml += '</' + object + '>';
 	xml += '</data></request>';
 
