@@ -2264,9 +2264,11 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 		/* quick hack to add pdf link */
 		if (collection == 'salesinvoices') {
 			var ref = $(this).find('ref').text();
+			var si = 'SI-' + ref.replace('/','-') + '.pdf';
+			var siref = 'SI/' + ref;
 			$t += '<td class="xml-pdf">';
-			$t += '<a href="/pdf/' + g_orgcode + '/';
-			$t += 'SI-' + ref.replace('/','-') + '.pdf">[PDF]</a>';
+			$t += '<a id="' + siref + '" href="/pdf/' + g_orgcode + '/';
+			$t += si + '">[PDF]</a>';
 			$t += '</td>';
 		}
 		$t += "</tr>";
@@ -2304,13 +2306,15 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 			displayElement(collection, id, title);
 		}
 		else {
-			var href=$(this).find('td.xml-pdf').find('a').attr('href');
+			var a=$(this).find('td.xml-pdf').find('a');
+			var href=a.attr('href');
+			var si = a.attr('id');
 			var html = '<div class="pdf">';
 			html += '<object class="pdf" data="' + href + '"';
 			html += 'type="application/pdf">';
 			html += 'alt : <a href="' + href + '">PDF</a>';
 			html += '</object></div>';
-			addTab('PDF', html, true);
+			addTab(si, html, true);
 		}
 	});
 
