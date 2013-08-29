@@ -760,7 +760,7 @@ function displayForm(object, action, title, html, xml, tab) {
 		title = $(xml[0]).find('name').first().text();
 	}
 
-	if (tab != 'undefined') {
+	if (typeof tab != 'undefined') {
 		tab = updateTab(tab, html);
 	}
 	else {
