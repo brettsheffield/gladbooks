@@ -2303,6 +2303,15 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 			}
 			displayElement(collection, id, title);
 		}
+		else {
+			var href=$(this).find('td.xml-pdf').find('a').attr('href');
+			var html = '<div class="pdf">';
+			html += '<object class="pdf" data="' + href + '"';
+			html += 'type="application/pdf">';
+			html += 'alt : <a href="' + href + '">PDF</a>';
+			html += '</object></div>';
+			addTab('PDF', html, true);
+		}
 	});
 
 	if (tab) {

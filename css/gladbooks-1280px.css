@@ -29,4 +29,13 @@
 
   div.panel.right {
     float: right;
-    width: 450px; } }
+    width: 450px; }
+
+  /* pdf */
+  object.pdf {
+    height: 445px;
+    width: 100%; }
+
+  div.pdf {
+    min-height: 400px;
+    width: 100%; } }

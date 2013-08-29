@@ -32,4 +32,13 @@
     width: 340px; }
 
   div.panel.right {
-    width: 340px; } }
+    width: 340px; }
+
+  /* pdf */
+  object.pdf {
+    height: 396px;
+    width: 100%; }
+
+  div.pdf {
+    min-height: 400px;
+    width: 100%; } }
