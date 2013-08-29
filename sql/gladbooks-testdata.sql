@@ -41,13 +41,6 @@ INSERT INTO account (accounttype, description) VALUES ('6000', 'Accommodation');
 INSERT INTO account (accounttype, description) VALUES ('7000', 'Utilities');
 INSERT INTO account (accounttype, description) VALUES ('8000', 'Depreciation');
 
--- The Boris Tax
-INSERT INTO tax VALUES (DEFAULT);
-INSERT INTO taxdetail (account, name) VALUES ('2202', 'The Boris Tax');
-INSERT INTO taxrate VALUES (DEFAULT);
-INSERT INTO taxratedetail (rate, valid_from, valid_to) VALUES ('6.66', NULL, NULL);
-
-
 INSERT INTO product DEFAULT VALUES;
 INSERT INTO productdetail (account, shortname, description, price_buy, price_sell) VALUES ('4000', 'Test Product', 'Description of Test Product', '4.50', '9.99');
 INSERT INTO product_tax (product, tax) VALUES (currval(pg_get_serial_sequence('product','id')), '1');
