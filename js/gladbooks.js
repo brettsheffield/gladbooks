@@ -1509,6 +1509,14 @@ function relationshipUpdate(organisation, contact, relationships, refresh) {
 function taxProduct(product, tax, refresh, tab) {
 	console.log('Taxing product');
 	var xml = createRequestXml();
+	statusHide();
+
+	/* prevent more than one VAT rate being applied to a single product */
+	var has_tax = activeTab().find('td.product_taxes').text().indexOf('VAT');
+	if ((has_tax > 0) && (tax <= 3)) {
+		statusMessage("Only one type of VAT may be applied.", STATUS_WARN);
+		return;
+	}
 
     xml += '<tax id="' + tax + '">';
     xml += '<product>' + product + '</product>';
@@ -1746,7 +1754,7 @@ function addSalesOrderProducts(tab, datatable, xml) {
  *
  ******************************************************************************/
 function addSubFormRows(xml, datatable, view, tab) {
-	console.log('addSubFormRows()');
+	console.log('addSubFormRows(' + view + ')');
 	var i = 0;
 	var id = 0;
 	$(xml).find('resources').find('row').each(function() {
@@ -1760,7 +1768,7 @@ function addSubFormRows(xml, datatable, view, tab) {
 				row.append(relationshipCombo(datatable, $(this), id, tab));
 			}
 			else {
-				row.append('<td>' + $(this).text() + '</td>');
+				row.append('<td class="' + view + '">' + $(this).text() + '</td>');
 			}
 		});
 
@@ -1769,12 +1777,14 @@ function addSubFormRows(xml, datatable, view, tab) {
 			+ '<input type="hidden" name="id" value="' 
 			+ id + '"/><button class="removerow">X</button></td>');
 
-		/* attach click event to edit elements of subform */
-		row.find('td').not('.noclick').click(function() {
-			var id = $(this).parent().find('input[name="id"]').val();
-			var collection = view.split('_')[1].toLowerCase();
-			displayElement(collection, id);
-		});
+		if (view != 'product_taxes') {
+			/* attach click event to edit elements of subform */
+			row.find('td').not('.noclick').click(function() {
+				var id = $(this).parent().find('input[name="id"]').val();
+				var collection = view.split('_')[1].toLowerCase();
+				displayElement(collection, id);
+			});
+		}
 
 		datatable.append(row);
 
