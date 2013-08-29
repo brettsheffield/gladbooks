@@ -146,10 +146,20 @@ function addTab(title, content, activate, collection, refresh) {
 		tabContentClasses += ' refresh';
 	}
 
+	/* check if this tab already exists */
+	var oldtabid = getTabByTitle(title);
+	if (oldtabid >= 0) {
+		updateTab(oldtabid, content, activate);
+		if (activate) {
+			activateTab(oldtabid);
+		}
+		return oldtabid;
+	}
+
 	/* add tab and closer */
 	$('ul.tablist').append('<li id="tabli' + tabid
 		+ '" class="' + tabClasses + '">'
-		+ '<a href="' + tabid + '">' + title + '</a>'
+		+ '<a class="tabtitle" href="' + tabid + '">' + title + '</a>'
 		+ '<a id="tabcloser' + tabid + '" class="tabcloser" href="'
 		+ tabid  + '">'
 		+ 'X</a></li>');
@@ -181,6 +191,12 @@ function addTab(title, content, activate, collection, refresh) {
 	$('div.tabs').fadeIn(300);
 
 	return tabid; /* return new tab id */
+}
+
+function getTabByTitle(title) {
+	var tabid =   $('a.tabtitle:contains("' + title + '")').attr("href");
+	console.log('Found tab by title: ' + tabid);
+	return tabid;
 }
 
 /******************************************************************************/
@@ -522,7 +538,7 @@ function clickMenu(event) {
 		showQuery('reports/trialbalance', 'Trial Balance', false);
 	}
 	else if ($(this).attr("href") == '#rpt_profitandloss') {
-		showHTML(collection_url('reports/profitandloss'),'Profit &amp; Loss',false);
+		showHTML(collection_url('reports/profitandloss'),'Profit & Loss',false);
 	}
 	else if ($(this).attr("href") == '#rpt_accountsreceivable') {
 		showQuery('reports/accountsreceivable', 'Accounts Receivable', true);
@@ -744,7 +760,7 @@ function displayForm(object, action, title, html, xml, tab) {
 		title = $(xml[0]).find('name').first().text();
 	}
 
-	if (tab) {
+	if (tab != 'undefined') {
 		tab = updateTab(tab, html);
 	}
 	else {
