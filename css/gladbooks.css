@@ -425,12 +425,15 @@ td {
 .xml-subtotal,
 .xml-tax,
 .xml-total {
+  font-size: 90%;
   text-align: right;
   white-space: pre;
-  width: 10em; }
+  width: 8em; }
 
 .qty {
-  text-align: right; }
+  font-size: 90%;
+  text-align: right;
+  width: 2em; }
 
 td.xml-authuser {
   width: 8em; }
@@ -454,6 +457,7 @@ td.xml-orgcode {
   width: 10em; }
 
 td.linetext {
+  font-size: 90%;
   width: 50%; }
 
 input.linetext {

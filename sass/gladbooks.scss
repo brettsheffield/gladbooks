@@ -477,13 +477,16 @@ td {
 .xml-subtotal ,
 .xml-tax ,
 .xml-total {
+	font-size: 90%;
 	text-align: right;
 	white-space: pre;
-	width: 10em;
+	width: 8em;
 }
 
 .qty {
+	font-size: 90%;
 	text-align: right;
+	width: 2em;
 }
 
 td.xml-authuser {
@@ -518,6 +521,7 @@ td.xml-product {
 }
 
 td.linetext {
+	font-size: 90%;
 	width: 50%;
 }
 
