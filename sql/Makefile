@@ -23,6 +23,9 @@ testdata:
 functions:
 	psql gladbooks < gladbooks.functions.sql
 
+demo:
+	psql gladbooks < gladbooks.demo.sql
+
 dropdb:
 	dropdb gladbooks
 
