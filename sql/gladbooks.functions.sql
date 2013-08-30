@@ -1,5 +1,7 @@
 SET search_path TO gladbooks;
 
+SET ROLE dba;
+
 /* test of postgresql shared library function */
 CREATE FUNCTION test(TEXT) RETURNS INT4
 	AS 'gladbooks', 'test'
@@ -30,3 +32,6 @@ CREATE OR REPLACE FUNCTION write_salesinvoice_tex(
 ) RETURNS INT4
 	AS 'gladbooks', 'write_salesinvoice_tex'
 	LANGUAGE C STRICT;
+
+RESET ROLE;
+
