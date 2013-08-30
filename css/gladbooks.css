@@ -646,3 +646,12 @@ object.pdf {
 div.pdf {
   min-height: 100px;
   width: 100%; }
+
+/* video */
+object.video {
+  height: 100px;
+  width: 100%; }
+
+div.video {
+  min-height: 100px;
+  width: 100%; }

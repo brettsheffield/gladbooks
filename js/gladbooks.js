@@ -32,6 +32,7 @@ var g_frmLedger;
 var g_tabid = 0;
 var g_xml_business = ''
 var g_xml_relationships = '';
+var g_max_tabtitle = '24'; /* max characters to allow in tab title */
 
 var STATUS_INFO = 1;
 var STATUS_WARN = 2;
@@ -146,6 +147,9 @@ function addTab(title, content, activate, collection, refresh) {
 		tabContentClasses += ' refresh';
 	}
 
+	/* truncate tab title if required */
+	title = title.substring(0, g_max_tabtitle);
+
 	/* check if this tab already exists */
 	var oldtabid = getTabByTitle(title);
 	if (oldtabid >= 0) {
@@ -187,6 +191,11 @@ function addTab(title, content, activate, collection, refresh) {
 		activateTab(tabid);
 	}
 
+    /* set click events */
+	getTabById(tabid).find('a.tablink').each(function() {
+		$(this).click(clickTabLink);
+	});
+
 	/* fade in if we aren't already visible */
 	$('div.tabs').fadeIn(300);
 
@@ -212,8 +221,15 @@ function updateTab(tabid, content, activate) {
 	/* preserve status message */
 	var statusmsg = tab.find('.statusmsg').detach();
 
+	/* replace content */
 	tab.empty();
 	tab.append(content);
+	
+	/* set click events */
+	tab.find('a.tablink').each(function() {
+		$(this).click(clickTabLink);
+	});
+
 	if (statusmsg) {
 		tab.find('.statusmsg').replaceWith(statusmsg);
 	}
@@ -570,6 +586,11 @@ function clickMenu(event) {
 	else {
 		addTab("Not Implemented", "<h2>Feature Not Available Yet</h2>", true);
 	}
+}
+
+function clickTabLink(event) {
+	event.preventDefault();
+	showHTML($(this).attr("href"), 'Help' , false);
 }
 
 /******************************************************************************/

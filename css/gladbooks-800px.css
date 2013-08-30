@@ -13,11 +13,16 @@
   #pagearea {
     min-height: 425px; }
 
+  /* tabs */
   .tablet {
     min-height: 400px; }
 
   ul li a {
     padding: 10px 15px; }
+
+  ul.tablist > li {
+    font-size: 10pt;
+    line-height: 18pt; }
 
   /* map */
   .map-canvas {
@@ -40,5 +45,14 @@
     width: 100%; }
 
   div.pdf {
+    min-height: 400px;
+    width: 100%; }
+
+  /* video */
+  object.video {
+    height: 400px;
+    width: 100%; }
+
+  div.video {
     min-height: 400px;
     width: 100%; } }

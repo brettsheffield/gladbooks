@@ -16,9 +16,15 @@
         min-height: 490px;
 }
 
+/* tabs */
 .tablet {
 	min-height: 450px;
 }
+
+ul.tablist > li {
+	width: 24.8%; /* four tabs per line */
+}
+
 
 /* map */
 .map-canvas {

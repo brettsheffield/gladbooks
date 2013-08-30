@@ -3,8 +3,13 @@
   #pagearea {
     min-height: 750px; }
 
+  /* tabs */
   .tablet {
     min-height: 720px; }
+
+  ul.tablist > li {
+    width: 19.8%;
+    /* five tabs per line */ }
 
   /* map */
   .map-canvas {
@@ -31,5 +36,14 @@
     width: 100%; }
 
   div.pdf {
+    min-height: 600px;
+    width: 100%; }
+
+  /* video */
+  object.video {
+    height: 600px;
+    width: 100%; }
+
+  div.video {
     min-height: 600px;
     width: 100%; } }
