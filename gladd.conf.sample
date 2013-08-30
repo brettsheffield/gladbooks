@@ -1,6 +1,6 @@
-# gladd.conf
+# gladd.conf for Gladbooks
 # 
-# this file is part of GLADD
+# this file is part of GLADBOOKS
 # 
 # Copyright (c) 2012, 2013 Brett Sheffield <brett@gladserv.com>
 # 
@@ -38,13 +38,20 @@ url     static  GET  /css/*	/usr/local/gladbooks/gladbooks-ui/css/
 url     static  GET  /js/*	/usr/local/gladbooks/gladbooks-ui/js/
 url     static  GET  /html/*	/usr/local/gladbooks/gladbooks-ui/html/
 url     static  GET  /img/*	/usr/local/gladbooks/gladbooks-ui/img/
+url     static  GET  /mov/*	/usr/local/gladbooks/gladbooks-ui/mov/
+url     static  GET  /testdata/* /usr/local/gladbooks/gladbooks-ui/xml/testdata/
+url     static  GET  /pdf/* 	/var/spool/gladbooks/
+url     static  GET  /help/* 	/usr/local/gladbooks/gladbooks-ui/html/help/
 
 url	sqlview GET  /*/*/search/contacts/*		gb contactsearch
 url	sqlview GET  /*/*/accounts/*   			gb accountlist
+url	sqlview GET  /*/*/accounts.asset/* 		gb accounts.asset
+url	sqlview GET  /*/*/accounts.revenue/* 		gb accounts.revenue
 url	sqlview GET  /*/*/accounttypes/  		gb accounttype
 url     sqlview GET  /auth/*				gb auth
 url	sqlview GET  /*/*/businesses/* 			gb businesses
-url	sqlview GET  /*/*/contacts/* 			gb contactlist
+url	sqlview GET  /*/*/contacts/ 			gb contactlist
+url	sqlview GET  /*/*/contacts/* 			gb contactdetail
 url	sqlview GET  /*/*/cycles/* 			gb cycle
 url	sqlview GET  /*/*/departments/*			gb department
 url	sqlview GET  /*/*/divisions/*			gb division
@@ -53,21 +60,28 @@ url	sqlview GET  /*/*/journals/*			gb journal
 url	sqlview GET  /*/*/ledgers/*			gb ledger
 url	sqlview GET  /*/*/organisations/* 		gb organisationlist
 url	sqlview GET  /*/*/organisation_contacts/*/ 	gb org_contact
+url	sqlview GET  /*/*/paymenttype/*	 		gb paymenttype
 url	sqlview GET  /*/*/products/*	 		gb product
 url	sqlview GET  /*/*/product_taxes/*		gb product_taxes
 url	sqlview GET  /*/*/relationships/* 		gb relationships
-url	sqlview GET  /*/*/reports/balancesheet/ 	gb balancesheet
-url	sqlview GET  /*/*/reports/profitandloss/ 	gb profitandloss
-url	sqlview GET  /*/*/salesinvoices/* 		gb salesinvoices
+url	xslt	GET  /*/*/reports/balancesheet/ 	gb balancesheet
+url	xslt	GET  /*/*/reports/profitandloss/ 	gb profitandloss
+url	sqlview	GET  /*/*/reports/accountsreceivable/ 	gb receivables
+url	xslt	GET  /*/*/reports/accountsreceivable/* 	gb accountsreceivable
+url	sqlview GET  /*/*/salesinvoices/* 		gb salesinvoicelist
 url	sqlview GET  /*/*/salesorders/	 		gb salesorderlist
 url	sqlview GET  /*/*/salesorders/*	 		gb salesorderview
 url	sqlview GET  /*/*/salesorderitems/* 		gb salesorderitem
+url	sqlview GET  /*/*/salespayments/	 	gb salespaymentlist
 url	sqlview GET  /*/*/taxes/*	 		gb tax
+url	sqlview GET  /*/*/trialbalance/*	 	gb trialbalance
 
 url	sqlview DELETE /*/*/organisation_contacts/*	gb org_contact_del
 url	sqlview DELETE /*/*/product_taxes/*		gb product_tax_del
 
 url	xslpost POST /*/*/accounts/*			gb account
+url	xslpost POST /*/*/banks/*			gb bank
+url	xslpost POST /*/*/billingrun/*	 		gb billingrun
 url	xslpost POST /*/*/businesses/*			gb business
 url	xslpost POST /*/*/contacts/*			gb contact
 url	xslpost POST /*/*/departments/*			gb department
@@ -76,11 +90,40 @@ url	xslpost POST /*/*/instances/*			gb instance
 url	xslpost POST /*/*/journals/*			gb journal
 url	xslpost POST /*/*/organisations/*		gb organisation
 url	xslpost POST /*/*/organisation_contacts/*	gb organisation_contact
+url	xslpost POST /*/*/payments/*			gb payment
 url	xslpost POST /*/*/products/*			gb product
 url	xslpost POST /*/*/product_taxes/*		gb product_tax
+url	xslpost POST /*/*/purchaseorders/*		gb purchaseorder
+url	xslpost POST /*/*/purchaseinvoices/*		gb purchaseinvoice
+url	xslpost POST /*/*/purchasepayments/*		gb purchasepayment
+url	xslpost POST /*/*/purchasepaymentallocations/*	gb purchasepaymentallocation
 url	xslpost POST /*/*/salesorders/*			gb salesorder
+url	xslpost POST /*/*/salesinvoices/*		gb salesinvoice
+url	xslpost POST /*/*/salespayments/*		gb salespayment
+url	xslpost POST /*/*/salespaymentallocations/*	gb salespaymentallocation
 
-url    	xslt    GET  /testxslt/*                        gb testxslt
+url	xslt	GET  /testxslt/*			gb testxslt
+
+# importer urls
+url sqlview GET  /gladserv/organisations/*			gladserv import_gs_organisations
+url sqlview GET  /gladserv/products/*				gladserv import_products
+url sqlview GET  /gladserv/product_taxs/* 			gladserv import_product_taxes
+url sqlview GET  /gladserv/organisation_contacts/* 		gladserv import_gs_organisation_contacts
+url sqlview GET  /gladserv/organisation_salesinvoices/* 	gladserv import_gs_organisation_salesinvoices
+url sqlview GET  /gladserv/organisation_salesorders/* 		gladserv import_gs_organisation_salesorders
+url sqlview GET  /gladserv/salesorder_salesorderitems/* 	gladserv import_gs_salesorder_salesorderitems
+url sqlview GET  /gladserv/salesorder_salesinvoices/* 		gladserv import_gs_salesorder_salesinvoices
+
+url xslpost POST /gladserv/products/	gladserv product
+
+url sqlview GET  /penguinfactory/organisations/* 		penguinf import_pf_organisations
+url sqlview GET  /penguinfactory/products/* 			penguinf import_products
+url sqlview GET  /penguinfactory/product_taxs/* 		penguinf import_product_taxes
+url sqlview GET  /penguinfactory/organisation_contacts/*	penguinf import_pf_organisation_contacts
+url sqlview GET  /penguinfactory/organisation_salesinvoices/*	penguinf import_pf_organisation_salesinvoices
+url sqlview GET  /penguinfactory/organisation_salesorders/*	penguinf import_pf_organisation_salesorders
+url sqlview GET  /penguinfactory/salesorder_salesorderitems/*	penguinf import_pf_salesorder_salesorderitems
+url sqlview GET  /penguinfactory/salesorder_salesinvoices/*	penguinf import_pf_salesorder_salesinvoices
 
 ###############################################################################
 # acls (tried in order of appearance)
@@ -88,15 +131,20 @@ url    	xslt    GET  /testxslt/*                        gb testxslt
 acl     GET     /css/*                          allow   *
 acl     GET     /js/*                           allow   *
 acl     GET     /html/*                         allow   *
+acl     GET     /help/*                         allow   *
 acl     GET     /media/*                        allow   *
 acl     GET     /img/*                          allow   *
-acl     GET     /testxslt/*                     allow   *
+acl     GET     /mov/*                          allow   *
 acl     GET     /testdata/*                     allow   *
+acl     GET     /testxslt/*                     allow   *
 acl     GET     /*/*/*                          sufficient      *
 acl     POST    /*/*/*                          sufficient      *
 acl     GET     /auth/*                         sufficient      *
 acl     DELETE  /*/*/organisation_contacts/*    sufficient      *
 acl     DELETE  /*/*/product_taxes/*            sufficient      *
+
+# temp
+acl     GET     /pdf/*.pdf                      allow   *
 
 ###############################################################################
 ## auth
@@ -118,9 +166,14 @@ user    bravo   pass
 # $1 = business
 ###############################################################################
 sql accountlist		SELECT * FROM gladbooks_$0_$1.accountlist
+sql accounts.asset	SELECT * FROM gladbooks_$0_$1.assetaccountlist
+sql accounts.revenue	SELECT * FROM gladbooks_$0_$1.revenueaccountlist
 sql accounttype		SELECT * FROM gladbooks_$0_$1.accounttype ORDER by id ASC
 sql auth		SELECT * FROM gladbooks.username
 sql balancesheet	SELECT * FROM gladbooks_$0_$1.balancesheet
+sql receivables		SELECT * FROM gladbooks_$0_$1.accountsreceivable
+sql accountsreceivable	SELECT * FROM gladbooks_$0_$1.salesstatement
+sql trialbalance	SELECT * FROM gladbooks_$0_$1.trialbalance
 sql businesses		SELECT * FROM gladbooks_$0.businessview ORDER BY name ASC
 sql contactdetail	SELECT * FROM gladbooks_$0.contactdetailview
 sql contactlist		SELECT * FROM gladbooks_$0.contactlist
@@ -143,7 +196,7 @@ end sql org_contact_del
 sql division		SELECT * FROM gladbooks_$0_$1.division
 sql instances		SELECT * FROM gladbooks.instance
 sql journal		SELECT * FROM gladbooks_$0_$1.journal
-sql ledger              SELECT * FROM gladbooks_$0_$1.generalledger
+sql ledger		SELECT * FROM gladbooks_$0_$1.generalledger
 sql organisationlist	SELECT * FROM gladbooks_$0.organisationlist
 
 begin sql org_contact	
@@ -165,6 +218,7 @@ begin sql org_contact
 	)
 end sql org_contact
 
+sql paymenttype		SELECT DISTINCT * FROM gladbooks.paymenttype
 sql product		SELECT * FROM gladbooks_$0_$1.productlist
 
 begin sql product_taxes
@@ -196,7 +250,20 @@ end sql product_tax_del
 
 sql profitandloss	SELECT * FROM gladbooks_$0_$1.profitandloss
 sql relationships	SELECT * FROM gladbooks_$0.relationship WHERE id > 0
-sql salesinvoice	SELECT * FROM gladbooks_$0_$1.salesinvoice
+sql salesinvoice	SELECT * FROM gladbooks_$0_$1.salesinvoice_current
+
+begin sql salesinvoicelist
+	SELECT 
+		ref,
+		taxpoint,
+		DATE(issued) as issued,
+		due,
+		gladbooks.format_accounting(subtotal) AS subtotal,
+		gladbooks.format_accounting(tax) AS tax,
+		gladbooks.format_accounting(total) AS total
+	FROM gladbooks_$0_$1.salesinvoice_current
+end sql salesinvoicelist
+
 sql salesorderlist	SELECT * FROM gladbooks_$0_$1.salesorderlist
 sql salesorderview	SELECT * FROM gladbooks_$0_$1.salesorderview
 
@@ -205,6 +272,8 @@ begin sql salesorderitem
 	WHERE salesorder = '$3'
 end sql salesorderitem
 
+sql salespaymentlist	SELECT * FROM gladbooks_$0_$1.salespaymentlist
+
 begin sql tax
 	SELECT tax as id, name
 	FROM gladbooks.taxdetail
@@ -212,7 +281,240 @@ begin sql tax
 end sql tax
 
 sql test		SELECT * FROM test
-sql testxslt SELECT * FROM gladbooks.instance
 
 sql ld_auth		ou=people
 sql ld_group		ou=group
+
+
+##### Gladserv Import SQL
+begin sql import_gs_organisations
+	SELECT * FROM accountdetail
+	WHERE id IN (
+		SELECT MAX(id)
+		FROM accountdetail
+		GROUP BY account
+	)
+	AND account = 'MOBILEHE'
+end sql import_gs_organisations
+
+begin sql import_products
+	SELECT * FROM productdetail
+	WHERE id IN (
+		SELECT MAX(id)
+		FROM productdetail
+		GROUP BY product
+	)
+end sql import_products
+
+begin sql import_product_taxes
+	SELECT * FROM product_tax
+	WHERE product="$2"
+end sql import_product_taxes
+
+begin sql import_gs_organisation_contacts
+	SELECT * FROM contactdetail
+	WHERE id IN (
+		SELECT MAX(id)
+		FROM contactdetail
+		GROUP BY contact
+	)
+	AND account = '$2'
+end sql import_gs_organisation_contacts
+
+begin sql import_gs_organisation_salesorders
+	SELECT
+		salesorder,
+		account,
+		ponumber,
+		cycle,
+		DATE(start_date) AS start_date,
+		DATE(end_date) AS end_date,
+		is_open
+	FROM salesorderdetail
+	WHERE id IN (
+		SELECT MAX(id)
+		FROM salesorderdetail
+		GROUP BY salesorder
+	)
+	AND account='$2'
+end sql import_gs_organisation_salesorders
+
+begin sql import_gs_salesorder_salesorderitems
+	SELECT
+		product,
+		linetext,
+		price,
+		'1' as qty
+	FROM salesorderitem
+	WHERE is_deleted=false
+	AND salesorder='$2/$3'
+end sql import_gs_salesorder_salesorderitems
+
+begin sql import_gs_salesorders
+	SELECT
+		salesorder,
+		period,
+		DATE(taxpoint) as taxpoint,
+		DATE(issued) as issued,
+		DATE(due) as due,
+		subtotal,
+		tax,
+		total,
+		pdf,
+        	ponumber,
+		emailtext
+	FROM salesinvoice
+	WHERE salesorder='$2/$3'
+end sql import_gs_salesorders
+
+begin sql import_gs_organisation_salesinvoices
+	SELECT
+		id,
+		RIGHT(id, 4) AS invoicenum,
+		salesorder,
+		period,
+		DATE(taxpoint) as taxpoint,
+		DATE(issued) as issued,
+		DATE(due) as due,
+		subtotal,
+		tax,
+		total,
+		pdf,
+	        ponumber,
+		emailtext
+	FROM salesinvoice
+	WHERE salesorder IS NULL
+	AND account="$2"
+	ORDER BY nanostamp
+end sql import_gs_organisation_salesinvoices
+
+begin sql import_gs_salesorder_salesinvoices
+	SELECT
+		id,
+		RIGHT(id, 4) AS invoicenum,
+		salesorder,
+		period,
+		DATE(taxpoint) as taxpoint,
+		DATE(issued) as issued,
+		DATE(due) as due,
+		subtotal,
+		tax,
+		total,
+		pdf,
+	        ponumber,
+		emailtext
+	FROM salesinvoice
+	WHERE salesorder='$2/$3'
+	ORDER BY nanostamp
+end sql import_gs_salesorder_salesinvoices
+
+##### Penguin Factory Import SQL
+
+begin sql import_pf_organisations
+	SELECT * FROM organisationdetail
+	WHERE id IN (
+		SELECT MAX(id)
+		FROM organisationdetail
+		GROUP BY organisation
+	)
+#	AND organisation = 'JUSTEMPL'
+end sql import_pf_organisations
+
+begin sql import_pf_organisation_contacts
+	SELECT * FROM contactdetail cd
+	RIGHT JOIN organisation_contact oc ON cd.contact = oc.contact
+	WHERE cd.id IN (
+		SELECT MAX(id)
+		FROM contactdetail
+		GROUP BY contact
+	)
+	AND organisation = '$2'
+end sql import_pf_organisation_contacts
+
+begin sql import_pf_organisation_salesinvoices
+	SELECT
+		id,
+		RIGHT(id, 4) AS invoicenum,
+		salesorder,
+		period,
+		DATE(taxpoint) as taxpoint,
+		DATE(issued) as issued,
+		DATE(due) as due,
+		subtotal,
+		tax,
+		total,
+		pdf,
+	        ponumber,
+		emailtext
+	FROM salesinvoicedetail sid
+	WHERE salesorder IS NULL
+	AND sid.id IN (
+		SELECT MAX(id)
+		FROM salesinvoicedetail
+		GROUP BY salesinvoice
+	)
+	AND organisation="$2"
+	ORDER BY nanostamp
+end sql import_pf_organisation_salesinvoices
+
+begin sql import_pf_salesorder_salesinvoices
+	SELECT
+		id,
+		RIGHT(id, 4) AS invoicenum,
+		salesorder,
+		period,
+		DATE(taxpoint) as taxpoint,
+		DATE(issued) as issued,
+		DATE(due) as due,
+		subtotal,
+		tax,
+		total,
+		pdf,
+	        ponumber,
+		emailtext
+	FROM salesinvoicedetail sid
+	WHERE sid.id IN (
+		SELECT MAX(id)
+		FROM salesinvoicedetail
+		GROUP BY salesinvoice
+	)
+	AND salesorder='$2/$3'
+	ORDER BY nanostamp
+end sql import_pf_salesorder_salesinvoices
+
+begin sql import_pf_salesorder_salesorderitems
+	SELECT
+		product,
+		linetext,
+		price,
+		'1' as qty
+	FROM salesorderitemdetail soid
+	WHERE soid.id IN (
+		SELECT MAX(id)
+		FROM salesorderitemdetail
+		GROUP BY salesorderitem
+	)
+	AND is_deleted=false
+	AND salesorder='$2/$3'
+	ORDER BY nanostamp
+end sql import_pf_salesorder_salesorderitems
+
+begin sql import_pf_organisation_salesorders
+	SELECT
+		salesorder,
+		organisation as account,
+		ponumber,
+		cycle,
+		DATE(start_date) AS start_date,
+		DATE(end_date) AS end_date,
+		is_open
+	FROM salesorderdetail
+	WHERE id IN (
+		SELECT MAX(id)
+		FROM salesorderdetail
+		GROUP BY salesorder
+	)
+	AND organisation='$2'
+end sql import_pf_organisation_salesorders
+
+sql testxslt SELECT * FROM gladbooks.instance;
