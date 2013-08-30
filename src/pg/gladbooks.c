@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/sendfile.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <syslog.h>
@@ -59,6 +60,7 @@ Datum create_business_dirs(PG_FUNCTION_ARGS)
 {
         char *orgcode = text_to_char(PG_GETARG_TEXT_P(0));
         char *dir;
+        char *dst;
         int ret = 0;
 
         /* log something, and return */
@@ -81,6 +83,16 @@ Datum create_business_dirs(PG_FUNCTION_ARGS)
                 syslog(LOG_ERR, "Error creating directory");
                 ret--;
         }
+
+        /* copy skel files to new org dir
+         * TODO: pull this from config */
+        umask(022);
+        asprintf(&dst, "/etc/gladbooks/conf.d/%s/SI.cls", orgcode);
+        copy_file("/etc/gladbooks/conf.d/skel/SI.cls", dst);
+        free(dst);
+        asprintf(&dst, "/etc/gladbooks/conf.d/%s/SI-template.tex", orgcode);
+        copy_file("/etc/gladbooks/conf.d/skel/SI-template.tex", dst);
+        free(dst);
 
         closelog();
         free(dir);
@@ -259,6 +271,54 @@ int xelatex(char *filename, char *spooldir, char *configdir)
 
         free(command);
         pfree(outputdir);
+
+        return 0;
+}
+
+int copy_file(char *src, char *dest)
+{
+        int in_fd;
+        int out_fd;
+        int rc;
+        off_t offset;
+        struct stat stat_buf;
+
+        /* open source file */
+        in_fd = open(src, O_RDONLY);
+
+        /* get size of file */
+        fstat(in_fd, &stat_buf);
+
+        /* ensure file is a regular file */
+        if (! S_ISREG(stat_buf.st_mode)) {
+                syslog(LOG_ERR, "'%s' is not a regular file\n", src);
+                return -1;
+        }
+
+        /* open dest file */
+        umask(stat_buf.st_mode);
+        out_fd = open(dest, O_WRONLY | O_CREAT, stat_buf.st_mode);
+
+        /* copy file */
+        errno = 0;
+        offset = 0;
+        rc = sendfile(out_fd, in_fd, &offset, stat_buf.st_size);
+        if (rc == -1) {
+                syslog(LOG_ERR, "error from sendfile: %s\n", strerror(errno));
+                return -1;
+        }
+
+        /* everything copied ? */
+        if (rc != stat_buf.st_size) {
+                syslog(LOG_ERR,
+                        "incomplete copy from sendfile: %d of %d bytes\n",
+                        rc, (int)stat_buf.st_size);
+                return -1;
+        }
+
+        /* close files */
+        close(in_fd);
+        close(out_fd);
 
         return 0;
 }

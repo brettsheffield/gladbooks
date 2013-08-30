@@ -25,6 +25,7 @@
 char * process_template_line(char *tex, char *line);
 char * text_to_char(text *txt);
 char * texquote(char *raw);
+int copy_file(char *src, char *dest);
 int xelatex(char *filename, char *spooldir, char *configdir);
 
 PG_FUNCTION_INFO_V1(test);
