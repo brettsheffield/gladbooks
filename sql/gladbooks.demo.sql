@@ -20,7 +20,7 @@ INSERT INTO username (id, instance) VALUES ('demouser', 'demo');
 
 -- create some businesses
 BEGIN;
-	SELECT create_business('demo', 'Libre Llamas Ltd');
+	SELECT create_business('demo', 'Libre Llamas Ltd', '2013-04-01');
 END;
 
 -- set search path to business 1
