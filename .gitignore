@@ -3,6 +3,6 @@
 *.o
 .sass-cache/
 .gladd.lock
-gladd.conf
+gladd.conf.local
 js/importer_config.js
 mov/
