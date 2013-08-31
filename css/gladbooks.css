@@ -127,7 +127,7 @@ nav ul li:hover > ul {
   width: 100%; }
 
 .tabheaders ul li a {
-  padding: 0 10px; }
+  padding: 0 5px; }
 
 .tabheaders li {
   background: #6e89a5;
@@ -139,7 +139,7 @@ nav ul li:hover > ul {
   list-style: none;
   text-shadow: 0 1px 0 gray; }
 
-.tabheaders li > a {
+div.tabhead div > a {
   color: #b2cde0;
   text-decoration: none; }
 
@@ -149,8 +149,8 @@ nav ul li:hover > ul {
   background: white;
   text-shadow: 0 1px 0 black; }
 
-.tabheaders li.active > a,
-.tabheaders li:hover > a {
+.tabheaders li.active > div > div > a,
+.tabheaders li:hover > div > div > a {
   color: #6e89a5;
   text-shadow: 0; }
 
@@ -167,6 +167,17 @@ nav ul li:hover > ul {
   display: block; }
 
 .tabcloser {
+  float: right; }
+
+div.tabtitle {
+  float: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 90%; }
+
+div.tabx {
   float: right; }
 
 /* login box */

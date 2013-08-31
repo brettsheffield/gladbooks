@@ -154,7 +154,7 @@ nav ul li:hover > ul {
 }
 
 .tabheaders ul li a {
-	padding: 0 10px;
+	padding: 0 5px;
 }
 
 .tabheaders li {
@@ -168,7 +168,7 @@ nav ul li:hover > ul {
 	text-shadow: 0 1px 0 gray;
 }
 
-.tabheaders li > a {
+div.tabhead div > a {
 	color: $color-light;
 	text-decoration: none;
 }
@@ -180,8 +180,8 @@ nav ul li:hover > ul {
 	text-shadow: 0 1px 0 black;
 }
 
-.tabheaders li.active > a,
-.tabheaders li:hover > a {
+.tabheaders li.active > div > div > a,
+.tabheaders li:hover > div > div > a {
 	color: $color-dark;
 	text-shadow: 0;
 }
@@ -201,6 +201,22 @@ nav ul li:hover > ul {
 }
 
 .tabcloser {
+	float: right;
+}
+
+div.tabhead {
+}
+
+div.tabtitle {
+	float: left;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 90%;
+}
+
+div.tabx {
 	float: right;
 }
 

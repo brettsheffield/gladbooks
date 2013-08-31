@@ -13,6 +13,10 @@
   #pagearea {
     min-height: 425px; }
 
+  /* menus */
+  nav ul {
+    font-size: 90%; }
+
   /* tabs */
   .tablet {
     min-height: 400px; }

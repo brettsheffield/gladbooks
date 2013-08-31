@@ -32,7 +32,7 @@ var g_frmLedger;
 var g_tabid = 0;
 var g_xml_business = ''
 var g_xml_relationships = '';
-var g_max_tabtitle = '24'; /* max characters to allow in tab title */
+var g_max_tabtitle = '48'; /* max characters to allow in tab title */
 
 var STATUS_INFO = 1;
 var STATUS_WARN = 2;
@@ -163,10 +163,16 @@ function addTab(title, content, activate, collection, refresh) {
 	/* add tab and closer */
 	$('ul.tablist').append('<li id="tabli' + tabid
 		+ '" class="' + tabClasses + '">'
+		+ '<div class="tabhead">'
+		+ '<div class="tabtitle">'
 		+ '<a class="tabtitle" href="' + tabid + '">' + title + '</a>'
+		+ '</div>'
+		+ '<div class="tabx">'
 		+ '<a id="tabcloser' + tabid + '" class="tabcloser" href="'
 		+ tabid  + '">'
-		+ 'X</a></li>');
+		+ 'X</a>'
+		+ '</div>' 
+		+ '</li>');
 
 	/* add content */
 	$('div.tabcontent').append('<div id="tab' + tabid + '" '
