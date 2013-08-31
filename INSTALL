@@ -1,0 +1,14 @@
+(incomplete)
+
+== Postgres setup ==
+
+pg_hba.conf - allow from gladd server
+
+As postgres user (or another pg superuser):
+psql
+postgres=# create role dba with superuser noinherit;
+CREATE ROLE
+postgres=# grant dba to gladbook;
+GRANT ROLE
+
+This allows the user to create the c language functions.
