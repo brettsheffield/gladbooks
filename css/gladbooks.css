@@ -659,6 +659,9 @@ div.pdf {
   min-height: 100px;
   width: 100%; }
 
+td.xml-pdf {
+  display: none; }
+
 /* video */
 object.video {
   height: 100px;

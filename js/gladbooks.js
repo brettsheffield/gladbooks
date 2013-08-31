@@ -2311,16 +2311,23 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 
 	/* attach click event */
 	$t.find('tr').click(function(event) {
-		if (collection != 'salesinvoices') {
+		if (collection == 'salesinvoices') {
+			/* view salesinvoice pdf */
+			var a=$(this).find('td.xml-pdf').find('a');
+			var href=a.attr('href');
+			var si = a.attr('id');
+			var html = '<div class="pdf">';
+			html += '<object class="pdf" data="' + href + '"';
+			html += 'type="application/pdf">';
+			html += 'alt : <a href="' + href + '">PDF</a>';
+			html += '</object></div>';
+			addTab(si, html, true);
+		}
+		else {
 			event.preventDefault();
 			if (collection == 'accounts') {
 				var id = $(this).find('td.xml-nominalcode').text();
 			}
-			/*
-			else if (collection == 'salesinvoices') {
-				var id = $(this).find('td.xml-ref').text();
-			}
-			*/
 			else {
 				var id = $(this).find('td.xml-id').text();
 			}
@@ -2331,17 +2338,6 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 				var title = null;
 			}
 			displayElement(collection, id, title);
-		}
-		else {
-			var a=$(this).find('td.xml-pdf').find('a');
-			var href=a.attr('href');
-			var si = a.attr('id');
-			var html = '<div class="pdf">';
-			html += '<object class="pdf" data="' + href + '"';
-			html += 'type="application/pdf">';
-			html += 'alt : <a href="' + href + '">PDF</a>';
-			html += '</object></div>';
-			addTab(si, html, true);
 		}
 	});
 
