@@ -73,7 +73,13 @@ Datum create_business_dirs(PG_FUNCTION_ARGS)
         syslog(LOG_DEBUG, "Creating directory: %s", dir);
         umask(022);
         if (mkdir(dir, 0755) != 0) {
-                syslog(LOG_ERR, "Error creating directory");
+                if (errno == EEXIST) {
+                        syslog(LOG_DEBUG, "Directory '%s' exists.  Skipping.",
+                                dir);
+                        return 0;
+                }
+                syslog(LOG_ERR, "Error creating directory '%s': %s",
+                        dir, strerror(errno));
                 ret--; 
         }
         free(dir);
