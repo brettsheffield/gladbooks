@@ -84,7 +84,7 @@ Datum create_business_dirs(PG_FUNCTION_ARGS)
                 ret--;
         }
 
-        /* copy skel files to new org dir
+        /* copy skel files to new org dir, skipping any that exist
          * TODO: pull this from config */
         umask(022);
         asprintf(&dst, "/etc/gladbooks/conf.d/%s/SI.cls", orgcode);
@@ -284,7 +284,14 @@ int copy_file(char *src, char *dest)
         struct stat stat_buf;
 
         /* open source file */
+        errno = 0;
         in_fd = open(src, O_RDONLY);
+        if (in_fd == -1) {
+                syslog(LOG_ERR,
+                        "Could not open source file '%s' to copy: %s\n",
+                        src, strerror(errno));
+                return -1;
+        }
 
         /* get size of file */
         fstat(in_fd, &stat_buf);
@@ -297,14 +304,21 @@ int copy_file(char *src, char *dest)
 
         /* open dest file */
         umask(stat_buf.st_mode);
+        errno = 0;
         out_fd = open(dest, O_WRONLY | O_CREAT, stat_buf.st_mode);
+        if (out_fd == -1) {
+                syslog(LOG_ERR,
+                        "Could not open destination file '%s': %s\n",
+                        dest, strerror(errno));
+                return -1;
+        }
 
         /* copy file */
         errno = 0;
         offset = 0;
         rc = sendfile(out_fd, in_fd, &offset, stat_buf.st_size);
         if (rc == -1) {
-                syslog(LOG_ERR, "error from sendfile: %s\n", strerror(errno));
+                syslog(LOG_ERR, "sendfile() failed: %s\n", strerror(errno));
                 return -1;
         }
 
