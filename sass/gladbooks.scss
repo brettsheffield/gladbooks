@@ -155,7 +155,7 @@ nav ul li:hover > ul {
 }
 
 .tabheaders ul li a {
-	padding: 0 5px;
+	padding: 0 10px;
 }
 
 .tabheaders li {
@@ -211,10 +211,11 @@ div.tabhead {
 div.tabtitle {
 	float: left;
 	overflow: hidden;
+	padding: 0;
 	text-overflow: ellipsis;
 	-o-text-overflow: ellipsis;
 	white-space: nowrap;
-	width: 90%;
+	width: 85%;
 }
 
 div.tabx {
