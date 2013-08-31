@@ -145,5 +145,21 @@ div.video {
         width: 100%;
 }
 
+/* forms */
+div.form.twocolumn {
+}
+
+div.row {
+}
+
+div.column.left {
+	float: left;
+	width: 20%;
+}
+
+div.column.right {
+	float: right;
+	width: 75%;
+}
 
 }

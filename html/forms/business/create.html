@@ -1,8 +1,22 @@
 <div class="business create">
 	<h2>Enter New Business</h2>
 	<form method="post" action="businesses">
-		<input class="focus" type="text" name="name" placeholder="Business Name"/>
-		<input type="text" name="period_start" class="datefield" autocomplete="off"/>
-		<button class="submit formsubmit">Save</button>
+		<div class="form twocolumn">
+			<div class="row">
+				<div class="column left">Business Name</div>
+				<div class="column right">
+					<input class="focus" type="text" name="name" placeholder="Business Name"/>
+				</div>
+				<div class="clearfix"/>
+			</div>
+			<div class="row">
+				<div class="column left">Accounting Reference Date</div>
+				<div class="column right">
+					<input type="text" name="period_start" class="datefield" autocomplete="off"/>
+				</div>
+				<div class="clearfix"/>
+			</div>
+			<button class="submit formsubmit">Create Business</button>
+		</div>
 	</form>
 </div>

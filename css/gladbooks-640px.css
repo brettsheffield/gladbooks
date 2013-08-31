@@ -117,4 +117,13 @@
 
   div.video {
     min-height: 300px;
-    width: 100%; } }
+    width: 100%; }
+
+  /* forms */
+  div.column.left {
+    float: left;
+    width: 20%; }
+
+  div.column.right {
+    float: right;
+    width: 75%; } }
