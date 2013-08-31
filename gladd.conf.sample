@@ -179,7 +179,7 @@ sql contactdetail	SELECT * FROM gladbooks_$0.contactdetailview
 sql contactlist		SELECT * FROM gladbooks_$0.contactlist
 sql contactsearch	SELECT * FROM gladbooks_$0.contactlist WHERE name ILIKE '%$4%'
 sql cycle		SELECT * FROM gladbooks.cycle
-sql department		SELECT * FROM gladbooks_$0_$1.department
+sql department		SELECT id, name FROM gladbooks_$0_$1.department
 
 begin sql org_contact_del
 	DELETE FROM gladbooks_$0.organisation_contact 
@@ -193,7 +193,7 @@ begin sql org_contact_del
 	)
 end sql org_contact_del
 
-sql division		SELECT * FROM gladbooks_$0_$1.division
+sql division		SELECT id, name FROM gladbooks_$0_$1.division
 sql instances		SELECT * FROM gladbooks.instance
 sql journal		SELECT * FROM gladbooks_$0_$1.journal
 sql ledger		SELECT * FROM gladbooks_$0_$1.generalledger
