@@ -305,7 +305,7 @@ int copy_file(char *src, char *dest)
         /* open dest file */
         umask(stat_buf.st_mode);
         errno = 0;
-        out_fd = open(dest, O_WRONLY | O_CREAT, stat_buf.st_mode);
+        out_fd = open(dest, O_WRONLY | O_CREAT | O_EXCL, stat_buf.st_mode);
         if (out_fd == -1) {
                 syslog(LOG_ERR,
                         "Could not open destination file '%s': %s\n",
