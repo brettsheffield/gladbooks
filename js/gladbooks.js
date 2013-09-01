@@ -1285,10 +1285,10 @@ function salesorderAddProduct(tab, datatable, id, product, linetext, price, qty)
 		$(this).trigger('change');
 	});
 
-	updateSalesOrderTotals(tab);
-
 	/* reset the defaults for next product */
 	resetSalesOrderProductDefaults();
+
+	updateSalesOrderTotals(tab);
 }
 
 function resetSalesOrderProductDefaults() {
@@ -1298,9 +1298,10 @@ function resetSalesOrderProductDefaults() {
 		parentrow.find('input.linetext').attr('placeholder', 'Line Text');
 		parentrow.find('input.price').attr('placeholder', '0.00');
 		parentrow.find('input.linetext').val('');
-		parentrow.find('input.price').val('0.00');
+		//parentrow.find('input.price').val('0.00');
 		parentrow.find('input.qty').val('1');
-		parentrow.find('input.total').val('0.00');
+		//parentrow.find('input.total').val('0.00');
+		recalculateLineTotal(parentrow, activeTab());
 	});
 }
 
