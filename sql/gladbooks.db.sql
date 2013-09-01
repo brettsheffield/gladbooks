@@ -1735,26 +1735,27 @@ BEGIN
 		total
 	) 
 	SELECT
-		sii.salesinvoice,
-		t.account,
-		t.name AS taxname,
+		si.salesinvoice,
+		t.account as account,
+		t.name as taxname,
 		tr.rate,
-		SUM(sii.price * sii.qty) AS nett,
+		sii.price * sii.qty AS nett,
 		roundhalfeven(SUM(sii.price * sii.qty) * tr.rate/100, 2) AS total
-	FROM
-		salesinvoice_current si
-		LEFT JOIN salesinvoiceitem_current sii 
-		ON si.salesinvoice = sii.salesinvoice
-		LEFT JOIN product_tax pt ON sii.product = pt.product
-		INNER JOIN tax_current t ON t.tax = pt.tax
-		INNER JOIN taxrate_current tr ON tr.tax = pt.tax
-	WHERE (tr.valid_from <= si.taxpoint OR tr.valid_from IS NULL)
+	FROM salesinvoice_current si 
+	LEFT JOIN salesinvoiceitem_current sii ON si.salesinvoice = sii.salesinvoice
+	INNER JOIN (
+		SELECT * FROM product_tax WHERE is_applicable='t'
+		AND id IN (SELECT MAX(id) FROM product_tax GROUP BY product, tax)
+	) pt ON sii.product = pt.product
+	INNER JOIN taxrate_current tr ON tr.tax = pt.tax
+	INNER JOIN tax_current t ON t.tax = pt.tax
+	WHERE 
+	(tr.valid_from <= si.taxpoint OR tr.valid_from IS NULL)
 	AND (tr.valid_to >= si.taxpoint OR  tr.valid_to IS NULL)
 	AND si.salesinvoice = NEW.salesinvoice
-	GROUP BY sii.salesinvoice, t.name, t.account, tr.rate
+	GROUP BY si.salesinvoice,t.account,t.name,sii.price, sii.qty,tr.rate
+	ORDER BY tr.rate DESC
 	;
-
-	--NEW.total := NEW.subtotal + NEW.tax;
 
         RETURN NEW;
 END;
