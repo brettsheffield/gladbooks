@@ -1151,6 +1151,18 @@ WHERE soid.id IN (
 AND soid.is_deleted = 'false'
 ;
 
+CREATE OR REPLACE VIEW organisation_invoiced AS
+SELECT o.id, SUM(COALESCE(si.total, 0)) as invoiced
+FROM organisation o
+LEFT JOIN salesinvoice_current si ON o.id = si.organisation
+GROUP BY o.id;
+
+CREATE OR REPLACE VIEW organisation_paid AS
+SELECT o.id, SUM(COALESCE(sp.amount, 0)) as paid
+FROM organisation o
+LEFT JOIN salespayment_current sp ON o.id = sp.organisation
+GROUP BY o.id;
+
 CREATE OR REPLACE VIEW salesstatement AS
 SELECT
 	'ORG_NAME' as type,
@@ -1209,18 +1221,6 @@ LEFT JOIN organisation_invoiced oi ON o.id = oi.id
 LEFT JOIN organisation_paid op ON o.id = op.id
 ORDER BY taxpoint ASC
 ;
-
-CREATE OR REPLACE VIEW organisation_invoiced AS
-SELECT o.id, SUM(COALESCE(si.total, 0)) as invoiced
-FROM organisation o
-LEFT JOIN salesinvoice_current si ON o.id = si.organisation
-GROUP BY o.id;
-
-CREATE OR REPLACE VIEW organisation_paid AS
-SELECT o.id, SUM(COALESCE(sp.amount, 0)) as paid
-FROM organisation o
-LEFT JOIN salespayment_current sp ON o.id = sp.organisation
-GROUP BY o.id;
 
 CREATE OR REPLACE VIEW accountsreceivable AS
 SELECT
