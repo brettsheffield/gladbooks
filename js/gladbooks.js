@@ -30,6 +30,7 @@ var g_loggedin = false;
 var g_max_ledgers_per_journal=7;
 var g_frmLedger;
 var g_tabid = 0;
+var g_xml_accounttype = '';
 var g_xml_business = ''
 var g_xml_relationships = '';
 var g_max_tabtitle = '48'; /* max characters to allow in tab title */
@@ -655,12 +656,20 @@ function getForm(object, action, title, xml, tab) {
 	.done(function(html) {
 		var args = Array.prototype.splice.call(arguments, 1);
 		var safeHTML = $.parseHTML(html[0]);
+		cacheData(object, action, args);
 		displayForm(object, action, title, safeHTML, args, tab);
 	})
 	.fail(function() {
 		console.log('fetchFormData() failed');
 		hideSpinner();
 	});
+}
+
+function cacheData(object, action, args) {
+	console.log('cacheData(' + object + ',' + action + ')');
+	if ((object == 'account') && (action == 'create')) {
+		g_xml_accounttype = args[0];
+	}
 }
 
 
@@ -1026,6 +1035,8 @@ function validateForm(object, action, id) {
 function validateFormAccount(action, id) {
 	var mytab = activeTab();
 
+	console.log('validateFormAccount()');
+
 	var type = mytab.find('select.type');
 	if (type.val() < 0) {
 		statusMessage('Please select an Account Type', STATUS_WARN);
@@ -1039,6 +1050,15 @@ function validateFormAccount(action, id) {
 		description.focus();
 		return false;
 	}
+	var codebox = mytab.find('input.nominalcode');
+	var code = codebox.val();
+
+	if (validateNominalCode(code, type.val()) == false) {
+		codebox.focus();
+		return false;
+	}
+
+	console.log('account form validates');
 
 	return true;
 }
@@ -1413,7 +1433,10 @@ function populateCombo(xml, combo, tab) {
 	if (combo.attr('name') == 'type') {
 		/* add change() event to nominal code input box */
 		mytab.find('input.nominalcode').change(function() {
-			return validateNominalCode($(this).val(), combo.val(), xml);
+			return validateNominalCode($(this).val(), combo.val());
+		});
+		combo.change(function() {
+			comboChange($(this), xml, tab);
 		});
 	}
 	else if (combo.attr('name') == 'account') {
@@ -1435,13 +1458,25 @@ function populateCombo(xml, combo, tab) {
 
 /******************************************************************************/
 /* return true iff nominal code is in range for type */
-function validateNominalCode(code, type, xml) {
+function validateNominalCode(code, type) {
+
+	var xml = g_xml_accounttype;
+
+	statusHide(); /* clear status box */
+
+	if (code == '') {
+		return true; /* blank code => auto-assign */
+	}
+
+	/* force arguments to be numeric */
+	code = +(code);
+	type = +(type);
 
 	if (type < 0) { /* type not selected yet */
 		console.log('type not selected');
 		return true;
 	}
-	
+
 	/* find row that refers to this type */
 	var row = $(xml).find('id').filter(function() {
 		return $(this).parent().find('id').text() == type;
@@ -1451,8 +1486,6 @@ function validateNominalCode(code, type, xml) {
 	var max = row.find('range_max').text();
 	var typename = row.find('name').text();
 	var ret = false;
-
-	statusHide();
 
 	console.log('code: ' + code);
 	console.log('min: ' + min);
@@ -1493,7 +1526,7 @@ function comboChange(combo, xml, tab) {
 	/* deal with chart form type combo */
 	if (combo.attr('name') == 'type') {
 		var code = activeTab().find('input.nominalcode').val();
-		return validateNominalCode(code, newval, xml);
+		return validateNominalCode(code, newval);
 	}
 
 	/* in the salesorder form, dynamically set placeholders to show defaults */
