@@ -208,8 +208,9 @@ function addTab(title, content, activate, collection, refresh) {
 	return tabid; /* return new tab id */
 }
 
+/* find tab by title within active business */
 function getTabByTitle(title) {
-	var tabid =   $('a.tabtitle:contains("' + title + '")').attr("href");
+	var tabid = $('li.tabhead.business' + g_business).find('a.tabtitle:contains("' + title + '")').attr("href");
 	console.log('Found tab by title: ' + tabid);
 	return tabid;
 }
