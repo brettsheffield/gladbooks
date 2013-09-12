@@ -1,6 +1,6 @@
 # To setup/reset a fresh gladbooks database:
 #
-.PHONY: dropdb db reset instance business businessdata testdata functions
+.PHONY: dropdb db reset instance business businessdata testdata functions upgrade
 
 all: db functions instance instance business businessdata testdata
 
@@ -30,3 +30,6 @@ dropdb:
 	dropdb gladbooks
 
 reset: dropdb all
+
+upgrade:
+	psql -v VERBOSITY=terse gladbooks < gladbooks.upgrades.sql
