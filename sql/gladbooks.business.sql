@@ -326,14 +326,6 @@ CREATE TABLE purchaseorderdetail (
 		FOREIGN KEY (cycle) REFERENCES cycle(id)
 );
 
-CREATE OR REPLACE VIEW product_current AS
-SELECT * FROM productdetail
-WHERE id IN (
-	SELECT MAX(id)
-	FROM productdetail
-	GROUP BY product
-);
-
 CREATE TABLE purchaseorderitem (
 	id		SERIAL PRIMARY KEY,
 	updated		timestamp with time zone default now(),
