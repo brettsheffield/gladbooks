@@ -1164,7 +1164,7 @@ BEGIN
 			COALESCE(soi.price, p.price_sell) as price,
 			soi.qty
 		FROM salesorderitem_current soi
-		INNER JOIN product_current p ON p.id = soi.product
+		INNER JOIN product_current p ON p.product = soi.product
 		WHERE salesorder = so_id
 	LOOP
 		INSERT INTO salesinvoiceitem DEFAULT VALUES;

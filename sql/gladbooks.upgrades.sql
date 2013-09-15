@@ -63,7 +63,7 @@ CREATE OR REPLACE FUNCTION upgrade_database()
 RETURNS INT4 AS
 $$
 DECLARE
-	vnum		INT4 = 0; -- New version (increment this)
+	vnum		INT4 = 1; -- New version (increment this)
 	instances	INT4;
 	inst		TEXT;
 	oldv		INT4;
@@ -76,6 +76,10 @@ BEGIN
 		RAISE INFO 'Database is already version %.  Upgrade aborted.', oldv;
 		RETURN oldv;
 	END IF;
+
+	-- Perform upgrades on gladbooks schema
+	RAISE INFO '******** Upgrading gladbooks schema ********';
+	PERFORM upgrade_0003();
 
 	EXECUTE 'SELECT COUNT(id) FROM instance;' INTO instances;
 	RAISE INFO 'Found % instances', instances;
@@ -234,9 +238,114 @@ BEGIN
 	;
 	';
 
-	-- record upgrade
-	EXECUTE 'INSERT INTO business_upgrade(id) VALUES(2);';
+	RETURN 0;
+END;
+$$ LANGUAGE 'plpgsql';
 
+-- 0003 - update create_salesinvoice() to fix #93
+-- applies to main gladbooks schema only
+CREATE OR REPLACE FUNCTION upgrade_0003()
+RETURNS INT4 AS
+$$
+BEGIN
+	
+	RAISE INFO '0003 - update create_salesinvoice() to fix #93';
+
+	EXECUTE '
+CREATE OR REPLACE FUNCTION create_salesinvoice(so_id INT4, period INT4)
+RETURNS boolean AS $create_salesinvoice$
+DECLARE
+        r_so            RECORD;
+        r_soi           RECORD;
+        r_tax           RECORD;
+        taxpoint        DATE;
+        endpoint        DATE;
+        due             DATE;
+        termdays        INT4;
+        terminterval    TEXT;
+        si_id           INT4;
+BEGIN
+        -- fetch the salesorder and cycle info --
+        SELECT so.*, c.years, c.months, c.days INTO r_so
+        FROM salesorder_current so
+        INNER JOIN cycle c ON so.cycle = c.id
+        WHERE so.salesorder=so_id;
+        IF NOT FOUND THEN
+                RAISE EXCEPTION ''salesorder details not found'';
+        END IF;
+        IF r_so.organisation IS NULL THEN
+                RAISE EXCEPTION ''organisation for salesorder cannot be null'';
+        END IF;
+
+        taxpoint := taxpoint(r_so.years, r_so.months, r_so.days, r_so.start_date, period);
+        endpoint := periodenddate(r_so.years, r_so.months, r_so.days, r_so.start_date, period);
+
+        -- fetch terms for organisation --
+        SELECT terms INTO termdays FROM organisation_current
+        WHERE organisation = r_so.organisation;
+
+        terminterval := termdays || '' days'';
+        due := DATE(NOW()) + terminterval::interval;
+
+        INSERT INTO salesinvoice (organisation) VALUES (r_so.organisation)
+        RETURNING currval(pg_get_serial_sequence(''salesinvoice'',''id''))
+        INTO si_id;
+
+        IF si_id IS NULL THEN
+                RAISE EXCEPTION ''Failed to INSERT salesinvoice'';
+        END IF;
+
+        -- salesinvoiceitem
+        --TODO: linetext macro substitution
+        FOR r_soi IN
+                SELECT
+                        soi.product,
+                        COALESCE(soi.linetext, p.description) AS linetext,
+                        soi.discount,
+                        COALESCE(soi.price, p.price_sell) as price,
+                        soi.qty
+                FROM salesorderitem_current soi
+                INNER JOIN product_current p ON p.product = soi.product
+                WHERE salesorder = so_id
+        LOOP
+                INSERT INTO salesinvoiceitem DEFAULT VALUES;
+                INSERT INTO salesinvoiceitemdetail (
+                        product,
+                        linetext,
+                        discount,
+                        price,
+                        qty
+                ) VALUES (
+                        r_soi.product,
+                        r_soi.linetext,
+                        r_soi.discount,
+                        roundhalfeven(r_soi.price, 2),
+                        r_soi.qty
+                );
+        END LOOP;
+
+        INSERT INTO salesinvoicedetail (
+                salesorder, period, ponumber,
+                taxpoint, endpoint, due
+        ) VALUES (
+                so_id, period, r_so.ponumber,
+                taxpoint, COALESCE(endpoint,taxpoint), due
+        );
+
+        PERFORM create_salesinvoice_tex(si_id);
+
+        IF NOT FOUND THEN
+                RAISE EXCEPTION ''Failed to create .tex'';
+        END IF;
+
+        PERFORM post_salesinvoice(si_id);  -- post to ledger
+        PERFORM mail_salesinvoice(si_id);  -- email pdf
+
+        RETURN true;
+END;
+$create_salesinvoice$ LANGUAGE ''plpgsql'';
+
+	';
 	RETURN 0;
 END;
 $$ LANGUAGE 'plpgsql';
