@@ -1376,7 +1376,7 @@ BEGIN
 	SELECT * FROM salesinvoice_current WHERE salesinvoice=si_id INTO r;
 
 	IF NOT FOUND THEN
-		RAISE EXCEPTION 'Invoice id % exist', si_id;
+		RAISE EXCEPTION 'Invoice id % does not exist', si_id;
 	END IF;
 
 	/* fetch lineitems */
