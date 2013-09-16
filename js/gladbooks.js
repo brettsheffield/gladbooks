@@ -1439,6 +1439,8 @@ function populateCombo(xml, combo, tab) {
 		combo.change(function() {
 			comboChange($(this), xml, tab);
 		});
+		/* remove superfluous tab stop from chosen combo */
+		$('div.chzn-container ul').attr("tabindex", -1);
 	}
 	else if (combo.attr('name') == 'account') {
 		console.log('setting value of product->account combo');
