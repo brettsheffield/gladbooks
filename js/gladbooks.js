@@ -2100,6 +2100,7 @@ function submitFormSuccess(object, action, id, collection) {
 
 	// lets check for tabs that will need refreshing
 	$('div.refresh.' + collection).each(function() {
+		/* TODO: ensure tab is within current business */
 		var tabid = $(this).attr('id').substr(3);
 		var title = $('#tabli' + tabid).find(
 			'a[href="' + tabid + '"]:not(.tabcloser)'
@@ -2109,8 +2110,6 @@ function submitFormSuccess(object, action, id, collection) {
 
 	if (action == 'create') {
 		/* clear form ready for more data entry */
-		var mytab = activeTab();
-		var myform = mytab.find('div.' + object + '.' + action);
 		var tab = activeTabId();
 
 		getForm(object, action, null, null, tab);
