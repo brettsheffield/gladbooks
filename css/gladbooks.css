@@ -541,6 +541,10 @@ select.tax {
 select.paymenttype {
   width: 15em; }
 
+/* fix chosen combo brokenness */
+div.chosen-container {
+  width: 100% !important; }
+
 /* totals table (salesorder form) */
 table.totals {
   font-family: monospace;
