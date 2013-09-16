@@ -218,7 +218,8 @@ function getTabByTitle(title) {
 
 /******************************************************************************/
 function activeTabId() {
-	return $('li.tabhead.active').find('a.tabcloser').attr('href');
+	return $('li.tabhead.active.business' + g_business
+		).find('a.tabcloser').attr('href');
 }
 
 /******************************************************************************/
@@ -2110,9 +2111,7 @@ function submitFormSuccess(object, action, id, collection) {
 
 	if (action == 'create') {
 		/* clear form ready for more data entry */
-		var tab = activeTabId();
-
-		getForm(object, action, null, null, tab);
+		getForm(object, action, null, null, activeTabId());
 	}
 
 	hideSpinner();
