@@ -72,10 +72,10 @@
     /* three tabs per line */ }
 
   /* journal form */
-  input.description {
+  form.journalform input.description {
     width: 75%; }
 
-  select.account {
+  form.journalform select.account {
     max-width: 78%; }
 
   /* map */

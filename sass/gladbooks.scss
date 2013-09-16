@@ -337,17 +337,14 @@ button#journalsubmit {
 	width: 6em;
 }
 
-input.shortname {
-	width: 12em;
-}
-input.description {
+/*input.description {
 	min-width: 20em;
 	max-width: 95%;
-}
+}*/
 
 input.amount {
         text-align: right;
-        width: 5em;
+//        width: 5em;
 }
 
 fieldset.ledger {
@@ -467,9 +464,13 @@ td > a {
 	font-weight: bold;
 }
 
-td {
+td, div.td {
 	font-family: Courier, monospace;
 	font-weight: normal;
+}
+
+div.th, div.td {
+	float: left;
 }
 
 .even, tr.even > td {
@@ -486,10 +487,10 @@ td {
 	width: 10em;
 }
 
-.price,
+td.price, input.price,
+td.total, input.total,
 .xml-price_buy,
 .xml-price_sell,
-.total,
 .xml-debit ,
 .xml-credit ,
 .xml-amount ,
@@ -550,10 +551,6 @@ input.linetext {
 
 input.qty {
 	width: 4em;
-}
-
-.chzn-container {
-	margin: 7px;
 }
 
 .search-choice-close {
@@ -677,6 +674,52 @@ div.tablewrapper {
 	width: 25%;
 }
 
+/* formtable */
+div.formtable {
+	background-color: $color-dark;
+       	border: 1px solid white;
+	padding: 0 5px;
+	text-color: black;
+}
+
+div.tr {
+}
+
+div.th {
+	color: white;
+        font-family: verdana,helvetica,arial,sans-serif;
+	font-weight: bold;
+	text-align: left;
+	text-transform: capitalize;
+}
+
+div.td {
+	line-height: 24px;
+}
+
+/* form: product.create */
+div.product.create div.td {
+}
+div.product.create input {
+	width: 95%;
+}
+div.product.create div.account {
+	width: 20%;
+}
+div.product.create div.th.account {
+	width: 20%;
+}
+div.product.create div.shortname {
+	width: 20%;
+}
+div.product.create div.description {
+	width: 30%;
+}
+div.product.create div.price {
+	width: 15%;
+}
+
+
 /* business selector */
 .businessselect {
 	border-radius: 15px;
@@ -781,3 +824,16 @@ div.video {
         width: 100%;
 }
 
+/* chosen overrides */
+div.chzn-container {
+	width: 98% !important;
+}
+div.chzn-drop {
+	width: 95% !important;
+}
+div.chzn-search {
+	width: 90% !important;
+}
+div.chzn-search > input {
+	width: 90% !important;
+}

@@ -2,26 +2,26 @@
 	<div class="statusmsg clearfix"/>
 	<h2>Create New Product</h2>
 	<form method="post" action="products">
-	  <table class="datatable">
-			<thead>
-				<tr>
-					<th>Nominal Code</th>
-					<th>Short Name</th>
-					<th>Description (Line Text)</th>
-					<th>Price (buy)</th>
-					<th>Price (sell)</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td><a class="datasource" href="accounts.revenue"></a><select name="account" class="account populate" data-placeholder="Select account" title="You must select an account to post this product against"></select></td>
-					<td><input class="shortname focus" type="text" name="shortname" placeholder="Short Name" title="A Short Name for the Product which will appear in system menus"/></td>
-					<td><input class="description" type="text" name="description" placeholder="Product Description" title="The full description of the product as it should appear on invoices etc."/></td>
-					<td><input class="price" type="text" name="price_buy" placeholder="0.00" title="the price we buy this products at (optional)"/></td>
-					<td><input class="price" type="text" name="price_sell" placeholder="0.00" title="the price we usually sell this product at (optional)"/></td>
-				</tr>
-			</tbody>
-	  </table>
+	  <div class="formtable">
+			<div class="tr clearfix">
+				<div class="thead">
+					<div class="th account">Nominal Code</div>
+					<div class="th shortname">Short Name</div>
+					<div class="th description">Description (Line Text)</div>
+					<div class="th price price_buy">Price (buy)</div>
+					<div class="th price price_sell">Price (sell)</div>
+				</div>
+			</div>
+			<div class="tr clearfix">
+				<div class="tbody">
+					<div class="td account"><a class="datasource" href="accounts.revenue"></a><select name="account" class="account populate" data-placeholder="Select account" title="You must select an account to post this product against"></select></div>
+					<div class="td shortname"><input class="shortname focus" type="text" name="shortname" placeholder="Short Name" title="A Short Name for the Product which will appear in system menus"/></div>
+					<div class="td description"><input class="description" type="text" name="description" placeholder="Product Description" title="The full description of the product as it should appear on invoices etc."/></div>
+					<div class="td price price_buy"><input class="price" type="text" name="price_buy" placeholder="0.00" title="the price we buy this products at (optional)"/></div>
+					<div class="td price price_sell"><input class="price" type="text" name="price_sell" placeholder="0.00" title="the price we usually sell this product at (optional)"/></div>
+				</div>
+			</div>
+	  </div>
 		<div class="info">NB: Standard Rate VAT will be applied automatically.
 			You can change/remove taxes by editing the product after it is saved.
 		</div>
