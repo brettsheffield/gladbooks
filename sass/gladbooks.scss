@@ -697,28 +697,32 @@ div.td {
 	line-height: 24px;
 }
 
-/* form: product.create */
-div.product.create div.td {
+/* form: product.create & product.update */
+div.product div.td {
 }
-div.product.create input {
+div.product input {
 	width: 95%;
 }
-div.product.create div.account {
+div.product div.account {
 	width: 20%;
 }
-div.product.create div.th.account {
+div.product div.th.account {
 	width: 20%;
 }
-div.product.create div.shortname {
+div.product div.shortname {
 	width: 20%;
 }
-div.product.create div.description {
+div.product div.description {
 	width: 30%;
 }
-div.product.create div.price {
+div.product div.price {
 	width: 15%;
 }
 
+/* form: organisation.update */
+div.organisation.update div.chzn-container {
+	margin: 7px;
+}
 
 /* business selector */
 .businessselect {
