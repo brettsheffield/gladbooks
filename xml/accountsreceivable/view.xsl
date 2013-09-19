@@ -6,6 +6,7 @@
 <div class="report statement">
 	<xsl:apply-templates select="row"/>
 	<xsl:text disable-output-escaping="yes"><![CDATA[</div>]]></xsl:text>
+	<div class="clearfix"/>
 </div>
 </xsl:template>
 

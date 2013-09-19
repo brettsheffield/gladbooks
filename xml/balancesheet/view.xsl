@@ -9,6 +9,7 @@
 	<h3>Assets</h3>
 	<xsl:apply-templates select="row"/>
 	</div>
+	<div class="clearfix"/>
 </div>
 </xsl:template>
 <xsl:template match="row">

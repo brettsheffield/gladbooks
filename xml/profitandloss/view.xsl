@@ -8,6 +8,7 @@
 	<div class="panel left">
 	<xsl:apply-templates select="row"/>
 	</div>
+	<div class="clearfix"/>
 </div>
 </xsl:template>
 <xsl:template match="row">

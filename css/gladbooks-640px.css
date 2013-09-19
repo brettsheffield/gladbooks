@@ -88,8 +88,7 @@
   /* report panels */
   div.report {
     font-size: 75%;
-    margin: 50px;
-    min-height: 500px; }
+    margin: 50px; }
 
   div.panel.left {
     font-size: 100%;
