@@ -389,6 +389,7 @@ img.spinner {
 
 /* help table */
 table.helptable {
+  border: 1px solid #eeeeff;
   font-size: 0.9em;
   width: 100%; }
 
