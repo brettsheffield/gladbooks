@@ -99,7 +99,8 @@
 
   /* help screens */
   div.help {
-    padding: 0 0 1% 1%; }
+    font-size: 0.9em;
+    padding: 0 1% 1% 1%; }
 
   /* pdf */
   object.pdf {

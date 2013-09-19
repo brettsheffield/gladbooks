@@ -1,0 +1,34 @@
+<div class="help">
+	<h2>Line Text Macros</h2>
+	<a class="tablink" title="Help" href="/help/index.html">Back to Help Menu</a>
+	<p>Some linetext macros are available for use in either the Product Description field, or, when creating Sales Orders, in the Line Text when adding products to an order.</p>
+	<p>Each of these macros is replaced with generated text when a Sales Invoice is generated.  The following macros are available:</p>
+	<p><strong>NB: all dates are calculated based on the taxpoint of the invoice unless stated otherwise</strong></p>
+	<table class="helptable">
+		<tr>
+			<th>%%%DAY%%%</th>
+			<td>the day of the month (01 - 31)</td>
+		</tr>
+		<tr>
+			<th>%%%MONTH%%%</th>
+			<td>The full name of the month (eg. January)</td>
+		</tr>
+		<tr>
+			<th>%%%YEAR%%%</th>
+			<td>The four-digit year (eg. 2013)</td>
+		</tr>
+		<tr>
+			<th>%%%MONTH-n%%%</th>
+			<td>(where n is an integer between 1 and 2)  As %%%MONTH%%%, but skip back n months.</td>
+		</tr>
+		<tr>
+			<th>%%%MONTH+n%%%</th>
+			<td>(where n is an integer between 1 and 12)  As %%%MONTH%%%, but skip forward n months.</td>
+		</tr>
+		<tr>
+			<th>%%%PERIOD%%%</th>
+			<td>'YYYY-MM-DD to YYYY-MM-DD'.  For use with recurring Sales Orders.  The first date is the tax point, and the second date is the day before the tax point of the next recurring invoice.</td>
+		</tr>
+	</table>
+
+</div>

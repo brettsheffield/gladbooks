@@ -435,6 +435,26 @@ img.spinner {
 	background: $color-light;
 }
 
+/* help table */
+table.helptable {
+	font-size: 0.9em;
+	width: 100%;
+}
+table.helptable tr:nth-of-type(odd) {
+	background-color: white;	
+}
+table.helptable tr:nth-of-type(even) {
+	background-color: $color-feint;	
+}
+table.helptable th {
+        font-family: monospace;
+	font-weight: bold;
+	padding: 5px;
+	text-align: left;
+}
+table.helptable td {
+}
+
 /* dataform results table */
 div.datatable {
 	font-family: monospace;
@@ -444,14 +464,14 @@ div.datatable {
 	text-color: black;
 	width: 100%;
 }
-.datatable {
+table.datatable {
 	background-color: $color-dark;
        	border: 1px solid white;
 	text-color: black;
 	width: 100%;
 }
 
-th {
+table.datatable th {
 	color: white;
         font-family: verdana,helvetica,arial,sans-serif;
 	font-weight: bold;
@@ -459,12 +479,12 @@ th {
 	text-transform: capitalize;
 }
 
-td > a {
+table.datatable td > a {
 	font-family: Courier, Monospace;
 	font-weight: bold;
 }
 
-td, div.td {
+table.datatable td, div.td {
 	font-family: Courier, monospace;
 	font-weight: normal;
 }
