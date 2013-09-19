@@ -11,21 +11,25 @@
     margin-left: 3%; }
 
   #pagearea {
-    min-height: 425px; }
+    min-height: 440px; }
 
   /* tabs */
   .tablet {
-    min-height: 400px; }
+    min-height: 395px; }
 
   ul li a {
     padding: 10px 15px; }
 
+  /* forms */
+  .contact.form input,
+  .organisation.form input {
+    width: 49%; }
+
   /* map */
   .map-canvas {
-    height: 350px;
-    width: 350px; }
+    height: 395px; }
 
-  /* report panels */
+  /* *report panels , NULL*/
   div.report {
     font-size: 75%; }
 

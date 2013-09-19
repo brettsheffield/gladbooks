@@ -12,6 +12,9 @@ body {
 img {
   max-width: 100%; }
 
+h2 {
+  font-size: 1.2em; }
+
 /* individual element styles by id */
 div#footdiv {
   background-color: #6e89a5;
@@ -581,18 +584,20 @@ div.tablewrapper {
 /* form styling */
 .contact.form ul,
 .organisation.form ul {
+  margin-left: -40px;
   list-style-type: none;
   list-style-position: outside; }
 
 .contact.form label,
 .organisation.form label {
   display: inline-block;
+  font-size: 85%;
   float: left;
   min-width: 25%; }
 
 .contact.form input,
 .organisation.form input {
-  width: 25%; }
+  width: 40%; }
 
 /* formtable */
 div.formtable {

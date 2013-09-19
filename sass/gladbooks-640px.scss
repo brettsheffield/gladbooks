@@ -16,7 +16,7 @@ body {
 }
 
 #pagearea {
-	min-height: 150px;
+	min-height: 175px;
 }
 
 /* search bar */
@@ -28,6 +28,7 @@ body {
 
 /* menu styling overrides for larger screens */
 nav ul {
+	font-size: 85%;
 	padding-left: 20px;
 	padding-right: 20px;
 }
@@ -63,7 +64,8 @@ nav ul ul {
 
 /* tabs */
 .tablet {
-        max-height: 190px;
+        height: 140px;
+	overflow: auto;
 }
 
 .tabheaders ul > li {
@@ -97,8 +99,8 @@ form.journalform select.account {
 
 /* map */
 .map-canvas {
-	height: 200px;
-	width: 200px;
+	height: 140px;
+	width: 33%;
 }
 
 /* report panels */

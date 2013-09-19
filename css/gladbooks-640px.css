@@ -11,7 +11,7 @@
     padding: 10px 20px 0px; }
 
   #pagearea {
-    min-height: 150px; }
+    min-height: 175px; }
 
   /* search bar */
   .search-query {
@@ -21,6 +21,7 @@
 
   /* menu styling overrides for larger screens */
   nav ul {
+    font-size: 85%;
     padding-left: 20px;
     padding-right: 20px; }
 
@@ -50,7 +51,8 @@
 
   /* tabs */
   .tablet {
-    max-height: 190px; }
+    height: 140px;
+    overflow: auto; }
 
   .tabheaders ul > li {
     padding-top: 0;
@@ -80,8 +82,8 @@
 
   /* map */
   .map-canvas {
-    height: 200px;
-    width: 200px; }
+    height: 140px;
+    width: 33%; }
 
   /* report panels */
   div.report {

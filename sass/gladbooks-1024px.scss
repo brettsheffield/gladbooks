@@ -16,25 +16,30 @@ body {
 }
 
 #pagearea {
-	min-height: 425px;
+	min-height: 440px;
 }
 
 /* tabs */
 .tablet {
-        min-height: 400px;
+        min-height: 395px;
 }
 
 ul li a {
         padding: 10px 15px;
 }
 
-/* map */
-.map-canvas {
-        height: 350px;
-	width: 350px;
+/* forms */
+.contact.form input,
+.organisation.form input {
+        width: 49%;
 }
 
-/* report panels */
+/* map */
+.map-canvas {
+        height: 395px;
+}
+
+/* *report panels , NULL*/
 div.report {
 	font-size: 75%;
 }

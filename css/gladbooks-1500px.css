@@ -1,15 +1,20 @@
 @media only screen and (min-width: 1500px) {
   /* define some colours to use in our stylesheets */
   #pagearea {
-    min-height: 750px; }
+    min-height: 700px; }
 
   /* tabs */
   .tablet {
-    min-height: 720px; }
+    min-height: 655px; }
 
   ul.tablist > li {
     width: 19.9%;
     /* five tabs per line */ }
+
+  /* forms */
+  .contact.form input,
+  .organisation.form input {
+    width: 33%; }
 
   /* map */
   .map-canvas {

@@ -1,23 +1,19 @@
 /* 
- * gladbooks-1366px.scss
+ * gladbooks-1440px.scss
  * sass file for Gladbooks base styles
  * Large screen edition
  */
 
-@media only screen and (min-width: 1366px) {
+@media only screen and (min-width: 1440px) {
 
 @import "sass/gladbooks-color.scss";
 
-#logo {
-        margin-left: 3.5%;
-}
-
 #pagearea {
-        min-height: 440px;
+        min-height: 575px;
 }
 
 .tablet {
-	min-height: 395px;
+	min-height: 530px;
 }
 
 /* forms */
@@ -28,8 +24,8 @@
 
 /* map */
 .map-canvas {
-        height: 395px;
-	width: 395px;
+        height: 450px;
+	width: 450px;
 } 
 
 /* report panels */
