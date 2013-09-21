@@ -1,6 +1,6 @@
 /* sass file for Gladbooks base styles */
 
-@import "sass/gladbooks-color.scss";
+@import "sass/includes/gladbooks-color.scss";
 
 /* global element styles */
 body {
@@ -868,3 +868,12 @@ div.chzn-search {
 div.chzn-search > input {
 	width: 90% !important;
 }
+
+/* media query overrides */
+@import "sass/includes/gladbooks-640px.scss";
+@import "sass/includes/gladbooks-800px.scss";
+@import "sass/includes/gladbooks-1024px.scss";
+@import "sass/includes/gladbooks-1280px.scss";
+@import "sass/includes/gladbooks-1366px.scss";
+@import "sass/includes/gladbooks-1440px.scss";
+@import "sass/includes/gladbooks-1500px.scss";
