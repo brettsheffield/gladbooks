@@ -751,7 +751,6 @@ div.chzn-search > input {
  * sass file for Gladbooks base styles
  */
 @media only screen and (min-width: 640px) {
-  /* define some colours to use in our stylesheets */
   body {
     font-size: 8pt; }
 
@@ -882,7 +881,6 @@ div.chzn-search > input {
  * sass file for Gladbooks base styles
  */
 @media only screen and (min-width: 800px) {
-  /* define some colours to use in our stylesheets */
   body {
     font-size: 12pt; }
 
@@ -947,7 +945,6 @@ div.chzn-search > input {
  * sass file for Gladbooks base styles
  */
 @media only screen and (min-width: 1024px) {
-  /* define some colours to use in our stylesheets */
   body {
     font-size: 12pt; }
 
@@ -999,7 +996,6 @@ div.chzn-search > input {
  * Large screen edition
  */
 @media only screen and (min-width: 1280px) {
-  /* define some colours to use in our stylesheets */
   #logo {
     margin-left: 3.5%; }
 
@@ -1053,7 +1049,6 @@ div.chzn-search > input {
  * Large screen edition
  */
 @media only screen and (min-width: 1366px) {
-  /* define some colours to use in our stylesheets */
   #logo {
     margin-left: 3.5%; }
 
@@ -1099,7 +1094,6 @@ div.chzn-search > input {
  * Large screen edition
  */
 @media only screen and (min-width: 1440px) {
-  /* define some colours to use in our stylesheets */
   #pagearea {
     min-height: 575px; }
 
@@ -1137,7 +1131,6 @@ div.chzn-search > input {
     min-height: 400px;
     width: 100%; } }
 @media only screen and (min-width: 1500px) {
-  /* define some colours to use in our stylesheets */
   #pagearea {
     min-height: 700px; }
 

@@ -223,7 +223,7 @@ function activeTabId() {
 }
 
 /******************************************************************************/
-function updateTab(tabid, content, activate) {
+function updateTab(tabid, content, activate, title) {
 	console.log('updating tab ' + tabid);
 	var tab = $('#tab' + tabid);
 
@@ -233,6 +233,11 @@ function updateTab(tabid, content, activate) {
 	/* replace content */
 	tab.empty();
 	tab.append(content);
+
+	/* set title, if required */
+	if (title) {
+		setTabTitle(tabid, title);
+	}
 	
 	/* set click events */
 	tab.find('a.tablink').each(function() {
@@ -243,6 +248,10 @@ function updateTab(tabid, content, activate) {
 		tab.find('.statusmsg').replaceWith(statusmsg);
 	}
 	return tabid;
+}
+
+function setTabTitle(tabid, title) {
+	$('a.tabtitle[href="' + tabid + '"]').text(title);
 }
 
 /*******************************************************************************
@@ -724,7 +733,7 @@ function populateForm(tab, object, xml) {
 			var tagName = this.tagName;
 			var tagValue = $(this).text();
 
-			if (tagName == 'id') {
+			if ((tagName == 'id') || (tagName == object)) {
 				id = tagValue;
 			}
 
@@ -787,7 +796,7 @@ function displayForm(object, action, title, html, xml, tab) {
 		/* Display Sales Order number as tab title */
 		title = 'SO ' + $(xml[0]).find('order').first().text();
 	}
-
+	
 	if ((object == 'contact') && (action == 'update') && (xml[0])) {
 		/* Display Contact name as tab title */
 		title = $(xml[0]).find('name').first().text();
@@ -799,7 +808,7 @@ function displayForm(object, action, title, html, xml, tab) {
 	}
 
 	if (typeof tab != 'undefined') {
-		tab = updateTab(tab, html);
+		tab = updateTab(tab, html, true, title);
 	}
 	else {
 		tab = addTab(title, html, false);
@@ -2065,7 +2074,7 @@ function submitForm(object, action, id) {
         data: xml,
         contentType: 'text/xml',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
-        success: function(xml) { submitFormSuccess(object, action, id, collection); },
+        success: function(xml) { submitFormSuccess(object, action, id, collection, xml); },
         error: function(xml) { submitFormError(object, action, id); }
     });
 }
@@ -2089,7 +2098,7 @@ function escapeHTML(html) {
 }
 
 /******************************************************************************/
-function submitFormSuccess(object, action, id, collection) {
+function submitFormSuccess(object, action, id, collection, xml) {
 	if ((object == 'salesorder') && (action == 'process')) {
 		statusMessage('Billing run successful', STATUS_INFO, 5000);
 	}
@@ -2110,6 +2119,26 @@ function submitFormSuccess(object, action, id, collection) {
 		).text();
 		showQuery(collection, title, false, tabid);
 	});
+
+	/* We received some data back. Display it. */
+	newid = $(xml).find(object).text();
+	if (newid) {
+		if (action == 'create') {
+			console.log('id of ' + object + ' created was ' + newid);
+			action = 'update';
+			var d = new Array();
+			var formURL = '/html/forms/' + object + '/' + action + '.html';
+			d.push(getHTML(formURL));   /* fetch html form */
+			$.when.apply(null, d)
+			.done(function(html) {
+				displayForm(object, action, null, html, [xml], activeTabId());
+			})
+			.fail(function() {
+				console.log('failed to fetch html form');
+				hideSpinner();
+			});
+		}
+	}
 
 	if (action == 'create') {
 		/* clear form ready for more data entry */
