@@ -538,6 +538,9 @@ function clickMenu(event) {
 	else if ($(this).attr("href") == '#contact.create') {
 		getForm('contact', 'create', 'Add New Contact');
 	}
+	else if ($(this).attr("href") == '#bank.upload') {
+		getForm('bank', 'upload', 'Upload Bank Statement');
+	}
 	else if ($(this).attr("href") == '#departments.create') {
 		getForm('department', 'create', 'Add New Department');
 	}
@@ -874,6 +877,37 @@ function formEvents(tab, object, action, id) {
 	{
 		event.preventDefault();
 		doFormSubmit(object, action, id);
+	});
+
+	/* upload button click handler */
+	mytab.find('button.upload').click(function() 
+	{
+		//doFormSubmit(object, action, id);
+		uploadFile();
+	});
+}
+
+function uploadFile() {
+	var url = '/fileupload/' + g_instance + '/';
+	var form = new FormData(document.forms.namedItem("fileinfo"));
+
+	showSpinner();
+	$.ajax({
+	    url: url,
+		type: 'POST',
+		data: form,
+		processData: false,
+		contentType: false,
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) {
+			hideSpinner();
+			alert(xml);
+		},
+		error: function(xml) {
+			hideSpinner();
+			alert("error uploading file");
+		}
+
 	});
 }
 
