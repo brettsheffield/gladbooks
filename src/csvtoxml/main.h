@@ -22,4 +22,5 @@
 
 void check_args(int argc, char **argv);
 int main(int argc, char **argv);
+int setorderspec(char *orderspec);
 void usage(int status);
