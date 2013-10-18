@@ -85,6 +85,8 @@ int flattenxml(xmlDocPtr doc, char **xml, int pretty)
 char *getfieldname(int field)
 {
         char *fieldname = NULL;
+
+        if ((field < 0) || (field > 4)) return NULL;
         switch (map[field]) {
         case 0:
                 asprintf(&fieldname, "transactdate");
@@ -102,6 +104,7 @@ char *getfieldname(int field)
                 asprintf(&fieldname, "debit");
                 break;
         default:
+                fieldname = NULL;
                 break;
         }
 
@@ -156,8 +159,7 @@ int main(int argc, char **argv)
                         fieldname = getfieldname(flds);
                         if (fieldname != NULL) {
                                 /* store fields in remapped order */
-                                nfld[map[flds]]
-                                        = xmlNewNode(NULL, BAD_CAST fieldname);
+                                nfld[map[flds]] = xmlNewNode(NULL, BAD_CAST fieldname);
                                 free(fieldname);
                                 nval = xmlNewText(BAD_CAST f);
                                 xmlAddChild(nfld[map[flds]], nval);
