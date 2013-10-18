@@ -92,16 +92,16 @@ char *getfieldname(int field)
                 asprintf(&fieldname, "transactdate");
                 break;
         case 1:
-                asprintf(&fieldname, "paymenttype");
-                break;
-        case 2:
                 asprintf(&fieldname, "description");
                 break;
+        case 2:
+                asprintf(&fieldname, "paymenttype");
+                break;
         case 3:
-                asprintf(&fieldname, "credit");
+                asprintf(&fieldname, "debit");
                 break;
         case 4:
-                asprintf(&fieldname, "debit");
+                asprintf(&fieldname, "credit");
                 break;
         default:
                 fieldname = NULL;
