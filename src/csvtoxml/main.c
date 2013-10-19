@@ -46,6 +46,7 @@
 char *orderspec = "0,1,2,3,4";
 int map[5];
 char *filename;
+int bank = -1;
 
 void check_args(int argc, char **argv)
 {
@@ -55,6 +56,20 @@ void check_args(int argc, char **argv)
                 }
                 orderspec = argv[2];
                 filename = argv[3];
+        }
+        else if (argc == 3) {
+                if (strcmp(argv[1], "--hbos") == 0) {
+                        orderspec="0,3,2,1,4";
+                        bank = 0;
+                }
+                else if (strcmp(argv[1], "--hsbc") == 0) {
+                        orderspec="0,2,1,4,3";
+                        bank = 1;
+                }
+                else {
+                        usage(EXIT_FAILURE);
+                }
+                filename = argv[2];
         }
         else if (argc != 2) {
                 usage(EXIT_FAILURE);
@@ -129,6 +144,7 @@ int main(int argc, char **argv)
         char *fieldname;
         xmlNodePtr nfld[5] = { NULL, NULL, NULL, NULL, NULL };
         int i;
+        char *amount;
 
         check_args(argc, argv);
 
@@ -158,17 +174,46 @@ int main(int argc, char **argv)
                         /* unquoted comma or newline - end field, start new */
                         fieldname = getfieldname(flds);
                         if (fieldname != NULL) {
-                                /* store fields in remapped order */
-                                nfld[map[flds]] = xmlNewNode(NULL, BAD_CAST fieldname);
-                                free(fieldname);
-                                nval = xmlNewText(BAD_CAST f);
-                                xmlAddChild(nfld[map[flds]], nval);
+
+                                /* HBOS hack */
+                                if ((bank == 0) && ((flds == 1) || (flds == 4))) {
+                                        if (flds == 1) {
+                                                amount = strdup(f);
+                                        }
+                                        else if (flds == 4) {
+                                                /* change debit to credit */
+                                                nval = xmlNewText(BAD_CAST amount);
+                                                if (strcmp(f, "C") == 0) {
+                                                        nfld[3] = xmlNewNode(NULL, BAD_CAST "debit");
+                                                        nfld[4] = xmlNewNode(NULL, BAD_CAST "credit");
+                                                        xmlAddChild(nfld[4], nval);
+                                                }
+                                                else {
+                                                        nfld[3] = xmlNewNode(NULL, BAD_CAST "debit");
+                                                        nfld[4] = xmlNewNode(NULL, BAD_CAST "credit");
+                                                        xmlAddChild(nfld[3], nval);
+                                                }
+                                                free(amount);
+                                        }
+                                }
+                                else {
+                                        /* store fields in remapped order */
+                                        nfld[map[flds]] = xmlNewNode(NULL, BAD_CAST fieldname);
+                                        free(fieldname);
+                                        nval = xmlNewText(BAD_CAST f);
+                                        xmlAddChild(nfld[map[flds]], nval);
+                                }
                         }
                         flds++;
 
                         if (c[0] == '\n') {
                                 lines++;
                                 flds = 0;
+
+                                /* hack to fix hbos credits/debits */
+                                if (bank == 0) {
+                                        
+                                }
 
                                 /* append the fields in mapped order to row */
                                 for (i=0; i<=4; i++) {
@@ -210,6 +255,6 @@ int setorderspec(char *orderspec)
 
 void usage(int status)
 {
-        fprintf(stderr, "usage: csvtoxml [--order <orderspec>] <filename>\n");
+        fprintf(stderr, "usage: csvtoxml [--order <orderspec> | --hsbc | --hbos ] <filename>\n");
         _exit(status);
 }
