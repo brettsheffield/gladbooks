@@ -33,6 +33,11 @@
 #include <libxml/parser.h>
 #include <libxml/xmlschemas.h>
 
+#define format_hsbc "Date,Type,Description,Paid out,Paid in,Balance"
+#define BANK_UNKNOWN -1
+#define BANK_HBOS 0
+#define BANK_HSBC 1
+
 /* order in which to expect columns
  * provided by --orderspec <orderspec>
  * 0 = transactdate
@@ -47,6 +52,7 @@ char *orderspec = "0,1,2,3,4";
 int map[5];
 char *filename;
 int bank = -1;
+int fd;
 
 void check_args(int argc, char **argv)
 {
@@ -58,18 +64,22 @@ void check_args(int argc, char **argv)
                 filename = argv[3];
         }
         else if (argc == 3) {
-                if (strcmp(argv[1], "--hbos") == 0) {
+                filename = argv[2];
+                if (strcmp(argv[1], "--auto") == 0) {
+                        /* automatically figure out format */
+                        bank = guess_format();
+                }
+                if ((strcmp(argv[1], "--hbos") == 0) || (bank == 0)) {
                         orderspec="0,3,2,1,4";
                         bank = 0;
                 }
-                else if (strcmp(argv[1], "--hsbc") == 0) {
+                else if ((strcmp(argv[1], "--hsbc") == 0) || (bank == 1)) {
                         orderspec="0,2,1,4,3";
                         bank = 1;
                 }
                 else {
                         usage(EXIT_FAILURE);
                 }
-                filename = argv[2];
         }
         else if (argc != 2) {
                 usage(EXIT_FAILURE);
@@ -126,9 +136,69 @@ char *getfieldname(int field)
         return fieldname;
 }
 
+/* make an intelligent guess about the format of the file 
+ -1 = unknown
+  0 = HBOS TRN
+  1 = HSBC
+*/
+int guess_format()
+{
+        ssize_t size = LINE_MAX;
+        char buf[LINE_MAX];
+        char *nl;
+        bank = BANK_UNKNOWN;
+        int cols = 0;
+        char *ptr;
+        
+        fd = open(filename, O_RDONLY);
+        if (fd == -1) {
+                perror("open()");
+                _exit(EXIT_FAILURE);
+        }
+
+        size = read(fd, buf, LINE_MAX);
+        if (size == -1) {
+                perror("read()");
+                _exit(EXIT_FAILURE);
+        }
+
+        if (size > 0) {
+                nl = memchr(buf, '\n', size);
+                if (memchr(buf, '\n', size) != NULL) { /* newline found */
+                        if (strncmp(buf, format_hsbc, nl - buf - 1) == 0) {
+                                bank = BANK_HSBC;
+                        }
+                        else {
+                                /* count columns */
+                                for (ptr = buf; ptr < nl; ptr++) {
+                                        if (strncmp(ptr, ",", 1) == 0)
+                                                cols ++;
+                                }
+                                if (cols == 7) {
+                                        /* 7 cols, assume HBOS TRN for now */
+                                        bank = BANK_HBOS;
+                                }
+                        }
+                }
+        }
+
+        switch (bank) {
+        case BANK_HBOS:
+                lseek(fd, 0, SEEK_SET); /* rewind to start */
+                break;
+        case BANK_HSBC:
+                lseek(fd, nl-buf+1, SEEK_SET); /* skip to second line */
+                break;
+        case BANK_UNKNOWN:
+                close(fd);
+                break;
+        }
+
+        return bank;
+}
+
 int main(int argc, char **argv)
 {
-        int fd;
         ssize_t size = 1;
         char c[1];
         char f[LINE_MAX] = ""; /* field */
@@ -148,11 +218,13 @@ int main(int argc, char **argv)
 
         check_args(argc, argv);
 
-        /* open file for reading */
-        fd = open(filename, O_RDONLY);
-        if (fd == -1) {
-                perror("open()");
-                _exit(EXIT_FAILURE);
+        /* open file for reading, if not already */
+        if (fd == 0) {
+                fd = open(filename, O_RDONLY);
+                if (fd == -1) {
+                        perror("open()");
+                        _exit(EXIT_FAILURE);
+                }
         }
 
         /* start building xml document */

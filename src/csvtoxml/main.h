@@ -21,6 +21,7 @@
  */
 
 void check_args(int argc, char **argv);
+int guess_format();
 int main(int argc, char **argv);
 int setorderspec(char *orderspec);
 void usage(int status);
