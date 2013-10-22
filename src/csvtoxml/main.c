@@ -197,6 +197,19 @@ int guess_format()
         return bank;
 }
 
+void fixupField(char (*f)[LINE_MAX], int bank, int fld)
+{
+        if ((bank == BANK_HBOS) && (fld == 0)) {
+                (*f)[10] = '\n';
+                (*f)[9] = (*f)[7];
+                (*f)[8] = (*f)[6];
+                (*f)[7] = '-';
+                (*f)[6] = (*f)[5];
+                (*f)[6] = (*f)[4];
+                (*f)[4] = '-';
+        }
+}
+
 int main(int argc, char **argv)
 {
         ssize_t size = 1;
@@ -247,6 +260,8 @@ int main(int argc, char **argv)
                         fieldname = getfieldname(flds);
                         if (fieldname != NULL) {
 
+                                fixupField(&f, bank, flds);
+
                                 /* HBOS hack */
                                 if ((bank == 0) && ((flds == 1) || (flds == 4))) {
                                         if (flds == 1) {
@@ -281,11 +296,6 @@ int main(int argc, char **argv)
                         if (c[0] == '\n') {
                                 lines++;
                                 flds = 0;
-
-                                /* hack to fix hbos credits/debits */
-                                if (bank == 0) {
-                                        
-                                }
 
                                 /* append the fields in mapped order to row */
                                 for (i=0; i<=4; i++) {
