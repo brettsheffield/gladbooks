@@ -3,8 +3,8 @@
   <instance>default</instance>
   <business>1</business>	
 	<data>
-		<organisation>1</organisation>
-		<contact>1</contact>
+		<organisation id="1"></organisation>
+		<contact id="1"></contact>
 		<relationship id="1" datefrom="2012-12-25" dateto="2013-01-26"/>
 		<relationship id="2"/>
 	</data>

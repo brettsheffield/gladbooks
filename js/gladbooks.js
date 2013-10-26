@@ -882,12 +882,12 @@ function formEvents(tab, object, action, id) {
 	/* upload button click handler */
 	mytab.find('button.upload').click(function() 
 	{
-		//doFormSubmit(object, action, id);
-		uploadFile();
+		uploadFile(csvToXml);
 	});
 }
 
-function uploadFile() {
+/* upload file, calling function f on success */
+function uploadFile(f) {
 	var url = '/fileupload/' + g_instance + '/';
 	var form = new FormData(document.forms.namedItem("fileinfo"));
 
@@ -901,13 +901,125 @@ function uploadFile() {
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
 			hideSpinner();
-			alert(xml);
+			if (f) {
+				f(xml);
+			}
 		},
 		error: function(xml) {
 			hideSpinner();
 			alert("error uploading file");
 		}
 
+	});
+}
+
+function csvToXml(sha) {
+	$.ajax({
+		url: collection_url('csvtoxml/' + sha),
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		dataType: 'xml',
+		success: function(xml) {
+			xml = fixXMLDates(xml);
+			console.log('Barney');
+			xml = fixXMLRequest(xml);
+			console.log('Wilma');
+			postBankData(xml);
+		},
+		error: function(xml) {
+			displayResultsGeneric(xml, collection, title);
+		}
+	});
+}
+
+/* remove first row of xml document */
+function stripFirstRow(xml) {
+	$(xml).find('row:first').each(function() {
+		$(this).remove();
+	});
+	return xml;
+}
+
+function fixXMLDates(xml) {
+	$(xml).find('row').each(function() {
+		$(this).find('transactdate').each(function() {
+			/* format date */
+			var mydate = moment($(this).text());
+			if (mydate.isValid()) {
+				$(this).replaceWith('<' + this.tagName + '>' + mydate.format('YYYY-MM-DD') + '</' + this.tagName + '>');
+			}
+		});
+	});
+
+	return xml;
+}
+
+/* repackage xml as request */
+function fixXMLRequest(rawxml) {
+	
+	/* create a new XML request document */
+	var doc = createRequestXmlDoc(data);
+
+	/* clone the <data> part of our raw xml */
+	var data = $(rawxml).find('resources').children().clone();
+
+	/* paste the data into the new request xml */
+	$(doc).find('data').each(function() {
+		$(this).append(data);
+	});
+
+	/* flatten the xml ready to POST */
+	xml = flattenXml(doc);
+
+	return xml;
+}
+
+function createRequestXmlDoc() {
+    var doc = document.implementation.createDocument(null, null, null);
+
+    function X() {
+        var node = doc.createElement(arguments[0]), text, child;
+
+        for(var i = 1; i < arguments.length; i++) {
+            child = arguments[i];
+            if(typeof child == 'string') {
+                child = doc.createTextNode(child);
+            }
+            node.appendChild(child);
+        }
+
+        return node;
+    };
+
+    // create the XML structure recursively
+    xml = X('request',
+        X('instance', g_instance),
+        X('business', g_business),
+        X('data')
+    );
+
+	return xml;
+}
+
+function flattenXml(xml) {
+	return (new XMLSerializer()).serializeToString(xml);
+}
+
+function postBankData(xml) {
+	showSpinner();
+	$.ajax({
+		url: collection_url('banks'),
+		data: xml,
+		contentType: 'text/xml',
+		type: 'POST',
+		beforeSend: function (xhr) { setAuthHeader(xhr); },
+		success: function(xml) {
+			hideSpinner();
+			alert("Yo Dawwg!");
+		},
+		error: function(xml) {
+			hideSpinner();
+			alert("Something went wrong!");
+		}
 	});
 }
 
@@ -2310,7 +2422,7 @@ function getXML(url, async) {
 
 /******************************************************************************/
 /* display XML results as a sortable table */
-function displayResultsGeneric(xml, collection, title, sorted, tab) {
+function displayResultsGeneric(xml, collection, title, sorted, tab, headers) {
 	var refresh = false;
 
 	/* TODO: refactor */
@@ -2351,8 +2463,17 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 		row += 1;
 		if (row == 1) {
 			$(this).children().each(function() {
-				$t += '<th class="xml-' + this.tagName + '">';
-				$t += this.tagName + '  </th>';
+				$t += '<th class="xml-';
+				if (headers) {
+					/* use first row as headers */
+					$t += $(this).text().toLowerCase() + '">';
+					$t += $(this).text();
+				}
+				else {
+					$t += this.tagName + '">';
+					$t += this.tagName;
+				}
+				$t += '  </th>';
 			});
 			$t += "</tr>";
 			$t += "</thead>";
@@ -2364,26 +2485,30 @@ function displayResultsGeneric(xml, collection, title, sorted, tab) {
 			$t += '<tr class="odd ' + this.tagName  + '">';
 		}
 		$(this).children().each(function() {
-			$t += '<td class="xml-' + this.tagName + '">'
-			if ((this.tagName == 'price_buy')||(this.tagName == 'price_sell')){
-				$t += decimalPad($(this).text(), 2);
-			}
-			else if (this.tagName == 'nominalcode'){
-				$t += padString($(this).text(), 4);
-			}
-			else {
-				$t += $(this).text();
-			}
-			/* if this is a numeric value, and positive, add trailing space */
-			if ((this.tagName == 'debit') || (this.tagName == 'credit') 
-			 || (this.tagName == 'total') || (this.tagName == 'amount')
-			 || (this.tagName == 'tax') || (this.tagName == 'subtotal'))
-			{
-				if ($(this).text().substr(-1) != ')') {
-					$t += ' ';
+			if (!((row == 1) && (headers))) {
+				$t += '<td class="xml-' + this.tagName + '">'
+				if ((this.tagName == 'price_buy')
+				|| (this.tagName == 'price_sell'))
+				{
+					$t += decimalPad($(this).text(), 2);
 				}
+				else if (this.tagName == 'nominalcode'){
+					$t += padString($(this).text(), 4);
+				}
+				else {
+					$t += $(this).text();
+				}
+				/* add trailing space if numeric value and positive */
+				if ((this.tagName == 'debit') || (this.tagName == 'credit') 
+				 || (this.tagName == 'total') || (this.tagName == 'amount')
+				 || (this.tagName == 'tax') || (this.tagName == 'subtotal'))
+				{
+					if ($(this).text().substr(-1) != ')') {
+						$t += ' ';
+					}
+				}
+				$t += '</td>';
 			}
-			$t += '</td>';
 		});
 		/* quick hack to add pdf link */
 		if (collection == 'salesinvoices') {
