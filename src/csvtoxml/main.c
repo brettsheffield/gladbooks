@@ -232,6 +232,7 @@ int main(int argc, char **argv)
         char *fieldname;
         xmlNodePtr nfld[5] = { NULL, NULL, NULL, NULL, NULL };
         int i;
+        int lspace = 0;
         char *amount;
 
         check_args(argc, argv);
@@ -263,6 +264,7 @@ int main(int argc, char **argv)
                 || (c[0] == '\n') || (size == 0)) && (len > 0)) {
                         /* unquoted comma or newline - end field, start new */
                         fieldname = getfieldname(flds);
+                        f[lspace + 1] = '\0'; /* trim trailing whitespace */
                         if (fieldname != NULL) {
 
                                 fixupField(&f, bank, flds);
@@ -311,8 +313,11 @@ int main(int argc, char **argv)
                                 xmlAddChild(n, nrow);
                         }
                         len = 0;
+                        lspace = 0;
                 }
                 else {
+                        if (c[0] != ' ')
+                                lspace = len; /* keep track of last non-whitespace char */
                         f[len] = c[0];
                         len++;
                         if (len > LINE_MAX) {
