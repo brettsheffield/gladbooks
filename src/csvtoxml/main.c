@@ -200,13 +200,18 @@ int guess_format()
 void fixupField(char (*f)[LINE_MAX], int bank, int fld)
 {
         if ((bank == BANK_HBOS) && (fld == 0)) {
-                (*f)[10] = '\n';
+                /* fix HBOS date field */
+                (*f)[10] = '\0';
                 (*f)[9] = (*f)[7];
                 (*f)[8] = (*f)[6];
                 (*f)[7] = '-';
                 (*f)[6] = (*f)[5];
                 (*f)[6] = (*f)[4];
                 (*f)[4] = '-';
+        }
+        else if ((bank == BANK_HBOS) && ((fld == 1)||(fld == 4))) {
+                /* strip leading spaces from HBOS debits and credits */
+                sscanf(*f, "%s", *f);
         }
 }
 
