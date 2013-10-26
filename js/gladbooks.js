@@ -67,3 +67,80 @@ g_formdata = [
     [ 'salespayment', [ 'paymenttype', 'organisations', 'accounts.asset' ], ],
 ];
 
+var g_max_ledgers_per_journal=7;
+var g_frmLedger;
+var g_xml_accounttype = '';
+var g_xml_business = ''
+var g_xml_relationships = '';
+
+function postBankData(xml) {
+    showSpinner();
+    $.ajax({
+        url: collection_url('banks'),
+        data: xml,
+        contentType: 'text/xml',
+        type: 'POST',
+        beforeSend: function (xhr) { setAuthHeader(xhr); },
+        success: function(xml) {
+            hideSpinner();
+            console.log("postBankData() succeeded");
+        },
+        error: function(xml) {
+            hideSpinner();
+            console.log("postBankData() failed");
+        }
+    });
+}
+
+/* TODO  - functions that have Gladbooks-specific stuff in them: */
+/* handleSubforms()
+ * displayForm()
+ * formEvents() - not really, but consider refactoring
+ * uploadFile() - has hardcoded /fileupload/ destination
+ * formBlurEvents()
+ * displaySearchResults()
+ * changeRadio()
+ * recalculateLineTotal()
+ * validateForm()
+ * validateFormAccount()
+ * validateFormProduct()
+ * validateFormSalesOrder()
+ * updateSalesOrderTotals()
+ * productBoxClone()
+ * cloneInput()
+ * salesorderAddProduct()
+ * resetSalesOrderProductDefaults()
+ * populateCombos()
+ * loadCombo()
+ * populateCombo()
+ * validateNominalCode()
+ * comboChange()
+ * relationshipUpdate()
+ * taxProduct()
+ * relationshipCombo()
+ * prepareSalesOrderData()
+ * addSalesOrderProductField()
+ * addSalesOrderProducts()
+ * addSubFormRows()
+ * clearForm()
+ * displaySubformData()
+ * btnClickLinkContact()
+ * btnClickRemoveRow()
+ * submitForm()
+ * submitFormSuccess()
+ * submitFormError()
+ * collectionObject()
+ * fetchElementData()
+ * displayResultsGeneric()
+ * populateAccountsDDowns()
+ * populateDepartmentsDDowns()
+ * populateDivisionsDDowns()
+ * populateDebitCreditDDowns()
+ * setupJournalForm()
+ * finishJournalForm()
+ * validateJournalEntry()
+ * submitJournalEntry()
+ * submitJournalEntrySuccess()
+ * submitJournalEntryError()
+ * switchBusiness() - refers to orgcode
+ */
