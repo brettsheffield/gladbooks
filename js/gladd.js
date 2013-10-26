@@ -1,5 +1,5 @@
 /* 
- * gladbooks.js - main gladbooks javascript functions
+ * gladd.js - gladd helper functions
  *
  * this file is part of GLADBOOKS
  *
@@ -41,12 +41,6 @@ var STATUS_CRIT = 4;
 
 /******************************************************************************/
 $(document).ready(function() {
-
-//	if (window.location.pathname != '/') {
-		/* we're not the main application page, bail out */
-//		return false;
-//	}
-
 	/* no password, display login dialog */
 	if (g_password == '') { displayLoginBox(); }
 
@@ -509,104 +503,33 @@ function setMenu(xml) {
 /******************************************************************************/
 /* grab menu event and fetch content in the background */
 function clickMenu(event) {
-	event.preventDefault();
+    event.preventDefault();
 
-	if ($(this).attr("href") == '#journal') {
-		setupJournalForm();
-	} 
-	else if ($(this).attr("href") == '#ledger') {
-		showQuery('ledgers', 'General Ledger', true);
-	} 
-	else if ($(this).attr("href") == '#businessview') {
-		showQuery('businesses', 'Businesses', true);
-	}
-	else if ($(this).attr("href") == '#business.create') {
-		getForm('business', 'create', 'Add New Business');
-	}
-	else if ($(this).attr("href") == '#chartview') {
-		showQuery('accounts', 'Chart of Accounts', true);
-	}
-	else if ($(this).attr("href") == '#chartadd') {
-		getForm('account', 'create', 'Add New Account');
-	}
-	else if ($(this).attr("href") == '#banking') {
-		showHTML('help/banking.html', 'Banking', false);
-	}
-	else if ($(this).attr("href") == '#contacts') {
-		showQuery('contacts', 'Contacts', true);
-	}
-	else if ($(this).attr("href") == '#contact.create') {
-		getForm('contact', 'create', 'Add New Contact');
-	}
-	else if ($(this).attr("href") == '#bank.upload') {
-		getForm('bank', 'upload', 'Upload Bank Statement');
-	}
-	else if ($(this).attr("href") == '#departments.create') {
-		getForm('department', 'create', 'Add New Department');
-	}
-	else if ($(this).attr("href") == '#divisions.create') {
-		getForm('division', 'create', 'Add New Division');
-	}
-	else if ($(this).attr("href") == '#departments.view') {
-		showQuery('departments', 'Departments', true);
-	}
-	else if ($(this).attr("href") == '#divisions.view') {
-		showQuery('divisions', 'Divisions', true);
-	}
-	else if ($(this).attr("href") == '#organisations') {
-		showQuery('organisations', 'Organisations', true);
-	}
-	else if ($(this).attr("href") == '#organisation.create') {
-		getForm('organisation', 'create', 'Add New Organisation');
-	}
-	else if ($(this).attr("href") == '#payables') {
-		showHTML('help/payables.html', 'Payables', false);
-	}
-	else if ($(this).attr("href") == '#products') {
-		showQuery('products', 'Products', true);
-	}
-	else if ($(this).attr("href") == '#product.create') {
-		getForm('product', 'create', 'Add New Product');
-	}
-	else if ($(this).attr("href") == '#rpt_balancesheet') {
-		showHTML(collection_url('reports/balancesheet'),'Balance Sheet',false);
-	}
-	else if ($(this).attr("href") == '#rpt_trialbalance') {
-		showQuery('reports/trialbalance', 'Trial Balance', false);
-	}
-	else if ($(this).attr("href") == '#rpt_profitandloss') {
-		showHTML(collection_url('reports/profitandloss'),'Profit & Loss',false);
-	}
-	else if ($(this).attr("href") == '#rpt_accountsreceivable') {
-		showQuery('reports/accountsreceivable', 'Accounts Receivable', true);
-	}
-	else if ($(this).attr("href") == '#salesorders') {
-		showQuery('salesorders', 'Sales Orders', true);
-	}
-	else if ($(this).attr("href") == '#salesorder.create') {
-		getForm('salesorder', 'create', 'New Sales Order');
-	}
-	else if ($(this).attr("href") == '#salesorders.process') {
-		getForm('salesorder', 'process', 'Manual Billing Run');
-	}
-	else if ($(this).attr("href") == '#salesinvoices') {
-		showQuery('salesinvoices', 'Sales Invoices', true);
-	}
-	else if ($(this).attr("href") == '#salespayments') {
-		showQuery('salespayments', 'Sales Payments', true);
-	}
-	else if ($(this).attr("href") == '#salespayment.create') {
-		getForm('salespayment', 'create', 'Enter Sales Payment');
-	}
-	else if ($(this).attr("href") == '#help') {
-		showHTML('help/index.html', 'Help', false);
-	}
-	else if ($(this).attr("href") == '#') {
+    ok = false;
+
+    console.log('clickMenu()');
+
+	if ($(this).attr("href") == '#') {
 		console.log('Doing nothing, successfully');
+		ok = true;
 	}
 	else {
-		addTab("Not Implemented", "<h2>Feature Not Available Yet</h2>", true);
+		for (menu in g_menus) {
+				if ($(this).attr("href") == '#' + g_menus[menu][0]) {
+						if (g_menus[menu][1] == alert ) {
+							alert(g_menus[menu][2]);
+						}
+						else {
+							g_menus[menu][1].apply(this, Array.prototype.slice.call(g_menus[menu], 2));
+						}
+						ok = true;
+						break;
+				}
+		}
 	}
+    if (!ok) {
+        addTab("null", "<h2>Feature Not Available Yet</h2>", true);
+    }
 }
 
 function clickTabLink(event) {
@@ -686,35 +609,31 @@ function cacheData(object, action, args) {
 }
 
 
-/******************************************************************************/
+/*****************************************************************************/
 function fetchFormData(object, action) {
-	console.log('fetchFormData(' + object + ',' + action + ')');
-	var d = new Array(); /* array of deferreds */
+    console.log('fetchFormData(' + object + ',' + action + ')');
+    var d = new Array(); /* array of deferreds */
+    var ok = false;
 
-	var formURL = '/html/forms/' + object + '/' + action + '.html';
-	d.push(getHTML(formURL));   /* fetch html form */
+    var formURL = '/html/forms/' + object + '/' + action + '.html';
+    d.push(getHTML(formURL));   /* fetch html form */
 
-	if (object == 'account') {
-		d.push(getXML(collection_url('accounttypes')));
-	}
-	else if (object == 'product') {
-		d.push(getXML(collection_url('accounts.revenue')));
-	}
-	else if (object == 'salesorder') {
-		d.push(getXML(collection_url('organisations')));
-		d.push(getXML(collection_url('cycles')));
-		d.push(getXML(collection_url('products')));
-	}
-	else if (object == 'salespayment') {
-		d.push(getXML(collection_url('paymenttype')));
-		d.push(getXML(collection_url('organisations')));
-		d.push(getXML(collection_url('accounts.asset')));
-	}
-	else {
-		d.push($.Deferred().resolve()); /* succeed at nothing */
-	}
+    for (o in g_formdata) {
+        console.log(g_formdata[o]);
+        if (object == g_formdata[o][0]) {
+            /* loop through and push all sources */
+            for (i=0; i <= g_formdata[o][1].length-1; i++) {
+                d.push(getXML(collection_url(g_formdata[o][1][i])));
+            }
+            ok = true;
+        }
+    }
 
-	return d;
+    if (!ok) {
+        d.push($.Deferred().resolve()); /* succeed at nothing */
+    }
+
+    return d;
 }
 
 /******************************************************************************/
