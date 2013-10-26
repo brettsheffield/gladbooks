@@ -1,0 +1,2 @@
+# http://sass-lang.com/
+sass --watch sass/gladbooks.scss:css/gladbooks.css
