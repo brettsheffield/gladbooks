@@ -3,13 +3,18 @@
   <instance>test</instance>
   <business>1</business>
 	<data>
+		<account>1000</account>
 		<bank>
 			<transactdate>2013-04-01</transactdate>
 			<description>a comment</description>
-			<account>1000</account>
+			<paymenttype>1</paymenttype>
+			<credit>50.00</credit>
+		</bank>
+		<bank>
+			<transactdate>2013-04-02</transactdate>
+			<description>a comment</description>
 			<paymenttype>1</paymenttype>
 			<debit>120.00</debit>
-			<credit>0.00</credit>
 		</bank>
 	</data>
 </request>

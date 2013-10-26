@@ -24,6 +24,7 @@
 
 g_menus = [
 	[ 'bank.upload', getForm, 'bank', 'upload', 'Upload Bank Statement' ],
+	[ 'bank.view', showQuery, 'bank', 'Bank Statement', true ],
 	[ 'banking', showHTML, 'help/banking.html', 'Banking', false ],
 	[ 'contact.create', getForm, 'contact', 'create', 'Add New Contact' ],
 	[ 'contacts', showQuery, 'contacts', 'Contacts', true ],
@@ -62,6 +63,7 @@ g_menus = [
 
 g_formdata = [
     [ 'account', [ 'accounttypes' ], ],  
+    [ 'bank', [ 'accounts.asset' ], ],  
     [ 'product', [ 'accounts.revenue' ], ],
     [ 'salesorder', [ 'organisations', 'cycles', 'products' ], ],
     [ 'salespayment', [ 'paymenttype', 'organisations', 'accounts.asset' ], ],
@@ -72,6 +74,8 @@ var g_frmLedger;
 var g_xml_accounttype = '';
 var g_xml_business = ''
 var g_xml_relationships = '';
+
+/* functions ****************************************************************/
 
 function addSalesOrderProductField(field, value, mytab) {
     if (value.length > 0) {
@@ -253,10 +257,20 @@ function populateDebitCreditDDowns() {
 }
 
 function postBankData(xml) {
+	var account = activeTab().find('select.bankaccount').val();
+	console.log('Uploading bank statement to account ' + account);
+
+	/* prefix account number to data*/
+	$(xml).find('data').each(function() {
+		$(this).prepend('<account>' + account + '</account>');
+	});
+
+	var flatxml = flattenXml(xml);
+
     showSpinner();
     $.ajax({
         url: collection_url('banks'),
-        data: xml,
+        data: flatxml,
         contentType: 'text/xml',
         type: 'POST',
         beforeSend: function (xhr) { setAuthHeader(xhr); },

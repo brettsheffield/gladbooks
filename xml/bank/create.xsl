@@ -6,6 +6,7 @@
         <xsl:variable name="clientip" select="request/clientip" />
         <xsl:variable name="instance" select="request/instance" />
         <xsl:variable name="business" select="request/business" />
+        <xsl:variable name="account" select="request/data/account" />
 
 	<xsl:include href="../cleanQuote.xsl"/>
 	<xsl:include href="../setSearchPath.xsl"/>
@@ -36,9 +37,7 @@
 		<xsl:if test="description">
 			<xsl:text>description,</xsl:text>
 		</xsl:if>
-		<xsl:if test="account">
-			<xsl:text>account,</xsl:text>
-		</xsl:if>
+		<xsl:text>account,</xsl:text>
 		<xsl:if test="paymenttype">
 			<xsl:text>paymenttype,</xsl:text>
 		</xsl:if>
@@ -77,10 +76,8 @@
 			</xsl:call-template>
 			<xsl:text>','</xsl:text>
 		</xsl:if>
-		<xsl:if test="account">
-			<xsl:value-of select="account"/>
-			<xsl:text>','</xsl:text>
-		</xsl:if>
+		<xsl:copy-of select="$account"/>
+		<xsl:text>','</xsl:text>
 		<xsl:if test="paymenttype">
 			<xsl:value-of select="paymenttype"/>
 			<xsl:text>','</xsl:text>

@@ -213,6 +213,11 @@ void fixupField(char (*f)[LINE_MAX], int bank, int fld)
                 /* strip leading spaces from HBOS debits and credits */
                 sscanf(*f, "%s", *f);
         }
+        else if (((bank == BANK_HSBC) && (fld == 1))
+        || ((bank == BANK_HBOS) && (fld == 2)))
+        {
+                strcpy(*f, "1");
+        }
 }
 
 int main(int argc, char **argv)
@@ -264,38 +269,43 @@ int main(int argc, char **argv)
                 || (c[0] == '\n') || (size == 0)) && (len > 0)) {
                         /* unquoted comma or newline - end field, start new */
                         fieldname = getfieldname(flds);
-                        f[lspace + 1] = '\0'; /* trim trailing whitespace */
+                        //f[lspace + 1] = '\0'; /* trim trailing whitespace */
                         if (fieldname != NULL) {
+                                if (lspace > 0) { 
+                                        /* we have a name and data */
+                                        fixupField(&f, bank, flds);
 
-                                fixupField(&f, bank, flds);
-
-                                /* HBOS hack */
-                                if ((bank == 0) && ((flds == 1) || (flds == 4))) {
-                                        if (flds == 1) {
-                                                amount = strdup(f);
+                                        /* HBOS hack */
+                                        if ((bank == 0) && ((flds == 1) || (flds == 4))) {
+                                                if (flds == 1) {
+                                                        amount = strdup(f);
+                                                }
+                                                else if (flds == 4) {
+                                                        /* change debit to credit */
+                                                        nval = xmlNewText(BAD_CAST amount);
+                                                        if (strcmp(f, "C") == 0) {
+                                                                nfld[3] = NULL;
+                                                                nfld[4] = xmlNewNode(NULL, BAD_CAST "credit");
+                                                                xmlAddChild(nfld[4], nval);
+                                                        }
+                                                        else {
+                                                                nfld[3] = xmlNewNode(NULL, BAD_CAST "debit");
+                                                                nfld[4] = NULL;
+                                                                xmlAddChild(nfld[3], nval);
+                                                        }
+                                                        free(amount);
+                                                }
                                         }
-                                        else if (flds == 4) {
-                                                /* change debit to credit */
-                                                nval = xmlNewText(BAD_CAST amount);
-                                                if (strcmp(f, "C") == 0) {
-                                                        nfld[3] = xmlNewNode(NULL, BAD_CAST "debit");
-                                                        nfld[4] = xmlNewNode(NULL, BAD_CAST "credit");
-                                                        xmlAddChild(nfld[4], nval);
-                                                }
-                                                else {
-                                                        nfld[3] = xmlNewNode(NULL, BAD_CAST "debit");
-                                                        nfld[4] = xmlNewNode(NULL, BAD_CAST "credit");
-                                                        xmlAddChild(nfld[3], nval);
-                                                }
-                                                free(amount);
+                                        else {
+                                                /* store fields in remapped order */
+                                                nfld[map[flds]] = xmlNewNode(NULL, BAD_CAST fieldname);
+                                                free(fieldname);
+                                                nval = xmlNewText(BAD_CAST f);
+                                                xmlAddChild(nfld[map[flds]], nval);
                                         }
                                 }
                                 else {
-                                        /* store fields in remapped order */
-                                        nfld[map[flds]] = xmlNewNode(NULL, BAD_CAST fieldname);
-                                        free(fieldname);
-                                        nval = xmlNewText(BAD_CAST f);
-                                        xmlAddChild(nfld[map[flds]], nval);
+                                        nfld[map[flds]] = NULL;
                                 }
                         }
                         flds++;
@@ -306,6 +316,7 @@ int main(int argc, char **argv)
 
                                 /* append the fields in mapped order to row */
                                 for (i=0; i<=4; i++) {
+                                        if (nfld[i] != NULL)
                                         xmlAddChild(nrow, nfld[i]);
                                 }
 
@@ -316,10 +327,10 @@ int main(int argc, char **argv)
                         lspace = 0;
                 }
                 else {
-                        if (c[0] != ' ')
-                                lspace = len; /* keep track of last non-whitespace char */
                         f[len] = c[0];
                         len++;
+                        if (c[0] != ' ')
+                                lspace++; /* keep track of last non-whitespace char */
                         if (len > LINE_MAX) {
                                 fprintf(stderr, "Line length overrun\n");
                                 _exit(EXIT_FAILURE);

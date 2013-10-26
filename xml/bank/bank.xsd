@@ -5,7 +5,6 @@
 	<xs:sequence>
 		<xs:element name="transactdate" type="xs:date"/>
 		<xs:element name="description" type="xs:string" minOccurs="0"/>
-		<xs:element name="account" type="xs:nonNegativeInteger"/>
 		<xs:element name="paymenttype" type="xs:positiveInteger"/>
 		<xs:element name="journal" type="xs:positiveInteger" minOccurs="0"/>
 		<xs:element name="debit" type="xs:decimal" minOccurs="0"/>

@@ -852,14 +852,12 @@ function stripFirstRow(xml) {
 }
 
 function fixXMLDates(xml) {
-	$(xml).find('row').each(function() {
-		$(this).find('transactdate').each(function() {
-			/* format date */
-			var mydate = moment($(this).text());
-			if (mydate.isValid()) {
-				$(this).replaceWith('<' + this.tagName + '>' + mydate.format('YYYY-MM-DD') + '</' + this.tagName + '>');
-			}
-		});
+	$(xml).find('transactdate').each(function() {
+		/* format date */
+		var mydate = moment($(this).text());
+		if (mydate.isValid()) {
+			$(this).replaceWith('<' + this.tagName + '>' + mydate.format('YYYY-MM-DD') + '</' + this.tagName + '>');
+		}
 	});
 
 	return xml;
@@ -880,7 +878,7 @@ function fixXMLRequest(rawxml) {
 	});
 
 	/* flatten the xml ready to POST */
-	xml = flattenXml(doc);
+	//xml = flattenXml(doc);
 
 	return xml;
 }
