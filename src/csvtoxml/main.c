@@ -261,6 +261,9 @@ int main(int argc, char **argv)
                 size = read(fd, c, 1);
                 if ((size == 1) && (flds == 1) && (len == 1))
                         nrow = xmlNewNode(NULL, BAD_CAST "bank");
+                if ((size == 0) && (f[len] != '\n'))
+                        c[0] = '\n';
+                        
                 if (c[0] == '"') {
                         /* start/end quoted field */
                         quot = (len == 0) ? 1 : 0;
