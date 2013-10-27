@@ -269,7 +269,6 @@ int main(int argc, char **argv)
                 || (c[0] == '\n') || (size == 0)) && (len > 0)) {
                         /* unquoted comma or newline - end field, start new */
                         fieldname = getfieldname(flds);
-                        //f[lspace + 1] = '\0'; /* trim trailing whitespace */
                         if (fieldname != NULL) {
                                 if (lspace > 0) { 
                                         /* we have a name and data */
@@ -299,7 +298,6 @@ int main(int argc, char **argv)
                                         else {
                                                 /* store fields in remapped order */
                                                 nfld[map[flds]] = xmlNewNode(NULL, BAD_CAST fieldname);
-                                                free(fieldname);
                                                 nval = xmlNewText(BAD_CAST f);
                                                 xmlAddChild(nfld[map[flds]], nval);
                                         }
@@ -307,6 +305,7 @@ int main(int argc, char **argv)
                                 else {
                                         nfld[map[flds]] = NULL;
                                 }
+                                free(fieldname);
                         }
                         flds++;
 
@@ -317,11 +316,12 @@ int main(int argc, char **argv)
                                 /* append the fields in mapped order to row */
                                 for (i=0; i<=4; i++) {
                                         if (nfld[i] != NULL)
-                                        xmlAddChild(nrow, nfld[i]);
+                                                xmlAddChild(nrow, nfld[i]);
                                 }
 
                                 /* now append the row */
                                 xmlAddChild(n, nrow);
+                                nrow = NULL;
                         }
                         len = 0;
                         lspace = 0;
@@ -339,6 +339,10 @@ int main(int argc, char **argv)
                 }
         }
         close(fd);
+
+        /* if last line of the file didn't end in a newline, append it now */
+        if (nrow != NULL )
+                xmlAddChild(n, nrow);
 
         flattenxml(doc, &xml, 1);
         printf("%s", xml);
@@ -361,3 +365,4 @@ void usage(int status)
         fprintf(stderr, "usage: csvtoxml [--order <orderspec> | --hsbc | --hbos ] <filename>\n");
         _exit(status);
 }
+
