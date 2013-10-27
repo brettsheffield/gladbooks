@@ -24,7 +24,7 @@
 
 g_menus = [
 	[ 'bank.upload', getForm, 'bank', 'upload', 'Upload Bank Statement' ],
-	[ 'bank.view', showQuery, 'bank', 'Bank Statement', true ],
+	[ 'bank.view', showQuery, 'banks', 'Bank Statement', true ],
 	[ 'banking', showHTML, 'help/banking.html', 'Banking', false ],
 	[ 'contact.create', getForm, 'contact', 'create', 'Add New Contact' ],
 	[ 'contacts', showQuery, 'contacts', 'Contacts', true ],
