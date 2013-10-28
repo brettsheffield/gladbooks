@@ -24,9 +24,8 @@
 
 g_menus = [
 	[ 'bank.reconcile', getForm, 'bank', 'reconcile', 'Bank Reconciliation' ],
-	[ 'bank.select', getForm, 'bank', 'select', 'Select Bank Account' ],
 	[ 'bank.upload', getForm, 'bank', 'upload', 'Upload Bank Statement' ],
-	[ 'bank.view', showQuery, 'bank.view/1000', 'Bank Statement', true ],
+	[ 'bank.statement', getForm, 'bank', 'statement', 'View Bank Statement' ],
 	[ 'banking', showHTML, 'help/banking.html', 'Banking', false ],
 	[ 'contact.create', getForm, 'contact', 'create', 'Add New Contact' ],
 	[ 'contacts', showQuery, 'contacts', 'Contacts', true ],
@@ -66,8 +65,8 @@ g_menus = [
 g_formdata = [
     [ 'account', [ 'accounttypes' ], ],  
     [ 'bank', [ 'accounts.asset' ], ],  
-    [ 'bank.reconcile', [ 'bank.unreconciled' ], ],  
-    [ 'bank.select', [ 'accounts.asset' ], ],  
+    [ 'bank.reconcile', [ 'accounts.asset' ], ],  
+    [ 'bank.upload', [ 'accounts.asset' ], ],  
     [ 'product', [ 'accounts.revenue' ], ],
     [ 'salesorder', [ 'organisations', 'cycles', 'products' ], ],
     [ 'salespayment', [ 'paymenttype', 'organisations', 'accounts.asset' ], ],
@@ -555,6 +554,23 @@ function submitJournalEntry(event, form) {
         success: function(xml) { submitJournalEntrySuccess(xml); },
         error: function(xml) { submitJournalEntryError(xml); }
     });
+}
+
+/* override the gladd.js function which sets tab titles */
+tabTitle = function (title, object, action, xml) {
+    if ((object == 'salesorder') && (action == 'update') && (xml[0])) {
+        /* Display Sales Order number as tab title */
+        title = 'SO ' + $(xml[0]).find('order').first().text();
+    }
+    else if ((object == 'contact') && (action == 'update') && (xml[0])) {
+        /* Display Contact name as tab title */
+        title = $(xml[0]).find('name').first().text();
+    }
+    else if ((object == 'organisation') && (action == 'update') && (xml[0])) {
+        /* Display Organisation name as tab title */
+        title = $(xml[0]).find('name').first().text();
+    }
+    return title;
 }
 
 /* apply tax to product */

@@ -702,6 +702,11 @@ function handleSubforms(tab, html, id, xml) {
 	});
 }
 
+/* this function is intended to be overridden by the application */
+function tabTitle(title) {
+	return title;
+}
+
 /*****************************************************************************/
 /* display html form we've just fetched in new tab */
 function displayForm(object, action, title, html, xml, tab) {
@@ -709,20 +714,7 @@ function displayForm(object, action, title, html, xml, tab) {
 	var id = 0;
 	var x = 0;
 
-	if ((object == 'salesorder') && (action == 'update') && (xml[0])) {
-		/* Display Sales Order number as tab title */
-		title = 'SO ' + $(xml[0]).find('order').first().text();
-	}
-	
-	if ((object == 'contact') && (action == 'update') && (xml[0])) {
-		/* Display Contact name as tab title */
-		title = $(xml[0]).find('name').first().text();
-	}
-
-	if ((object == 'organisation') && (action == 'update') && (xml[0])) {
-		/* Display Organisation name as tab title */
-		title = $(xml[0]).find('name').first().text();
-	}
+	title = tabTitle(title, object, action, xml);
 
 	if (typeof tab != 'undefined') {
 		tab = updateTab(tab, html, true, title);
