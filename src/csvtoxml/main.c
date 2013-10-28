@@ -285,7 +285,7 @@ int main(int argc, char **argv)
                                                 else if (flds == 4) {
                                                         /* change debit to credit */
                                                         nval = xmlNewText(BAD_CAST amount);
-                                                        if (strcmp(f, "C") == 0) {
+                                                        if (strcmp(f, "D") == 0) {
                                                                 nfld[3] = NULL;
                                                                 nfld[4] = xmlNewNode(NULL, BAD_CAST "credit");
                                                                 xmlAddChild(nfld[4], nval);

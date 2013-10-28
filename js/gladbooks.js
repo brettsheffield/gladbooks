@@ -23,8 +23,10 @@
 /* global variables **********************************************************/
 
 g_menus = [
+	[ 'bank.reconcile', getForm, 'bank', 'reconcile', 'Bank Reconciliation' ],
+	[ 'bank.select', getForm, 'bank', 'select', 'Select Bank Account' ],
 	[ 'bank.upload', getForm, 'bank', 'upload', 'Upload Bank Statement' ],
-	[ 'bank.view', showQuery, 'banks', 'Bank Statement', true ],
+	[ 'bank.view', showQuery, 'bank.view/1000', 'Bank Statement', true ],
 	[ 'banking', showHTML, 'help/banking.html', 'Banking', false ],
 	[ 'contact.create', getForm, 'contact', 'create', 'Add New Contact' ],
 	[ 'contacts', showQuery, 'contacts', 'Contacts', true ],
@@ -64,6 +66,8 @@ g_menus = [
 g_formdata = [
     [ 'account', [ 'accounttypes' ], ],  
     [ 'bank', [ 'accounts.asset' ], ],  
+    [ 'bank.reconcile', [ 'bank.unreconciled' ], ],  
+    [ 'bank.select', [ 'accounts.asset' ], ],  
     [ 'product', [ 'accounts.revenue' ], ],
     [ 'salesorder', [ 'organisations', 'cycles', 'products' ], ],
     [ 'salespayment', [ 'paymenttype', 'organisations', 'accounts.asset' ], ],
@@ -267,7 +271,7 @@ function postBankData(xml) {
 
 	var flatxml = flattenXml(xml);
 
-    showSpinner();
+    showSpinner('Saving bank data...');
     $.ajax({
         url: collection_url('banks'),
         data: flatxml,

@@ -805,7 +805,7 @@ function uploadFile(f) {
 	var url = '/fileupload/' + g_instance + '/';
 	var form = new FormData(document.forms.namedItem("fileinfo"));
 
-	showSpinner();
+	showSpinner('Uploading File...');
 	$.ajax({
 	    url: url,
 		type: 'POST',
@@ -814,9 +814,11 @@ function uploadFile(f) {
 		contentType: false,
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {
-			hideSpinner();
 			if (f) {
 				f(xml);
+			}
+			else {
+				hideSpinner();
 			}
 		},
 		error: function(xml) {
@@ -828,6 +830,7 @@ function uploadFile(f) {
 }
 
 function csvToXml(sha) {
+	showSpinner('Converting csv to xml...');
 	$.ajax({
 		url: collection_url('csvtoxml/' + sha),
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
