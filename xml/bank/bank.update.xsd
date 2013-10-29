@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:complexType name="bank">
+	<xs:sequence>
+		<xs:element name="transactdate" type="xs:date" minOccurs="0"/>
+		<xs:element name="description" type="xs:string" minOccurs="0"/>
+		<xs:element name="paymenttype" type="xs:positiveInteger" minOccurs="0"/>
+		<xs:element name="journal" type="xs:positiveInteger" minOccurs="0"/>
+		<xs:element name="debit" type="xs:decimal" minOccurs="0"/>
+		<xs:element name="credit" type="xs:decimal" minOccurs="0"/>
+	</xs:sequence>
+	<xs:attribute name="id" type="xs:positiveInteger" use="required" />
+</xs:complexType><!--bank-->
+
+</xs:schema>

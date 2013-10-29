@@ -213,8 +213,14 @@ function activeTabId() {
 
 /*****************************************************************************/
 function updateTab(tabid, content, activate, title) {
-	console.log('updating tab ' + tabid);
-	var tab = $('#tab' + tabid);
+	if (typeof tabid == 'object'){
+		/* we were passed a jquery object (hopefully) */
+		var tab = tabid;
+	}
+	else {
+		console.log('updating tab ' + tabid);
+		var tab = $('#tab' + tabid);
+	}
 
 	/* preserve status message */
 	var statusmsg = tab.find('.statusmsg').detach();
@@ -543,7 +549,7 @@ function showQuery(collection, title, sort, tab) {
 			displayResultsGeneric(xml, collection, title, sort, tab);
 		},
 		error: function(xml) {
-			displayResultsGeneric(xml, collection, title);
+			displayResultsGeneric(xml, collection, title, sort, tab);
 		}
 	});
 }
@@ -614,7 +620,6 @@ function fetchFormData(object, action) {
     d.push(getHTML(formURL));   /* fetch html form */
 
     for (o in g_formdata) {
-        console.log(g_formdata[o]);
         if (object == g_formdata[o][0]) {
             /* loop through and push all sources */
             for (i=0; i <= g_formdata[o][1].length-1; i++) {
@@ -790,6 +795,12 @@ function formEvents(tab, object, action, id) {
 	{
 		uploadFile(csvToXml);
 	});
+
+	customFormEvents(tab, object, action, id);
+}
+
+/* to be overridden by application */
+function customFormEvents(tab, object, action, id) {
 }
 
 /* upload file, calling function f on success */
@@ -1813,6 +1824,8 @@ function getXML(url, async) {
 function displayResultsGeneric(xml, collection, title, sorted, tab, headers) {
 	var refresh = false;
 
+	statusHide();
+
 	/* TODO: refactor */
 	if (collection == 'contacts') {
 		refresh = true;
@@ -1837,7 +1850,13 @@ function displayResultsGeneric(xml, collection, title, sorted, tab, headers) {
 			getForm('product', 'create', 'Add New Product');
 		}
 		else {
-			addTab(title, "<p>Nothing found</p>", true);
+			$t = '<div class="results empty">Nothing found</div>';
+		    if (tab) {
+				updateTab(tab, $t);
+			}
+			else {
+				addTab(title, $t, true, collection, refresh);
+			}
 		}
 		return;
 	}

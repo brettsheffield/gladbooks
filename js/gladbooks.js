@@ -139,6 +139,35 @@ function addSubFormRows(xml, datatable, view, tab) {
     });
 }
 
+function bankChange() {
+	var account = $(this).val();
+	var mytab = activeTab();
+	var div = mytab.find('div.bank.data');
+	var limit = 20;
+	var offset = 0;
+	var title = '';
+	var sort = false;
+	var sortfield = 'id';
+	var asc = 'ASC';
+	var url = 'bank.view/' + account 
+	url += '/' + limit + '/' + offset + '/' + sortfield + '/' + asc;
+
+	/* remove scrollbar from tablet - we'll handle this in the bank.data div */
+	mytab.addClass('noscroll');
+
+	showQuery(url, title, sort, div);
+
+	mytab.find('div.results.pager').empty();
+	mytab.find('div.results.pager').append('<a href="#next">next</a>');
+}
+
+/* override gladd.js function */
+customFormEvents = function(tab, object, action, id) {
+	var mytab = getTabById(tab);
+
+	mytab.find('select.bankaccount').change(bankChange);
+}
+
 /* show the form, after setup is complete */
 function finishJournalForm(tab) {
     var ledger_lines = 1;
@@ -876,7 +905,6 @@ function validateNominalCode(code, type) {
 
 /* TODO  - functions that have Gladbooks-specific stuff in them: */
 /* handleSubforms()
- * displayForm()
  * formEvents() - not really, but consider refactoring
  * uploadFile() - has hardcoded /fileupload/ destination
  * formBlurEvents()

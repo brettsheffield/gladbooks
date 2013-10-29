@@ -2,6 +2,7 @@
 *.so
 *.o
 .sass-cache/
+css/includes/
 .gladd.lock
 gladd.conf.local
 js/importer_config.js

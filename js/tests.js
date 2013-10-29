@@ -200,7 +200,11 @@ test("create account (invalid type) - MUST be rejected", function() {
 module("Bank");
 
 test("create bank entry", function() {
-	testXmlPost('bank', 2);
+	testXmlPost('banks', 2);
+});
+
+test("reconcile bank entry - existing journal", function() {
+	testXmlPost('banks', 9, 1);
 });
 
 module("Contacts");
@@ -854,7 +858,7 @@ module("Payments");
 
 /* FIXME: can only use each bank entry once, so repeated tests fail
 test("create payment from bank entry", function() {
-	testXmlPost('payment', 8);
+	testXmlPost('payments', 8);
 });
 */
 
@@ -899,19 +903,19 @@ test("tax product (add)", function() {
 module("Purchase Orders");
 
 test("create purchase order", function() {
-	testXmlPost('purchaseorder', 4);
+	testXmlPost('purchaseorders', 4);
 });
 
 module("Purchase Invoices");
 
 test("create purchase invoice", function() {
-	testXmlPost('purchaseinvoice', 5);
+	testXmlPost('purchaseinvoices', 5);
 });
 
 module("Purchase Payments");
 
 test("create purchase payment", function() {
-	testXmlPost('purchasepayment', 6);
+	testXmlPost('purchasepayments', 6);
 });
 
 module("Purchase Payment Allocation");
@@ -919,7 +923,7 @@ module("Purchase Payment Allocation");
 /* FIXME: this test is broken by check_payment_allocation() trigger
  * payment must first exist, and not have yet been allocated for this to pass
 test("allocate purchase payment", function() {
-	testXmlPost('purchasepaymentallocation', 7);
+	testXmlPost('purchasepaymentallocations', 7);
 });
 */
 
@@ -978,13 +982,13 @@ test("update sales order", function() {
 module("Sales Invoices");
 
 test("create sales invoice", function() {
-	testXmlPost('salesinvoice', 0);
+	testXmlPost('salesinvoices', 0);
 });
 
 module("Sales Payment");
 
 test("create sales payment", function() {
-	testXmlPost('salespayment', 1);
+	testXmlPost('salespayments', 1);
 });
 
 /* FIXME: this test is broken by check_payment_allocation() trigger
@@ -1025,7 +1029,7 @@ function testXmlGet(url1, url2) {
 	});
 }
 
-function testXmlPost(object, testid) {
+function testXmlPost(object, testid, id) {
 
     stop();
 	var url = '/testdata/' + padString(testid, 5) + '.xml';
@@ -1034,7 +1038,12 @@ function testXmlPost(object, testid) {
 		dataType: 'text',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(xml) {  
-			var posturl = collection_url(object + 's');
+			if (id) {
+				var posturl = collection_url(object) + id;
+			}
+			else {
+				var posturl = collection_url(object);
+			}
 			//xml = xml.replace(/\s{0,}\n\s{0,}/g, ''); /* strip */
 			$.ajax({
 				url: posturl,

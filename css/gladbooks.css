@@ -167,6 +167,9 @@ div.tabhead div > a {
   overflow: auto;
   width: 100%; }
 
+.tablet.noscroll {
+  overflow: hidden; }
+
 .active {
   display: block; }
 
@@ -557,6 +560,43 @@ select.tax {
 
 select.paymenttype {
   width: 15em; }
+
+/* Bank screens */
+div.bank.data {
+  background-color: #dee9f2;
+  height: 95%;
+  overflow: auto;
+  width: 100%; }
+
+div.bank.selector {
+  padding: 10px;
+  height: 5%;
+  width: 100%; }
+
+div.results.pager {
+  float: right;
+  width: 40%; }
+
+div.bank.selector div.chzn-container {
+  width: 50% !important; }
+
+div.bank.statement {
+  background-color: beige;
+  clear: both;
+  height: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%; }
+
+div.results.empty {
+  background-color: white;
+  color: #6e89a5;
+  font-family: monospace;
+  font-size: 1.8em;
+  height: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center; }
 
 /* totals table (salesorder form) */
 table.totals {
