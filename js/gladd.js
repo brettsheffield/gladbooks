@@ -126,53 +126,56 @@ function deployTabs() {
 /*****************************************************************************/
 /* add a new tab with content, optionally activating it */
 function addTab(title, content, activate, collection, refresh) {
-	var tabid = g_tabid++;
-	var tabClasses = 'tabhead tablet' + tabid + ' business' + g_business;
-	var tabContentClasses = 'tablet tablet' + tabid + ' business' + g_business;
+	var tab = newtab();
+	tab.title = title;
+	tab.content = content;
+	tab.activate = activate;
+	tab.collection = collection;
+	tab.refresh = refresh;
 
-	if (collection) {
-		tabContentClasses += ' ' + collection;
+	if (tab.collection) {
+		tab.contentClasses += ' ' + tab.collection;
 	}
 	if (refresh) {
-		tabContentClasses += ' refresh';
+		tab.contentClasses += ' refresh';
 	}
 
 	/* truncate tab title if required */
-	title = title.substring(0, g_max_tabtitle);
+	tab.title = tab.title.substring(0, g_max_tabtitle);
 
 	/* check if this tab already exists */
-	var oldtabid = getTabByTitle(title);
+	var oldtabid = getTabByTitle(tab.title);
 	if (oldtabid >= 0) {
-		updateTab(oldtabid, content, activate);
-		if (activate) {
+		updateTab(oldtabid, tab.content, tab.activate);
+		if (tab.activate) {
 			activateTab(oldtabid);
 		}
 		return oldtabid;
 	}
 
 	/* add tab and closer */
-	$('ul.tablist').append('<li id="tabli' + tabid
-		+ '" class="' + tabClasses + '">'
+	$('ul.tablist').append('<li id="tabli' + tab.id
+		+ '" class="' + tab.classes + '">'
 		+ '<div class="tabhead">'
-		+ '<div class="tabtitle">'
-		+ '<a class="tabtitle" href="' + tabid + '">' + title + '</a>'
+		+ '<div class="tabtitle" data-collection="' + tab.collection + '">'
+		+ '<a class="tabtitle" href="' + tab.id + '">' + tab.title + '</a>'
 		+ '</div>'
 		+ '<div class="tabx">'
-		+ '<a id="tabcloser' + tabid + '" class="tabcloser" href="'
-		+ tabid  + '">'
+		+ '<a id="tabcloser' + tab.id + '" class="tabcloser" href="'
+		+ tab.id  + '">'
 		+ 'X</a>'
 		+ '</div>' 
 		+ '</li>');
 
 	/* add content */
-	$('div.tabcontent').append('<div id="tab' + tabid + '" '
-		+ 'class="' + tabContentClasses + '">');
-	$('div#tab' + tabid).append(content);
+	$('div.tabcontent').append('<div id="tab' + tab.id + '" '
+		+ 'class="' + tab.contentClasses + '">');
+	$('div#tab' + tab.id).append(tab.content);
 
 	/* add closer event */
-    $('#tabcloser' + tabid).click(function(event) {
+    $('#tabcloser' + tab.id).click(function(event) {
 		event.preventDefault();
-		closeTab(tabid);
+		closeTab(tab.id);
 	});
 
 	/* set up tab navigation */
@@ -183,19 +186,19 @@ function addTab(title, content, activate, collection, refresh) {
 	});
 	
 	/* activate our new tab */
-	if (activate) {
-		activateTab(tabid);
+	if (tab.activate) {
+		activateTab(tab.id);
 	}
 
     /* set click events */
-	getTabById(tabid).find('a.tablink').each(function() {
+	getTabById(tab.id).find('a.tablink').each(function() {
 		$(this).click(clickTabLink);
 	});
 
 	/* fade in if we aren't already visible */
 	$('div.tabs').fadeIn(300);
 
-	return tabid; /* return new tab id */
+	return tab.id; /* return new tab id */
 }
 
 /* find tab by title within active business */
@@ -2204,4 +2207,13 @@ function renderMap(map, locationString) {
 		}
 	});
 	google.maps.event.trigger(map, "resize");
+}
+
+/* create tab object */
+function newtab() {
+	var tab = new Object();
+	tab.id = ++g_tabid;
+	tab.classes = 'tabhead tablet' + tab.id + ' business' + g_business;
+	tab.contentClasses = 'tablet tablet' + tab.id + ' business' + g_business;
+	return tab;
 }

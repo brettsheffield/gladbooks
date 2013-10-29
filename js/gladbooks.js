@@ -164,6 +164,7 @@ function bankChange() {
 /* override gladd.js function */
 customFormEvents = function(tab, object, action, id) {
 	var mytab = getTabById(tab);
+	mytab.addClass('noscroll');
 
 	mytab.find('select.bankaccount').change(bankChange);
 }

@@ -580,6 +580,7 @@ div.results.pager {
 div.bank.selector div.chzn-container {
   width: 50% !important; }
 
+div.bank.reconcile,
 div.bank.statement {
   background-color: beige;
   clear: both;

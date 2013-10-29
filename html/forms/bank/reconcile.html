@@ -1,5 +1,9 @@
-<div>
-	<a href="/bank.reconcile/"/>
-	<select name="account" class="bankaccount populate"/>
-	<button class="go" name="bank.reconcile" type="button">Reconcile</button>
+<div class="bank reconcile">
+	<div class="bank selector">
+		<a href="/accounts.asset/"/>
+		<select name="account" class="bankaccount populate" data-placeholder="Select account to view">
+		</select>
+		<div class="results pager"/>
+	</div>
+	<div class="bank data clearfix"/>
 </div>
