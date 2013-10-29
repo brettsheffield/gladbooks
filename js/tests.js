@@ -203,6 +203,10 @@ test("create bank entry", function() {
 	testXmlPost('banks', 2);
 });
 
+test("update journal entry", function() {
+	testXmlPost('banks', 10, 1);
+});
+
 test("reconcile bank entry - existing journal", function() {
 	testXmlPost('banks', 9, 1);
 });
