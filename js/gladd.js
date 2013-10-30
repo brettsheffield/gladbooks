@@ -1966,36 +1966,7 @@ function displayResultsGeneric(xml, collection, title, sorted, tab, headers) {
 	$t = $($t); /* htmlify */
 
 	/* attach click event */
-	$t.find('tr').click(function(event) {
-		if (collection == 'salesinvoices') {
-			/* view salesinvoice pdf */
-			var a=$(this).find('td.xml-pdf').find('a');
-			var href=a.attr('href');
-			var si = a.attr('id');
-			var html = '<div class="pdf">';
-			html += '<object class="pdf" data="' + href + '"';
-			html += 'type="application/pdf">';
-			html += 'alt : <a href="' + href + '">PDF</a>';
-			html += '</object></div>';
-			addTab(si, html, true);
-		}
-		else {
-			event.preventDefault();
-			if (collection == 'accounts') {
-				var id = $(this).find('td.xml-nominalcode').text();
-			}
-			else {
-				var id = $(this).find('td.xml-id').text();
-			}
-			if (collection == 'reports/accountsreceivable') {
-				var title = 'Statement: ' + $(this).find('td.xml-orgcode').text();
-			}
-			else {
-				var title = null;
-			}
-			displayElement(collection, id, title);
-		}
-	});
+	$t.find('tr').click(clickElement);
 
 	if (tab) {
 		/* refreshing existing tab */
@@ -2014,6 +1985,38 @@ function displayResultsGeneric(xml, collection, title, sorted, tab, headers) {
 	}
 
 	hideSpinner();
+}
+
+function clickElement() {
+	var row = $(this);
+	var collection = getTabMeta(activeTabId(), 'collection');
+	if (collection == 'salesinvoices') {
+		/* view salesinvoice pdf */
+		var a=row.find('td.xml-pdf').find('a');
+		var href=a.attr('href');
+		var si = a.attr('id');
+		var html = '<div class="pdf">';
+		html += '<object class="pdf" data="' + href + '"';
+		html += 'type="application/pdf">';
+		html += 'alt : <a href="' + href + '">PDF</a>';
+		html += '</object></div>';
+		addTab(si, html, true);
+	}
+	else {
+		if (collection == 'accounts') {
+			var id = row.find('td.xml-nominalcode').text();
+		}
+		else {
+			var id = row.find('td.xml-id').text();
+		}
+		if (collection == 'reports/accountsreceivable') {
+			var title = 'Statement: ' + row.find('td.xml-orgcode').text();
+		}
+		else {
+			var title = null;
+		}
+		displayElement(collection, id, title);
+	}
 }
 
 /*****************************************************************************/

@@ -143,14 +143,16 @@ function bankChange() {
 	var account = $(this).val();
 	var mytab = activeTab();
 	var div = mytab.find('div.bank.data');
-	var limit = 20;
-	var offset = 0;
+	var limit = 20; 		/* FIXME - hardcoded */
+	var offset = 0; 		/* FIXME - hardcoded */
+	var sortfield = 'id'; 	/* FIXME - hardcoded */
+	var asc = 'ASC';		/* FIXME - hardcoded */
 	var title = '';
 	var sort = false;
-	var sortfield = 'id';
-	var asc = 'ASC';
 	var object = getTabMeta(activeTabId(), 'object');
 	var action = getTabMeta(activeTabId(), 'action');
+
+	/* FIXME */
 	var url = object + '.' + action + '/' + account;
 	url += '/' + limit + '/' + offset + '/' + sortfield + '/' + asc;
 
