@@ -66,6 +66,7 @@ g_formdata = [
     [ 'account', [ 'accounttypes' ], ],  
     [ 'bank', [ 'accounts.asset' ], ],  
     [ 'bank.reconcile', [ 'accounts.asset' ], ],  
+    [ 'bank.reconciledata', [ 'bank.unreconciled' ], ],  
     [ 'bank.upload', [ 'accounts.asset' ], ],  
     [ 'product', [ 'accounts.revenue' ], ],
     [ 'salesorder', [ 'organisations', 'cycles', 'products' ], ],
@@ -139,8 +140,34 @@ function addSubFormRows(xml, datatable, view, tab) {
     });
 }
 
+/* the selected bank account has changed - do something about that */
 function bankChange() {
+	var mytab = activeTab();
+	var div = mytab.find('div.bank.data');
+
 	var account = $(this).val();
+	if (account == -1) { /* nothing selected */
+		div.empty();
+		return false;
+	}
+
+	var action = getTabMeta(activeTabId(), 'action');
+	if (action == 'reconcile') {
+		bankReconcile();
+	}
+	else if (action == 'statement') {
+		bankStatement(account);
+	}
+}
+
+function bankReconcile() {
+	console.log('bankReconcile()');
+	var title = '';
+	var div = activeTab().find('div.bank.data');
+	getForm('bank', 'reconciledata', title, null, div);
+}
+
+function bankStatement(account) {
 	var mytab = activeTab();
 	var div = mytab.find('div.bank.data');
 	var limit = 20; 		/* FIXME - hardcoded */
@@ -149,33 +176,22 @@ function bankChange() {
 	var asc = 'ASC';		/* FIXME - hardcoded */
 	var title = '';
 	var sort = false;
-	var object = getTabMeta(activeTabId(), 'object');
-	var action = getTabMeta(activeTabId(), 'action');
-
-	/* FIXME */
+	var tabid = activeTabId();
+	var object = getTabMeta(tabid, 'object');
+	var action = getTabMeta(tabid, 'action');
 	var url = object + '.' + action + '/' + account;
 	url += '/' + limit + '/' + offset + '/' + sortfield + '/' + asc;
-
-	console.log('bankChange() url: ' + url);
-
-	if (account == -1) { /* nothing selected */
-		mytab.find('div.bank.data').empty();
-		return false;
-	}
-
-	/* remove scrollbar from tablet - we'll handle this in the bank.data div */
-	mytab.addClass('noscroll');
-
 	showQuery(url, title, sort, div);
-
-	mytab.find('div.results.pager').empty();
-	mytab.find('div.results.pager').append('<a href="#next">next</a>');
 }
 
 /* override gladd.js function */
 customFormEvents = function(tab, object, action, id) {
 	var mytab = getTabById(tab);
-	mytab.addClass('noscroll');
+
+	/* remove scrollbar from tablet - we'll handle this in the bank.data div */
+	if (object == 'bank') {
+		mytab.addClass('noscroll');
+	}
 
 	mytab.find('select.bankaccount').change(bankChange);
 }
@@ -940,4 +956,5 @@ function validateNominalCode(code, type) {
  * fetchElementData()
  * displayResultsGeneric()
  * switchBusiness() - refers to orgcode
+ * clickElement()
  */

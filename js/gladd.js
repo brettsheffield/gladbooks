@@ -126,6 +126,7 @@ function deployTabs() {
 /*****************************************************************************/
 /* add a new tab with content, optionally activating it */
 function addTab(title, content, activate, collection, refresh) {
+	console.log('addTab()');
 	var tab = newtab();
 	tab.title = title;
 	tab.content = content;
@@ -147,9 +148,6 @@ function addTab(title, content, activate, collection, refresh) {
 	var oldtabid = getTabByTitle(tab.title);
 	if (oldtabid >= 0) {
 		updateTab(oldtabid, tab.content, tab.activate);
-		if (tab.activate) {
-			activateTab(oldtabid);
-		}
 		return oldtabid;
 	}
 
@@ -173,6 +171,7 @@ function addTab(title, content, activate, collection, refresh) {
 	$('div#tab' + tab.id).append(tab.content);
 
 	/* store metadata */
+	setTabMeta(tab.id, 'id', tab.id);
 	setTabMeta(tab.id, 'instance', g_instance);
 	setTabMeta(tab.id, 'business', g_business);
 	setTabMeta(tab.id, 'collection', collection);
@@ -206,16 +205,43 @@ function addTab(title, content, activate, collection, refresh) {
 	return tab.id; /* return new tab id */
 }
 
-function setTabMeta(tabid, key, value) {
-	$('div#tabhead' + tabid).data(key, value);
+function setTabMeta(tab, key, value) {
+    if ((typeof tab == 'number') || (typeof tab == 'string')) {
+		$('div#tabhead' + tab).data(key, value);
+	}
+	else if (typeof tab == 'object') {
+		tab.data(key, value);
+	}
+    else { /* something else we weren't expecting */
+        console.log(typeof tab + ' passed to setTabMeta()');
+        return false;
+    }
 }
 
-function getTabMeta(tabid, key) {
-	return $('div#tabhead' + tabid).data(key);
+function getTabMeta(tab, key) {
+    if ((typeof tab == 'number') || (typeof tab == 'string')) {
+        return $('div#tabhead' + tab).data(key);
+    }
+    else if (typeof tab == 'object') {
+        return tab.data(key);
+    }
+    else { /* something else we weren't expecting */
+        console.log(typeof tab + ' passed to getTabMeta()');
+        return false;
+    }
 }
 
-function clearTabMeta(tabid) {
-	$('div#tabhead' + tabid).removeData();
+function clearTabMeta(tab) {
+    if ((typeof tab == 'number') || (typeof tab == 'string')) {
+		$('div#tabhead' + tab).removeData();
+	}
+	else if (typeof tab == 'object') {
+		tab.removeData();
+	}
+    else { /* something else we weren't expecting */
+        console.log(typeof tab + ' passed to clearTabMeta()');
+        return false;
+    }
 }
 
 /* find tab by title within active business */
@@ -232,14 +258,22 @@ function activeTabId() {
 }
 
 /*****************************************************************************/
-function updateTab(tabid, content, activate, title) {
-	if (typeof tabid == 'object'){
-		/* we were passed a jquery object (hopefully) */
-		var tab = tabid;
+/* o can either be the id of a tab, or a jquery object */
+function updateTab(o, content, activate, title) {
+	console.log('updateTab()');
+	/* figure out what o represents */
+	if (typeof o == 'object'){ /* jquery object (probably) */
+		var tab = o;
+		var tabid = getTabMeta(o, 'id');
 	}
-	else {
-		console.log('updating tab ' + tabid);
-		var tab = $('#tab' + tabid);
+	else if ((typeof o == 'number') || (typeof o == 'string')){ /* numeric */
+		console.log('updating tab ' + o);
+		var tab = $('#tab' + o);
+		var tabid = o;
+	}
+	else { /* something else we weren't expecting */
+		console.log(typeof o + ' passed to updateTab()');
+		return false;
 	}
 
 	/* preserve status message */
@@ -250,7 +284,7 @@ function updateTab(tabid, content, activate, title) {
 	tab.append(content);
 
 	/* clear metadata */
-	clearTabMeta(tab.id);
+	clearTabMeta(o);
 
 	/* set title, if required */
 	if (title) {
@@ -265,6 +299,12 @@ function updateTab(tabid, content, activate, title) {
 	if (statusmsg) {
 		tab.find('.statusmsg').replaceWith(statusmsg);
 	}
+
+	if (activate) {
+		activateTab(tabid);
+	}
+
+	hideSpinner();
 	return tabid;
 }
 
@@ -280,6 +320,7 @@ function getTabById(tabid) {
 
 /*****************************************************************************/
 function activateTab(tabid) {
+	if ((typeof tabid == "number") || (typeof tabid == "string")) {
 		console.log("activating tab " + tabid);
         /* remove "active" styling from all tabs for this business */
         $(".tabhead.business" + g_business).removeClass('active');
@@ -290,6 +331,7 @@ function activateTab(tabid) {
 
 		/* set focus to control with class "focus" */
         $(".tablet" + tabid).find(".focus").focus();
+	}
 }
 
 /******************************************************************************
@@ -607,6 +649,7 @@ function showHTML(url, title, tab) {
 
 /******************************************************************************/
 /* fetch html form from server to display */
+/* TODO: clean up - xml arg no longer needed? */
 function getForm(object, action, title, xml, tab) {
 	console.log('getForm()');
 	showSpinner(); /* tell user to wait */
@@ -759,8 +802,14 @@ function displayForm(object, action, title, html, xml, tab) {
 		x = 2;
 	}
 
+	if (typeof tab == 'number') { 
+		var mytab = getTabById(tab); /* numeric tab id */
+	}
+	else {
+		var mytab = tab; /* jquery object */
+	}
+
 	/* populate combos with xml data */
-	var mytab = getTabById(tab);
 	mytab.find('select.populate:not(.sub)').each(function() {
 		var combo = $(this);
 		populateCombo(xml[x], combo, tab);
@@ -779,6 +828,7 @@ function displayForm(object, action, title, html, xml, tab) {
 
 /*****************************************************************************/
 function finaliseForm(tab, object, action, id) {
+	console.log('finaliseForm()');
 	formatDatePickers(tab);        			  /* date pickers */
 	formatRadioButtons(tab, object);  		  /* tune the radio */
 	formBlurEvents(tab);					  /* set up blur() events */
