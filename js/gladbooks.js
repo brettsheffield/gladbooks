@@ -149,8 +149,17 @@ function bankChange() {
 	var sort = false;
 	var sortfield = 'id';
 	var asc = 'ASC';
-	var url = 'bank.view/' + account 
+	var object = getTabMeta(activeTabId(), 'object');
+	var action = getTabMeta(activeTabId(), 'action');
+	var url = object + '.' + action + '/' + account;
 	url += '/' + limit + '/' + offset + '/' + sortfield + '/' + asc;
+
+	console.log('bankChange() url: ' + url);
+
+	if (account == -1) { /* nothing selected */
+		mytab.find('div.bank.data').empty();
+		return false;
+	}
 
 	/* remove scrollbar from tablet - we'll handle this in the bank.data div */
 	mytab.addClass('noscroll');

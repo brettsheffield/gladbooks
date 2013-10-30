@@ -156,8 +156,8 @@ function addTab(title, content, activate, collection, refresh) {
 	/* add tab and closer */
 	$('ul.tablist').append('<li id="tabli' + tab.id
 		+ '" class="' + tab.classes + '">'
-		+ '<div class="tabhead">'
-		+ '<div class="tabtitle" data-collection="' + tab.collection + '">'
+		+ '<div id="tabhead' + tab.id + '" class="tabhead">'
+		+ '<div class="tabtitle">'
 		+ '<a class="tabtitle" href="' + tab.id + '">' + tab.title + '</a>'
 		+ '</div>'
 		+ '<div class="tabx">'
@@ -171,6 +171,11 @@ function addTab(title, content, activate, collection, refresh) {
 	$('div.tabcontent').append('<div id="tab' + tab.id + '" '
 		+ 'class="' + tab.contentClasses + '">');
 	$('div#tab' + tab.id).append(tab.content);
+
+	/* store metadata */
+	setTabMeta(tab.id, 'instance', g_instance);
+	setTabMeta(tab.id, 'business', g_business);
+	setTabMeta(tab.id, 'collection', collection);
 
 	/* add closer event */
     $('#tabcloser' + tab.id).click(function(event) {
@@ -199,6 +204,18 @@ function addTab(title, content, activate, collection, refresh) {
 	$('div.tabs').fadeIn(300);
 
 	return tab.id; /* return new tab id */
+}
+
+function setTabMeta(tabid, key, value) {
+	$('div#tabhead' + tabid).data(key, value);
+}
+
+function getTabMeta(tabid, key) {
+	return $('div#tabhead' + tabid).data(key);
+}
+
+function clearTabMeta(tabid) {
+	$('div#tabhead' + tabid).removeData();
 }
 
 /* find tab by title within active business */
@@ -231,6 +248,9 @@ function updateTab(tabid, content, activate, title) {
 	/* replace content */
 	tab.empty();
 	tab.append(content);
+
+	/* clear metadata */
+	clearTabMeta(tab.id);
 
 	/* set title, if required */
 	if (title) {
@@ -730,6 +750,10 @@ function displayForm(object, action, title, html, xml, tab) {
 	else {
 		tab = addTab(title, html, false);
 	}
+
+	/* add some metadata */
+	setTabMeta(tab, 'object', object);
+	setTabMeta(tab, 'action', action);
 
 	if (action == 'update') {
 		x = 2;
