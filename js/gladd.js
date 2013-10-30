@@ -206,7 +206,7 @@ function addTab(title, content, activate, collection, refresh) {
 }
 
 function setTabMeta(tab, key, value) {
-    if ((typeof tab == 'number') || (typeof tab == 'string')) {
+    if (isTabId(tab)) {
 		$('div#tabhead' + tab).data(key, value);
 	}
 	else if (typeof tab == 'object') {
@@ -219,7 +219,7 @@ function setTabMeta(tab, key, value) {
 }
 
 function getTabMeta(tab, key) {
-    if ((typeof tab == 'number') || (typeof tab == 'string')) {
+    if (isTabId(tab)) {
         return $('div#tabhead' + tab).data(key);
     }
     else if (typeof tab == 'object') {
@@ -232,7 +232,7 @@ function getTabMeta(tab, key) {
 }
 
 function clearTabMeta(tab) {
-    if ((typeof tab == 'number') || (typeof tab == 'string')) {
+    if (isTabId(tab)) {
 		$('div#tabhead' + tab).removeData();
 	}
 	else if (typeof tab == 'object') {
@@ -262,16 +262,16 @@ function activeTabId() {
 function updateTab(o, content, activate, title) {
 	console.log('updateTab()');
 	/* figure out what o represents */
-	if (typeof o == 'object'){ /* jquery object (probably) */
-		var tab = o;
-		var tabid = getTabMeta(o, 'id');
-	}
-	else if ((typeof o == 'number') || (typeof o == 'string')){ /* numeric */
+	if (isTabId(o)) { 				/* numeric */
 		console.log('updating tab ' + o);
 		var tab = $('#tab' + o);
 		var tabid = o;
 	}
-	else { /* something else we weren't expecting */
+	else if (typeof o == 'object'){ /* jquery object (probably) */
+		var tab = o;
+		var tabid = getTabMeta(o, 'id');
+	}
+	else { 							/* unexpected type */
 		console.log(typeof o + ' passed to updateTab()');
 		return false;
 	}
@@ -292,9 +292,7 @@ function updateTab(o, content, activate, title) {
 	}
 	
 	/* set click events */
-	tab.find('a.tablink').each(function() {
-		$(this).click(clickTabLink);
-	});
+	tab.find('a.tablink').click(clickTabLink);
 
 	if (statusmsg) {
 		tab.find('.statusmsg').replaceWith(statusmsg);
@@ -304,8 +302,10 @@ function updateTab(o, content, activate, title) {
 		activateTab(tabid);
 	}
 
-	hideSpinner();
-	return tabid;
+	console.log('finished updating tab ' + tabid);
+
+	/* return tab id, or the object we started with */
+	return tabid == undefined ? o : tabid;
 }
 
 function setTabTitle(tabid, title) {
@@ -315,12 +315,20 @@ function setTabTitle(tabid, title) {
 /******************************************************************************
  * return jQuery object for specified tab, or active tab if no tab specified  */
 function getTabById(tabid) {
-	return (tabid != null) ? $('#tab' + tabid) : activeTab();
+	if (tabid == null) {
+		return activeTab();
+	}
+	if (isTabId(tabid)) {
+		return $('#tab' + tabid);
+	}
+	else {
+		return tabid;
+	}
 }
 
 /*****************************************************************************/
 function activateTab(tabid) {
-	if ((typeof tabid == "number") || (typeof tabid == "string")) {
+	if (isTabId(tabid)) {
 		console.log("activating tab " + tabid);
         /* remove "active" styling from all tabs for this business */
         $(".tabhead.business" + g_business).removeClass('active');
@@ -778,6 +786,16 @@ function tabTitle(title) {
 	return title;
 }
 
+function isTabId(o) {
+	if (typeof o == 'number') {
+		return true;
+	}
+	else if (typeof o == 'string') {
+		return !(isNaN(o));
+	}
+	return false;
+}
+
 /*****************************************************************************/
 /* display html form we've just fetched in new tab */
 function displayForm(object, action, title, html, xml, tab) {
@@ -802,7 +820,7 @@ function displayForm(object, action, title, html, xml, tab) {
 		x = 2;
 	}
 
-	if (typeof tab == 'number') { 
+	if (isTabId(tab)) {
 		var mytab = getTabById(tab); /* numeric tab id */
 	}
 	else {

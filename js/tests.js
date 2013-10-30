@@ -1071,6 +1071,14 @@ function testXmlPost(object, testid, id) {
 	});
 }
 
+module("Misc");
+test("isTabId()", function() {
+	var o = $('div');
+	equal(isTabId(o), false, "jquery object returns false");
+	equal(isTabId(4), true, "number returns true");
+	equal(isTabId("4"), true, "numeric string returns true");
+	equal(isTabId("id"), false, "non-numeric string returns false");
+});
 
 module("Strings");
 
