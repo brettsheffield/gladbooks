@@ -63,14 +63,16 @@ g_menus = [
  */
 
 g_formdata = [
-    [ 'account', [ 'accounttypes' ], ],  
-    [ 'bank', [ 'accounts.asset' ], ],  
-    [ 'bank.reconcile', [ 'accounts.asset' ], ],  
-    [ 'bank.reconciledata', [ 'bank.unreconciled' ], ],  
-    [ 'bank.upload', [ 'accounts.asset' ], ],  
-    [ 'product', [ 'accounts.revenue' ], ],
-    [ 'salesorder', [ 'organisations', 'cycles', 'products' ], ],
-    [ 'salespayment', [ 'paymenttype', 'organisations', 'accounts.asset' ], ],
+    [ 'account', 'create', [ 'accounttypes' ], ],  
+    [ 'bank', 'statement', [ 'accounts.asset' ], ],  
+    [ 'bank', 'reconcile', [ 'accounts.asset' ], ],  
+    [ 'bank', 'reconcile.data', ['bank.unreconciled','journal.unreconciled'],],
+    [ 'bank', 'upload', [ 'accounts.asset' ], ],  
+    [ 'product', 'create', [ 'accounts.revenue' ], ],
+    [ 'salesorder', 'create', [ 'organisations', 'cycles', 'products' ], ],
+    [ 'salesorder', 'update', [ 'organisations', 'cycles', 'products' ], ],
+    [ 'salespayment', 'create',[ 'paymenttype', 'organisations', 'accounts.asset' ], ],
+    [ 'salespayment', 'update',[ 'paymenttype', 'organisations', 'accounts.asset' ], ],
 ];
 
 var g_max_ledgers_per_journal=7;
@@ -153,18 +155,44 @@ function bankChange() {
 
 	var action = getTabMeta(activeTabId(), 'action');
 	if (action == 'reconcile') {
-		bankReconcile();
+		bankReconcile(account);
 	}
 	else if (action == 'statement') {
 		bankStatement(account);
 	}
 }
 
-function bankReconcile() {
+function bankReconcile(account) {
 	console.log('bankReconcile()');
 	var title = '';
-	var div = activeTab().find('div.bank.data');
-	getForm('bank', 'reconciledata', title, null, div);
+	var div = activeTab().find('div.bank.target');
+	var offset = 0;
+	var limit = 10;
+	var sort = false;
+	var url = 'bank.unreconciled/' + account + '/' + limit + '/' + offset;
+	var d = new Array(); /* array of deferreds */
+
+	showSpinner();
+	d.push(getXML(collection_url(url)));
+	$.when.apply(null, d)
+	.done(function(xml) {
+		divTable(div, xml);
+		div.find('div.tr').click(clickBankRow);
+		hideSpinner();
+	})
+	.fail(function() {
+		statusMessage('error loading data', STATUS_CRIT);
+		hideSpinner();
+	});
+}
+
+function clickBankRow() {
+	var id = $(this).find('div.xml-id').text();
+	console.log('bank row ' + id + ' selected');
+	selectRowSingular($(this));
+
+	/* TODO: populate suspects panel */
+	
 }
 
 function bankStatement(account) {

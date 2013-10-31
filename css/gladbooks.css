@@ -568,6 +568,18 @@ div.bank.data {
   overflow: auto;
   width: 100%; }
 
+div.bank.target {
+  background-color: white;
+  float: left;
+  height: 100%;
+  width: 34%; }
+
+div.bank.suspects {
+  background-color: #6e89a5;
+  float: right;
+  height: 100%;
+  width: 66%; }
+
 div.bank.selector {
   padding: 10px;
   height: 5%;
@@ -598,6 +610,30 @@ div.results.empty {
   margin-left: auto;
   margin-right: auto;
   text-align: center; }
+
+div.bank.data div.td {
+  float: left;
+  font-size: 75%;
+  padding-right: 1%; }
+
+div.bank.data div.td.xml-id {
+  text-align: right;
+  width: 5%; }
+
+div.bank.data div.td.xml-transactdate {
+  width: 8%; }
+
+div.bank.data div.td.xml-description {
+  overflow: hidden;
+  width: 51%; }
+
+div.bank.data div.td.xml-debit,
+div.bank.data div.td.xml-credit {
+  text-align: right;
+  width: 12%; }
+
+div.tr.selected div.td {
+  background-color: yellow; }
 
 /* totals table (salesorder form) */
 table.totals {
@@ -645,8 +681,10 @@ div.tablewrapper {
 div.formtable {
   background-color: #6e89a5;
   border: 1px solid white;
-  padding: 0 5px;
   text-color: black; }
+
+div.tr {
+  clear: both; }
 
 div.th {
   color: white;
@@ -654,9 +692,6 @@ div.th {
   font-weight: bold;
   text-align: left;
   text-transform: capitalize; }
-
-div.td {
-  line-height: 24px; }
 
 /* form: product.create & product.update */
 div.product input {

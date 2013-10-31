@@ -313,7 +313,7 @@ function setTabTitle(tabid, title) {
 }
 
 /******************************************************************************
- * return jQuery object for specified tab, or active tab if no tab specified  */
+ * return jQuery object for specified tab, or active tab if no tab specified */
 function getTabById(tabid) {
 	if (tabid == null) {
 		return activeTab();
@@ -663,7 +663,7 @@ function getForm(object, action, title, xml, tab) {
 	showSpinner(); /* tell user to wait */
 
 	var d = fetchFormData(object, action);
-	$.when.apply(null, d)
+	return $.when.apply(null, d)
 	.done(function(html) {
 		var args = Array.prototype.splice.call(arguments, 1);
 		var safeHTML = $.parseHTML(html[0]);
@@ -694,10 +694,10 @@ function fetchFormData(object, action) {
     d.push(getHTML(formURL));   /* fetch html form */
 
     for (o in g_formdata) {
-        if (object == g_formdata[o][0]) {
+        if ((object == g_formdata[o][0]) && (action == g_formdata[o][1])) {
             /* loop through and push all sources */
-            for (i=0; i <= g_formdata[o][1].length-1; i++) {
-                d.push(getXML(collection_url(g_formdata[o][1][i])));
+            for (i=0; i <= g_formdata[o][2].length-1; i++) {
+                d.push(getXML(collection_url(g_formdata[o][2][i])));
             }
             ok = true;
         }
@@ -1914,6 +1914,57 @@ function getXML(url, async) {
 	});
 }
 
+/* build a table structure from xml using divs */
+function divTable(div, xml) {
+	div.empty();
+
+    if ($(xml).find('resources').children().length == 0) {
+        console.log('No results');
+        return false; /* no results */
+    }   
+
+    /* build a table structure using divs */
+    var formtable = $('<div class="formtable"/>');
+    div.append(formtable);
+    var row = 0;
+    $(xml).find('resources').find('row').each(function() {
+        row++;
+		var eo = oddEven(row);
+        tr = $('<div class="tr ' + eo + '"/>');
+        formtable.append(tr);
+		$(this).children().each(function() {
+			var n = 'xml-' + this.tagName;
+			var v = ($(this).text() != '') ? $(this).text() : '&nbsp;';
+			var td = $('<div class="td ' + eo + ' ' + n + '">' + v + '</div>');
+			tr.append(td);
+		});
+    });
+	var clearfix = $('<div class="clearfix"/>');
+	formtable.append(clearfix);
+}
+
+function oddEven(row) {
+	return ((row % 2) == 0) ? 'even' : 'odd';
+}
+
+function toggleSelected(o) {
+    if (o.hasClass('selected')) {
+        o.removeClass('selected');
+    }
+    else {
+        o.addClass('selected');
+    }
+}
+
+function deselectAllRows(o) {
+	o.parent().find('div.tr').removeClass('selected');
+}
+
+function selectRowSingular(o) {
+	deselectAllRows(o);
+	toggleSelected(o);
+}
+
 /*****************************************************************************/
 /* display XML results as a sortable table */
 function displayResultsGeneric(xml, collection, title, sorted, tab, headers) {
@@ -1962,7 +2013,7 @@ function displayResultsGeneric(xml, collection, title, sorted, tab, headers) {
 	$t += "<tr>";
 	var row = 0;
 	$(xml).find('resources').find('row').each(function() {
-		row += 1;
+		row++;
 		if (row == 1) {
 			$(this).children().each(function() {
 				$t += '<th class="xml-';
