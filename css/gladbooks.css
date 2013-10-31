@@ -564,9 +564,12 @@ select.paymenttype {
 /* Bank screens */
 div.bank.data {
   background-color: #dee9f2;
-  height: 95%;
+  height: 92%;
   overflow: auto;
   width: 100%; }
+
+div.bank.reconcile div.bank.data {
+  overflow: hidden; }
 
 div.bank.target {
   background-color: white;
@@ -633,7 +636,23 @@ div.bank.data div.td.xml-credit {
   width: 12%; }
 
 div.tr.selected div.td {
-  background-color: yellow; }
+  background-color: yellow;
+  font-weight: bold; }
+
+div.reconcile h3 {
+  font-size: 10pt; }
+
+div.reconcile p {
+  color: #6e89a5;
+  font-size: 10pt; }
+
+div.reconcile div.accordion {
+  display: none; }
+
+/* stop jquery-ui from rounding corners */
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br,
+.ui-corner-top, .ui-corner-tr {
+  border-radius: 0; }
 
 /* totals table (salesorder form) */
 table.totals {

@@ -149,7 +149,7 @@ function bankChange() {
 
 	var account = $(this).val();
 	if (account == -1) { /* nothing selected */
-		div.empty();
+		div.empty(); /* FIXME */
 		return false;
 	}
 
@@ -167,7 +167,7 @@ function bankReconcile(account) {
 	var title = '';
 	var div = activeTab().find('div.bank.target');
 	var offset = 0;
-	var limit = 10;
+	var limit = 30;
 	var sort = false;
 	var url = 'bank.unreconciled/' + account + '/' + limit + '/' + offset;
 	var d = new Array(); /* array of deferreds */
@@ -177,7 +177,9 @@ function bankReconcile(account) {
 	$.when.apply(null, d)
 	.done(function(xml) {
 		divTable(div, xml);
+		/* TODO: keyboard navigation */
 		div.find('div.tr').click(clickBankRow);
+		activeTab().find('div.accordion').accordion({ heightStyle: "fill" });
 		hideSpinner();
 	})
 	.fail(function() {
@@ -192,6 +194,8 @@ function clickBankRow() {
 	selectRowSingular($(this));
 
 	/* TODO: populate suspects panel */
+
+	$('div.reconcile div.accordion').fadeIn();
 	
 }
 
