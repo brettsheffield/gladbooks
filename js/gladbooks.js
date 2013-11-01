@@ -193,11 +193,13 @@ function bankJournal(row) {
 
 	/* populate first ledger entry */
 	var account = t.find('div.bank.selector select.bankaccount').val();
+	var bankid = row.find('div.xml-id').text();
 	var date = row.find('div.xml-date').text();
 	var description = row.find('div.xml-description').text();
 	var debit = row.find('div.xml-debit').text();
 	var credit = row.find('div.xml-credit').text();
 	jtab.find('select.account').val(account);
+	jtab.find('select.type').val('debit');
 	jtab.find('input.transactdate').val(date);
 	jtab.find('input.description').val(description);
 	var amount = (debit > 0) ? debit : credit;
@@ -209,7 +211,7 @@ function bankJournal(row) {
 	}
 
 	jtab.find('button.submit').click(function(event) {
-		submitJournalEntry(event, jtab)
+		submitJournalEntry(event, jtab, bankid)
 	});
 
 	j.each(accordionClick); /* show journal form */
@@ -702,9 +704,9 @@ function setupJournalForm(tab) {
     populateDebitCreditDDowns();
 }
 
-function submitJournalEntry(event, form) {
+function submitJournalEntry(event, form, bankid) {
     event.preventDefault();
-    xml = validateJournalEntry(form);
+    xml = validateJournalEntry(form, bankid);
     if (!xml) {
         return;
     }
@@ -883,7 +885,7 @@ function validateFormSalesOrder(action, id) {
     return true;
 }
 
-function validateJournalEntry(form) {
+function validateJournalEntry(form, bankid) {
     var xml = createRequestXml();
     var account;
     var division = 0;
@@ -909,6 +911,7 @@ function validateJournalEntry(form) {
             xml += '<journal ';
             xml += 'transactdate="' + $(form).find('.transactdate').val()
                 + '" ';
+			if (bankid) xml += 'bankid="' + bankid + '" ';
             xml += 'description="'+ escapeHTML($(this).val().trim()) +'">';
         }
         else if ($(this).hasClass('account')) {
