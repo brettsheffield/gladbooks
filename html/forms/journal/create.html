@@ -1,0 +1,22 @@
+	<h2 class="formtitle">Journal Entry</h2>
+	<form method="post" class="journalform" action="/journal/">
+		<fieldset class="journal">
+			<caption>Transaction Date</caption>
+			<input class="transactdate datefield" autocomplete="off" required/>
+			<br/>
+			<caption>Description / Narrative</caption>
+			<input class="description" autocomplete="off" placeholder="Enter a description of this journal entry" required/>
+		</fieldset>
+		<fieldset class="ledger">
+			<select class="account populate" data-source="accounts" data-placeholder="Select account"></select>
+			<select class="division populate" data-source="divisions"></select>
+			<select class="department populate" data-source="departments"></select>
+			<select class="type">
+				<option>debit</option>
+				<option>credit</option>
+			</select>
+			<input class="amount" autocomplete="off" placeholder="0.00"/>
+		</fieldset>
+	</form>
+	<button class="submit">Post Journal</button>
+	<p class="journalstatus"/>

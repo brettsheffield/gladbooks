@@ -649,6 +649,37 @@ div.reconcile p {
 div.reconcile div.accordion {
   display: none; }
 
+div.bank.reconcile div.accordion > div {
+  height: 80%; }
+
+div.bank.reconcile input.amount {
+  width: 6em; }
+
+/* play the accordion */
+div.accordion {
+  height: 100%; }
+
+div.accordion h3 {
+  color: #b2cde0;
+  background-color: #6e89a5;
+  border-bottom: 1px solid #b2cde0;
+  padding-left: 1em;
+  margin: 0; }
+
+div.accordion > div {
+  background-color: white;
+  display: none;
+  height: auto;
+  margin: 0;
+  padding: 1em; }
+
+div.accordion > div p {
+  margin: 0; }
+
+div.accordion h3.selected {
+  background-color: #b2cde0;
+  color: #6e89a5; }
+
 /* stop jquery-ui from rounding corners */
 .ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br,
 .ui-corner-top, .ui-corner-tr {

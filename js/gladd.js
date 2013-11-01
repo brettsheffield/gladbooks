@@ -276,36 +276,19 @@ function updateTab(o, content, activate, title) {
 		return false;
 	}
 
-	/* preserve status message */
-	var statusmsg = tab.find('.statusmsg').detach();
+	var statusmsg = tab.find('.statusmsg').detach();/* preserve status msg */
+	tab.empty().append(content);					/* replace content */
+	clearTabMeta(o);								/* clear metadata */
+	tab.find('a.tablink').click(clickTabLink);		/* set click events */
 
-	/* replace content */
-	tab.empty();
-	tab.append(content);
-
-	/* clear metadata */
-	clearTabMeta(o);
-
-	/* set title, if required */
-	if (title) {
-		setTabTitle(tabid, title);
-	}
-	
-	/* set click events */
-	tab.find('a.tablink').click(clickTabLink);
-
-	if (statusmsg) {
-		tab.find('.statusmsg').replaceWith(statusmsg);
-	}
-
-	if (activate) {
-		activateTab(tabid);
-	}
+	if (title) setTabTitle(tabid, title);
+	if (statusmsg) tab.find('.statusmsg').replaceWith(statusmsg);
+	if (activate) activateTab(tabid);
 
 	console.log('finished updating tab ' + tabid);
 
 	/* return tab id, or the object we started with */
-	return tabid == undefined ? o : tabid;
+	return (tabid) ? tabid : o;
 }
 
 function setTabTitle(tabid, title) {
@@ -796,51 +779,42 @@ function isTabId(o) {
 	return false;
 }
 
+function addOrUpdateTab(tab, content, activate, title) {
+    if (typeof tab == 'undefined') {
+		tab = addTab(title, content, activate);
+	}
+	else {
+		tab = updateTab(tab, content, activate, title);
+	}
+	return tab;
+}
+
 /*****************************************************************************/
 /* display html form we've just fetched in new tab */
 function displayForm(object, action, title, html, xml, tab) {
 	console.log('displayForm("'+ object +'","'+ action +'","'+ title +'")');
-	var id = 0;
-	var x = 0;
+	var x = (action == 'update') ? 2 : 0; /* which xml to start with */
 
 	title = tabTitle(title, object, action, xml);
-
-	if (typeof tab != 'undefined') {
-		tab = updateTab(tab, html, true, title);
-	}
-	else {
-		tab = addTab(title, html, false);
-	}
+	tab = addOrUpdateTab(tab, html, true, title);
 
 	/* add some metadata */
 	setTabMeta(tab, 'object', object);
 	setTabMeta(tab, 'action', action);
 
-	if (action == 'update') {
-		x = 2;
-	}
-
-	if (isTabId(tab)) {
-		var mytab = getTabById(tab); /* numeric tab id */
-	}
-	else {
-		var mytab = tab; /* jquery object */
-	}
+	/* tab is either a numeric value or a jquery object */
+	mytab = (isTabId(tab)) ? getTabById(tab) : tab;
 
 	/* populate combos with xml data */
 	mytab.find('select.populate:not(.sub)').each(function() {
-		var combo = $(this);
-		populateCombo(xml[x], combo, tab);
-		x++;
+		populateCombo(xml[x++], $(this), tab);
 	});
 
-	if (action == 'update') {
-		id = populateForm(tab, object, xml); /* pre-populate form */
-	}
+	/* pre-populate form */
+	var id = (action == 'update') ? populateForm(tab, object, xml) : 0;
 
-	handleSubforms(tab, html, id, xml)   /* deal with subforms */
-
-	/* finalise form display */
+	/* deal with subforms and finalise form display */
+	handleSubforms(tab, html, id, xml);
 	finaliseForm(tab, object, action, id);
 }
 
@@ -1296,6 +1270,55 @@ function loadCombo(datasource, combo) {
 	});
 }
 
+/* a simpler combo population function */
+$.fn.populate = function(tab) {
+	if (tab == undefined) tab = activeTab();
+	var combo = $(this);
+	var datasource = $(this).attr('data-source');
+	var xml = tab.data('data-' + datasource);
+	var selections = [];
+
+	/* first, preserve selections */
+	for (var x=0; x < combo[0].options.length; x++) {
+		selections[combo[0].options[x].text] = combo[0].options[x].selected;
+	}
+
+	combo.empty();
+
+	/* add placeholder */
+	if ((combo.attr('data-placeholder')) && (combo.attr('multiple') != true)) {
+		console.log('combo has placeholder');
+		var placeholder = combo.attr('data-placeholder');
+		combo.append($("<option />").val(-1).text(placeholder));
+	}
+
+    /* now, repopulate and reselect options */
+    $(xml).find('row').each(function() {
+        var id = $(this).find('id').text();
+        var name = $(this).find('name').text();
+        combo.append($("<option />").val(id).text(name));
+        if (selections[id]) {
+            combo[0].options[id].selected = selections[id];
+        }
+    });
+}
+
+/* save form data sources to object */
+$.fn.updateDataSources = function(data) {
+	var object = $(this).data('object');
+	var action = $(this).data('action');
+	var sources = dataSources(object, action);
+	for (var i in  sources) {
+		$(this).data('data-' + sources[i], data[i].responseText);
+	}
+}
+
+function dataSources(object, action) {
+	return $.grep(g_formdata, function(n, i) {
+		return (n[0] == object && n[1] == action);
+	})[0][2];
+}
+
 /*****************************************************************************/
 function populateCombo(xml, combo, tab) {
 	console.log('populateCombo()');
@@ -1305,7 +1328,7 @@ function populateCombo(xml, combo, tab) {
 		return false;
 	}
 	var selections = [];
-	var mytab = getTabById(tab);
+	var mytab = isTabId(tab) ? getTabById(tab) : tab;
 
 	/* first, preserve selections */
 	for (var x=0; x < combo[0].options.length; x++) {
@@ -1386,6 +1409,7 @@ function populateCombo(xml, combo, tab) {
 function comboChange(combo, xml, tab) {
 	var id = combo.attr('id');
 	var newval = combo.val();
+	var mytab = isTabId(tab) ? getTabById(tab) : tab;
 
 	console.log('Value of ' + id + ' combo has changed to ' + newval);
 
@@ -1396,7 +1420,7 @@ function comboChange(combo, xml, tab) {
 	}
 
 	/* in the salesorder form, dynamically set placeholders to show defaults */
-	if (getTabById(tab).find('div.salesorder')) {
+	if (mytab.find('div.salesorder')) {
 		$(xml).find('row').find('id').each(function() {
 			if ($(this).text() == newval) {
 				var desc = $(this).parent().find('description').text();
@@ -1963,6 +1987,21 @@ function deselectAllRows(o) {
 function selectRowSingular(o) {
 	deselectAllRows(o);
 	toggleSelected(o);
+}
+
+/* build a basic accordion object */
+function accordionize(o) {
+	o.find('h3').each(function() {
+		$(this).click(accordionClick);
+	});
+}
+
+function accordionClick() {
+	if ($(this).next().visible) return;
+	$(this).parent().find('div').hide();
+	$(this).parent().find('h3').removeClass('selected');
+	$(this).addClass('selected');
+	$(this).next().fadeIn();
 }
 
 /*****************************************************************************/

@@ -68,6 +68,9 @@ g_formdata = [
     [ 'bank', 'reconcile', [ 'accounts.asset' ], ],  
     [ 'bank', 'reconcile.data', ['bank.unreconciled','journal.unreconciled'],],
     [ 'bank', 'upload', [ 'accounts.asset' ], ],  
+    [ 'journal', 'create',
+		[ 'accounts', 'divisions', 'departments', 'organisations' ],
+	],  
     [ 'product', 'create', [ 'accounts.revenue' ], ],
     [ 'salesorder', 'create', [ 'organisations', 'cycles', 'products' ], ],
     [ 'salesorder', 'update', [ 'organisations', 'cycles', 'products' ], ],
@@ -80,6 +83,14 @@ var g_frmLedger;
 var g_xml_accounttype = '';
 var g_xml_business = ''
 var g_xml_relationships = '';
+
+/* bank reconcilition types */
+var rectype = {
+	"suggested": 0,
+	"journal": 1,
+	"salesinvoices": 2,
+	"salespayments": 3
+};
 
 /* functions ****************************************************************/
 
@@ -162,6 +173,48 @@ function bankChange() {
 	}
 }
 
+/* set up journal form based on row that was clicked */
+function bankJournal(row) {
+	var t = activeTab();
+	var journalForm = activeTab().data('journalForm');
+	var j = t.find('div.accordion h3:nth-child(3)');
+	var jtab = j.next();
+
+	jtab.empty().append(journalForm); /* insert journal form */
+
+	/* populate combos */
+	jtab.find('select.populate:not(.sub)').each(function() {
+		$(this).populate(jtab);
+	});
+
+	/* clone a ledger row */
+	var ledgers = jtab.find('fieldset.ledger');
+	var l = ledgers.clone();
+
+	/* populate first ledger entry */
+	var account = t.find('div.bank.selector select.bankaccount').val();
+	var date = row.find('div.xml-date').text();
+	var description = row.find('div.xml-description').text();
+	var debit = row.find('div.xml-debit').text();
+	var credit = row.find('div.xml-credit').text();
+	jtab.find('select.account').val(account);
+	jtab.find('input.transactdate').val(date);
+	jtab.find('input.description').val(description);
+	var amount = (debit > 0) ? debit : credit;
+	jtab.find('input.amount').val(amount);
+
+	/* add more ledger lines */
+	for (var x = 1; x < g_max_ledgers_per_journal; x++) {
+		ledgers.append(l.clone());
+	}
+
+	jtab.find('button.submit').click(function(event) {
+		submitJournalEntry(event, jtab)
+	});
+
+	j.each(accordionClick); /* show journal form */
+}
+
 function bankReconcile(account) {
 	console.log('bankReconcile()');
 	var title = '';
@@ -171,32 +224,30 @@ function bankReconcile(account) {
 	var sort = false;
 	var url = 'bank.unreconciled/' + account + '/' + limit + '/' + offset;
 	var d = new Array(); /* array of deferreds */
+	var journalDiv = $('');
+	var jtab = activeTab().find('div.accordion h3:nth-child(3)').next();
+
+	setTabMeta(jtab, 'object', 'journal');
+	setTabMeta(jtab, 'action', 'create');
 
 	showSpinner();
 	d.push(getXML(collection_url(url)));
+	d.push(fetchFormData('journal', 'create'));
 	$.when.apply(null, d)
-	.done(function(xml) {
-		divTable(div, xml);
-		/* TODO: keyboard navigation */
+	.done(function(bankdata) {
+		divTable(div, bankdata);
+		var args = Array.prototype.splice.call(arguments, 1);
+		var html = args[0].shift().responseText;
+		activeTab().data('journalForm', html);
+		jtab.updateDataSources(args[0]);
 		div.find('div.tr').click(clickBankRow);
-		activeTab().find('div.accordion').accordion({ heightStyle: "fill" });
+		accordionize(activeTab().find('div.accordion'));
 		hideSpinner();
 	})
 	.fail(function() {
 		statusMessage('error loading data', STATUS_CRIT);
 		hideSpinner();
 	});
-}
-
-function clickBankRow() {
-	var id = $(this).find('div.xml-id').text();
-	console.log('bank row ' + id + ' selected');
-	selectRowSingular($(this));
-
-	/* TODO: populate suspects panel */
-
-	$('div.reconcile div.accordion').fadeIn();
-	
 }
 
 function bankStatement(account) {
@@ -216,14 +267,40 @@ function bankStatement(account) {
 	showQuery(url, title, sort, div);
 }
 
+/* find suggestions for bank rec */
+function bankSuggest(row) {
+	var t = activeTab();
+	var results = 0;
+	var title = 'Suggested Matches (' + results + ')';
+	t.find('div.accordion h3:nth-child(1)').text(title);
+	if (results > 0) {
+		/* suggestions found, show them */
+		t.find('div.accordion h3:nth-child(1)').each(accordionClick);
+	}
+	else {
+		/* nothing to suggest, make journal active instead */
+		bankJournal(row);
+	}
+}
+
+function clickBankRow() {
+	var id = $(this).find('div.xml-id').text();
+	console.log('bank row ' + id + ' selected');
+	selectRowSingular($(this));
+	statusHide();
+
+	/* TODO: populate suspects panel */
+	bankSuggest($(this));
+
+	$('div.reconcile div.accordion').fadeIn();
+}
+
 /* override gladd.js function */
 customFormEvents = function(tab, object, action, id) {
 	var mytab = getTabById(tab);
 
 	/* remove scrollbar from tablet - we'll handle this in the bank.data div */
-	if (object == 'bank') {
-		mytab.addClass('noscroll');
-	}
+	if (object == 'bank') mytab.addClass('noscroll');
 
 	mytab.find('select.bankaccount').change(bankChange);
 }
@@ -245,9 +322,8 @@ function finishJournalForm(tab) {
 
     /* add some ledger lines */
     var jl = jf.find('fieldset.ledger').clone();
-    while (ledger_lines < g_max_ledgers_per_journal) {
+    while (ledger_lines++ < g_max_ledgers_per_journal) {
         jf.find('form').append(jl.clone());
-        ledger_lines++;
     }
 
     /* add datepicker */
@@ -640,7 +716,7 @@ function submitJournalEntry(event, form) {
         data: xml,
         contentType: 'text/xml',
         beforeSend: function (xhr) { setAuthHeader(xhr); },
-        success: function(xml) { submitJournalEntrySuccess(xml); },
+        success: function(xml) { submitJournalEntrySuccess(xml, form); },
         error: function(xml) { submitJournalEntryError(xml); }
     });
 }
@@ -892,9 +968,8 @@ function validateJournalEntry(form) {
 }
 
 /* journal was posted successfully */
-function submitJournalEntrySuccess(xml) {
-    var activeForm = $('.tablet.active');
-    setupJournalForm(activeForm);
+function submitJournalEntrySuccess(xml, form) {
+    setupJournalForm(form);
     statusMessage('Journal posted', STATUS_INFO);
     hideSpinner();
 }

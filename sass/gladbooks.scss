@@ -734,18 +734,48 @@ div.tr.selected div.td {
 	background-color: yellow;
 	font-weight: bold;
 }
-
 div.reconcile h3 {
 	font-size: 10pt;
 }
-
 div.reconcile p {
 	color: $color-dark;
 	font-size: 10pt;
 }
-
 div.reconcile div.accordion {
 	display: none;
+}
+div.bank.reconcile div.accordion > div {
+	height: 80%;
+}
+div.bank.reconcile input.amount {
+	width: 6em;
+}
+
+/* play the accordion */
+div.accordion {
+	height: 100%;
+}
+div.accordion h3 {
+	color: $color-light;
+	background-color: $color-dark;
+	border-bottom: 1px solid $color-light;
+	padding-left: 1em;
+	margin: 0;
+}
+
+div.accordion > div {
+	background-color: white;
+	display: none;
+	height: auto;
+	margin: 0;
+	padding: 1em;
+}
+div.accordion > div p {
+	margin: 0;
+}
+div.accordion h3.selected {
+	background-color: $color-light;
+	color: $color-dark;
 }
 
 /* stop jquery-ui from rounding corners */
