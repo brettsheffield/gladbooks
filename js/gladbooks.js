@@ -160,7 +160,8 @@ function bankChange() {
 
 	var account = $(this).val();
 	if (account == -1) { /* nothing selected */
-		div.empty(); /* FIXME */
+		div.find('div.bank.target').children().fadeOut();
+		div.find('div.bank.suspects').children().fadeOut();
 		return false;
 	}
 
@@ -233,6 +234,7 @@ function bankReconcile(account) {
 	setTabMeta(jtab, 'action', 'create');
 
 	showSpinner();
+	activeTab().find('div.suspects').children().fadeOut();
 	d.push(getXML(collection_url(url)));
 	d.push(fetchFormData('journal', 'create'));
 	$.when.apply(null, d)
@@ -718,7 +720,15 @@ function submitJournalEntry(event, form, bankid) {
         data: xml,
         contentType: 'text/xml',
         beforeSend: function (xhr) { setAuthHeader(xhr); },
-        success: function(xml) { submitJournalEntrySuccess(xml, form); },
+        success: function(xml) {
+			console.log('success');
+			if (bankid) {
+				activeTab().find('select.bankaccount').change();
+			}
+			else {
+				submitJournalEntrySuccess(xml, form);
+			}
+		},
         error: function(xml) { submitJournalEntryError(xml); }
     });
 }
