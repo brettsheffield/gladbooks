@@ -1273,11 +1273,30 @@ function loadCombo(datasource, combo) {
 
 /* a simpler combo population function */
 $.fn.populate = function(tab) {
+	$(this).each(function() { /* wrapped in case many objects selected */
+		$(this)._populate(tab);
+	});
+}
+$.fn._populate = function(tab) {
 	if (tab == undefined) tab = activeTab();
 	var combo = $(this);
 	var datasource = $(this).attr('data-source');
 	var xml = tab.data('data-' + datasource);
 	var selections = [];
+
+	console.log('$.populate()');
+	/* FIXME: data frequently can't be found */
+	console.log('populating combo from datasource: ' + datasource);
+	if (!xml) {
+		/* data lost: go fetch it now, and wait for it */
+		console.log('datasource not found, fetching it');
+		showSpinner();
+		getXML(collection_url(datasource), false).done(function(xdata) {
+			xml = xdata;
+			tab.data('data-' + datasource, xml);
+			hideSpinner();
+		});
+	}
 
 	/* first, preserve selections */
 	for (var x=0; x < combo[0].options.length; x++) {
@@ -1306,10 +1325,12 @@ $.fn.populate = function(tab) {
 
 /* save form data sources to object */
 $.fn.updateDataSources = function(data) {
+	console.log('$.updateDataSources()');
 	var object = $(this).data('object');
 	var action = $(this).data('action');
 	var sources = dataSources(object, action);
 	for (var i in  sources) {
+		console.log('updateDataSources() - saving ' + sources[i]);
 		$(this).data('data-' + sources[i], data[i].responseText);
 	}
 }

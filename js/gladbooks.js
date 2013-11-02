@@ -155,6 +155,7 @@ function addSubFormRows(xml, datatable, view, tab) {
 
 /* the selected bank account has changed - do something about that */
 function bankChange() {
+	console.log('bankChange()');
 	var mytab = activeTab();
 	var div = mytab.find('div.bank.data');
 
@@ -176,6 +177,7 @@ function bankChange() {
 
 /* set up journal form based on row that was clicked */
 function bankJournal(row) {
+	console.log('bankJournal()');
 	var t = activeTab();
 	var journalForm = activeTab().data('journalForm');
 	var j = t.find('div.accordion h3:nth-child(3)');
@@ -184,9 +186,7 @@ function bankJournal(row) {
 	jtab.empty().append(journalForm); /* insert journal form */
 
 	/* populate combos */
-	jtab.find('select.populate:not(.sub)').each(function() {
-		$(this).populate(jtab);
-	});
+	jtab.find('select.populate:not(.sub)').populate(jtab);
 
 	/* work out debit/credit dropdowns */
 	var debit = row.find('div.xml-debit').text();
@@ -280,6 +280,7 @@ function bankStatement(account) {
 
 /* find suggestions for bank rec */
 function bankSuggest(row) {
+	console.log('bankSuggest()');
 	var t = activeTab();
 	var results = 0;
 	var title = 'Suggested Matches (' + results + ')';
@@ -295,6 +296,7 @@ function bankSuggest(row) {
 }
 
 function clickBankRow() {
+	console.log('clickBankRow()');
 	var id = $(this).find('div.xml-id').text();
 	console.log('bank row ' + id + ' selected');
 	selectRowSingular($(this));
