@@ -612,7 +612,8 @@ function showQuery(collection, title, sort, tab) {
 
 /*****************************************************************************/
 /* Fetch HTML fragment and display in new tab */
-function showHTML(url, title, tab) {
+function showHTML(url, title, tab, collection) {
+	if (collection) url = collection_url(url);
 	showSpinner();
 	$.ajax({
 		url: url,
