@@ -188,6 +188,12 @@ function bankJournal(row) {
 		$(this).populate(jtab);
 	});
 
+	/* work out debit/credit dropdowns */
+	var debit = row.find('div.xml-debit').text();
+	var credit = row.find('div.xml-credit').text();
+	var bdc = (debit > 0) ? 'debit' : 'credit'; /* bank debit/credit */
+	var odc = (debit > 0) ? 'credit' : 'debit'; /* other debit/credit */
+
 	/* clone a ledger row */
 	var ledgers = jtab.find('fieldset.ledger');
 	var l = ledgers.clone();
@@ -197,10 +203,7 @@ function bankJournal(row) {
 	var bankid = row.find('div.xml-id').text();
 	var date = row.find('div.xml-date').text();
 	var description = row.find('div.xml-description').text();
-	var debit = row.find('div.xml-debit').text();
-	var credit = row.find('div.xml-credit').text();
 	jtab.find('select.account').val(account);
-	jtab.find('select.type').val('debit');
 	jtab.find('input.transactdate').val(date);
 	jtab.find('input.description').val(description);
 	var amount = (debit > 0) ? debit : credit;
@@ -210,6 +213,10 @@ function bankJournal(row) {
 	for (var x = 1; x < g_max_ledgers_per_journal; x++) {
 		ledgers.append(l.clone());
 	}
+
+	/* set debit/credit dropdowns */
+	jtab.find('select.type').val(odc);
+	jtab.find('select.type').first().val(bdc);
 
 	jtab.find('button.submit').click(function(event) {
 		submitJournalEntry(event, jtab, bankid)
