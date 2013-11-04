@@ -574,9 +574,10 @@ div.bank.reconcile div.bank.data {
 
 div.bank.target {
   background-color: white;
+  border-right: 1px solid #6e89a5;
   float: left;
   height: 100%;
-  width: 34%; }
+  width: calc(34% - 1px); }
 
 div.bank.suspects {
   background-color: #6e89a5;
@@ -615,6 +616,9 @@ div.results.empty {
   margin-right: auto;
   text-align: center; }
 
+div.bank.data div.formtable {
+  width: 100%; }
+
 div.bank.data div.td {
   float: left;
   font-size: 75%;
@@ -622,10 +626,10 @@ div.bank.data div.td {
 
 div.bank.data div.td.xml-id {
   text-align: right;
-  width: 5%; }
+  width: 4%; }
 
-div.bank.data div.td.xml-transactdate {
-  width: 8%; }
+div.bank.data div.td.xml-date {
+  width: 17%; }
 
 div.bank.data div.td.xml-description {
   overflow: hidden;
@@ -634,7 +638,7 @@ div.bank.data div.td.xml-description {
 div.bank.data div.td.xml-debit,
 div.bank.data div.td.xml-credit {
   text-align: right;
-  width: 12%; }
+  width: 11.5%; }
 
 div.tr.selected div.td {
   background-color: yellow;
@@ -731,7 +735,6 @@ div.tablewrapper {
 /* formtable */
 div.formtable {
   background-color: #6e89a5;
-  border: 1px solid white;
   text-color: black; }
 
 div.tr {
