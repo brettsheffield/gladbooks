@@ -20,6 +20,13 @@ h2 {
 	font-size: 1.2em;
 }
 
+/* fix boxes */
+*, *:before, *:after {
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+	box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
 /* individual element styles by id */
 div#footdiv {
 	background-color: $color-dark;
@@ -666,7 +673,6 @@ div.bank.data {
 }
 div.bank.reconcile div.bank.data {
 	overflow: hidden;
-	//border-top: 1px solid $color-dark;
 }
 div.bank.target {
 	background-color: white;
@@ -683,6 +689,8 @@ div.bank.suspects {
 }
 div.bank.selector {
 	padding: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 	height: 5%;
 	width: 100%;
 }
@@ -722,19 +730,19 @@ div.bank.data div.td {
 }
 div.bank.data div.td.xml-id {
 	text-align: right;
-	width: 4%;
+	width: 5%;
 }
 div.bank.data div.td.xml-date {
-	width: 17%;
+	width: 18%;
 }
 div.bank.data div.td.xml-description {
 	overflow: hidden;
-	width: 51%;
+	width: 52%;
 }
 div.bank.data div.td.xml-debit,  
 div.bank.data div.td.xml-credit {
 	text-align: right;
-	width: 11.5%;
+	width: 12.5%;
 }
 div.tr.selected div.td {
 	background-color: yellow;
