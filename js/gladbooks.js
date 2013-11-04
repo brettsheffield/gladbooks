@@ -315,6 +315,7 @@ function bankSuggestResults(row, xml) {
 		/* nothing to suggest, make journal active instead */
 		bankJournal(row);
 	}
+	$('div.reconcile div.accordion').fadeIn();
 }
 
 function clickBankRow() {
@@ -327,7 +328,6 @@ function clickBankRow() {
 	/* populate suspects panel */
 	bankSuggest($(this));
 
-	$('div.reconcile div.accordion').fadeIn();
 }
 
 /* override gladd.js function */

@@ -1369,27 +1369,7 @@ function populateCombo(xml, combo, tab) {
 	/* now, repopulate and reselect options */
 	$(xml).find('row').each(function() {
    		var id = $(this).find('id').text();
-		if (combo.attr('name') == 'cycle') {
-			var name = $(this).find('cyclename').text();
-		}
-		else if ((combo.attr('name') == 'account') ||
-		(combo.attr('name') == 'bankaccount')
-		)
-		{
-   			var id = $(this).find('nominalcode').text();
-			id = padString(id, 4);  /* pad nominal code to 4 digits */
-			var name = id + " - " + $(this).find('account').text();
-		}
-		else if (combo.attr('name') == 'product') {
-			var name = $(this).find('shortname').text();
-		}
-		else if (combo.attr('name') == 'type') {
-			id = padString(id, 4);  /* pad nominal code to 4 digits */
-			var name = $(this).find('name').text();
-		}
-		else {
-			var name = $(this).find('name').text();
-		}
+		var name = $(this).find('name').text();
 		combo.append($("<option />").val(id).text(name));
 		if (selections[id]) {
 			combo[0].options[id].selected = selections[id];
