@@ -2026,6 +2026,15 @@ function accordionClick() {
 	$(this).next().fadeIn();
 }
 
+$.fn.accordionTab = function(n) {
+    return $(this).find('div.accordion h3:nth-child(' + n + ')');
+}
+
+$.fn.accordionTabSelect = function(n) {
+    $(this).accordionTab(n).each(accordionClick);
+}
+
+
 /*****************************************************************************/
 /* display XML results as a sortable table */
 function displayResultsGeneric(xml, collection, title, sorted, tab, headers) {

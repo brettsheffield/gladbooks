@@ -246,6 +246,9 @@ function bankReconcile(account) {
 	d.push(fetchFormData('journal', 'create'));
 	$.when.apply(null, d)
 	.done(function(bankdata) {
+		if (div.children().length > 0) { /* get id of last row selected */
+			var lastid = div.find('div.tr.selected').find('div.xml-id').text();
+		}
 		divTable(div, bankdata);
 		var args = Array.prototype.splice.call(arguments, 1);
 		var html = args[0].shift().responseText;
@@ -253,6 +256,7 @@ function bankReconcile(account) {
 		jtab.updateDataSources(args[0]);
 		div.find('div.tr').click(clickBankRow);
 		accordionize(activeTab().find('div.accordion'));
+		if (lastid) div.find('div.tr').first().click(); /* select first row */
 		hideSpinner();
 	})
 	.fail(function() {
@@ -281,13 +285,31 @@ function bankStatement(account) {
 /* find suggestions for bank rec */
 function bankSuggest(row) {
 	console.log('bankSuggest()');
+	var d = new Array();
+
+	d.push(getXML(collection_url('journal.unreconciled')));
+	$.when.apply(null, d)
+	.done(function(xml) {
+		bankSuggestResults(row, xml);
+	})
+	.fail(bankJournal(row));
+}
+
+function bankSuggestResults(row, xml) {
+	console.log('bankSuggestResults()')
+	var results = $(xml).find('row').length;
 	var t = activeTab();
-	var results = 0;
-	var title = 'Suggested Matches (' + results + ')';
-	t.find('div.accordion h3:nth-child(1)').text(title);
+	t.accordionTab(1).text('Suggested Matches (' + results + ')');
 	if (results > 0) {
 		/* suggestions found, show them */
-		t.find('div.accordion h3:nth-child(1)').each(accordionClick);
+		var workspace = t.accordionTab(1).next();
+		workspace.empty();
+		workspace.append('<ul>');
+		$(xml).find('row').each(function() {
+			workspace.append('<li>result</li>');
+		});
+		workspace.append('</ul>');
+		t.accordionTabSelect(1);
 	}
 	else {
 		/* nothing to suggest, make journal active instead */
@@ -302,7 +324,7 @@ function clickBankRow() {
 	selectRowSingular($(this));
 	statusHide();
 
-	/* TODO: populate suspects panel */
+	/* populate suspects panel */
 	bankSuggest($(this));
 
 	$('div.reconcile div.accordion').fadeIn();
