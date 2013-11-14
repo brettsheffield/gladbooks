@@ -1105,3 +1105,14 @@ test("xslt GET()", function() {
 	testXmlGet('/testxslt/', '/testdata/testxslt.html');
 
 });
+
+module("Plugin");
+
+test("test plugin function", function() {
+	testXmlPost('plugintest', 11);
+});
+test("test plugin function", function() {
+	testXmlPost('plugintest', 12);
+});
+
+
