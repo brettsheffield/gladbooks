@@ -55,6 +55,7 @@ g_menus = [
     [ 'chartview', showQuery, 'accounts', 'Chart of Accounts', true ],
     [ 'journal', setupJournalForm ],
     [ 'ledger', showQuery, 'ledgers', 'General Ledger', true ],
+    [ 'logout', logout ],
 ];
 
 /* data sources for each form

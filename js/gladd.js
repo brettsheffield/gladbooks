@@ -53,12 +53,6 @@ $(document).ready(function() {
 
 	loginSetup();
 
-	/* logout menu */
-	$('a.logout-window').click(function() {
-		logout();
-		displayLoginBox();
-	});
-
 	$('button.submit').click(function() {
 		// grab those login details and save for later
 		g_username = $('input:text[name=username]').val();
@@ -453,6 +447,8 @@ function logout()
 	g_password = '';
 	g_loggedin = false;
 	$('input:password[name=password]').val('');
+
+	displayLoginBox();
 }
 
 /******************************************************************************
