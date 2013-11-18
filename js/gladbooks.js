@@ -1087,16 +1087,13 @@ function validateNominalCode(code, type) {
 /* handleSubforms()
  * formEvents() - not really, but consider refactoring
  * uploadFile() - has hardcoded /fileupload/ destination
- * formBlurEvents()
  * displaySearchResults()
  * changeRadio()
- * recalculateLineTotal()
  * validateForm()
  * cloneInput()
  * populateCombos()
  * loadCombo()
  * populateCombo()
- * comboChange()
  * clearForm()
  * displaySubformData()
  * btnClickLinkContact()
@@ -1110,3 +1107,80 @@ function validateNominalCode(code, type) {
  * switchBusiness() - refers to orgcode
  * clickElement()
  */
+
+function customBlurEvents(tab) {
+    var mytab = getTabById(tab);
+    mytab.find('input.price').each(function() {
+        $(this).blur(function() {
+            /* pad amounts to two decimal places */
+            if ($(this).val().length > 0) {
+                var newamount = decimalPad($(this).val(), 2);
+                $(this).val(newamount);
+            }
+        });
+    });
+    mytab.find('input.price, input.qty').each(function() {
+        $(this).blur(function() {
+            recalculateLineTotal($(this).parent().parent(), tab);
+        });
+    });
+}
+
+function customComboChange(combo, xml, tab) {
+    var id = combo.attr('id');
+    var newval = combo.val();
+    var mytab = isTabId(tab) ? getTabById(tab) : tab;
+
+    console.log('Value of ' + id + ' combo has changed to ' + newval);
+
+    /* deal with chart form type combo */
+    if (combo.attr('name') == 'type') {
+        var code = activeTab().find('input.nominalcode').val();
+        return validateNominalCode(code, newval);
+    }
+
+    /* in the salesorder form, dynamically set placeholders to show defaults */
+    if (mytab.find('div.salesorder')) {
+        $(xml).find('row').find('id').each(function() {
+            if ($(this).text() == newval) {
+                var desc = $(this).parent().find('description').text();
+                var price = $(this).parent().find('price_sell').text();
+                price = decimalPad(price, 2);
+                var parentrow = combo.parent().parent();
+                parentrow.find('input.linetext').attr('placeholder', desc);
+                parentrow.find('input.price').attr('placeholder', price);
+                recalculateLineTotal(parentrow, tab);
+            }
+        });
+    }
+}
+
+/*****************************************************************************/
+/* recalculate line total */
+function recalculateLineTotal(parentrow, tab) {
+    console.log('recalculateLineTotal()');
+    var p = parentrow.find('input.price').val();
+    var q = parentrow.find('input.qty').val();
+
+    /* if price is blank, use placeholder value */
+    if (!p) {
+        p = parentrow.find('input.price').attr('placeholder');
+    }
+    if (isNaN(p)) {
+        p = 0;
+    }
+    if (isNaN(q)) {
+        q = 0;
+    }
+    p = new Big(p);
+    q = new Big(q);
+    var t = p.times(q);
+    t = decimalPad(roundHalfEven(t, 2), 2);
+    var inputtotal = parentrow.find('input.total');
+    var oldval = inputtotal.val();
+    inputtotal.val(formatThousands(t));
+    if (oldval != t) {
+        updateSalesOrderTotals(tab);
+    }
+}
+
