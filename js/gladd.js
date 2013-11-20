@@ -93,7 +93,7 @@ function loginSetup() {
 function auth_check()
 {
 	$.ajax({
-		url: g_authurl + g_username,
+		url: g_authurl,
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(data) { loginok(data); },
 		error: function(data) { loginfailed(); }
