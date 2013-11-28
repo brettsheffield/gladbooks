@@ -21,6 +21,7 @@
  */
 
 var g_authurl = '/auth/';
+var g_authtimeout = 60000; /* milliseconds - every 60s */
 var g_resourcedefaultsurl = '/defaults/';
 var g_username = '';
 var g_password = '';
@@ -29,6 +30,7 @@ var g_business = '1';
 var g_loggedin = false;
 var g_tabid = 0;
 var g_max_tabtitle = '48'; /* max characters to allow in tab title */
+var g_session = false;
 
 var STATUS_INFO = 1;
 var STATUS_WARN = 2;
@@ -97,6 +99,22 @@ function auth_check()
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(data) { loginok(data); },
 		error: function(data) { loginfailed(); }
+	});
+}
+
+function auth_session_logout()
+{
+	console.log('session logout...');
+	g_session = false;
+	$.ajax({
+		url: g_authurl,
+		beforeSend: function (xhr) { 
+			setAuthHeader(xhr);
+			xhr.setRequestHeader("Logout", g_username);
+		},
+		complete: function(data) { 
+			console.log('session logout complete');
+		},
 	});
 }
 
@@ -394,14 +412,36 @@ function removeAllTabs() {
 
 /*****************************************************************************/
 /* Add Authentication header with logged-in user's credentials */
+/* only send if no session active */
 function setAuthHeader(xhr) {
-	var hash = auth_encode(g_username, g_password);
-	xhr.setRequestHeader("Authorization", "Silent " + hash);
+	if (!g_session) {
+		console.log('setting auth header');
+		var hash = auth_encode(g_username, g_password);
+		xhr.setRequestHeader("Authorization", "Silent " + hash);
+	}
+	else {
+		console.log('NOT setting auth header');
+	}
+}
+
+/* If we're still logged in, refresh our session cookie */
+function reauthenticate() {
+    if (g_loggedin) {
+        console.log('refreshing session cookie');
+        g_session = false;
+        auth_check();
+    }
 }
 
 /*****************************************************************************/
 /* login successful, do successful things */
 function loginok(xml) {
+	g_session = true;
+
+	/* set timer to re-authenticate, so we always have a fresh cookie */
+    console.log('setting auth timer');
+    window.setTimeout(reauthenticate, g_authtimeout);
+
 	g_instance = '';
 	$(xml).find('instance').each(function() {
 		g_loggedin = true;
@@ -443,12 +483,21 @@ function logout()
 	/* clear working area */
 	removeAllTabs();
 
+	/* send logout to server, clearing the session */
+	auth_session_logout();
+
 	/* clear password */
 	g_password = '';
 	g_loggedin = false;
 	$('input:password[name=password]').val('');
 
+	customLogoutActions();
+
 	displayLoginBox();
+}
+
+/* to be overridden by application */
+function customLogoutActions() {
 }
 
 /******************************************************************************
