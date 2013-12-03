@@ -905,12 +905,6 @@ function formEvents(tab, object, action, id) {
 		doFormSubmit(object, action, id);
 	});
 
-	/* upload button click handler */
-	mytab.find('button.upload').click(function() 
-	{
-		uploadFile(csvToXml);
-	});
-
 	customFormEvents(tab, object, action, id);
 }
 
@@ -919,8 +913,7 @@ function customFormEvents(tab, object, action, id) {
 }
 
 /* upload file, calling function f on success */
-function uploadFile(f) {
-	var url = '/fileupload/' + g_instance + '/';
+function uploadFile(f, url) {
 	var form = new FormData(document.forms.namedItem("fileinfo"));
 
 	showSpinner('Uploading File...');

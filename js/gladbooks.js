@@ -338,6 +338,12 @@ customFormEvents = function(tab, object, action, id) {
 	/* remove scrollbar from tablet - we'll handle this in the bank.data div */
 	if (object == 'bank') mytab.addClass('noscroll');
 
+    /* upload button click handler */
+	mytab.find('button.upload').click(function()
+	{
+		uploadFile(csvToXml, '/fileupload/' + g_instance + '/');
+	});
+
 	mytab.find('select.bankaccount').change(bankChange);
 }
 
