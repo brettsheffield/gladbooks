@@ -66,6 +66,8 @@ $(document).ready(function() {
 		logout();
 	});
 
+	console.log(randomString(16));
+
 });
 
 function loginSetup() {
@@ -660,7 +662,7 @@ function showQuery(collection, title, sort, tab) {
 function showHTML(url, title, tab, collection) {
 	if (collection) url = collection_url(url);
 	showSpinner();
-	$.ajax({
+	return $.ajax({
 		url: url,
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
 		success: function(html) {
@@ -1138,20 +1140,17 @@ function doFormSubmit(object, action, id) {
 
 /*****************************************************************************/
 function validateForm(object, action, id) {
-	console.log('validating form ' + object + '.' + action);
+    console.log('validating form ' + object + '.' + action);
 	statusHide(); /* remove any prior status */
 
-	if (object == 'account') {
-		return validateFormAccount(action, id);
-	}
-	else if (object == 'product') {
-		return validateFormProduct(action, id);
-	}
-	else if ((object == 'salesorder') && (action != 'process')) {
-		return validateFormSalesOrder(action, id);
-	}
+	return customFormValidation(object, action, id);
+}
+
+/* to be overridden by application */
+function customFormValidation(object, action, id) {
 	return true;
 }
+
 
 /*****************************************************************************/
 function statusHide() {
@@ -2390,4 +2389,14 @@ function newtab() {
 	tab.classes = 'tabhead tablet' + tab.id + ' business' + g_business;
 	tab.contentClasses = 'tablet tablet' + tab.id + ' business' + g_business;
 	return tab;
+}
+
+function randomString(strlen) {
+    var a = new Array();
+    var set = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for(var i=0; i < strlen; i++) {
+        a.push(set.charAt(Math.floor(Math.random() * set.length)));
+    }
+    return a.join('');
 }

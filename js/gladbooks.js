@@ -1089,30 +1089,6 @@ function validateNominalCode(code, type) {
 }
 
 
-/* TODO  - functions that have Gladbooks-specific stuff in them: */
-/* handleSubforms()
- * formEvents() - not really, but consider refactoring
- * uploadFile() - has hardcoded /fileupload/ destination
- * displaySearchResults()
- * changeRadio()
- * validateForm()
- * cloneInput()
- * populateCombos()
- * loadCombo()
- * populateCombo()
- * clearForm()
- * displaySubformData()
- * btnClickLinkContact()
- * btnClickRemoveRow()
- * submitForm()
- * submitFormSuccess()
- * submitFormError()
- * collectionObject()
- * fetchElementData()
- * displayResultsGeneric()
- * switchBusiness() - refers to orgcode
- * clickElement()
- */
 
 function customBlurEvents(tab) {
     var mytab = getTabById(tab);
@@ -1189,4 +1165,41 @@ function recalculateLineTotal(parentrow, tab) {
         updateSalesOrderTotals(tab);
     }
 }
+
+function customFormValidation(object, action, id) {
+	if (object == 'account') {
+        return validateFormAccount(action, id);
+    }
+    else if (object == 'product') {
+        return validateFormProduct(action, id);
+    }
+    else if ((object == 'salesorder') && (action != 'process')) {
+        return validateFormSalesOrder(action, id);
+    }
+    return true;
+}
+
+/* TODO  - functions that have Gladbooks-specific stuff in them: */
+/* handleSubforms()
+ * formEvents() - not really, but consider refactoring
+ * uploadFile() - has hardcoded /fileupload/ destination
+ * displaySearchResults()
+ * changeRadio()
+ * cloneInput()
+ * populateCombos()
+ * loadCombo()
+ * populateCombo()
+ * clearForm()
+ * displaySubformData()
+ * btnClickLinkContact()
+ * btnClickRemoveRow()
+ * submitForm()
+ * submitFormSuccess()
+ * submitFormError()
+ * collectionObject()
+ * fetchElementData()
+ * displayResultsGeneric()
+ * switchBusiness() - refers to orgcode
+ * clickElement()
+ */
 
