@@ -1663,33 +1663,40 @@ function submitForm(object, action, id) {
 	).find('input:not(.nosubmit,default),select:not(.nosubmit,.default)').each(function() {
 		var name = $(this).attr('name');
 		if (name) {
-			if (name == 'subid') {
-				subid = $(this).val();
-			}
-			console.log('processing input ' + name);
-			if ((name != 'id') && (name != 'subid')
-			&& ((name != 'relationship')||(object == 'organisation_contacts')))
-			{
-				console.log($(this).val());
-				if ($(this).hasClass('sub')) {
-					/* this is a subform entry, so add extra xml tag */
-					xml += '<' + subobject;
-					if (subid) {
-						xml += ' id="' + subid + '"';
-						subid = null;
-					}
-					xml += '>';
+            var o = new Object();
+            if (customFormFieldHandler($(this), o)) {
+                xml += o.xml;
+            }
+            else {
+
+				if (name == 'subid') {
+					subid = $(this).val();
 				}
-				if ($(this).val()) {
-					if ($(this).val().length > 0) { /* skip blanks */
-						xml += '<' + name + '>';
-						xml += escapeHTML($(this).val());
-						xml += '</' + name + '>';
+				console.log('processing input ' + name);
+				if ((name != 'id') && (name != 'subid')
+				&& ((name != 'relationship')||(object == 'organisation_contacts')))
+				{
+					console.log($(this).val());
+					if ($(this).hasClass('sub')) {
+						/* this is a subform entry, so add extra xml tag */
+						xml += '<' + subobject;
+						if (subid) {
+							xml += ' id="' + subid + '"';
+							subid = null;
+						}
+						xml += '>';
 					}
-				}
-				if ($(this).hasClass('endsub')) {
-					/* this is a subform entry, so close extra xml tag */
-					xml += '</' + subobject + '>';
+					if ($(this).val()) {
+						if ($(this).val().length > 0) { /* skip blanks */
+							xml += '<' + name + '>';
+							xml += escapeHTML($(this).val());
+							xml += '</' + name + '>';
+						}
+					}
+					if ($(this).hasClass('endsub')) {
+						/* this is a subform entry, so close extra xml tag */
+						xml += '</' + subobject + '>';
+					}
 				}
 			}
 		}
@@ -1721,6 +1728,11 @@ function submitForm(object, action, id) {
         success: function(xml) { submitFormSuccess(object, action, id, collection, xml); },
         error: function(xml) { submitFormError(object, action, id); }
     });
+}
+
+/* To be overridden by application */
+function customFormFieldHandler(input, o) {
+    return false;
 }
 
 /*****************************************************************************/
