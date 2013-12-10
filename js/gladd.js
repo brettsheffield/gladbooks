@@ -618,6 +618,7 @@ function clickMenu(event) {
 		ok = true;
 	}
 	else {
+		statusHide(); /* clear any previous error messages from status box */
 		for (menu in g_menus) {
 				if ($(this).attr("href") == '#' + g_menus[menu][0]) {
 						if (g_menus[menu][1] == alert ) {
