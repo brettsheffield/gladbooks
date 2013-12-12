@@ -66,8 +66,6 @@ $(document).ready(function() {
 		logout();
 	});
 
-	console.log(randomString(16));
-
 });
 
 function loginSetup() {
@@ -902,7 +900,7 @@ function formEvents(tab, object, action, id) {
 	});
 
 	/* deal with submit event */
-	mytab.find('form:not(.subform)').submit(function(event)
+	mytab.find('form:not(.subform):not(.nosubmit)').submit(function(event)
 	{
 		event.preventDefault();
 		doFormSubmit(object, action, id);
@@ -939,7 +937,6 @@ function uploadFile(f, url) {
 			hideSpinner();
 			alert("error uploading file");
 		}
-
 	});
 }
 
@@ -1676,26 +1673,33 @@ function submitForm(object, action, id) {
 				if ((name != 'id') && (name != 'subid')
 				&& ((name != 'relationship')||(object == 'organisation_contacts')))
 				{
-					console.log($(this).val());
-					if ($(this).hasClass('sub')) {
-						/* this is a subform entry, so add extra xml tag */
-						xml += '<' + subobject;
-						if (subid) {
-							xml += ' id="' + subid + '"';
-							subid = null;
+					if ($(this).attr('type') == "checkbox") {
+                        xml += '<' + name + '>';
+                        xml += $(this).prop('checked') ? '1' : '0';
+                        xml += '</' + name + '>';
+                    }
+                    else {	
+						console.log($(this).val());
+						if ($(this).hasClass('sub')) {
+							/* this is a subform entry, so add extra xml tag */
+							xml += '<' + subobject;
+							if (subid) {
+								xml += ' id="' + subid + '"';
+								subid = null;
+							}
+							xml += '>';
 						}
-						xml += '>';
-					}
-					if ($(this).val()) {
-						if ($(this).val().length > 0) { /* skip blanks */
-							xml += '<' + name + '>';
-							xml += escapeHTML($(this).val());
-							xml += '</' + name + '>';
+						if ($(this).val()) {
+							if ($(this).val().length > 0) { /* skip blanks */
+								xml += '<' + name + '>';
+								xml += escapeHTML($(this).val());
+								xml += '</' + name + '>';
+							}
 						}
-					}
-					if ($(this).hasClass('endsub')) {
-						/* this is a subform entry, so close extra xml tag */
-						xml += '</' + subobject + '>';
+						if ($(this).hasClass('endsub')) {
+							/* this is a subform entry, so close extra xml tag */
+							xml += '</' + subobject + '>';
+						}
 					}
 				}
 			}
@@ -1755,16 +1759,9 @@ function escapeHTML(html) {
 
 /*****************************************************************************/
 function submitFormSuccess(object, action, id, collection, xml) {
-	if ((object == 'salesorder') && (action == 'process')) {
-		statusMessage('Billing run successful', STATUS_INFO, 5000);
-	}
-	else {
-		statusMessage(object + ' saved', STATUS_INFO, 5000);
-	}
-
-	if (object == 'business') {
-		prepBusinessSelector();
-	}
+    if (!customSubmitFormSuccess(object, action, id, collection, xml)) {
+        return;
+    }
 
 	// lets check for tabs that will need refreshing
 	$('div.refresh.' + collection).each(function() {

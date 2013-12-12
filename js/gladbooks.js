@@ -1179,6 +1179,20 @@ function customFormValidation(object, action, id) {
     return true;
 }
 
+customSubmitFormSuccess = function(object, action, id, collection, xml) {
+    if ((object == 'salesorder') && (action == 'process')) {
+        statusMessage('Billing run successful', STATUS_INFO, 5000);
+    }
+    else {
+        statusMessage(object + ' saved', STATUS_INFO, 5000);
+    }
+
+    if (object == 'business') {
+        prepBusinessSelector();
+    }
+	return true;
+}
+
 /* TODO  - functions that have Gladbooks-specific stuff in them: */
 /* handleSubforms()
  * formEvents() - not really, but consider refactoring
@@ -1194,7 +1208,6 @@ function customFormValidation(object, action, id) {
  * btnClickLinkContact()
  * btnClickRemoveRow()
  * submitForm()
- * submitFormSuccess()
  * submitFormError()
  * collectionObject()
  * fetchElementData()
