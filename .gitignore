@@ -6,4 +6,5 @@ css/includes/
 .gladd.lock
 gladd.conf.local
 js/importer_config.js
+js/gladd.js
 mov/
