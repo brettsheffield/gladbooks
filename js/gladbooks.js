@@ -1193,10 +1193,9 @@ customSubmitFormSuccess = function(object, action, id, collection, xml) {
 	return true;
 }
 
-/* TODO  - functions that have Gladbooks-specific stuff in them: */
+/* TODO  - gladd.js functions that have Gladbooks-specific stuff in them: */
 /* handleSubforms()
  * formEvents() - not really, but consider refactoring
- * uploadFile() - has hardcoded /fileupload/ destination
  * displaySearchResults()
  * changeRadio()
  * cloneInput()
