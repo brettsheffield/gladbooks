@@ -284,11 +284,11 @@ function bankStatement(account) {
 }
 
 /* find suggestions for bank rec */
-function bankSuggest(row) {
+function bankSuggest(row, account) {
 	console.log('bankSuggest()');
 	var d = new Array();
 
-	d.push(getXML(collection_url('journal.unreconciled')));
+	d.push(getXML(collection_url('journal.unreconciled/' + account)));
 	$.when.apply(null, d)
 	.done(function(xml) {
 		bankSuggestResults(row, xml);
@@ -305,11 +305,12 @@ function bankSuggestResults(row, xml) {
 		/* suggestions found, show them */
 		var workspace = t.accordionTab(1).next();
 		workspace.empty();
-		workspace.append('<ul>');
+		var html = '<ul>';
 		$(xml).find('row').each(function() {
-			workspace.append('<li>result</li>');
+			html += '<li>' + $(this).find('description').text() + '</li>';
 		});
-		workspace.append('</ul>');
+		html += '</ul>';
+		workspace.append(html);
 		t.accordionTabSelect(1);
 	}
 	else {
@@ -325,9 +326,10 @@ function clickBankRow() {
 	console.log('bank row ' + id + ' selected');
 	selectRowSingular($(this));
 	statusHide();
+	var account = activeTab().find('select.bankaccount').val();
 
 	/* populate suspects panel */
-	bankSuggest($(this));
+	bankSuggest($(this), account);
 
 }
 
@@ -418,17 +420,13 @@ function populateAccountsDDowns(xml, tab) {
         $("<option />").val(0).text('<select account>')
     );
     $(xml).find('row').each(function() {
-        var accountid = $(this).find('nominalcode').text();
+        var accountid = $(this).find('id').text();
         accountid = padString(accountid, 4); /* pad code with leading zeros */
-        var accounttype = $(this).find('type').text();
-        var accountdesc = accountid + " - " +
-        $(this).find('account').text();
-
+        var accountdesc = $(this).find('name').text();
         $('select.account').append(
             $("<option />").val(accountid).text(accountdesc)
         );
     });
-
     finishJournalForm(tab);
 }
 
