@@ -287,30 +287,28 @@ function bankStatement(account) {
 function bankSuggest(row, account) {
 	console.log('bankSuggest()');
 	var d = new Array();
-
-	d.push(getXML(collection_url('journal.unreconciled/' + account)));
+	var transactdate = $(row).find('div.xml-date').text();
+	var url = 'journal.unreconciled/' + account + '/' + transactdate;
+	d.push(getHTML(collection_url(url)));
 	$.when.apply(null, d)
-	.done(function(xml) {
-		bankSuggestResults(row, xml);
+	.done(function(html) {
+		bankSuggestResults(row, html);
 	})
 	.fail(bankJournal(row));
 }
 
-function bankSuggestResults(row, xml) {
+function bankSuggestResults(row, html) {
 	console.log('bankSuggestResults()')
-	var results = $(xml).find('row').length;
+	console.log(html);
+	var results = $(html).find('div.bank.suggestion').length;
 	var t = activeTab();
 	t.accordionTab(1).text('Suggested Matches (' + results + ')');
 	if (results > 0) {
 		/* suggestions found, show them */
 		var workspace = t.accordionTab(1).next();
 		workspace.empty();
-		var html = '<ul>';
-		$(xml).find('row').each(function() {
-			html += '<li>' + $(this).find('description').text() + '</li>';
-		});
-		html += '</ul>';
 		workspace.append(html);
+		workspace.find('div.bank.suggestion').click(bankSuggestionClick);
 		t.accordionTabSelect(1);
 	}
 	else {
@@ -318,6 +316,10 @@ function bankSuggestResults(row, xml) {
 		bankJournal(row);
 	}
 	$('div.reconcile div.accordion').fadeIn();
+}
+
+function bankSuggestionClick() {
+	toggleSelected($(this));
 }
 
 function clickBankRow() {

@@ -671,6 +671,20 @@ div.bank.reconcile div.accordion > div {
 div.bank.reconcile input.amount {
   width: 6em; }
 
+div.bank.suggestion div.description {
+  width: 32em; }
+
+div.bank.suggestions div.tr:nth-child(odd):not(.selected) div.td {
+  background-color: white; }
+
+div.bank.suggestions div.tr:nth-child(even):not(.selected) div.td {
+  background-color: #eeeeff; }
+
+div.bank.suggestion div.debit,
+div.bank.suggestion div.credit {
+  text-align: right;
+  width: 6em; }
+
 /* play the accordion */
 div.accordion {
   height: 100%; }

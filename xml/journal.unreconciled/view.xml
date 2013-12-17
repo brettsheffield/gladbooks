@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <row>
+    <id>1</id>
+    <journal>1</journal>
+    <account>1100</account>
+    <division>0</division>
+    <department>0</department>
+    <debit>4800.00</debit>
+    <credit>0.00</credit>
+    <entered>2013-10-04 10:19:30.582534+01</entered>
+    <authuser></authuser>
+    <clientip></clientip>
+  </row>
+  <row>
+    <id>2</id>
+    <journal>1</journal>
+    <account>2202</account>
+    <division>0</division>
+    <department>0</department>
+    <debit>0.00</debit>
+    <credit>800.00</credit>
+    <entered>2013-10-04 10:19:30.582534+01</entered>
+    <authuser></authuser>
+    <clientip></clientip>
+  </row>
+  <row>
+    <id>3</id>
+    <journal>1</journal>
+    <account>4000</account>
+    <division>0</division>
+    <department>0</department>
+    <debit>0.00</debit>
+    <credit>4000.00</credit>
+    <entered>2013-10-04 10:19:30.582534+01</entered>
+    <authuser></authuser>
+    <clientip></clientip>
+  </row>
+  <row>
+    <id>4</id>
+    <journal>2</journal>
+    <account>1100</account>
+    <division>0</division>
+    <department>0</department>
+    <debit>4800.00</debit>
+    <credit>0.00</credit>
+    <entered>2013-10-04 10:19:30.582534+01</entered>
+    <authuser></authuser>
+    <clientip></clientip>
+  </row>
+  <row>
+    <id>5</id>
+    <journal>2</journal>
+    <account>2202</account>
+    <division>0</division>
+    <department>0</department>
+    <debit>0.00</debit>
+    <credit>800.00</credit>
+    <entered>2013-10-04 10:19:30.582534+01</entered>
+    <authuser></authuser>
+    <clientip></clientip>
+  </row>
+  <row>
+    <id>6</id>
+    <journal>2</journal>
+    <account>4000</account>
+    <division>0</division>
+    <department>0</department>
+    <debit>0.00</debit>
+    <credit>4000.00</credit>
+    <entered>2013-10-04 10:19:30.582534+01</entered>
+    <authuser></authuser>
+    <clientip></clientip>
+  </row>
+  <row>
+    <id>7</id>
+    <journal>3</journal>
+    <account>1100</account>
+    <division>0</division>
+    <department>0</department>
+    <debit></debit>
+    <credit>4000</credit>
+    <entered>2013-10-04 10:22:32.571094+01</entered>
+    <authuser></authuser>
+    <clientip></clientip>
+  </row>
+  <row>
+    <id>8</id>
+    <journal>3</journal>
+    <account>1000</account>
+    <division>0</division>
+    <department>0</department>
+    <debit>4000</debit>
+    <credit></credit>
+    <entered>2013-10-04 10:22:32.571094+01</entered>
+    <authuser></authuser>
+    <clientip></clientip>
+  </row>
+  <row>
+    <id>9</id>
+    <journal>4</journal>
+    <account>1100</account>
+    <division>0</division>
+    <department>0</department>
+    <debit></debit>
+    <credit>26</credit>
+    <entered>2013-10-26 12:15:05.267823+01</entered>
+    <authuser></authuser>
+    <clientip></clientip>
+  </row>
+  <row>
+    <id>10</id>
+    <journal>4</journal>
+    <account>1000</account>
+    <division>0</division>
+    <department>0</department>
+    <debit>26</debit>
+    <credit></credit>
+    <entered>2013-10-26 12:15:05.267823+01</entered>
+    <authuser></authuser>
+    <clientip></clientip>
+  </row>
+  <row>
+    <id>11</id>
+    <journal>5</journal>
+    <account>1000</account>
+    <division>0</division>
+    <department>0</department>
+    <debit>350.00</debit>
+    <credit></credit>
+    <entered>2013-11-01 13:57:18.208079+00</entered>
+    <authuser>bacs</authuser>
+    <clientip>127.0.0.1</clientip>
+  </row>
+  <row>
+    <id>12</id>
+    <journal>5</journal>
+    <account>1100</account>
+    <division>0</division>
+    <department>0</department>
+    <debit></debit>
+    <credit>350.00</credit>
+    <entered>2013-11-01 13:57:18.208079+00</entered>
+    <authuser>bacs</authuser>
+    <clientip>127.0.0.1</clientip>
+  </row>
+  <row>
+    <id>13</id>
+    <journal>6</journal>
+    <account>1000</account>
+    <division>0</division>
+    <department>0</department>
+    <debit>155.25</debit>
+    <credit></credit>
+    <entered>2013-11-01 14:38:01.53142+00</entered>
+    <authuser>bacs</authuser>
+    <clientip>127.0.0.1</clientip>
+  </row>
+  <row>
+    <id>14</id>
+    <journal>6</journal>
+    <account>1100</account>
+    <division>0</division>
+    <department>0</department>
+    <debit></debit>
+    <credit>155.25</credit>
+    <entered>2013-11-01 14:38:01.53142+00</entered>
+    <authuser>bacs</authuser>
+    <clientip>127.0.0.1</clientip>
+  </row>
+  <row>
+    <id>44</id>
+    <journal>21</journal>
+    <account>1100</account>
+    <division>0</division>
+    <department>0</department>
+    <debit>4800.00</debit>
+    <credit>0.00</credit>
+    <entered>2013-11-01 18:38:13.406539+00</entered>
+    <authuser></authuser>
+    <clientip></clientip>
+  </row>
+  <row>
+    <id>45</id>
+    <journal>21</journal>
+    <account>2202</account>
+    <division>0</division>
+    <department>0</department>
+    <debit>0.00</debit>
+    <credit>800.00</credit>
+    <entered>2013-11-01 18:38:13.406539+00</entered>
+    <authuser></authuser>
+    <clientip></clientip>
+  </row>
+  <row>
+    <id>46</id>
+    <journal>21</journal>
+    <account>4000</account>
+    <division>0</division>
+    <department>0</department>
+    <debit>0.00</debit>
+    <credit>4000.00</credit>
+    <entered>2013-11-01 18:38:13.406539+00</entered>
+    <authuser></authuser>
+    <clientip></clientip>
+  </row>
+  <row>
+    <id>47</id>
+    <journal>22</journal>
+    <account>1100</account>
+    <division>0</division>
+    <department>0</department>
+    <debit>12.00</debit>
+    <credit>0.00</credit>
+    <entered>2013-11-01 18:38:13.406539+00</entered>
+    <authuser></authuser>
+    <clientip></clientip>
+  </row>
+  <row>
+    <id>48</id>
+    <journal>22</journal>
+    <account>2202</account>
+    <division>0</division>
+    <department>0</department>
+    <debit>0.00</debit>
+    <credit>2.00</credit>
+    <entered>2013-11-01 18:38:13.406539+00</entered>
+    <authuser></authuser>
+    <clientip></clientip>
+  </row>
+  <row>
+    <id>49</id>
+    <journal>22</journal>
+    <account>4001</account>
+    <division>0</division>
+    <department>0</department>
+    <debit>0.00</debit>
+    <credit>10.00</credit>
+    <entered>2013-11-01 18:38:13.406539+00</entered>
+    <authuser></authuser>
+    <clientip></clientip>
+  </row>
+</resources>
