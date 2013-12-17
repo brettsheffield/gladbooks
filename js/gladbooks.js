@@ -26,6 +26,7 @@ g_menus = [
 	[ 'bank.reconcile', getForm, 'bank', 'reconcile', 'Bank Reconciliation' ],
 	[ 'bank.upload', getForm, 'bank', 'upload', 'Upload Bank Statement' ],
 	[ 'bank.statement', getForm, 'bank', 'statement', 'View Bank Statement' ],
+	[ 'bank.test', showHTML, 'help/layouttest.html', 'Layout Test' ],
 	[ 'banking', showHTML, 'help/banking.html', 'Banking', false ],
 	[ 'contact.create', getForm, 'contact', 'create', 'Add New Contact' ],
 	[ 'contacts', showQuery, 'contacts', 'Contacts', true ],
@@ -254,7 +255,7 @@ function bankReconcile(account) {
 		var args = Array.prototype.splice.call(arguments, 1);
 		var html = args[0].shift().responseText;
 		activeTab().data('journalForm', html);
-		jtab.updateDataSources(args[0]);
+		//jtab.updateDataSources(args[0]);
 		div.find('div.tr').click(clickBankRow);
 		accordionize(activeTab().find('div.accordion'));
 		if (lastid) div.find('div.tr').first().click(); /* select first row */
@@ -294,7 +295,9 @@ function bankSuggest(row, account) {
 	.done(function(html) {
 		bankSuggestResults(row, html);
 	})
-	.fail(bankJournal(row));
+	.fail(function() {
+		bankJournal(row);
+	});
 }
 
 function bankSuggestResults(row, html) {
@@ -302,12 +305,11 @@ function bankSuggestResults(row, html) {
 	console.log(html);
 	var results = $(html).find('div.bank.suggestion').length;
 	var t = activeTab();
-	t.accordionTab(1).text('Suggested Matches (' + results + ')');
+	t.accordionTitle(1).text('Suggested Matches (' + results + ')');
 	if (results > 0) {
 		/* suggestions found, show them */
-		var workspace = t.accordionTab(1).next();
-		workspace.empty();
-		workspace.append(html);
+		var workspace = t.accordionTab(1)
+		workspace.empty().append(html);
 		workspace.find('div.bank.suggestion').click(bankSuggestionClick);
 		t.accordionTabSelect(1);
 	}
@@ -332,7 +334,6 @@ function clickBankRow() {
 
 	/* populate suspects panel */
 	bankSuggest($(this), account);
-
 }
 
 /* override gladd.js function */

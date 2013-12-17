@@ -3,12 +3,14 @@
 <xsl:output method="html" encoding="UTF-8" indent="yes" />
 
 <xsl:template match="resources">
-	<div class="bank suggestions">
-		<xsl:apply-templates select="row"/>
+	<div class="bank target">
+		<div class="formtable">
+			<xsl:apply-templates select="row"/>
+		</div>
 	</div>
 </xsl:template>
 <xsl:template match="row">
-	<div class="tr bank suggestion ledger">
+	<div class="tr">
 		<div class="td xml-id">
 			<xsl:value-of select="id"/>
 		</div>

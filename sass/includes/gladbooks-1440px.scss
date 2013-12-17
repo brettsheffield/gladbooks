@@ -39,6 +39,14 @@ div.panel.right {
         width: 500px;
 }
 
+/* accordion */
+div.accordion > div.section > div.content {
+	min-height: 448px;
+}
+div.bank.suspects div.accordion > div.section > div.content {
+	height: 457px;
+}  
+
 /* pdf */
 object.pdf {
         height: 420px;

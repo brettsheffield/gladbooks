@@ -667,31 +667,36 @@ select.paymenttype {
 /* Bank screens */
 div.bank.data {
 	background-color: lighten($color-light, 12%);
-	height: 92%;
-	overflow: auto;
+	border-top: 1px solid $color-dark;
+	height: 100%;
+	overflow: hidden;
 	width: 100%;
 }
-div.bank.reconcile div.bank.data {
-	overflow: hidden;
-}
 div.bank.target {
-	background-color: white;
 	border-right: 1px solid $color-dark;
 	float: left;
 	height: 100%;
-	width: calc(34% - 1px);
+	width: 50%;
+}
+div.bank.target > div.formtable {
+	background-color: white;
+	height: 100%;
+	width: 100%;
+}
+div.bank.target > div.formtable div.td {
+	overflow: hidden;
 }
 div.bank.suspects {
 	background-color: $color-dark;
-	float: right;
+	float: left;
 	height: 100%;
-	width: 66%;
+	width: 50%;
 }
 div.bank.selector {
 	padding: 10px;
 	padding-top: 5px;
 	padding-bottom: 5px;
-	height: 5%;
+	height: 2em;
 	width: 100%;
 }
 div.results.pager {
@@ -726,26 +731,33 @@ div.bank.data div.formtable {
 div.bank.data div.td {
 	float: left;
 	font-size: 75%;
-	padding-right: 1%;
+	padding-right: 0.5em;
 }
 div.bank.data div.td.xml-id {
+	display: none;
 	text-align: right;
-	width: 5%;
+	width: 10%;
 }
 div.bank.data div.td.xml-date {
-	width: 18%;
+	padding-left: 0.5em;
+	width: 17%;
 }
 div.bank.data div.td.xml-description {
 	overflow: hidden;
-	width: 52%;
+	width: 53%;
 }
 div.bank.data div.td.xml-debit,  
 div.bank.data div.td.xml-credit {
 	text-align: right;
-	width: 12.5%;
+	width: 15%;
 }
-div.tr.selected div.td {
-	background-color: yellow;
+div.tr.selected:nth-child(odd) {
+	background-color: lighten(yellow, 30%);
+}
+div.tr.selected:nth-child(even) {
+	background-color: lighten(yellow, 20%);
+}
+div.tr.selected > div.td {
 	font-weight: bold;
 }
 div.reconcile h3 {
@@ -759,30 +771,39 @@ div.reconcile div.accordion {
 	display: none;
 }
 div.bank.reconcile div.accordion > div {
-	height: 80%;
+	//height: 80%; /* FIXME: make proportional */
+	//display: inline-block;
+	//height: calc(100% - 2px - 3*19px);;
 }
 div.bank.reconcile input.amount {
 	width: 6em;
 }
-div.bank.suggestion div.description {
-	width: 32em;
+
+/* Bank Suggestions */
+div.bank.suggestions {
+	padding: 0;
+	width: 100%;
 }
-div.bank.suggestions div.tr:nth-child(odd):not(.selected) div.td {
+div.bank.suggestions div.tr {
+	margin: 0;
+	width: 100%;
+}
+div.bank.data div.tr:nth-child(odd):not(.selected) {
 	background-color: white;
 }
-div.bank.suggestions div.tr:nth-child(even):not(.selected) div.td {
+div.bank.data div.tr:nth-child(even):not(.selected) {
 	background-color: $color-feint;
 }
-
-div.bank.suggestion div.debit,
-div.bank.suggestion div.credit {
-	text-align: right;
-	width: 6em;
+//div.bank.suggestions div.accordion > div.section {
+div.accordion > div.section > div.content {
+	//min-height: 450px;
 }
 
 /* play the accordion */
 div.accordion {
 	height: 100%;
+	overflow: hidden;
+	width: 100%;
 }
 div.accordion h3 {
 	color: $color-light;
@@ -791,21 +812,20 @@ div.accordion h3 {
 	padding-left: 1em;
 	margin: 0;
 }
-
-div.accordion > div {
+div.accordion > div.section > div.content {
 	background-color: white;
 	display: none;
-	height: auto;
+	height: 100%;
+	width: 100%;
 	margin: 0;
-	padding: 1em;
-}
-div.accordion > div p {
-	margin: 0;
+	overflow: auto;
 }
 div.accordion h3.selected {
 	background-color: $color-light;
 	color: $color-dark;
 }
+
+/* remove scrollbars from element */
 
 /* stop jquery-ui from rounding corners */
 .ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br,
@@ -872,6 +892,12 @@ div.formtable {
 
 div.tr {
 	clear: both;
+}
+div.tr:after {
+	content: "";
+	display: block;
+	clear: both;
+	visibility: hidden;
 }
 
 div.th {

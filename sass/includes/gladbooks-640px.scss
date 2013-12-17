@@ -116,6 +116,11 @@ div.panel.right {
         width: 250px;
 }
 
+/* accordion */
+div.bank.suspects div.accordion > div.section > div.content {
+        height: 77px;
+}
+
 /* help screens */
 div.help{
 	font-size: 0.9em;
