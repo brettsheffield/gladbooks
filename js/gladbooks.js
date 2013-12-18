@@ -258,6 +258,11 @@ function bankJournalAdd() {
 	/* validate */
 	if (nominal < 0) { return false; } /* TODO: report warning to user */
 
+	/* default description to bank entry */
+	if (description.length == 0) {
+		description = mytab.find('div.bank.target div.td.xml-description').text();
+	}
+
 	/* build fragment */
 	var j = $('<div class="tr"/>');
 	j.append('<div class="td xml-date">' + date + '</div>');
@@ -416,7 +421,8 @@ function bankResultsPager(account) {
 		bankReconcile(account);
 		return false;
 	});
-	pager.find('button').each(function() {
+	pager.find('button.first,button.previous,button.next,button.last')
+	.each(function() {
 		$(this).removeAttr("disabled");
 	});
 }
