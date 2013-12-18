@@ -246,8 +246,38 @@ function bankJournal(row) {
 /* user has clicked journal Add button */
 function bankJournalAdd() {
 	console.log('bankJournalAdd()');
+	var mytab = activeTab();
 	/* TODO: add journal row to div.bank.entries */
+	var date = mytab.find('div.bank.target div.td.xml-date').text();
+	var description = mytab.find('div.journal input.description').val();
+	var nominal = mytab.find('div.journal select.nominalcode').val();
+	var division = mytab.find('div.journal select.division').val();
+	var department = mytab.find('div.journal select.department').val();
+	var debit = mytab.find('div.journal input.debit').val();
+	var credit = mytab.find('div.journal input.credit').val();
+
+	/* validate */
+	if (nominal < 0) { return false; }
+
+	/* build fragment */
+	var j = $('<div class="tr"/>');
+	j.append('<div class="td xml-date">' + date + '</div>');
+	j.append('<div class="td xml-description">' + description + '</div>');
+	j.append('<div class="td xml-account">' + nominal + '</div>');
+	j.append('<div class="td xml-debit">' + debit + '</div>');
+	j.append('<div class="td xml-credit">' + credit + '</div>');
+	j.append('<div class="td buttons"><button class="del">X</button></div>');
+	j.find('button.del').click(bankJournalDel);
+
+	/* append to entries */
+	mytab.find('div.bank.entries').append(j);
+
 	bankJournalReset();
+}
+
+/* user clicked delete button on entry */
+function bankJournalDel() {
+	$(this).parents('div.tr').fadeOut();
 }
 
 /* check user entered somthing numeric */
