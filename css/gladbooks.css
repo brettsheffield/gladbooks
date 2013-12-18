@@ -608,16 +608,21 @@ div.bank.entries {
   width: 100%; }
 
 div.bank.total {
-  background-color: orange;
   display: none;
   height: 1.4em; }
 
 div.bank.total div.xml-account {
   text-align: right; }
 
+div.bank.total div.xml-debit,
+div.bank.total div.xml-credit {
+  font-weight: bold;
+  text-align: right; }
+
 div.bank.journal {
   display: none;
-  height: 1.4em; }
+  padding-top: 1px;
+  height: 1.8em; }
 
 div.bank.journal select {
   width: 100%; }
