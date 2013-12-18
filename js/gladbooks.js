@@ -67,8 +67,20 @@ g_menus = [
 g_formdata = [
     [ 'account', 'create', [ 'accounttypes' ], ],  
     [ 'bank', 'statement', [ 'accounts.asset' ], ],  
-    [ 'bank', 'reconcile', [ 'accounts.asset' ], ],  
-    [ 'bank', 'reconcile.data', ['bank.unreconciled','journal.unreconciled'],],
+    [ 'bank', 'reconcile',
+		[
+			'accounts.asset',
+			'accounts',
+			'divisions',
+			'departments',
+		],
+	],  
+    [ 'bank', 'reconcile.data', 
+		[
+			'bank.unreconciled',
+			'journal.unreconciled',
+		],
+	],
     [ 'bank', 'upload', [ 'accounts.asset' ], ],  
     [ 'journal', 'create',
 		[ 'accounts', 'divisions', 'departments', 'organisations' ],
@@ -168,6 +180,10 @@ function bankChange() {
 		return false;
 	}
 
+	/* reset offset in results pager */
+	mytab.find('div.results.pager').data('offset', 0);
+	mytab.find('div.results.pager').data('order', 'ASC');
+
 	var action = getTabMeta(activeTabId(), 'action');
 	if (action == 'reconcile') {
 		bankReconcile(account);
@@ -227,43 +243,127 @@ function bankJournal(row) {
 	j.each(accordionClick); /* show journal form */
 }
 
+/* clear values and reset state of journal subform */
+function bankJournalReset() {
+	var mytab = activeTab();
+	mytab.find('div.bank.journal').show();
+	mytab.find('div.bank.journal select').each(function() {
+		$(this).val(-1);
+		$(this).trigger('liszt:updated');
+	});
+	mytab.find('div.bank.journal input').val('');
+}
+
+/* Display/recalculate bank totals */
+function bankTotalsUpdate() {
+	console.log('bankTotalsUpdate()');
+	var mytab = activeTab();
+	var debits = decimalPad(0, 2);
+	var credits = decimalPad(0, 2);
+	mytab.find('div.bank.total div.xml-debit').text(debits);
+	mytab.find('div.bank.total div.xml-credit').text(credits);
+	mytab.find('div.bank.total').show();
+	mytab.find('div.bank.target div.xml-debit').each(function() {
+		if ($.isNumeric($(this).text())) {
+			debits = decimalAdd(debits, $(this).text());
+			debits = decimalPad(debits, 2);
+			mytab.find('div.bank.total div.xml-debit').text(debits);
+		}
+	});
+	mytab.find('div.bank.target div.xml-credit').each(function() {
+		if ($.isNumeric($(this).text())) {
+			credits = decimalAdd(credits, $(this).text());
+			credits = decimalPad(credits, 2);
+			mytab.find('div.bank.total div.xml-credit').text(credits);
+		}
+	});
+}
+
 function bankReconcile(account) {
 	console.log('bankReconcile()');
 	var title = '';
 	var div = activeTab().find('div.bank.target');
-	var offset = 0;
-	var limit = 30;
-	var sort = false;
-	var url = 'bank.unreconciled/' + account + '/' + limit + '/' + offset;
+	var offset = activeTab().find('div.results.pager').data('offset');
+	var order = activeTab().find('div.results.pager').data('order');
+	var limit = 1;
+	var url = 'bank.unreconciled/' + account + '/' + limit + '/' + offset
+		+ '/' + order;
 	var d = new Array(); /* array of deferreds */
-	var journalDiv = $('');
-	var jtab = activeTab().find('div.accordion h3:nth-child(3)').next();
 
-	setTabMeta(jtab, 'object', 'journal');
-	setTabMeta(jtab, 'action', 'create');
+	bankResultsPager(account);
+	bankJournalReset();
+	bankTotalsUpdate(); 
 
 	showSpinner();
 	activeTab().find('div.suspects').children().fadeOut();
-	d.push(getXML(collection_url(url)));
-	d.push(fetchFormData('journal', 'create'));
+	d.push(getHTML(collection_url(url)));
 	$.when.apply(null, d)
 	.done(function(bankdata) {
-		if (div.children().length > 0) { /* get id of last row selected */
-			var lastid = div.find('div.tr.selected').find('div.xml-id').text();
+		div.empty();
+		if (bankdata != '(null)') {
+			div.append(bankdata);
+			div.find('div.tr').addClass('selected');
+			div.show();
+			bankTotalsUpdate(); 
 		}
-		divTable(div, bankdata);
-		var args = Array.prototype.splice.call(arguments, 1);
-		var html = args[0].shift().responseText;
-		activeTab().data('journalForm', html);
-		//jtab.updateDataSources(args[0]);
-		div.find('div.tr').click(clickBankRow);
-		accordionize(activeTab().find('div.accordion'));
-		if (lastid) div.find('div.tr').first().click(); /* select first row */
+		else {
+			div.hide();
+		}
 		hideSpinner();
 	})
 	.fail(function() {
 		statusMessage('error loading data', STATUS_CRIT);
 		hideSpinner();
+	});
+}
+
+/* set up pager buttons */
+function bankResultsPager(account) {
+	var mytab = activeTab();
+	var pager = mytab.find('div.results.pager');
+	var offset = pager.data('offset');
+	var order = pager.data('order');
+	console.log('bankResultsPager(' + account + ')');
+	pager.find('button.first').off().click(function() {
+		pager.data('offset', 0);
+		pager.data('order', 'ASC');
+		bankReconcile(account);
+		return false;
+	});
+	pager.find('button.previous').off().click(function() {
+		if (order == 'ASC') {
+			offset--;
+			if (offset < 0) { offset = 0 };
+		}
+		else {
+			offset++
+			/* FIXME: detect end of results */
+		}
+		pager.data('offset', offset);
+		bankReconcile(account);
+		return false;
+	});
+	pager.find('button.next').off().click(function() {
+		if (order == 'ASC') {
+			pager.data('offset', ++offset);
+			/* FIXME: detect end of results */
+		}
+		else {
+			offset--;
+			if (offset < 0) { offset = 0 };
+			pager.data('offset', offset);
+		}
+		bankReconcile(account);
+		return false;
+	});
+	pager.find('button.last').off().click(function() {
+		pager.data('offset', 0);
+		pager.data('order', 'DESC');
+		bankReconcile(account);
+		return false;
+	});
+	pager.find('button').each(function() {
+		$(this).removeAttr("disabled");
 	});
 }
 

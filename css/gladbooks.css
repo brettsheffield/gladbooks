@@ -573,17 +573,22 @@ select.paymenttype {
 
 /* Bank screens */
 div.bank.data {
-  background-color: #dee9f2;
+  background-color: white;
   border-top: 1px solid #6e89a5;
   height: 100%;
   overflow: hidden;
+  position: relative;
+  width: 100%; }
+
+div.bank.data input {
   width: 100%; }
 
 div.bank.target {
-  border-right: 1px solid #6e89a5;
-  float: left;
-  height: 100%;
-  width: 50%; }
+  border-bottom: 1px solid #6e89a5;
+  display: none;
+  height: 2.8em;
+  overflow: hidden;
+  width: 100%; }
 
 div.bank.target > div.formtable {
   background-color: white;
@@ -593,11 +598,49 @@ div.bank.target > div.formtable {
 div.bank.target > div.formtable div.td {
   overflow: hidden; }
 
+div.bank.workspace {
+  height: 100%;
+  width: 100%; }
+
+div.bank.entries {
+  background-color: #b2cde0;
+  height: 33%;
+  width: 100%; }
+
+div.bank.total {
+  background-color: orange;
+  display: none;
+  height: 1.4em; }
+
+div.bank.total div.xml-account {
+  text-align: right; }
+
+div.bank.journal {
+  display: none;
+  height: 1.4em; }
+
+div.bank.journal select {
+  width: 100%; }
+
+div.bank.journal > div.account {
+  width: 22%; }
+
+div.bank.journal > div.division {
+  width: 7%; }
+
+div.bank.journal > div.department {
+  width: 7%; }
+
+div.bank.journal > div.debit,
+div.bank.journal > div.credit {
+  text-align: right;
+  width: 10%; }
+
 div.bank.suspects {
   background-color: #6e89a5;
-  float: left;
-  height: 100%;
-  width: 50%; }
+  height: 33%;
+  overflow: auto;
+  width: 100%; }
 
 div.bank.selector {
   padding: 10px;
@@ -635,28 +678,41 @@ div.results.empty {
 div.bank.data div.formtable {
   width: 100%; }
 
+div.bank.data div.th {
+  background-color: #6e89a5; }
+
+div.bank.data div.th,
 div.bank.data div.td {
   float: left;
-  font-size: 75%;
+  font-size: 100%;
+  min-height: 1px;
   padding-right: 0.5em; }
 
-div.bank.data div.td.xml-id {
+div.bank.data div.xml-id {
   display: none;
   text-align: right;
   width: 10%; }
 
-div.bank.data div.td.xml-date {
+div.bank.data div.xml-date {
   padding-left: 0.5em;
-  width: 17%; }
+  width: 12%; }
 
-div.bank.data div.td.xml-description {
+div.bank.data div.xml-description {
   overflow: hidden;
-  width: 53%; }
+  width: 27%; }
 
-div.bank.data div.td.xml-debit,
-div.bank.data div.td.xml-credit {
+div.bank.data div.xml-account {
+  overflow: hidden;
+  width: 36%; }
+
+div.bank.data div.xml-debit,
+div.bank.data div.xml-credit {
   text-align: right;
-  width: 15%; }
+  white-space: normal;
+  width: 10%; }
+
+div.bank.data div.buttons {
+  width: 5%; }
 
 div.tr.selected:nth-child(odd) {
   background-color: #ffff99; }
@@ -676,9 +732,6 @@ div.reconcile p {
 
 div.reconcile div.accordion {
   display: none; }
-
-div.bank.reconcile input.amount {
-  width: 6em; }
 
 /* Bank Suggestions */
 div.bank.suggestions {
@@ -1370,13 +1423,6 @@ div.chzn-search > input {
 
   div.panel.right {
     width: 580px; }
-
-  /* accordion */
-  div.accordion > div.section > div.content {
-    height: 572px; }
-
-  div.bank.suspects div.accordion > div.section > div.content {
-    height: 581px; }
 
   /* pdf */
   object.pdf {
