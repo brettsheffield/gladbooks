@@ -247,7 +247,6 @@ function bankJournal(row) {
 function bankJournalAdd() {
 	console.log('bankJournalAdd()');
 	var mytab = activeTab();
-	/* TODO: add journal row to div.bank.entries */
 	var date = mytab.find('div.bank.target div.td.xml-date').text();
 	var description = mytab.find('div.journal input.description').val();
 	var nominal = mytab.find('div.journal select.nominalcode').val();
@@ -257,15 +256,15 @@ function bankJournalAdd() {
 	var credit = mytab.find('div.journal input.credit').val();
 
 	/* validate */
-	if (nominal < 0) { return false; }
+	if (nominal < 0) { return false; } /* TODO: report warning to user */
 
 	/* build fragment */
 	var j = $('<div class="tr"/>');
 	j.append('<div class="td xml-date">' + date + '</div>');
 	j.append('<div class="td xml-description">' + description + '</div>');
 	j.append('<div class="td xml-account">' + nominal + '</div>');
-	j.append('<div class="td xml-debit">' + debit + '</div>');
-	j.append('<div class="td xml-credit">' + credit + '</div>');
+	j.append('<div class="td xml-debit">' + decimalPad(debit,2) + '</div>');
+	j.append('<div class="td xml-credit">' + decimalPad(credit,2) + '</div>');
 	j.append('<div class="td buttons"><button class="del">X</button></div>');
 	j.find('button.del').click(bankJournalDel);
 
@@ -273,11 +272,15 @@ function bankJournalAdd() {
 	mytab.find('div.bank.entries').append(j);
 
 	bankJournalReset();
+	bankTotalsUpdate();
 }
 
 /* user clicked delete button on entry */
 function bankJournalDel() {
-	$(this).parents('div.tr').fadeOut();
+	$(this).parents('div.tr').fadeOut(300, function() {
+		$(this).remove();
+		bankTotalsUpdate();
+	});
 }
 
 /* check user entered somthing numeric */
@@ -310,14 +313,18 @@ function bankTotalsUpdate() {
 	mytab.find('div.bank.total div.xml-debit').text(debits);
 	mytab.find('div.bank.total div.xml-credit').text(credits);
 	mytab.find('div.bank.total').show();
-	mytab.find('div.bank.target div.xml-debit').each(function() {
+	var target = mytab.find('div.bank.target div.xml-debit');
+	var entries = mytab.find('div.bank.entries div.xml-debit');
+	target.add(entries).each(function() {
 		if ($.isNumeric($(this).text())) {
 			debits = decimalAdd(debits, $(this).text());
 			debits = decimalPad(debits, 2);
 			mytab.find('div.bank.total div.xml-debit').text(debits);
 		}
 	});
-	mytab.find('div.bank.target div.xml-credit').each(function() {
+	var target = mytab.find('div.bank.target div.xml-credit');
+	var entries = mytab.find('div.bank.entries div.xml-credit');
+	target.add(entries).each(function() {
 		if ($.isNumeric($(this).text())) {
 			credits = decimalAdd(credits, $(this).text());
 			credits = decimalPad(credits, 2);
