@@ -243,15 +243,32 @@ function bankJournal(row) {
 	j.each(accordionClick); /* show journal form */
 }
 
+/* user has clicked journal Add button */
+function bankJournalAdd() {
+	console.log('bankJournalAdd()');
+	/* TODO: add journal row to div.bank.entries */
+	bankJournalReset();
+}
+
+/* check user entered somthing numeric */
+function bankJournalAmountChange() {
+	if (!$.isNumeric($(this).val())) {
+		$(this).val('');
+	}
+}
+
 /* clear values and reset state of journal subform */
 function bankJournalReset() {
 	var mytab = activeTab();
-	mytab.find('div.bank.journal').show();
-	mytab.find('div.bank.journal select').each(function() {
+	var journal = mytab.find('div.bank.journal');
+	journal.show();
+	journal.find('select').each(function() {
 		$(this).val(-1);
 		$(this).trigger('liszt:updated');
 	});
-	mytab.find('div.bank.journal input').val('');
+	journal.find('input').val('');
+	journal.find('input.amount').change(bankJournalAmountChange);
+	journal.find('button.add').off().click(bankJournalAdd);
 }
 
 /* Display/recalculate bank totals */
