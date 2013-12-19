@@ -736,6 +736,10 @@ div.bank.journal > div.credit {
 	text-align: right;
 	width: 10%;
 }
+div.bank.data div.bank.journal div.td.xml-debit,
+div.bank.data div.bank.journal div.td.xml-credit {
+	padding-right: 0;
+}
 div.bank.suspects {
 	background-color: $color-dark;
 	height: 33%;
