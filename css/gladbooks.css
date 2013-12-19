@@ -664,11 +664,29 @@ div.bank.selector {
   width: 100%; }
 
 div.results.pager {
-  float: right;
-  width: 40%; }
+  float: left;
+  padding-left: 2em;
+  width: 33%; }
 
+div.bank.workspace button {
+  font-size: 0.8em;
+  height: 21px;
+  margin: 2px;
+  padding: 0 0.2em;
+  width: 21px; }
+
+div.bank.journal button.add:before {
+  content: "\271A"; }
+
+/*
+div.bank.entries button.del:before {
+	content: "\2718";
+	font-size: 1.2em;
+}
+*/
 div.bank.selector div.chzn-container {
-  width: 50% !important; }
+  float: left;
+  width: 33% !important; }
 
 div.bank.reconcile,
 div.bank.statement {
