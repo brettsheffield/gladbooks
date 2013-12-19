@@ -298,11 +298,33 @@ function bankJournalValidate(o) {
 	return true;
 }
 
-/* check user entered somthing numeric */
 function bankJournalAmountChange() {
+	/* check user entered somthing numeric */
 	if (!$.isNumeric($(this).val())) {
 		$(this).val('');
+		return;
 	}
+
+	/* find our opposite number (debit/credit) */
+	if ($(this).hasClass('debit')) {
+		var opp = $(this).parents('div.tr').find('input.credit');
+	}
+	else {
+		var opp = $(this).parents('div.tr').find('input.debit');
+	}
+
+	/* if amount is negative, make positive and switch debit/credit */
+	if ($(this).val() < 0) {
+		opp.val(decimalPad(Math.abs($(this).val()),2));
+		$(this).val('');
+	}
+	else if ($(this).val() > 0) {
+		opp.val(''); /* There can be only one */
+	}
+	else {
+		$(this).val(''); /* clear zero values */
+	}
+
 }
 
 /* clear values and reset state of journal subform */
