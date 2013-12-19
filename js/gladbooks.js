@@ -382,11 +382,14 @@ function bankTotalsUpdated() {
 	var credits = mytab.find('div.bank.total div.xml-credit').text();
 	var totals = mytab.find('div.bank.total div.xml-debit')
 		.add(mytab.find('div.bank.total div.xml-credit'));
-	if (debits == credits) { /* totals are balanced, enable save */
+	var btnsave = mytab.find('div.results.pager button.save');
+	if (debits == credits) { /* totals are balanced */
 		totals.addClass('balanced');
+		btnsave.removeAttr('disabled');
 	}
-	else {  /* totals unbalanced, disable save */
+	else {                   /* totals unbalanced */
 		totals.removeClass('balanced');
+		btnsave.attr('disabled','disabled');
 	}
 }
 
@@ -404,6 +407,14 @@ function bankReconcile(account) {
 	bankResultsPager(account);
 	bankJournalReset();
 	bankTotalsUpdate(); 
+
+	/* set up save/cancel buttons */
+	var btncancel = mytab.find('div.results.pager button.cancel');
+	btncancel.off().click(bankReconcileCancel);
+	btncancel.removeAttr('disabled');
+	var btnsave = mytab.find('div.results.pager button.save');
+	btnsave.attr('disabled','disabled');
+	btnsave.off().click(bankReconcileSave);
 
 	showSpinner();
 	activeTab().find('div.suspects').children().fadeOut();
@@ -426,6 +437,21 @@ function bankReconcile(account) {
 		statusMessage('error loading data', STATUS_CRIT);
 		hideSpinner();
 	});
+}
+
+/* cancel button clicked */
+function bankReconcileCancel() {
+	console.log('bankReconcileCancel()');
+	var mytab = activeTab();
+	mytab.find('div.bank.entries div.tr').fadeOut(300, function() {
+		$(this).remove();
+		bankTotalsUpdate();
+	});
+}
+
+/* save button clicked */
+function bankReconcileSave() {
+	console.log('bankReconcileSave()');
 }
 
 /* set up pager buttons */
