@@ -247,29 +247,30 @@ function bankJournal(row) {
 function bankJournalAdd() {
 	console.log('bankJournalAdd()');
 	var mytab = activeTab();
-	var date = mytab.find('div.bank.target div.td.xml-date').text();
-	var description = mytab.find('div.journal input.description').val();
-	var nominal = mytab.find('div.journal select.nominalcode').val();
-	var division = mytab.find('div.journal select.division').val();
-	var department = mytab.find('div.journal select.department').val();
-	var debit = mytab.find('div.journal input.debit').val();
-	var credit = mytab.find('div.journal input.credit').val();
+	var o = new Object();
+	o.date = mytab.find('div.bank.target div.td.xml-date').text();
+	o.description = mytab.find('div.journal input.description').val();
+	o.nominal = mytab.find('div.journal select.nominalcode').val();
+	o.division = mytab.find('div.journal select.division').val();
+	o.department = mytab.find('div.journal select.department').val();
+	o.debit = mytab.find('div.journal input.debit').val();
+	o.credit = mytab.find('div.journal input.credit').val();
 
 	/* validate */
-	if (nominal < 0) { return false; } /* TODO: report warning to user */
+	if (!bankJournalValidate(o)) { return false; }
 
 	/* default description to bank entry */
-	if (description.length == 0) {
-		description = mytab.find('div.bank.target div.td.xml-description').text();
+	if (o.description.length == 0) {
+		o.description = mytab.find('div.bank.target div.td.xml-description').text();
 	}
 
 	/* build fragment */
 	var j = $('<div class="tr"/>');
-	j.append('<div class="td xml-date">' + date + '</div>');
-	j.append('<div class="td xml-description">' + description + '</div>');
-	j.append('<div class="td xml-account">' + nominal + '</div>');
-	j.append('<div class="td xml-debit">' + decimalPad(debit,2) + '</div>');
-	j.append('<div class="td xml-credit">' + decimalPad(credit,2) + '</div>');
+	j.append('<div class="td xml-date">' + o.date + '</div>');
+	j.append('<div class="td xml-description">' + o.description + '</div>');
+	j.append('<div class="td xml-account">' + o.nominal + '</div>');
+	j.append('<div class="td xml-debit">' + decimalPad(o.debit,2) + '</div>');
+	j.append('<div class="td xml-credit">' + decimalPad(o.credit,2) +'</div>');
 	j.append('<div class="td buttons"><button class="del">X</button></div>');
 	j.find('button.del').click(bankJournalDel);
 
@@ -286,6 +287,15 @@ function bankJournalDel() {
 		$(this).remove();
 		bankTotalsUpdate();
 	});
+}
+
+/* Check new journal entry before adding to entries */
+function bankJournalValidate(o) {
+	if (o.nominal < 0) { return false; } /* TODO: report warning to user */
+	if (decimalPad(o.debit,2) == '0.00' && decimalPad(o.credit,2) == '0.00') { 
+		return false;
+	}
+	return true;
 }
 
 /* check user entered somthing numeric */
