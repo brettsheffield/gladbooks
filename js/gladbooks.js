@@ -313,18 +313,21 @@ function bankJournalAmountChange() {
 		var opp = $(this).parents('div.tr').find('input.debit');
 	}
 
+	/* round and pad to 2 decimal places */
+	var amount = decimalPad(roundHalfEven(Math.abs($(this).val()),2),2);
+
 	/* if amount is negative, make positive and switch debit/credit */
 	if ($(this).val() < 0) {
-		opp.val(decimalPad(Math.abs($(this).val()),2));
+		opp.val(amount);
 		$(this).val('');
 	}
 	else if ($(this).val() > 0) {
 		opp.val(''); /* There can be only one */
+		$(this).val(amount);
 	}
 	else {
 		$(this).val(''); /* clear zero values */
 	}
-
 }
 
 /* clear values and reset state of journal subform */
