@@ -349,6 +349,7 @@ function bankTotalsUpdate() {
 	var credits = decimalPad(0, 2);
 	mytab.find('div.bank.total div.xml-debit').text(debits);
 	mytab.find('div.bank.total div.xml-credit').text(credits);
+	bankTotalsUpdated();
 	mytab.find('div.bank.total').show();
 	var target = mytab.find('div.bank.target div.xml-debit');
 	var entries = mytab.find('div.bank.entries div.xml-debit');
@@ -357,6 +358,7 @@ function bankTotalsUpdate() {
 			debits = decimalAdd(debits, $(this).text());
 			debits = decimalPad(debits, 2);
 			mytab.find('div.bank.total div.xml-debit').text(debits);
+			bankTotalsUpdated();
 		}
 	});
 	var target = mytab.find('div.bank.target div.xml-credit');
@@ -366,8 +368,23 @@ function bankTotalsUpdate() {
 			credits = decimalAdd(credits, $(this).text());
 			credits = decimalPad(credits, 2);
 			mytab.find('div.bank.total div.xml-credit').text(credits);
+			bankTotalsUpdated();
 		}
 	});
+}
+
+/* called any time one of the totals is updated */
+function bankTotalsUpdated() {
+	var debits = mytab.find('div.bank.total div.xml-debit').text();
+	var credits = mytab.find('div.bank.total div.xml-credit').text();
+	var totals = mytab.find('div.bank.total div.xml-debit')
+		.add(mytab.find('div.bank.total div.xml-credit'));
+	if (debits == credits) { /* totals are balanced, enable save */
+		totals.addClass('balanced');
+	}
+	else {  /* totals unbalanced, disable save */
+		totals.removeClass('balanced');
+	}
 }
 
 function bankReconcile(account) {

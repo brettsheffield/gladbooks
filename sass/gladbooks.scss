@@ -709,8 +709,13 @@ div.bank.total div.xml-account {
 }
 div.bank.total div.xml-debit,
 div.bank.total div.xml-credit {
+	color: red;
 	font-weight: bold;
 	text-align: right;
+}
+div.bank.total div.xml-debit.balanced,
+div.bank.total div.xml-credit.balanced {
+	color: green;
 }
 div.bank.journal {
 	display: none;
