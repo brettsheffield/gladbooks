@@ -763,12 +763,24 @@ div.results.pager {
 	padding-left: 2em;
 	width: 33%;
 }
+div.results.pager button.first::before {
+	//content: "\23EE";
+	content: "<<";
+}
+div.results.pager button.previous::before {
+	//content: "\23EA";
+	content: "<";
+}
+div.results.pager button.next::before {
+	//content: "\23E9";
+	content: ">";
+}
+div.results.pager button.last::before {
+	//content: "\23ED";
+	content: ">>";
+}
+div.results.pager button,
 div.bank.workspace button {
-	font-size: 0.8em;
-	height: 21px;
-	margin: 2px;
-	padding: 0 .2em;
-	width: 21px;
 }
 div.bank.journal button.add:before {
 	content: "\271A";

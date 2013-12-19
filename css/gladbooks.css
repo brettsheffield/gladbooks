@@ -668,12 +668,17 @@ div.results.pager {
   padding-left: 2em;
   width: 33%; }
 
-div.bank.workspace button {
-  font-size: 0.8em;
-  height: 21px;
-  margin: 2px;
-  padding: 0 0.2em;
-  width: 21px; }
+div.results.pager button.first::before {
+  content: "<<"; }
+
+div.results.pager button.previous::before {
+  content: "<"; }
+
+div.results.pager button.next::before {
+  content: ">"; }
+
+div.results.pager button.last::before {
+  content: ">>"; }
 
 div.bank.journal button.add:before {
   content: "\271A"; }
