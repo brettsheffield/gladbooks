@@ -575,6 +575,7 @@ select.paymenttype {
 div.bank.data {
   background-color: white;
   border-top: 1px solid #6e89a5;
+  font-size: 0.9em;
   height: 100%;
   overflow: hidden;
   position: relative;
