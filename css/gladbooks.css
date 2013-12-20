@@ -572,6 +572,16 @@ select.paymenttype {
   width: 15em; }
 
 /* Bank screens */
+div.bank.upload {
+  border: 1px solid #6e89a5;
+  background-color: #fff8cb;
+  padding: 2em;
+  margin: 2em;
+  width: 50%; }
+
+div.bank.upload button.upload {
+  margin-top: 1em; }
+
 div.bank.data {
   background-color: white;
   border-top: 1px solid #6e89a5;

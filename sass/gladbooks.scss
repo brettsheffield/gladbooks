@@ -665,6 +665,16 @@ select.paymenttype {
 }
 
 /* Bank screens */
+div.bank.upload {
+	border: 1px solid $color-dark;
+	background-color: $color-even;
+	padding: 2em;
+	margin: 2em;
+	width: 50%;
+}
+div.bank.upload button.upload {
+	margin-top: 1em;
+}
 div.bank.data {
 	background-color: white;
 	border-top: 1px solid $color-dark;
