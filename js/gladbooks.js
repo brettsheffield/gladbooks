@@ -401,6 +401,7 @@ function bankReconcile(account) {
 	var offset = activeTab().find('div.results.pager').data('offset');
 	var order = activeTab().find('div.results.pager').data('order');
 	var limit = 1;
+	activeTab().find('div.results.pager').data('limit', limit);
 	var url = 'bank.unreconciled/' + account + '/' + limit + '/' + offset
 		+ '/' + order;
 	var d = new Array(); /* array of deferreds */
@@ -566,12 +567,13 @@ function bankResultsPagerFirst(pager, account, action) {
 function bankResultsPagerPrevious(pager, account, action) {
 	var offset = pager.data('offset');
 	var order = pager.data('order');
+	var limit = pager.data('limit');
 	if (order == 'ASC') {
-		offset--;
+		offset -= limit;
 		if (offset < 0) { offset = 0 };
 	}
 	else {
-		offset++
+		offset += limit;
 		/* FIXME: detect end of results */
 	}
 	pager.data('offset', offset);
@@ -581,15 +583,16 @@ function bankResultsPagerPrevious(pager, account, action) {
 function bankResultsPagerNext(pager, account, action) {
 	var offset = pager.data('offset');
 	var order = pager.data('order');
+	var limit = pager.data('limit');
 	if (order == 'ASC') {
-		pager.data('offset', ++offset);
+		offset += limit;
 		/* FIXME: detect end of results */
 	}
 	else {
-		offset--;
+		offset -= limit;
 		if (offset < 0) { offset = 0 };
-		pager.data('offset', offset);
 	}
+	pager.data('offset', offset);
 	bankResultsPagerAction(account, action);
 }
 
@@ -602,17 +605,33 @@ function bankResultsPagerLast(pager, account, action) {
 function bankStatement(account) {
 	var mytab = activeTab();
 	var div = mytab.find('div.bank.data');
-	var limit = 20; 		/* FIXME - hardcoded */
-	var offset = 0; 		/* FIXME - hardcoded */
+	var pager = mytab.find('div.results.pager');
+	var offset = pager.data('offset');
+	var order = pager.data('order');
+
+	/* work out how many rows we can fit on a screen */
+	var hbox = mytab.find('div.bank.statement').height();
+	//var hrow = mytab.find('div.bank.statement div.td').height();
+	var hrow = 20; /* 20 pixels */
+	var limit = Math.floor(hbox/hrow);
+
+	console.log(hbox + '/' + hrow + '=' + limit);
+
+	if (offset == undefined) { offset = 0; }
+	if (order == undefined) { order = 'ASC'; }
+	pager.data('limit', limit);
+	pager.data('offset', offset);
+	pager.data('order', order);
+
+	//var offset = 0; 		/* FIXME - hardcoded */
 	var sortfield = 'id'; 	/* FIXME - hardcoded */
-	var asc = 'ASC';		/* FIXME - hardcoded */
 	var title = '';
 	var sort = false;
 	var tabid = activeTabId();
 	var object = getTabMeta(tabid, 'object');
 	var action = getTabMeta(tabid, 'action');
 	var url = object + '.' + action + '/' + account;
-	url += '/' + limit + '/' + offset + '/' + sortfield + '/' + asc;
+	url += '/' + limit + '/' + offset + '/' + sortfield + '/' + order;
 	showHTML(collection_url(url), title, div);
 	bankResultsPager(account, 'statement');
 }

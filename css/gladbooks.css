@@ -721,6 +721,13 @@ div.bank.statement {
   margin-right: auto;
   width: 100%; }
 
+div.bank.statement div.bank.data div.xml-description {
+  overflow: hidden;
+  width: 33%; }
+
+div.bank.statement div.bank.data div.xml-account {
+  width: 30%; }
+
 div.bank.statement div.xml-journal,
 div.bank.statement div.xml-type {
   display: none; }
