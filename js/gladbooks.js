@@ -817,10 +817,12 @@ function postBankData(xml) {
         success: function(xml) {
             hideSpinner();
             console.log("postBankData() succeeded");
+			statusMessage('Bank Statement uploaded', STATUS_INFO, 5000);
         },
         error: function(xml) {
             hideSpinner();
             console.log("postBankData() failed");
+			statusMessage('Error processing bank statement', STATUS_CRIT);
         }
     });
 }

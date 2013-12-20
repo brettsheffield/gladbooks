@@ -669,11 +669,19 @@ div.bank.upload {
 	border: 1px solid $color-dark;
 	background-color: $color-even;
 	padding: 2em;
+	position: relative;
 	margin: 2em;
 	width: 50%;
 }
 div.bank.upload button.upload {
 	margin-top: 1em;
+}
+div.bank.upload div.statusmsg {
+	background-color: white;
+	position: absolute;
+	top: -2em;
+	left: -2em;
+	width: 100%;
 }
 div.bank.data {
 	background-color: white;
