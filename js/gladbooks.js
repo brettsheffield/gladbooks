@@ -657,6 +657,30 @@ customFormEvents = function(tab, object, action, id) {
 	mytab.find('select.bankaccount').change(bankChange);
 }
 
+
+function csvToXml(doc) {
+    showSpinner('Converting csv to xml...');
+
+	var sha = $(doc).find('sha1sum').text();
+	if (sha.length != 40) {
+		console.log('invalid sha1sum');
+		return false;
+	}
+    $.ajax({
+        url: collection_url('csvtoxml/' + sha),
+        beforeSend: function (xhr) { setAuthHeader(xhr); },
+        dataType: 'xml',
+        success: function(xml) {
+            xml = fixXMLDates(xml);
+            xml = fixXMLRequest(xml);
+            postBankData(xml);
+        },
+        error: function(xml) {
+            displayResultsGeneric(xml, collection, title);
+        }
+    });
+}
+
 /* show the form, after setup is complete */
 function finishJournalForm(tab) {
     var ledger_lines = 1;
