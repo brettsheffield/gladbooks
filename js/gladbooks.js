@@ -69,7 +69,7 @@ g_formdata = [
     [ 'bank', 'statement', [ 'accounts.asset' ], ],  
     [ 'bank', 'reconcile',
 		[
-			'accounts.asset',
+			'accounts.unreconciled',
 			'accounts',
 			'divisions',
 			'departments',
@@ -702,6 +702,23 @@ customFormEvents = function(tab, object, action, id) {
 	});
 
 	mytab.find('select.bankaccount').change(bankChange);
+
+	if (object == 'bank' && action == 'reconcile') {
+		var acct = mytab.find('select.bankaccount').val();
+		console.log('Bank: ' + acct);
+		if (!acct) {
+			/* no unreconciled transactions */
+			console.log('no unreconciled transactions');
+			mytab.find('div.bank.reconcile').empty();
+			closeTab(tab);
+			getForm('bank', 'upload', 'Upload Bank Statement');
+			return;
+		}
+		else {
+			/* Select first item in bank list */
+			mytab.find('select.bankaccount').trigger('change');
+		}
+	}
 }
 
 
