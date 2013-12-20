@@ -509,12 +509,14 @@ function bankReconcileSave() {
         beforeSend: function (xhr) { setAuthHeader(xhr); },
         success: function(xml) {
             hideSpinner();
+			statusMessage('Saved.', STATUS_INFO, 5000);
 			/* clean up, move on */
 			bankReconcileCancel();
 			mytab.find('div.results.pager button.next').trigger('click');
         },
         error: function(xml) {
             hideSpinner();
+			statusMessage('Error saving journal', STATUS_CRIT);
         }
     });
 }
