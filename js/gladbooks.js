@@ -187,6 +187,7 @@ function bankChange() {
 	var action = getTabMeta(activeTabId(), 'action');
 	if (action == 'reconcile') {
 		bankReconcile(account);
+		bankReconcileCancel();
 	}
 	else if (action == 'statement') {
 		bankStatement(account);
@@ -452,6 +453,70 @@ function bankReconcileCancel() {
 /* save button clicked */
 function bankReconcileSave() {
 	console.log('bankReconcileSave()');
+	var mytab = activeTab();
+	showSpinner('Saving...');
+
+	/* Build request xml */
+    var xml = createRequestXml();
+
+	/* add target from bank statement */
+	var target = '';
+	var id = mytab.find('div.bank.target div.tr div.td.xml-id').text();
+	var date = mytab.find('div.bank.target div.tr div.td.xml-date').text();
+	var desc = mytab.find('div.bank.target div.tr div.td.xml-description')
+		.text();
+	var acct = mytab.find('div.bank.target div.tr div.td.xml-account').text();
+	var debit = mytab.find('div.bank.target div.tr div.td.xml-debit').text();
+	var credit = mytab.find('div.bank.target div.tr div.td.xml-credit').text();
+	var amount = (debit > 0) ? debit : credit;
+	xml += '<journal transactdate="' + date + '" description="' + desc + '" ';
+	xml += 'bankid="' + id + '">';
+
+	/* our xsd schema requires debits to appear before credits */
+	if (debit > 0) {
+		xml += '<debit account="' + acct + '" amount="' + amount + '"/>';
+	}
+	else {
+		target = '<credit account="' + acct + '" amount="' + amount + '"/>';
+	}
+
+	/* add debits */
+	mytab.find('div.bank.entries div.tr').each(function() {
+		var amount = $(this).find('div.td.xml-debit').text();
+		if (amount > 0) {
+			xml += '<debit account="' + acct + '" amount="' + amount + '"/>';
+		}
+	});
+
+	/* add credits */
+	mytab.find('div.bank.entries div.tr').each(function() {
+		var amount = $(this).find('div.td.xml-credit').text();
+		if (amount > 0) {
+			xml += '<credit account="' + acct + '" amount="' + amount + '"/>';
+		}
+	});
+	xml += target;
+	xml += '</journal></data></request>';
+	console.log(xml);
+
+	/* POST journal */
+    showSpinner('Saving...');
+    $.ajax({
+        url: collection_url('journals'),
+        data: xml,
+        contentType: 'text/xml',
+        type: 'POST',
+        beforeSend: function (xhr) { setAuthHeader(xhr); },
+        success: function(xml) {
+            hideSpinner();
+			/* clean up, move on */
+			bankReconcileCancel();
+			mytab.find('div.results.pager button.next').trigger('click');
+        },
+        error: function(xml) {
+            hideSpinner();
+        }
+    });
 }
 
 /* set up pager buttons */
