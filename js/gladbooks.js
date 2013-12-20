@@ -405,7 +405,7 @@ function bankReconcile(account) {
 		+ '/' + order;
 	var d = new Array(); /* array of deferreds */
 
-	bankResultsPager(account);
+	bankResultsPager(account, 'reconcile');
 	bankJournalReset();
 	bankTotalsUpdate(); 
 
@@ -522,54 +522,81 @@ function bankReconcileSave() {
 }
 
 /* set up pager buttons */
-function bankResultsPager(account) {
+function bankResultsPager(account, action) {
 	var mytab = activeTab();
 	var pager = mytab.find('div.results.pager');
-	var offset = pager.data('offset');
-	var order = pager.data('order');
-	console.log('bankResultsPager(' + account + ')');
+	console.log('bankResultsPager(' + account + ', ' + action + ')');
 	pager.find('button.first').off().click(function() {
-		pager.data('offset', 0);
-		pager.data('order', 'ASC');
-		bankReconcile(account);
+		bankResultsPagerFirst(pager, account, action);
 		return false;
 	});
 	pager.find('button.previous').off().click(function() {
-		if (order == 'ASC') {
-			offset--;
-			if (offset < 0) { offset = 0 };
-		}
-		else {
-			offset++
-			/* FIXME: detect end of results */
-		}
-		pager.data('offset', offset);
-		bankReconcile(account);
+		bankResultsPagerPrevious(pager, account, action);
 		return false;
 	});
 	pager.find('button.next').off().click(function() {
-		if (order == 'ASC') {
-			pager.data('offset', ++offset);
-			/* FIXME: detect end of results */
-		}
-		else {
-			offset--;
-			if (offset < 0) { offset = 0 };
-			pager.data('offset', offset);
-		}
-		bankReconcile(account);
+		bankResultsPagerNext(pager, account, action);
 		return false;
 	});
 	pager.find('button.last').off().click(function() {
-		pager.data('offset', 0);
-		pager.data('order', 'DESC');
-		bankReconcile(account);
+		bankResultsPagerLast(pager, account, action);
 		return false;
 	});
 	pager.find('button.first,button.previous,button.next,button.last')
 	.each(function() {
 		$(this).removeAttr("disabled");
 	});
+}
+
+function bankResultsPagerAction(account, action) {
+	if (action == 'reconcile') {
+		bankReconcile(account);
+	}
+	else if (action == 'statement') {
+		bankStatement(account);
+	}
+}
+
+function bankResultsPagerFirst(pager, account, action) {
+	pager.data('offset', 0);
+	pager.data('order', 'ASC');
+	bankResultsPagerAction(account, action);
+}
+
+function bankResultsPagerPrevious(pager, account, action) {
+	var offset = pager.data('offset');
+	var order = pager.data('order');
+	if (order == 'ASC') {
+		offset--;
+		if (offset < 0) { offset = 0 };
+	}
+	else {
+		offset++
+		/* FIXME: detect end of results */
+	}
+	pager.data('offset', offset);
+	bankResultsPagerAction(account, action);
+}
+
+function bankResultsPagerNext(pager, account, action) {
+	var offset = pager.data('offset');
+	var order = pager.data('order');
+	if (order == 'ASC') {
+		pager.data('offset', ++offset);
+		/* FIXME: detect end of results */
+	}
+	else {
+		offset--;
+		if (offset < 0) { offset = 0 };
+		pager.data('offset', offset);
+	}
+	bankResultsPagerAction(account, action);
+}
+
+function bankResultsPagerLast(pager, account, action) {
+	pager.data('offset', 0);
+	pager.data('order', 'DESC');
+	bankResultsPagerAction(account, action);
 }
 
 function bankStatement(account) {
@@ -586,7 +613,8 @@ function bankStatement(account) {
 	var action = getTabMeta(tabid, 'action');
 	var url = object + '.' + action + '/' + account;
 	url += '/' + limit + '/' + offset + '/' + sortfield + '/' + asc;
-	showQuery(url, title, sort, div);
+	showHTML(collection_url(url), title, div);
+	bankResultsPager(account, 'statement');
 }
 
 /* find suggestions for bank rec */

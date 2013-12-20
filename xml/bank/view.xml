@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <row>
+    <id>1</id>
+    <date>2013-03-18</date>
+    <description>sample 1</description>
+    <account>1000</account>
+    <type>1</type>
+    <journal></journal>
+    <debit>54.34</debit>
+    <credit>0.00</credit>
+  </row>
+  <row>
+    <id>2</id>
+    <date>2013-03-18</date>
+    <description>sample 2</description>
+    <account>1000</account>
+    <type>1</type>
+    <journal></journal>
+    <debit>0.00</debit>
+    <credit>25.60</credit>
+  </row>
+  <row>
+    <id>3</id>
+    <date>2013-03-18</date>
+    <description>sample 3</description>
+    <account>1000</account>
+    <type>1</type>
+    <journal></journal>
+    <debit>0.00</debit>
+    <credit>33.33</credit>
+  </row>
+</resources>

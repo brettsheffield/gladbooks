@@ -721,6 +721,14 @@ div.bank.statement {
   margin-right: auto;
   width: 100%; }
 
+div.bank.statement div.xml-journal,
+div.bank.statement div.xml-type {
+  display: none; }
+
+div.bank.statement div.results.pager button.cancel,
+div.bank.statement div.results.pager button.save {
+  display: none; }
+
 div.results.empty {
   background-color: white;
   color: #6e89a5;
