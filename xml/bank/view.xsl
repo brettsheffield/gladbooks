@@ -10,7 +10,7 @@
 			<div class="th xml-description">description</div>
 			<div class="th xml-account">account</div>
 			<div class="th xml-type">type</div>
-			<div class="th xml-journal">journal</div>
+			<div class="th xml-ledger">ledger</div>
 			<div class="th xml-debit">debit</div>
 			<div class="th xml-credit">credit</div>
 			<div class="th buttons">&#160;</div>
@@ -38,8 +38,8 @@
 		<div class="td xml-type">
 			<xsl:value-of select="type"/>
 		</div>
-		<div class="td xml-journal">
-			<xsl:value-of select="journal"/>
+		<div class="td xml-ledger">
+			<xsl:value-of select="ledger"/>
 		</div>
 		<div class="td xml-debit">
 			<xsl:value-of select="debit"/>

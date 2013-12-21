@@ -38,7 +38,7 @@ DECLARE
         odescription    TEXT;
         oaccount        INT4;
         opaymenttype    INT4;
-        ojournal        INT4;
+        oledger         INT4;
         odebit          NUMERIC;
         ocredit         NUMERIC;
 BEGIN
@@ -48,9 +48,9 @@ BEGIN
                 -- This isn't our first time, so use previous values 
                 SELECT INTO
                         otransactdate, odescription, oaccount, opaymenttype,
-                        ojournal, odebit, ocredit
+                        oledger, odebit, ocredit
                         transactdate, description, account, paymenttype,
-                        journal, debit, credit
+                        ledger, debit, credit
                 FROM bankdetail WHERE id IN (
                         SELECT MAX(id)
                         FROM bankdetail
@@ -70,8 +70,8 @@ BEGIN
                 IF NEW.paymenttype IS NULL THEN
                         NEW.paymenttype := opaymenttype;
                 END IF;
-                IF NEW.journal IS NULL THEN
-                        NEW.journal := ojournal;
+                IF NEW.ledger IS NULL THEN
+                        NEW.ledger := oledger;
                 END IF;
                 IF NEW.debit IS NULL THEN
                         NEW.debit := odebit;
@@ -323,6 +323,17 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
+
+CREATE OR REPLACE FUNCTION ledger_id_last()
+returns int4 AS
+$$
+DECLARE
+        last_pk int4;
+BEGIN
+        SELECT INTO last_pk ledger_pk FROM ledger_pk_counter;
+        RETURN last_pk;
+END;
+$$ LANGUAGE 'plpgsql';
 
 CREATE OR REPLACE FUNCTION ledger_id_next()
 returns int4 AS

@@ -20,6 +20,8 @@ BEGIN
 	-- Run each business upgrade
 	PERFORM upgrade_0001();
 	PERFORM upgrade_0002();
+	PERFORM upgrade_0004();
+	PERFORM upgrade_0005();
 
 	RETURN 0;
 END;
@@ -63,7 +65,7 @@ CREATE OR REPLACE FUNCTION upgrade_database()
 RETURNS INT4 AS
 $$
 DECLARE
-	vnum		INT4 = 1; -- New version (increment this)
+	vnum		INT4 = 5; -- New version (increment this)
 	instances	INT4;
 	inst		TEXT;
 	oldv		INT4;
@@ -347,6 +349,109 @@ $create_salesinvoice$ LANGUAGE ''plpgsql'';
 
 	';
 	RETURN 0;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION upgrade_0004()
+RETURNS INT4 AS
+$$
+BEGIN
+	RAISE INFO '0004 - replace journal with ledger in bankdetail table';
+
+	ALTER TABLE bankdetail DROP COLUMN IF EXISTS journal CASCADE;
+	BEGIN
+		ALTER TABLE bankdetail ADD COLUMN ledger INT4 references ledger(id)
+	ON DELETE RESTRICT;
+	EXCEPTION
+		WHEN duplicate_column THEN RAISE NOTICE 'column ledger already exists in bankdetail. Skipping';
+	END;
+
+	RETURN 0;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION upgrade_0005()
+RETURNS INT4 AS
+$$
+BEGIN
+	RAISE INFO '0005 - create bank_current view';
+
+	-- replace bank_current view
+	CREATE OR REPLACE VIEW bank_current AS
+	SELECT * FROM bankdetail
+	WHERE id IN (
+	        SELECT MAX(id)
+		FROM bankdetail
+		GROUP BY bank
+	);
+
+	RETURN 0;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION bankdetailupdate()
+RETURNS TRIGGER AS
+$$
+DECLARE
+        priorentries    INT4;
+        otransactdate   date;
+        odescription    TEXT;
+        oaccount        INT4;
+        opaymenttype    INT4;
+        oledger         INT4;
+        odebit          NUMERIC;
+        ocredit         NUMERIC;
+BEGIN
+        SELECT INTO priorentries COUNT(id) FROM bankdetail
+                WHERE bank = NEW.bank;
+        IF priorentries > 0 THEN
+                -- This isnt our first time, so use previous values 
+                SELECT INTO
+                        otransactdate, odescription, oaccount, opaymenttype,
+                        oledger, odebit, ocredit
+                        transactdate, description, account, paymenttype,
+                        ledger, debit, credit
+                FROM bankdetail WHERE id IN (
+                        SELECT MAX(id)
+                        FROM bankdetail
+                        GROUP BY bank
+                )
+                AND bank = NEW.bank;
+
+                IF NEW.transactdate IS NULL THEN
+                        NEW.transactdate := otransactdate;
+                END IF;
+                IF NEW.description IS NULL THEN
+                        NEW.description := odescription;
+                END IF;
+                IF NEW.account IS NULL THEN
+                        NEW.account := oaccount;
+                END IF;
+                IF NEW.paymenttype IS NULL THEN
+                        NEW.paymenttype := opaymenttype;
+                END IF;
+                IF NEW.ledger IS NULL THEN
+                        NEW.ledger := oledger;
+                END IF;
+                IF NEW.debit IS NULL THEN
+                        NEW.debit := odebit;
+                END IF;
+                IF NEW.credit IS NULL THEN
+                        NEW.credit := ocredit;
+                END IF;
+        END IF;
+        RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION ledger_id_last()
+returns int4 AS
+$$
+DECLARE
+        last_pk int4;
+BEGIN
+        SELECT INTO last_pk ledger_pk FROM ledger_pk_counter;
+        RETURN last_pk;
 END;
 $$ LANGUAGE 'plpgsql';
 

@@ -729,7 +729,7 @@ div.bank.statement div.bank.data div.xml-account {
   width: 30%; }
 
 div.bank.statement div.xml-account,
-div.bank.statement div.xml-journal,
+div.bank.statement div.xml-ledger,
 div.bank.statement div.xml-type {
   display: none; }
 

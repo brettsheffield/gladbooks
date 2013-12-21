@@ -470,15 +470,16 @@ function bankReconcileSave() {
 	var debit = mytab.find('div.bank.target div.tr div.td.xml-debit').text();
 	var credit = mytab.find('div.bank.target div.tr div.td.xml-credit').text();
 	var amount = (debit > 0) ? debit : credit;
-	xml += '<journal transactdate="' + date + '" description="' + desc + '" ';
-	xml += 'bankid="' + id + '">';
+	xml += '<journal transactdate="' + date + '" description="' + desc + '">';
 
 	/* our xsd schema requires debits to appear before credits */
 	if (debit > 0) {
-		xml += '<debit account="' + acct + '" amount="' + amount + '"/>';
+		xml += '<debit account="' + acct + '" amount="' + amount + '" ';
+		xml += 'bankid="' + id + '"/>';
 	}
 	else {
-		target = '<credit account="' + acct + '" amount="' + amount + '"/>';
+		target = '<credit account="' + acct + '" amount="' + amount + '" ';
+		target += 'bankid="' + id + '"/>';
 	}
 
 	/* add debits */

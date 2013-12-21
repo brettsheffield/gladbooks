@@ -144,7 +144,7 @@ CREATE TABLE bankdetail (
 			NOT NULL,
 	paymenttype	INT4 references paymenttype(id) ON DELETE RESTRICT
 			NOT NULL,
-	journal		INT4 references journal(id) ON DELETE RESTRICT,
+	ledger		INT4 references ledger(id) ON DELETE RESTRICT,
 	debit		NUMERIC,
 	credit		NUMERIC,
 	updated		timestamp with time zone default now(),

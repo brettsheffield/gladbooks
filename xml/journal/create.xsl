@@ -37,11 +37,6 @@
 			<xsl:apply-templates select="debit"/>
 			<xsl:apply-templates select="credit"/>
 		</fo:inline-sequence>
-		<xsl:if test="@bankid">
-			<xsl:text>INSERT INTO bankdetail (bank, journal) VALUES ('</xsl:text>
-			<xsl:value-of select="@bankid"/>
-			<xsl:text>',journal_id_last());</xsl:text>
-		</xsl:if>
 		<xsl:text>COMMIT;</xsl:text>
 	</xsl:template>
 	<xsl:template match="debit">
@@ -69,6 +64,11 @@
 		<xsl:text>','</xsl:text>
 		<xsl:copy-of select="$clientip"/>
 		<xsl:text>&apos;);</xsl:text><br/>       
+		<xsl:if test="@bankid">
+			<xsl:text>INSERT INTO bankdetail (bank, ledger) VALUES ('</xsl:text>
+			<xsl:value-of select="@bankid"/>
+			<xsl:text>',currval(pg_get_serial_sequence('ledger','id')));</xsl:text>
+		</xsl:if>
 	</xsl:template>
 	<xsl:template match="credit">
 		<xsl:text>INSERT INTO ledger (journal, account, </xsl:text>
@@ -95,5 +95,11 @@
 		<xsl:text>','</xsl:text>
 		<xsl:copy-of select="$clientip"/>
 		<xsl:text>&apos;);</xsl:text><br/>       
+
+		<xsl:if test="@bankid">
+			<xsl:text>INSERT INTO bankdetail (bank, ledger) VALUES ('</xsl:text>
+			<xsl:value-of select="@bankid"/>
+			<xsl:text>',ledger_id_last());</xsl:text>
+		</xsl:if>
 	</xsl:template>
 </xsl:stylesheet>

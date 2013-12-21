@@ -6,7 +6,7 @@
 		<xs:element name="transactdate" type="xs:date" minOccurs="0"/>
 		<xs:element name="description" type="xs:string" minOccurs="0"/>
 		<xs:element name="paymenttype" type="xs:positiveInteger" minOccurs="0"/>
-		<xs:element name="journal" type="xs:positiveInteger" minOccurs="0"/>
+		<xs:element name="ledger" type="xs:positiveInteger" minOccurs="0"/>
 		<xs:element name="debit" type="xs:decimal" minOccurs="0"/>
 		<xs:element name="credit" type="xs:decimal" minOccurs="0"/>
 	</xs:sequence>
