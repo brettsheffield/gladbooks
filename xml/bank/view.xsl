@@ -13,6 +13,7 @@
 			<div class="th xml-journal">journal</div>
 			<div class="th xml-debit">debit</div>
 			<div class="th xml-credit">credit</div>
+			<div class="th buttons">&#160;</div>
 		</div>
 		<xsl:apply-templates select="row">
 			<xsl:sort select="date" data-type="date"/>
