@@ -611,11 +611,9 @@ function bankStatement(account) {
 
 	/* work out how many rows we can fit on a screen */
 	var hbox = mytab.find('div.bank.statement').height();
-	//var hrow = mytab.find('div.bank.statement div.td').height();
-	var hrow = 20; /* 20 pixels */
-	var limit = Math.floor(hbox/hrow);
-
-	console.log(hbox + '/' + hrow + '=' + limit);
+	var hhead = 20; /* 20 pixels */
+	var hrow = 20;  /* 20 pixels */
+	var limit = Math.floor((hbox-hhead)/hrow) - 2;
 
 	if (offset == undefined) { offset = 0; }
 	if (order == undefined) { order = 'ASC'; }

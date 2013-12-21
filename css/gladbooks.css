@@ -723,11 +723,12 @@ div.bank.statement {
 
 div.bank.statement div.bank.data div.xml-description {
   overflow: hidden;
-  width: 33%; }
+  width: 63%; }
 
 div.bank.statement div.bank.data div.xml-account {
   width: 30%; }
 
+div.bank.statement div.xml-account,
 div.bank.statement div.xml-journal,
 div.bank.statement div.xml-type {
   display: none; }
