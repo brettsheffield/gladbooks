@@ -623,7 +623,6 @@ function bankStatement(account) {
 	pager.data('offset', offset);
 	pager.data('order', order);
 
-	//var offset = 0; 		/* FIXME - hardcoded */
 	var sortfield = 'id'; 	/* FIXME - hardcoded */
 	var title = '';
 	var sort = false;
@@ -632,8 +631,19 @@ function bankStatement(account) {
 	var action = getTabMeta(tabid, 'action');
 	var url = object + '.' + action + '/' + account;
 	url += '/' + limit + '/' + offset + '/' + sortfield + '/' + order;
-	showHTML(collection_url(url), title, div);
+	showHTML(collection_url(url), title, div).done(bankStatementEvents);
 	bankResultsPager(account, 'statement');
+}
+
+/* set up events on bank statement screen */
+function bankStatementEvents() {
+	var mytab = activeTab();
+	mytab.find('div.bank.statement div.tr').click(bankStatementRowClick);
+}
+
+/* bank statement row was clicked */
+function bankStatementRowClick() {
+	toggleSelected($(this));
 }
 
 /* find suggestions for bank rec */
