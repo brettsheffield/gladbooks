@@ -14,7 +14,10 @@
 			<div class="th xml-debit">debit</div>
 			<div class="th xml-credit">credit</div>
 		</div>
-		<xsl:apply-templates select="row"/>
+		<xsl:apply-templates select="row">
+			<xsl:sort select="date" data-type="date"/>
+			<xsl:sort select="id" data-type="number"/>
+		</xsl:apply-templates>
 	</div>
 </xsl:template>
 <xsl:template match="row">
