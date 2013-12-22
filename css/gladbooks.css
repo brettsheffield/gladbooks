@@ -608,6 +608,7 @@ div.bank.data {
   border-top: 1px solid #6e89a5;
   font-size: 0.9em;
   height: 100%;
+  height: calc(100% - 2.6em);
   overflow: hidden;
   position: relative;
   width: 100%; }
@@ -632,11 +633,13 @@ div.bank.target > div.formtable div.td {
 
 div.bank.workspace {
   height: 100%;
+  height: calc(100% - 2.8em);
   width: 100%; }
 
 div.bank.entries {
   background-color: #b2cde0;
-  height: 33%;
+  height: 45%;
+  height: calc((100% - 3.2em) / 2);
   width: 100%; }
 
 div.bank.total {
@@ -684,7 +687,8 @@ div.bank.data div.bank.journal div.td.xml-credit {
 
 div.bank.suspects {
   background-color: #6e89a5;
-  height: 33%;
+  height: 45%;
+  height: calc((100% - 3.2em) / 2);
   overflow: auto;
   width: 100%; }
 
