@@ -905,7 +905,7 @@ div.tr.selected:nth-child(even) {
 	background-color: lighten(yellow, 20%);
 }
 div.tr.selected > div.td {
-	font-weight: bold;
+	color: darken($color-dark, 20%);
 }
 div.reconcile h3 {
 	font-size: 10pt;

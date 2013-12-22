@@ -799,7 +799,7 @@ div.tr.selected:nth-child(even) {
   background-color: #ffff66; }
 
 div.tr.selected > div.td {
-  font-weight: bold; }
+  color: #42566b; }
 
 div.reconcile h3 {
   font-size: 10pt; }
