@@ -316,14 +316,30 @@ form.signin input::-webkit-input-placeholder {
 	text-shadow:0 0 2px #000;
 }
 
-.button {
+/* button styles */
+
+button {
+	border-radius: 25px 25px 25px 25px;
+}
+
+button.first,
+button.previous,
+button.next,
+button.last {
+	font-size: 1.2em;
+	font-weight: bold;
+	padding-bottom: 2px;
+	line-height: 1.1em;
+}
+
+#btnLogin {
         background: -moz-linear-gradient(center top, #f3f3f3, #dddddd);
         background: -webkit-gradient(linear, left top, left bottom, from(#f3f3f3), to(#dddddd));
         background:  -o-linear-gradient(top, #f3f3f3, #dddddd);
         filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#f3f3f3', EndColorStr='#dddddd');
         border-color:#000;
         border-width:1px;
-        border-radius:4px 4px 4px 4px;
+	border-radius: 25px 25px 25px 25px;
         -moz-border-radius: 4px;
         -webkit-border-radius: 4px;
         color:#333;
@@ -334,9 +350,10 @@ form.signin input::-webkit-input-placeholder {
         font:12px;
         width:150px;
 }
-.button:hover {
+#btnLoginbutton:hover {
 	background:#ddd;
 }
+
 
 /* dataform */
 .dataformdiv {
@@ -780,7 +797,7 @@ div.bank.selector {
 div.results.pager {
 	float: left;
 	padding-left: 2em;
-	width: 33%;
+	width: 66%;
 }
 div.results.pager button.first::before {
 	//content: "\23EE";
@@ -1110,6 +1127,9 @@ div.organisation.update div.chzn-container {
 div.statusmsg {
 	float: right;
 	padding: 0.5em 2em;
+	position: fixed;
+	right: 5%;
+	top: 1em;
 	width: 33%;
 	margin-right: 1px;
 }
