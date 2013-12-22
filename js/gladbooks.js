@@ -640,11 +640,19 @@ function bankStatementEvents() {
 	mytab.find('div.bank.statement div.tr').off().click(bankStatementRowClick);
 	mytab.find('div.pager button.unreconcile').off()
 		.click(bankUnreconcileSelected);
+	mytab.find('div.pager button.selectall').off()
+		.click(bankStatementSelectAll);
+	mytab.find('div.pager button.deselectall').off()
+		.click(bankStatementSelectNone);
 }
 
 /* bank statement row was clicked */
 function bankStatementRowClick() {
 	toggleSelected($(this));
+	bankStatementHaveSelected();
+}
+
+function bankStatementHaveSelected() {
 	var mytab = activeTab();
 	var selected = mytab.find('div.tr.selected').length;
 	if (selected > 0) {
@@ -653,6 +661,18 @@ function bankStatementRowClick() {
 	else {
 		mytab.find('div.pager button.unreconcile').attr('disabled','disabled');
 	}
+}
+
+function bankStatementSelectAll() {
+	var row = activeTab().find('div.bank.data div.tr');
+	selectAllRows(row);
+	bankStatementHaveSelected();
+}
+
+function bankStatementSelectNone() {
+	var row = activeTab().find('div.bank.data div.tr');
+	deselectAllRows(row);
+	bankStatementHaveSelected();
 }
 
 /* find suggestions for bank rec */
