@@ -41,8 +41,8 @@
 		<xsl:if test="paymenttype">
 			<xsl:text>paymenttype,</xsl:text>
 		</xsl:if>
-		<xsl:if test="journal">
-			<xsl:text>journal,</xsl:text>
+		<xsl:if test="ledger">
+			<xsl:text>ledger,</xsl:text>
 		</xsl:if>
 		<xsl:if test="debit">
 			<xsl:text>debit,</xsl:text>
@@ -57,44 +57,52 @@
                         <xsl:when test="@id">
                                 <xsl:text>'</xsl:text>
                                 <xsl:value-of select="@id"/>
-                                <xsl:text>','</xsl:text>
+                                <xsl:text>',</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>
-                                <xsl:text>currval(pg_get_serial_sequence('bank','id')),'</xsl:text>
+                                <xsl:text>currval(pg_get_serial_sequence('bank','id')),</xsl:text>
                         </xsl:otherwise>
                 </xsl:choose>
 
 		<xsl:if test="transactdate">
+			<xsl:text>'</xsl:text>
 			<xsl:value-of select="transactdate"/>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 		<xsl:if test="description">
+			<xsl:text>'</xsl:text>
 			<xsl:call-template name="cleanQuote">
 				<xsl:with-param name="string">
 					<xsl:value-of select="description"/>
 				</xsl:with-param>
 			</xsl:call-template>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
+		<xsl:text>'</xsl:text>
 		<xsl:copy-of select="$account"/>
-		<xsl:text>','</xsl:text>
+		<xsl:text>',</xsl:text>
 		<xsl:if test="paymenttype">
+			<xsl:text>'</xsl:text>
 			<xsl:value-of select="paymenttype"/>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
-		<xsl:if test="journal">
-			<xsl:value-of select="journal"/>
-			<xsl:text>','</xsl:text>
+		<xsl:if test="ledger">
+			<xsl:text>'</xsl:text>
+			<xsl:value-of select="ledger"/>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 		<xsl:if test="debit">
+			<xsl:text>'</xsl:text>
 			<xsl:value-of select="debit"/>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 		<xsl:if test="credit">
+			<xsl:text>'</xsl:text>
 			<xsl:value-of select="credit"/>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 
+		<xsl:text>'</xsl:text>
 		<xsl:copy-of select="$authuser"/>
 		<xsl:text>','</xsl:text>
 		<xsl:copy-of select="$clientip"/>

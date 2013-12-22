@@ -637,12 +637,22 @@ function bankStatement(account) {
 /* set up events on bank statement screen */
 function bankStatementEvents() {
 	var mytab = activeTab();
-	mytab.find('div.bank.statement div.tr').click(bankStatementRowClick);
+	mytab.find('div.bank.statement div.tr').off().click(bankStatementRowClick);
+	mytab.find('div.pager button.unreconcile').off()
+		.click(bankUnreconcileSelected);
 }
 
 /* bank statement row was clicked */
 function bankStatementRowClick() {
 	toggleSelected($(this));
+	var mytab = activeTab();
+	var selected = mytab.find('div.tr.selected').length;
+	if (selected > 0) {
+		mytab.find('div.pager button.unreconcile').removeAttr('disabled');
+	}
+	else {
+		mytab.find('div.pager button.unreconcile').attr('disabled','disabled');
+	}
 }
 
 /* find suggestions for bank rec */
@@ -683,6 +693,46 @@ function bankSuggestResults(row, html) {
 
 function bankSuggestionClick() {
 	toggleSelected($(this));
+}
+
+function bankUnreconcileId(id, account, row) {
+	console.log('Unreconciling bank entry ' + id);
+
+	/* Build request xml */
+    var xml = createRequestXml();
+	xml += '<account>' + account + '</account>';
+	xml += '<bank id="' + id + '">'; 
+	xml += '<ledger>0</ledger>';
+	xml += '</bank></data></request>';
+
+    showSpinner('Unreconciling bank item ' + id + '...');
+    $.ajax({
+        url: collection_url('banks') + id,
+        data: xml,
+        contentType: 'text/xml',
+        type: 'POST',
+        beforeSend: function (xhr) { setAuthHeader(xhr); },
+        success: function(xml) {
+            hideSpinner();
+			statusMessage('Saved.', STATUS_INFO, 5000);
+			row.removeClass('reconciled');
+        },
+        error: function(xml) {
+            hideSpinner();
+			statusMessage('Error unreconciling transaction', STATUS_CRIT);
+        }
+    });
+}
+
+function bankUnreconcileSelected() {
+	var mytab = activeTab();
+	var selected = mytab.find('div.tr.selected').length;
+	var account = mytab.find('div.bank.selector select.bankaccount').val();
+	console.log(selected + ' rows selected');
+	mytab.find('div.tr.selected.reconciled').each(function() {
+		var id = $(this).find('div.td.xml-id').text();
+		bankUnreconcileId(id, account, $(this));
+	});
 }
 
 function clickBankRow() {

@@ -6,7 +6,7 @@
     <description>sample 1</description>
     <account>1000</account>
     <type>1</type>
-    <journal></journal>
+    <ledger></ledger>
     <debit>54.34</debit>
     <credit>0.00</credit>
   </row>
@@ -16,7 +16,7 @@
     <description>sample 2</description>
     <account>1000</account>
     <type>1</type>
-    <journal></journal>
+    <ledger>42</ledger>
     <debit>0.00</debit>
     <credit>25.60</credit>
   </row>
@@ -26,7 +26,7 @@
     <description>sample 3</description>
     <account>1000</account>
     <type>1</type>
-    <journal></journal>
+    <ledger></ledger>
     <debit>0.00</debit>
     <credit>33.33</credit>
   </row>

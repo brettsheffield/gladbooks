@@ -728,6 +728,12 @@ div.bank.statement div.bank.data div.xml-description {
 div.bank.statement div.bank.data div.xml-account {
   width: 30%; }
 
+div.bank.statement div.tr.reconciled div.td.xml-description::before {
+  color: green;
+  content: "\02713";
+  position: absolute;
+  margin-left: -1em; }
+
 div.bank.statement div.xml-account,
 div.bank.statement div.xml-ledger,
 div.bank.statement div.xml-type {

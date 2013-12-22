@@ -73,6 +73,9 @@ BEGIN
                 IF NEW.ledger IS NULL THEN
                         NEW.ledger := oledger;
                 END IF;
+                IF NEW.ledger = 0 THEN
+                        NEW.ledger := NULL;
+                END IF;
                 IF NEW.debit IS NULL THEN
                         NEW.debit := odebit;
                 END IF;

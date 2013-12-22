@@ -65,7 +65,7 @@ CREATE OR REPLACE FUNCTION upgrade_database()
 RETURNS INT4 AS
 $$
 DECLARE
-	vnum		INT4 = 5; -- New version (increment this)
+	vnum		INT4 = 6; -- New version (increment this)
 	instances	INT4;
 	inst		TEXT;
 	oldv		INT4;
@@ -432,6 +432,9 @@ BEGIN
                 END IF;
                 IF NEW.ledger IS NULL THEN
                         NEW.ledger := oledger;
+                END IF;
+                IF NEW.ledger = 0 THEN
+                        NEW.ledger := NULL;
                 END IF;
                 IF NEW.debit IS NULL THEN
                         NEW.debit := odebit;

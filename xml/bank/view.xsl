@@ -22,7 +22,13 @@
 	</div>
 </xsl:template>
 <xsl:template match="row">
-	<div class="tr">
+	<div>
+		<xsl:attribute name="class">
+			<xsl:text>tr</xsl:text>
+			<xsl:if test="string-length(ledger)!=0">
+				<xsl:text> reconciled</xsl:text>
+			</xsl:if>
+		</xsl:attribute>
 		<div class="td xml-id">
 			<xsl:value-of select="id"/>
 		</div>
