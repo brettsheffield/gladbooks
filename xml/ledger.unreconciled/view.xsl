@@ -18,6 +18,9 @@
 		<div class="td xml-description">
 			<xsl:value-of select="description"/>&#160;
 		</div>
+		<div class="td xml-account">
+			<xsl:value-of select="account"/>&#160;
+		</div>
 		<div class="td xml-debit">
 			<xsl:value-of select="debit"/>
 		</div>

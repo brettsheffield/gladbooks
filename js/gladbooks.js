@@ -284,7 +284,14 @@ function bankJournalAdd() {
 
 /* user clicked delete button on entry */
 function bankJournalDel() {
+	var mytab = activeTab();
 	$(this).parents('div.tr').fadeOut(300, function() {
+		if ($(this).hasClass('suggestion')) {
+			var account = mytab.find('select.bankaccount').val();
+			var div = mytab.find('div.bank.target');
+			var row = div.find('div.tr div.td').parents('div.tr');
+			bankSuggest(row, account);
+		}
 		$(this).remove();
 		bankTotalsUpdate();
 	});
@@ -396,6 +403,8 @@ function bankTotalsUpdated() {
 
 function bankReconcile(account) {
 	console.log('bankReconcile()');
+	var mytab = activeTab();
+	var account = mytab.find('select.bankaccount').val();
 	var title = '';
 	var div = activeTab().find('div.bank.target');
 	var offset = activeTab().find('div.results.pager').data('offset');
@@ -426,9 +435,11 @@ function bankReconcile(account) {
 		div.empty();
 		if (bankdata != '(null)') {
 			div.append(bankdata);
-			div.find('div.tr').addClass('selected');
+			var row = div.find('div.tr div.td').parents('div.tr');
+			row.addClass('selected');
 			div.show();
 			bankTotalsUpdate(); 
+			bankSuggest(row, account);
 		}
 		else {
 			div.hide();
@@ -680,7 +691,7 @@ function bankSuggest(row, account) {
 	console.log('bankSuggest()');
 	var d = new Array();
 	var transactdate = $(row).find('div.xml-date').text();
-	var url = 'journal.unreconciled/' + account + '/' + transactdate;
+	var url = 'ledger.unreconciled/' + account + '/' + transactdate;
 	d.push(getHTML(collection_url(url)));
 	$.when.apply(null, d)
 	.done(function(html) {
@@ -689,30 +700,33 @@ function bankSuggest(row, account) {
 	.fail(function() {
 		bankJournal(row);
 	});
+	return d;
 }
 
 function bankSuggestResults(row, html) {
 	console.log('bankSuggestResults()')
 	console.log(html);
 	var results = $(html).find('div.bank.suggestion').length;
-	var t = activeTab();
-	t.accordionTitle(1).text('Suggested Matches (' + results + ')');
+	var mytab = activeTab();
 	if (results > 0) {
 		/* suggestions found, show them */
-		var workspace = t.accordionTab(1)
+		var workspace = mytab.find('div.bank.suspects');
 		workspace.empty().append(html);
 		workspace.find('div.bank.suggestion').click(bankSuggestionClick);
-		t.accordionTabSelect(1);
 	}
 	else {
 		/* nothing to suggest, make journal active instead */
 		bankJournal(row);
 	}
-	$('div.reconcile div.accordion').fadeIn();
 }
 
 function bankSuggestionClick() {
-	toggleSelected($(this));
+	var mytab = activeTab();
+	var row = $(this).detach().off();
+	row.append('<div class="td buttons"><button class="del">X</button></div>');
+	row.find('button.del').off().click(bankJournalDel);
+	mytab.find('div.bank.entries').append(row);
+	bankTotalsUpdate(); 
 }
 
 function bankUnreconcileId(id, account, row) {
