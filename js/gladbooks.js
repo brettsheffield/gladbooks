@@ -736,12 +736,6 @@ function bankSuggestionClick() {
 	else {
 		console.log('unknown suggestion type');
 	}
-	/*
-	row.append('<div class="td buttons"><button class="del">X</button></div>');
-	row.find('button.del').off().click(bankJournalDel);
-	mytab.find('div.bank.entries').append(row);
-	bankTotalsUpdate(); 
-	*/
 }
 
 function bankReconcileId(bank, ledger, account) {
@@ -764,6 +758,7 @@ function bankReconcileId(bank, ledger, account) {
         success: function(xml) {
             hideSpinner();
 			statusMessage('Saved.', STATUS_INFO, 5000);
+			bankReconcile(account); /* show next */
         },
         error: function(xml) {
             hideSpinner();
