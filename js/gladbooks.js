@@ -720,13 +720,56 @@ function bankSuggestResults(row, html) {
 	}
 }
 
+/* User has clicked on a suggestion row */
 function bankSuggestionClick() {
 	var mytab = activeTab();
 	var row = $(this).detach().off();
+
+	/* first, figure out what kind of row this is */
+	if (row.hasClass('ledger')) {
+		console.log('suggestion type: ledger');
+		var account = mytab.find('select.bankaccount').val();
+		var ledger = row.find('div.td.xml-id').text();
+		var bank = mytab.find('div.bank.target div.td.xml-id').text();
+		bankReconcileId(bank, ledger, account);
+	}
+	else {
+		console.log('unknown suggestion type');
+	}
+	/*
 	row.append('<div class="td buttons"><button class="del">X</button></div>');
 	row.find('button.del').off().click(bankJournalDel);
 	mytab.find('div.bank.entries').append(row);
 	bankTotalsUpdate(); 
+	*/
+}
+
+function bankReconcileId(bank, ledger, account) {
+	console.log('Reconciling bank entry ' + bank + ' against ledger ' +ledger);
+
+	/* Build request xml */
+    var xml = createRequestXml();
+	xml += '<account>' + account + '</account>';
+	xml += '<bank id="' + bank + '">'; 
+	xml += '<ledger>' + ledger + '</ledger>';
+	xml += '</bank></data></request>';
+
+    showSpinner('Reconciling bank item...');
+    $.ajax({
+        url: collection_url('banks') + bank,
+        data: xml,
+        contentType: 'text/xml',
+        type: 'POST',
+        beforeSend: function (xhr) { setAuthHeader(xhr); },
+        success: function(xml) {
+            hideSpinner();
+			statusMessage('Saved.', STATUS_INFO, 5000);
+        },
+        error: function(xml) {
+            hideSpinner();
+			statusMessage('Error unreconciling transaction', STATUS_CRIT);
+        }
+    });
 }
 
 function bankUnreconcileId(id, account, row) {

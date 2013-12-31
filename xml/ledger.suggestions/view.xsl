@@ -27,6 +27,7 @@
 		<div class="td xml-credit">
 			<xsl:value-of select="credit"/>
 		</div>
+		<div class="td xml-type">ledger</div>
 	</div>
 </xsl:template>
 
