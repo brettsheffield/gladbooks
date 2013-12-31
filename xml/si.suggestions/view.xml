@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <row>
+    <id>1</id>
+    <salesinvoice>1</salesinvoice>
+    <salesorder>1</salesorder>
+    <period>1</period>
+    <ponumber></ponumber>
+    <taxpoint>2013-09-01</taxpoint>
+    <endpoint>2013-09-30</endpoint>
+    <issued>2013-10-04 10:19:30.582534+01</issued>
+    <due>2013-10-18</due>
+    <organisation>2</organisation>
+    <orgcode>GLADSERV</orgcode>
+    <invoicenum>1</invoicenum>
+    <ref>GLADSERV/0001</ref>
+    <subtotal>4000.00</subtotal>
+    <tax>800.00</tax>
+    <total>4800.00</total>
+    <paid>0.00</paid>
+  </row>
+  <row>
+    <id>4</id>
+    <salesinvoice>4</salesinvoice>
+    <salesorder>2</salesorder>
+    <period>1</period>
+    <ponumber></ponumber>
+    <taxpoint>2013-11-01</taxpoint>
+    <endpoint>2013-11-01</endpoint>
+    <issued>2013-11-01 18:38:13.406539+00</issued>
+    <due>2013-11-15</due>
+    <organisation>10</organisation>
+    <orgcode>DUCKMXSK</orgcode>
+    <invoicenum>1</invoicenum>
+    <ref>DUCKMXSK/0001</ref>
+    <subtotal>10.00</subtotal>
+    <tax>2.00</tax>
+    <total>12.00</total>
+    <paid>0.00</paid>
+  </row>
+  <row>
+    <id>3</id>
+    <salesinvoice>3</salesinvoice>
+    <salesorder>1</salesorder>
+    <period>3</period>
+    <ponumber></ponumber>
+    <taxpoint>2013-11-01</taxpoint>
+    <endpoint>2013-11-30</endpoint>
+    <issued>2013-11-01 18:38:13.406539+00</issued>
+    <due>2013-11-15</due>
+    <organisation>2</organisation>
+    <orgcode>GLADSERV</orgcode>
+    <invoicenum>3</invoicenum>
+    <ref>GLADSERV/0003</ref>
+    <subtotal>4000.00</subtotal>
+    <tax>800.00</tax>
+    <total>4800.00</total>
+    <paid>0.00</paid>
+  </row>
+  <row>
+    <id>2</id>
+    <salesinvoice>2</salesinvoice>
+    <salesorder>1</salesorder>
+    <period>2</period>
+    <ponumber></ponumber>
+    <taxpoint>2013-10-01</taxpoint>
+    <endpoint>2013-10-31</endpoint>
+    <issued>2013-10-04 10:19:30.582534+01</issued>
+    <due>2013-10-18</due>
+    <organisation>2</organisation>
+    <orgcode>GLADSERV</orgcode>
+    <invoicenum>2</invoicenum>
+    <ref>GLADSERV/0002</ref>
+    <subtotal>4000.00</subtotal>
+    <tax>800.00</tax>
+    <total>4800.00</total>
+    <paid>0.00</paid>
+  </row>
+</resources>

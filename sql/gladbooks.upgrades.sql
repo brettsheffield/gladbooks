@@ -22,6 +22,7 @@ BEGIN
 	PERFORM upgrade_0002();
 	PERFORM upgrade_0004();
 	PERFORM upgrade_0005();
+	PERFORM upgrade_0006();
 
 	RETURN 0;
 END;
@@ -65,7 +66,7 @@ CREATE OR REPLACE FUNCTION upgrade_database()
 RETURNS INT4 AS
 $$
 DECLARE
-	vnum		INT4 = 6; -- New version (increment this)
+	vnum		INT4 = 7; -- New version (increment this)
 	instances	INT4;
 	inst		TEXT;
 	oldv		INT4;
@@ -388,6 +389,61 @@ BEGIN
 	RETURN 0;
 END;
 $$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION upgrade_0006()
+RETURNS INT4 AS
+$$
+BEGIN
+
+        RAISE INFO '0006 - CREATE VIEW salesinvoice_unpaid';
+
+        EXECUTE '
+CREATE OR REPLACE VIEW salesinvoice_unpaid AS
+SELECT  sic.id,
+        sic.salesinvoice,
+        sic.salesorder,
+        sic.period,
+        sic.ponumber,
+        sic.taxpoint,
+        sic.endpoint,
+        sic.issued,
+        sic.due,
+        sic.organisation,
+        sic.orgcode,
+        sic.invoicenum,
+        sic.ref,
+        sic.subtotal,
+        sic.tax,
+        sic.total,
+        COALESCE(SUM(sip.amount), ''0.00'') AS paid
+FROM salesinvoice_current sic
+LEFT JOIN salespaymentallocation_current sip
+ON sic.id = sip.salesinvoice
+GROUP BY
+        sic.id,
+        sic.salesinvoice,
+        sic.salesorder,
+        sic.period,
+        sic.ponumber,
+        sic.taxpoint,
+        sic.endpoint,
+        sic.issued,
+        sic.due,
+        sic.organisation,
+        sic.orgcode,
+        sic.invoicenum,
+        sic.ref,
+        sic.subtotal,
+        sic.tax,
+        sic.total
+HAVING COALESCE(SUM(sip.amount), ''0.00'') < sic.total
+;
+        ';
+
+        RETURN 0;
+END;
+$$ LANGUAGE 'plpgsql';
+
 
 CREATE OR REPLACE FUNCTION bankdetailupdate()
 RETURNS TRIGGER AS

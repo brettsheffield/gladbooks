@@ -386,6 +386,7 @@ function bankTotalsUpdate() {
 
 /* called any time one of the totals is updated */
 function bankTotalsUpdated() {
+	console.log('bankTotalsUpdated()');
 	var debits = mytab.find('div.bank.total div.xml-debit').text();
 	var credits = mytab.find('div.bank.total div.xml-credit').text();
 	var totals = mytab.find('div.bank.total div.xml-debit')
@@ -691,11 +692,12 @@ function bankSuggest(row, account) {
 	console.log('bankSuggest()');
 	var d = new Array();
 	var id = $(row).find('div.xml-id').text();
-	var url = 'ledger.suggestions/' + id;
-	d.push(getHTML(collection_url(url)));
+	d.push(getHTML(collection_url('ledger.suggestions/' + id)));
+	d.push(getHTML(collection_url('salesinvoice.suggestions/' + id)));
 	$.when.apply(null, d)
 	.done(function(html) {
-		bankSuggestResults(row, html);
+		var docs = Array.prototype.splice.call(arguments, 0);
+		bankSuggestResults(row, docs);
 	})
 	.fail(function() {
 		bankJournal(row);
@@ -703,20 +705,22 @@ function bankSuggest(row, account) {
 	return d;
 }
 
-function bankSuggestResults(row, html) {
+function bankSuggestResults(row, docs) {
 	console.log('bankSuggestResults()')
-	console.log(html);
-	var results = $(html).find('div.bank.suggestion').length;
+	var results = 0;
+	var rows = 0;
 	var mytab = activeTab();
-	if (results > 0) {
-		/* suggestions found, show them */
-		var workspace = mytab.find('div.bank.suspects');
-		workspace.empty().append(html);
-		workspace.find('div.bank.suggestion').click(bankSuggestionClick);
-	}
-	else {
-		/* nothing to suggest, make journal active instead */
-		bankJournal(row);
+	var workspace = mytab.find('div.bank.suspects');
+	workspace.empty();
+	for (var i=0; i<docs.length; i++) {
+		var html = docs[i][0];
+		rows = $(html).find('div.bank.suggestion').length;
+		results += rows;
+		if (rows > 0) {
+			/* suggestions found, show them */
+			workspace.append(html);
+			workspace.find('div.bank.suggestion').off().click(bankSuggestionClick);
+		}
 	}
 }
 
@@ -724,18 +728,26 @@ function bankSuggestResults(row, html) {
 function bankSuggestionClick() {
 	var mytab = activeTab();
 	var row = $(this).detach().off();
+	var account = mytab.find('select.bankaccount').val();
+	var id = row.find('div.td.xml-id').text();
+	var bank = mytab.find('div.bank.target div.td.xml-id').text();
 
 	/* first, figure out what kind of row this is */
 	if (row.hasClass('ledger')) {
 		console.log('suggestion type: ledger');
-		var account = mytab.find('select.bankaccount').val();
-		var ledger = row.find('div.td.xml-id').text();
-		var bank = mytab.find('div.bank.target div.td.xml-id').text();
-		bankReconcileId(bank, ledger, account);
+		bankReconcileId(bank, id, account);
+	}
+	else if (row.hasClass('salesinvoice')) {
+		console.log('suggestion type: salesinvoice');
+		bankReconcileSalesInvoice(bank, id, account);
 	}
 	else {
 		console.log('unknown suggestion type');
 	}
+}
+
+function bankReconcileSalesInvoice(bank, id, account) {
+	console.log('bankReconcileSalesInvoice()');
 }
 
 function bankReconcileId(bank, ledger, account) {
