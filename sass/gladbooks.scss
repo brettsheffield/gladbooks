@@ -788,7 +788,7 @@ div.bank.suspects {
 	background-color: $color-dark;
 	height: 45%;
 	height: calc((100% - 3.2em) / 2);
-	overflow: auto;
+	overflow: hidden;
 	width: 100%;
 }
 div.bank.selector {
