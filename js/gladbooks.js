@@ -690,8 +690,8 @@ function bankStatementSelectNone() {
 function bankSuggest(row, account) {
 	console.log('bankSuggest()');
 	var d = new Array();
-	var transactdate = $(row).find('div.xml-date').text();
-	var url = 'ledger.unreconciled/' + account + '/' + transactdate;
+	var id = $(row).find('div.xml-id').text();
+	var url = 'ledger.suggestions/' + id;
 	d.push(getHTML(collection_url(url)));
 	$.when.apply(null, d)
 	.done(function(html) {
