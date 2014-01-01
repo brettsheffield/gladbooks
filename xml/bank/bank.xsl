@@ -20,7 +20,7 @@
 		<xsl:if test="description">
 			<xsl:text>description,</xsl:text>
 		</xsl:if>
-		<xsl:if test="account">
+		<xsl:if test="$account">
 			<xsl:text>account,</xsl:text>
 		</xsl:if>
 		<xsl:if test="paymenttype">
@@ -63,9 +63,9 @@
 			</xsl:call-template>
 			<xsl:text>',</xsl:text>
 		</xsl:if>
-		<xsl:if test="account">
+		<xsl:if test="$account">
 			<xsl:text>'</xsl:text>
-			<xsl:value-of select="account"/>
+			<xsl:copy-of select="$account"/>
 			<xsl:text>',</xsl:text>
 		</xsl:if>
 		<xsl:if test="paymenttype">
