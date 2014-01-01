@@ -764,10 +764,8 @@ function bankSuggestionClick() {
 			var subtotal = $(this).find('div.td.xml-subtotal').text();
 			var tax = $(this).find('div.td.xml-tax').text();
 			var total = $(this).find('div.td.xml-total').text();
-			var org = $(this).find('div.td.xml-organisation').text();
+			var org = $(this).find('div.td.xml-organisation').first().text();
 
-			/* ensure we don't overallocate payment */
-			console.log('amount: ' + amount + '; total: ' + total);
 			if (Number(amount) < Number(total)) {
 				total = amount;
 			}
@@ -784,6 +782,7 @@ function bankSuggestionClick() {
 			mytab.find('div.bank.entries').append(dctl);
 
 			/* TODO: if VAT cash accounting, need an entry in 2200 - VAT */
+
 		}
 		else {
 			/* SI unselected - remove from div.entries */
@@ -794,11 +793,37 @@ function bankSuggestionClick() {
 				}
 			});
 		}
-		bankTotalsUpdate();
 	}
 	else {
 		console.log('unknown suggestion type');
 	}
+
+	/* deal with overpayment */
+	console.log('amount: ' + amount + '; total: ' + total);
+	var overpay = amount;
+	mytab.find('div.bank.suggestions div.tr.salesinvoice.selected')
+	.each(function() {
+		var sitotal = $(this).find('div.td.xml-total').text();
+		console.log('decimalSubtract(' + overpay + ',' + sitotal +')');
+		overpay = decimalPad(decimalSubtract(overpay, sitotal), 2);
+	});
+
+	/* append overpayment if required */
+	if (Number(overpay) > 0) {
+		console.log('Overpayment: ' + overpay);
+		/* overpayment - post to suspense account (9999) */
+		var dctl = $('<div class="tr salesinvoice overpayment"/>');
+		dctl.append('<div class="td xml-id">' + id + '</div>');
+		dctl.append('<div class="td xml-organisation">'+org+'</div>');
+		dctl.append('<div class="td xml-date">' + date + '</div>');
+		dctl.append('<div class="td xml-description">Unallocated</div>');
+		dctl.append('<div class="td xml-account">9999</div>');
+		dctl.append('<div class="td xml-debit"/>');
+		dctl.append('<div class="td xml-credit">' + overpay +'</div>');
+		mytab.find('div.bank.entries div.overpayment').remove();
+		mytab.find('div.bank.entries').append(dctl);
+	}
+	bankTotalsUpdate();
 }
 
 function bankReconcileSalesInvoice(bank, account) {
@@ -808,7 +833,7 @@ function bankReconcileSalesInvoice(bank, account) {
 	var date = mytab.find('div.bank.target div.td.xml-date').text();
 	/* 1=cash; 2=cheque; 3=bank transfer */
 	var paymenttype = '3'; /* FIXME: hardcoded */
-	var org = mytab.find('div.bank.entries div.td.xml-organisation').text();
+	var org = mytab.find('div.bank.entries div.td.xml-organisation').first().text();
 	var amount = mytab.find('div.bank.target div.td.xml-debit').text();
 	var desc = mytab.find('div.bank.target div.td.xml-description').text();
 
