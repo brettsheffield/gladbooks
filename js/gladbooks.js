@@ -739,6 +739,7 @@ function bankSuggestionClick() {
 	var id = row.find('div.td.xml-id').text();
 	var bank = mytab.find('div.bank.target div.td.xml-id').text();
 	var date = mytab.find('div.bank.target div.td.xml-date').text();
+	var amount = mytab.find('div.bank.target div.td.xml-debit').text();
 
 	/* first, figure out what kind of row this is */
 	if (row.hasClass('ledger')) {
@@ -756,6 +757,12 @@ function bankSuggestionClick() {
 			var tax = $(this).find('div.td.xml-tax').text();
 			var total = $(this).find('div.td.xml-total').text();
 			var org = $(this).find('div.td.xml-organisation').text();
+
+			/* ensure we don't overallocate payment */
+			console.log('amount: ' + amount + '; total: ' + total);
+			if (Number(amount) < Number(total)) {
+				total = amount;
+			}
 
 			/* 1100 - Debtors Control */
 			var dctl = $('<div class="tr salesinvoice"/>');
