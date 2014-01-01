@@ -194,6 +194,13 @@ function bankChange() {
 	}
 }
 
+/* clear junk from div.entries */
+function bankEntriesClear() {
+	/* remove salesinvoices */
+	var mytab = activeTab();
+	mytab.find('div.bank.entries div.tr.salesinvoice').remove();
+}
+
 /* set up journal form based on row that was clicked */
 function bankJournal(row) {
 	console.log('bankJournal()');
@@ -418,7 +425,8 @@ function bankReconcile(account) {
 
 	bankResultsPager(account, 'reconcile');
 	bankJournalReset();
-	bankTotalsUpdate(); 
+	bankTotalsUpdate();
+	bankEntriesClear();
 
 	/* set up save/cancel buttons */
 	var btncancel = mytab.find('div.results.pager button.cancel');
