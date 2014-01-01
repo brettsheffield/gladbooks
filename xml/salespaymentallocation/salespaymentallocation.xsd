@@ -3,7 +3,7 @@
 
 <xs:complexType name="salespaymentallocation">
 	<xs:sequence>
-		<xs:element name="salespayment" type="xs:positiveInteger"/>
+		<xs:element name="salespayment" type="xs:positiveInteger" minOccurs="0"/>
 		<xs:element name="salesinvoice" type="xs:positiveInteger"/>
 		<xs:element name="amount" type="xs:decimal"/>
 	</xs:sequence>

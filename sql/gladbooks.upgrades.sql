@@ -445,6 +445,95 @@ END;
 $$ LANGUAGE 'plpgsql';
 
 
+CREATE OR REPLACE FUNCTION postpayment(type TEXT, paymentid INT4)
+RETURNS INT4 AS
+$$
+DECLARE
+        idtable         TEXT;
+        detailtable     TEXT;
+        journalid       INT4;
+        ledgerid        INT4;
+        accountid       INT4;
+        transactdate    DATE;
+        description     TEXT;
+        bankaccount     INT4;
+        bankid          INT4;
+        amount          NUMERIC;
+        dc1             TEXT;
+        dc2             TEXT;
+BEGIN
+        -- type gives us which account code to post against --
+        IF type = 'sales' THEN
+                accountid := '1100'; -- 1100 = Debtors Control Account
+        ELSIF type = 'purchase' THEN
+                accountid := '2100'; -- 2100 = Creditors Control Account
+        ELSE
+                RAISE EXCEPTION 'postpayment() called with invalid type';
+        END IF;
+
+        -- which tables are we using? --
+        idtable := type || 'payment';
+        detailtable := idtable || 'detail';
+
+        -- fetch details of payment --
+        EXECUTE 'SELECT transactdate, description, amount, bankaccount, bank ' ||
+        format ('FROM %I WHERE id IN (', detailtable) ||
+        format ('SELECT MAX(id) FROM %I GROUP BY %I', detailtable, idtable) ||
+        format (') AND %I = ''%s'';', idtable, paymentid)
+        INTO transactdate, description, amount, bankaccount, bankid;
+
+        -- work out debits & credits --
+        IF type = 'sales' THEN
+                /* positive sales payments are credit
+                  (decrease the asset) */
+                IF amount > 0 THEN
+                        dc1 := 'credit';
+                        dc2 := 'debit';
+                ELSE
+                        dc1 := 'debit';
+                        dc2 := 'credit';
+                END IF;
+        ELSE
+                /* positive purchase payments are debits 
+                   (decrease the liability) */
+                IF amount > 0 THEN
+                        dc1 := 'debit';
+                        dc2 := 'credit';
+                ELSE
+                        dc1 := 'credit';
+                        dc2 := 'debit';
+                END IF;
+        END IF;
+
+        -- entry in journal table --
+        EXECUTE 'INSERT INTO journal (transactdate,description) VALUES ' ||
+        format('(''%s'',''%s'');', transactdate, description);
+
+        SELECT journal_id_last() INTO journalid;
+
+        -- ledger lines --
+        EXECUTE format('INSERT INTO ledger (journal, account, %I) ', dc1) ||
+        'VALUES (journal_id_last(),' ||
+        format('''%s'',''%s'');', accountid, ABS(amount));
+
+        EXECUTE format('INSERT INTO ledger (journal, account, %I) ', dc2) ||
+        'VALUES (journal_id_last(),' ||
+        format('''%s'',''%s'');', bankaccount, ABS(amount));
+
+        SELECT journal_id_last() INTO ledgerid;
+
+        -- update bank entry, if applicable --
+        IF bankid is not null THEN
+                EXECUTE 'INSERT INTO bankdetail (bank, ledger) VALUES ' ||
+                format('(''%s'',''%s'');', bankid, ledgerid);
+        END IF;
+
+        -- return id of new journal entry --
+        RETURN journalid;
+END;
+$$ LANGUAGE 'plpgsql';
+
+
 CREATE OR REPLACE FUNCTION bankdetailupdate()
 RETURNS TRIGGER AS
 $$

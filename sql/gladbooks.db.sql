@@ -649,6 +649,7 @@ DECLARE
         idtable         TEXT;
 	detailtable     TEXT;
 	journalid	INT4;
+	ledgerid	INT4;
 	accountid	INT4;
 	transactdate	DATE;
 	description	TEXT;
@@ -716,10 +717,12 @@ BEGIN
 	'VALUES (journal_id_last(),' ||
 	format('''%s'',''%s'');', bankaccount, ABS(amount));
 
+	SELECT journal_id_last() INTO ledgerid;
+
 	-- update bank entry, if applicable --
 	IF bankid is not null THEN
-		EXECUTE 'INSERT INTO bankdetail (bank, journal) VALUES ' ||
-		format('(''%s'',''%s'');', bankid, journalid);
+		EXECUTE 'INSERT INTO bankdetail (bank, ledger) VALUES ' ||
+		format('(''%s'',''%s'');', bankid, ledgerid);
 	END IF;
 
 	-- return id of new journal entry --

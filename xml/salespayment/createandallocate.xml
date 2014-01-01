@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+  <instance>test</instance>
+  <business>1</business>
+	<data>
+		<salespayment>
+			<transactdate>2013-04-01</transactdate>
+			<paymenttype>1</paymenttype>
+			<organisation>1</organisation>
+			<bank>1</bank>
+			<bankaccount>1000</bankaccount>
+			<amount>120.00</amount>
+			<description>a comment</description>
+			<salespaymentallocation>
+				<salesinvoice>1</salesinvoice>
+				<amount>90.00</amount>
+			</salespaymentallocation>
+			<salespaymentallocation>
+				<salesinvoice>2</salesinvoice>
+				<amount>30.00</amount>
+			</salespaymentallocation>
+		</salespayment>
+	</data>
+</request>

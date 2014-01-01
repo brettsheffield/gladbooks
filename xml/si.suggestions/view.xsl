@@ -12,19 +12,26 @@
 		<div class="td xml-id">
 			<xsl:value-of select="id"/>
 		</div>
+		<div class="td xml-organisation">
+			<xsl:value-of select="organisation"/>
+		</div>
 		<div class="td xml-date">
 			<xsl:value-of select="taxpoint"/>
 		</div>
 		<div class="td xml-description">
+			Sales Invoice
 			<xsl:value-of select="ref"/>&#160;
 		</div>
 		<div class="td xml-account">
 			<xsl:value-of select="account"/>&#160;
 		</div>
-		<div class="td xml-debit">
-			<xsl:value-of select="debit"/>
+		<div class="td xml-subtotal">
+			<xsl:value-of select="subtotal"/>
 		</div>
-		<div class="td xml-credit">
+		<div class="td xml-tax">
+			<xsl:value-of select="tax"/>
+		</div>
+		<div class="td xml-total">
 			<xsl:value-of select="total"/>
 		</div>
 		<div class="td xml-type">SI</div>

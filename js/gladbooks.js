@@ -469,6 +469,13 @@ function bankReconcileSave() {
 	var mytab = activeTab();
 	showSpinner('Saving...');
 
+	if (mytab.find('div.entries div.tr.salesinvoice').length > 0) {
+		var account = mytab.find('select.bankaccount').val();
+		var bank = mytab.find('div.bank.target div.td.xml-id').text();
+		bankReconcileSalesInvoice(bank, account);
+		return;
+	}
+	
 	/* Build request xml */
     var xml = createRequestXml();
 
@@ -727,27 +734,107 @@ function bankSuggestResults(row, docs) {
 /* User has clicked on a suggestion row */
 function bankSuggestionClick() {
 	var mytab = activeTab();
-	var row = $(this).detach().off();
+	var row = $(this);
 	var account = mytab.find('select.bankaccount').val();
 	var id = row.find('div.td.xml-id').text();
 	var bank = mytab.find('div.bank.target div.td.xml-id').text();
+	var date = mytab.find('div.bank.target div.td.xml-date').text();
 
 	/* first, figure out what kind of row this is */
 	if (row.hasClass('ledger')) {
+		row = $(this).detach().off();
 		console.log('suggestion type: ledger');
 		bankReconcileId(bank, id, account);
 	}
 	else if (row.hasClass('salesinvoice')) {
 		console.log('suggestion type: salesinvoice');
-		bankReconcileSalesInvoice(bank, id, account);
+		toggleSelected(row);
+		if (row.hasClass('selected')) {
+			/* SI selected - add appropriate transactions to div.entries */
+			var desc = $(this).find('div.td.xml-description').text();
+			var subtotal = $(this).find('div.td.xml-subtotal').text();
+			var tax = $(this).find('div.td.xml-tax').text();
+			var total = $(this).find('div.td.xml-total').text();
+			var org = $(this).find('div.td.xml-organisation').text();
+
+			/* 1100 - Debtors Control */
+			var dctl = $('<div class="tr salesinvoice"/>');
+			dctl.append('<div class="td xml-id">' + id + '</div>');
+			dctl.append('<div class="td xml-organisation">' + org + '</div>');
+			dctl.append('<div class="td xml-date">' + date + '</div>');
+			dctl.append('<div class="td xml-description">' + desc + '</div>');
+			dctl.append('<div class="td xml-account">1100</div>');
+			dctl.append('<div class="td xml-debit"/>');
+			dctl.append('<div class="td xml-credit">' + total + '</div>');
+			mytab.find('div.bank.entries').append(dctl);
+
+			/* TODO: if VAT cash accounting, need an entry in 2200 - VAT */
+		}
+		else {
+			/* SI unselected - remove from div.entries */
+			mytab.find('div.entries div.tr.salesinvoice div.td.xml-id')
+			.each( function() {
+				if ($(this).text() == id) {
+					$(this).parents('div.tr.salesinvoice').remove();
+				}
+			});
+		}
+		bankTotalsUpdate();
 	}
 	else {
 		console.log('unknown suggestion type');
 	}
 }
 
-function bankReconcileSalesInvoice(bank, id, account) {
+function bankReconcileSalesInvoice(bank, account) {
 	console.log('bankReconcileSalesInvoice()');
+	var mytab = activeTab();
+	var account = mytab.find('select.bankaccount').val();
+	var date = mytab.find('div.bank.target div.td.xml-date').text();
+	/* 1=cash; 2=cheque; 3=bank transfer */
+	var paymenttype = '3'; /* FIXME: hardcoded */
+	var org = mytab.find('div.bank.entries div.td.xml-organisation').text();
+	var amount = mytab.find('div.bank.target div.td.xml-debit').text();
+	var desc = mytab.find('div.bank.target div.td.xml-description').text();
+
+	/* create salespayment */
+    var xml = createRequestXml();
+	xml += '<salespayment>';
+	xml += '<transactdate>' + date + '</transactdate>';
+	xml += '<paymenttype>' + paymenttype + '</paymenttype>';
+	xml += '<organisation>' + org + '</organisation>';
+	xml += '<bank>' + bank + '</bank>';
+	xml += '<bankaccount>' + account + '</bankaccount>';
+	xml += '<amount>' + amount + '</amount>';
+	xml += '<description>' + desc + '</description>';
+
+	/* allocate salespayment against salesinvoice(s) */
+	mytab.find('div.bank.entries div.tr.salesinvoice').each(function() {
+		var siid = $(this).find('div.td.xml-id').text();
+		amount = $(this).find('div.td.xml-credit').text();
+		xml += '<salespaymentallocation>';
+		xml += '<salesinvoice>' + siid + '</salesinvoice>';
+		xml += '<amount>' + amount + '</amount>';
+		xml += '</salespaymentallocation>';
+	});
+	xml += '</salespayment></data></request>';
+
+    $.ajax({
+        url: collection_url('salespayments'),
+        data: xml,
+        contentType: 'text/xml',
+        type: 'POST',
+        beforeSend: function (xhr) { setAuthHeader(xhr); },
+        success: function(xml) {
+            hideSpinner();
+			statusMessage('Saved.', STATUS_INFO, 5000);
+			bankReconcile(account); /* show next */
+        },
+        error: function(xml) {
+            hideSpinner();
+			statusMessage('Error reconciling transaction', STATUS_CRIT);
+        }
+    });
 }
 
 function bankReconcileId(bank, ledger, account) {
