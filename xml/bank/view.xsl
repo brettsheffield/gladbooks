@@ -15,10 +15,7 @@
 			<div class="th xml-credit">credit</div>
 			<div class="th buttons">&#160;</div>
 		</div>
-		<xsl:apply-templates select="row">
-			<xsl:sort select="date" data-type="date"/>
-			<xsl:sort select="id" data-type="number"/>
-		</xsl:apply-templates>
+		<xsl:apply-templates select="row"/>
 	</div>
 </xsl:template>
 <xsl:template match="row">

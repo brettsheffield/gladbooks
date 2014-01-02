@@ -587,22 +587,24 @@ function bankResultsPagerAction(account, action) {
 }
 
 function bankResultsPagerFirst(pager, account, action) {
+	var order = pager.data('order');
+	var reverse = (order == 'ASC') ? 'ASC' : 'DESC';
 	pager.data('offset', 0);
-	pager.data('order', 'ASC');
+	pager.data('reverse', reverse);
 	bankResultsPagerAction(account, action);
 }
 
 function bankResultsPagerPrevious(pager, account, action) {
 	var offset = pager.data('offset');
 	var order = pager.data('order');
+	var reverse = pager.data('reverse');
 	var limit = pager.data('limit');
-	if (order == 'ASC') {
+	if (order == reverse) {
 		offset -= limit;
 		if (offset < 0) { offset = 0 };
 	}
 	else {
 		offset += limit;
-		/* FIXME: detect end of results */
 	}
 	pager.data('offset', offset);
 	bankResultsPagerAction(account, action);
@@ -611,10 +613,10 @@ function bankResultsPagerPrevious(pager, account, action) {
 function bankResultsPagerNext(pager, account, action) {
 	var offset = pager.data('offset');
 	var order = pager.data('order');
+	var reverse = pager.data('reverse');
 	var limit = pager.data('limit');
-	if (order == 'ASC') {
+	if (order == reverse) {
 		offset += limit;
-		/* FIXME: detect end of results */
 	}
 	else {
 		offset -= limit;
@@ -625,8 +627,10 @@ function bankResultsPagerNext(pager, account, action) {
 }
 
 function bankResultsPagerLast(pager, account, action) {
+	var order = pager.data('order');
+	var reverse = (order == 'ASC') ? 'DESC' : 'ASC';
 	pager.data('offset', 0);
-	pager.data('order', 'DESC');
+	pager.data('reverse', reverse);
 	bankResultsPagerAction(account, action);
 }
 
@@ -636,6 +640,8 @@ function bankStatement(account) {
 	var pager = mytab.find('div.results.pager');
 	var offset = pager.data('offset');
 	var order = pager.data('order');
+	var reverse = pager.data('reverse');
+	var sortfield = pager.data('sortfield');
 
 	/* work out how many rows we can fit on a screen */
 	var hbox = mytab.find('div.bank.statement').height();
@@ -643,13 +649,18 @@ function bankStatement(account) {
 	var hrow = 20;  /* 20 pixels */
 	var limit = Math.floor((hbox-hhead)/hrow) - 2;
 
+	/* set defaults */
 	if (offset == undefined) { offset = 0; }
 	if (order == undefined) { order = 'ASC'; }
+	if (reverse == undefined) { reverse = 'ASC'; }
+	if (sortfield == undefined) { sortfield = 'date'; }
+
 	pager.data('limit', limit);
 	pager.data('offset', offset);
 	pager.data('order', order);
+	pager.data('reverse', reverse);
+	pager.data('sortfield', sortfield);
 
-	var sortfield = 'id'; 	/* FIXME - hardcoded */
 	var title = '';
 	var sort = false;
 	var tabid = activeTabId();
@@ -657,6 +668,7 @@ function bankStatement(account) {
 	var action = getTabMeta(tabid, 'action');
 	var url = object + '.' + action + '/' + account;
 	url += '/' + limit + '/' + offset + '/' + sortfield + '/' + order;
+	url += '/' + reverse;
 	showHTML(collection_url(url), title, div).done(bankStatementEvents);
 	bankResultsPager(account, 'statement');
 }
@@ -665,6 +677,8 @@ function bankStatement(account) {
 function bankStatementEvents() {
 	var mytab = activeTab();
 	mytab.find('div.bank.statement div.tr').off().click(bankStatementRowClick);
+	mytab.find('div.bank.statement div.tr div.th').off()
+		.click(bankStatementHeadingClick);
 	mytab.find('div.pager button.unreconcile').off()
 		.click(bankUnreconcileSelected);
 	mytab.find('div.pager button.selectall').off()
@@ -681,11 +695,13 @@ function pagerControls() {
 	var limit = pager.data('limit');
 	var offset = pager.data('offset');
 	var order = pager.data('order');
+	var reverse = pager.data('reverse');
+	var reversed = (order != reverse);
 
 	/* detect end of results */
 	var rows = mytab.find('div.statement div.tr').length - 1;
 	if (rows < limit) {
-		if (order == 'ASC') {
+		if (!reversed) {
 			/* partial results, assume end reached */
 			pager.find('button.next').attr('disabled', 'disabled');
 		}
@@ -699,12 +715,12 @@ function pagerControls() {
 		pager.find('button.previous').removeAttr('disabled');
 		pager.find('button.next').removeAttr('disabled');
 	}
-	if (order == 'ASC' && offset == 0) {
+	if (!reversed && offset == 0) {
 		/* first position */
 		pager.find('button.first').attr('disabled', 'disabled');
 		pager.find('button.previous').attr('disabled', 'disabled');
 	}
-	else if (order == 'DESC' && offset == 0) {
+	else if (reversed && offset == 0) {
 		/* end position */
 		pager.find('button.next').attr('disabled', 'disabled');
 		pager.find('button.last').attr('disabled', 'disabled');
@@ -713,8 +729,47 @@ function pagerControls() {
 
 /* bank statement row was clicked */
 function bankStatementRowClick() {
-	toggleSelected($(this));
-	bankStatementHaveSelected();
+	var headers = $(this).find('div.th').length;
+	if (headers > 0) {
+		/* this is a heading row - ignore */
+	}
+	else {
+		toggleSelected($(this));
+		bankStatementHaveSelected();
+	}
+}
+
+function bankStatementHeadingClick() {
+	var heading = $(this).text();
+	console.log('heading clicked: ' + heading);
+	var mytab = activeTab();
+	var pager = mytab.find('div.results.pager');
+	var oldsort = pager.data('sortfield');
+	var sortfield = oldsort;
+	var order = pager.data('order');
+	console.log('sortfield was ' + sortfield + ' ' + order);
+	if (heading) {
+		//if (heading == 'date') {
+		//	sortfield = 'transactdate';
+		//}
+		//else {
+			sortfield = heading;
+		//}
+		if (sortfield == oldsort) {
+			console.log('heading == sortfield');
+			/* sort in reverse order */
+			var order = (order == 'ASC') ? 'DESC' : 'ASC';
+			pager.data('order', order);
+		}
+		else {
+			/* sort by new field, ASC */
+			console.log('sorting by ' + sortfield);
+			pager.data('sortfield', sortfield);
+			pager.data('order', 'ASC');
+		}
+		var account = mytab.find('select.bankaccount').val();
+		bankStatement(account);
+	}
 }
 
 function bankStatementHaveSelected() {
