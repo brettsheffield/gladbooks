@@ -1083,7 +1083,7 @@ customFormEvents = function(tab, object, action, id) {
 	}
 }
 
-function customLoginEvents(xml) {
+customLoginEvents = function(xml) {
     g_instance = '';
     $(xml).find('instance').each(function() {
         g_loggedin = true;
