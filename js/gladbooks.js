@@ -671,6 +671,44 @@ function bankStatementEvents() {
 		.click(bankStatementSelectAll);
 	mytab.find('div.pager button.deselectall').off()
 		.click(bankStatementSelectNone);
+	pagerControls();
+}
+
+/* update state of pager controls depending on where we are in results */
+function pagerControls() {
+	var mytab = activeTab();
+	var pager = mytab.find('div.results.pager');
+	var limit = pager.data('limit');
+	var offset = pager.data('offset');
+	var order = pager.data('order');
+
+	/* detect end of results */
+	var rows = mytab.find('div.statement div.tr').length - 1;
+	if (rows < limit) {
+		if (order == 'ASC') {
+			/* partial results, assume end reached */
+			pager.find('button.next').attr('disabled', 'disabled');
+		}
+		else {
+			/* beginning reached with partial results - fetch full page */
+			pager.find('button.previous').attr('disabled', 'disabled');
+			pager.find('button.first').trigger('click');
+		}
+	}
+	else {
+		pager.find('button.previous').removeAttr('disabled');
+		pager.find('button.next').removeAttr('disabled');
+	}
+	if (order == 'ASC' && offset == 0) {
+		/* first position */
+		pager.find('button.first').attr('disabled', 'disabled');
+		pager.find('button.previous').attr('disabled', 'disabled');
+	}
+	else if (order == 'DESC' && offset == 0) {
+		/* end position */
+		pager.find('button.next').attr('disabled', 'disabled');
+		pager.find('button.last').attr('disabled', 'disabled');
+	}
 }
 
 /* bank statement row was clicked */
@@ -809,6 +847,7 @@ function bankSuggestionClick() {
 	});
 
 	/* append overpayment if required */
+	mytab.find('div.bank.entries div.overpayment').remove();
 	if (Number(overpay) > 0) {
 		console.log('Overpayment: ' + overpay);
 		/* overpayment - post to suspense account (9999) */
@@ -820,7 +859,6 @@ function bankSuggestionClick() {
 		dctl.append('<div class="td xml-account">9999</div>');
 		dctl.append('<div class="td xml-debit"/>');
 		dctl.append('<div class="td xml-credit">' + overpay +'</div>');
-		mytab.find('div.bank.entries div.overpayment').remove();
 		mytab.find('div.bank.entries').append(dctl);
 	}
 	bankTotalsUpdate();
