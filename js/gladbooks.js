@@ -1083,6 +1083,23 @@ customFormEvents = function(tab, object, action, id) {
 	}
 }
 
+function customLoginEvents(xml) {
+    g_instance = '';
+    $(xml).find('instance').each(function() {
+        g_loggedin = true;
+        g_instance = $(this).text();
+        console.log('Instance selected: ' + g_instance);
+    });
+    if (g_instance == '') {
+        /* couldn't find instance for user - treat as failed login */
+        loginfailed();
+    }
+    else {
+        /* have instance, hide login dialog and get list of businesses */
+        hideLoginBox();
+        prepBusinessSelector();
+    }
+}
 
 function csvToXml(doc) {
     showSpinner('Converting csv to xml...');
