@@ -25,7 +25,7 @@
 g_menus = [
 	[ 'bank.reconcile', getForm, 'bank', 'reconcile', 'Bank Reconciliation' ],
 	[ 'bank.upload', getForm, 'bank', 'upload', 'Upload Bank Statement' ],
-	[ 'bank.statement', getForm, 'bank', 'statement', 'View Bank Statement' ],
+	[ 'bank.statement', getForm, 'bank', 'statement', 'Bank Statement' ],
 	[ 'bank.test', showHTML, 'help/layouttest.html', 'Layout Test' ],
 	[ 'banking', showHTML, 'help/banking.html', 'Banking', false ],
 	[ 'contact.create', getForm, 'contact', 'create', 'Add New Contact' ],
