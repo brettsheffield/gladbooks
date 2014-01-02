@@ -753,12 +753,7 @@ function bankStatementHeadingClick() {
 	var order = pager.data('order');
 	console.log('sortfield was ' + sortfield + ' ' + order);
 	if (heading) {
-		//if (heading == 'date') {
-		//	sortfield = 'transactdate';
-		//}
-		//else {
-			sortfield = heading;
-		//}
+		sortfield = heading;
 		if (sortfield == oldsort) {
 			console.log('heading == sortfield');
 			/* sort in reverse order */
