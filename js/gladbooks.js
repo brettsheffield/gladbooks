@@ -1083,6 +1083,10 @@ customFormEvents = function(tab, object, action, id) {
 	}
 }
 
+customBusinessNotFound = function(xml) {
+	getForm('business', 'create', 'Add New Business');
+}
+
 customLoginEvents = function(xml) {
     g_instance = '';
     $(xml).find('instance').each(function() {
