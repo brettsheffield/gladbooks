@@ -414,13 +414,17 @@ function bankReconcile(account) {
 	var mytab = activeTab();
 	var account = mytab.find('select.bankaccount').val();
 	var title = '';
-	var div = activeTab().find('div.bank.target');
-	var offset = activeTab().find('div.results.pager').data('offset');
-	var order = activeTab().find('div.results.pager').data('order');
+	var div = mytab.find('div.bank.target');
+	var offset = mytab.find('div.results.pager').data('offset');
+	var reverse = mytab.find('div.results.pager').data('reverse');
 	var limit = 1;
-	activeTab().find('div.results.pager').data('limit', limit);
+	if (offset == undefined) { offset = 0; }
+	if (reverse == undefined) { reverse = 'ASC'; }
+	mytab.find('div.results.pager').data('offset', offset)
+	mytab.find('div.results.pager').data('reverse', reverse)
+	mytab.find('div.results.pager').data('limit', limit);
 	var url = 'bank.unreconciled/' + account + '/' + limit + '/' + offset
-		+ '/' + order;
+		+ '/' + reverse;
 	var d = new Array(); /* array of deferreds */
 
 	bankResultsPager(account, 'reconcile');
