@@ -7,6 +7,7 @@
 			<!-- these terms apply globally -->
 			<term>BARNEY</term>
 			<term>Wilma</term>
+			<term>test</term>
 			<collection type="contact">
 				<!-- which fields should appear in results -->
 				<display>id</display>
@@ -24,7 +25,7 @@
 				<term>rubble</term>
 				<!-- search in these fields -->
 				<field>name</field>
-				<field>comment</field>
+				<field>email</field>
 			</collection>
 		</search>
 	</data>

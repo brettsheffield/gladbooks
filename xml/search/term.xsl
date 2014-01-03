@@ -9,7 +9,7 @@
 			<xsl:value-of select="$or"/>
 		</xsl:if>
 		<xsl:value-of select="$field"/>
-		<xsl:text> LIKE '%</xsl:text>
+		<xsl:text> ILIKE '%</xsl:text>
 		<xsl:value-of select="."/>
 		<xsl:text>%'</xsl:text>
 		<xsl:if test="position() != last()">
