@@ -5,9 +5,12 @@
 	<xsl:include href="sort.xsl"/>
 	<xsl:include href="term.xsl"/>
 	<xsl:include href="field.xsl"/>
+	<xsl:include href="display.xsl"/>
 
 	<xsl:template match="collection">
-		<xsl:text>SELECT * FROM </xsl:text>
+		<xsl:text>SELECT </xsl:text>
+		<xsl:apply-templates select="display"/>
+		<xsl:text> FROM </xsl:text>
 
 		<!-- replace with real view/table names -->
 		<xsl:choose>

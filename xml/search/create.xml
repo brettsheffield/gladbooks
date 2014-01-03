@@ -8,6 +8,14 @@
 			<term>BARNEY</term>
 			<term>Wilma</term>
 			<collection type="contact">
+				<!-- which fields should appear in results -->
+				<display>id</display>
+				<display>name</display>
+				<display>line_1</display>
+				<display>line_2</display>
+				<display>line_3</display>
+				<display>town</display>
+				<display>postcode</display>
 				<!-- specify sort order -->
 				<sort field="name" order="ASC"/>
 				<sort field="postcode" order="DESC"/>
