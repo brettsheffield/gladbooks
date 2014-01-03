@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+	<instance>test</instance>
+	<business>1</business>
+	<data>
+		<search>
+			<!-- these terms apply globally -->
+			<term>BARNEY</term>
+			<term>Wilma</term>
+			<collection type="contact">
+				<!-- specify sort order -->
+				<sort field="name" order="ASC"/>
+				<sort field="postcode" order="DESC"/>
+				<!-- these terms apply only to contact -->
+				<term>barney</term>
+				<term>rubble</term>
+				<!-- search in these fields -->
+				<field>name</field>
+				<field>comment</field>
+			</collection>
+		</search>
+	</data>
+</request>

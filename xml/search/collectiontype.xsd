@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:simpleType name="collectiontype">
+	<xs:restriction base="xs:string">
+		<xs:enumeration value="contact"/>
+		<xs:enumeration value="organisation" />
+		<xs:enumeration value="purchaseorder" />
+		<xs:enumeration value="purchaseinvoice" />
+		<xs:enumeration value="purchasepayment" />
+		<xs:enumeration value="salesorder" />
+		<xs:enumeration value="salesinvoice" />
+		<xs:enumeration value="salespayment" />
+		<xs:enumeration value="journal" />
+	</xs:restriction>
+</xs:simpleType>
+
+</xs:schema>

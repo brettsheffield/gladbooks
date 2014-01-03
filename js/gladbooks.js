@@ -1102,6 +1102,7 @@ customLoginEvents = function(xml) {
         /* have instance, hide login dialog and get list of businesses */
         hideLoginBox();
         prepBusinessSelector();
+		$('input.search-query').change(searchKeyPress);
     }
 }
 
@@ -1126,6 +1127,13 @@ function csvToXml(doc) {
             displayResultsGeneric(xml, collection, title);
         }
     });
+}
+
+docKeypress = function() {
+	var c = $(document.activeElement); /* find control with focus */
+	if (c.hasClass('search-query')) {
+		searchKeyPress();
+	}
 }
 
 /* show the form, after setup is complete */
@@ -1491,6 +1499,65 @@ function salesorderAddProduct(tab, datatable, id, product, linetext, price, qty)
     resetSalesOrderProductDefaults();
 
     updateSalesOrderTotals(tab);
+}
+
+/* key pressed in search bar - wait until user pauses before searching */
+var t;
+function searchKeyPress() {
+	var c = $(document.activeElement); /* find control with focus */
+	var ms = 400; /* 400ms delay */
+	t = Date.now() + ms;
+	window.setTimeout(searchLater, ms, c);
+}
+
+/* if no keys have been pressed since time was set, begin search */
+function searchLater(c) {
+	if (t <= Date.now()) {
+		searchNow(c);
+	}
+}
+
+/* begin search */
+function searchNow(c) {
+	var terms = searchTerms(c.val());
+	var searchurl = 'search/';
+	var d = new Array(); /* array of deferreds */
+
+	for (var i=0; i < terms.length; i++) {
+		if (terms[i].length > 0) {
+			console.log('term: ' + terms[i]);
+			d.push(getHTML(collection_url(searchurl + terms[i])));
+		}
+	}
+	$.when.apply(null, d)
+	.done(function(bankdata) {
+		hideSpinner();
+	})
+	.fail(function() {
+		hideSpinner();
+	});
+}
+
+/* split search into terms */
+function searchTerms(search) {
+	var terms = search.split(/[\s]+/);
+	var tokens = new Array();
+	var z = 0;
+	if (terms.length > 1) {
+		terms.unshift(search); /* add full search string as term */
+		z = 1;
+	}
+	for (var i=z; i < terms.length; i++) {
+		/* split the word down further and add these as extra search terms */
+		var tok = terms[i].split(/[\W]+/);
+		if (tok.length > 1) {
+			for (var j=0; j < tok.length; j++) {
+				tokens.push(tok[j]);
+			}
+		}
+	}
+	terms = terms.concat(tokens);
+	return terms;
 }
 
 function setupJournalForm(tab) {
