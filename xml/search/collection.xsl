@@ -8,14 +8,29 @@
 	<xsl:include href="display.xsl"/>
 
 	<xsl:template match="collection">
+		<xsl:param name="collections"/>
+		<xsl:if test="$collections > 1">
+			<xsl:if test="position() = '1'">
+				<xsl:text>SELECT q.sort,q.result </xsl:text>
+				<xsl:text>FROM (</xsl:text>
+			</xsl:if>
+		</xsl:if>
+		<xsl:text>(SELECT </xsl:text>
+		<xsl:text>nextval('sorted') AS sort,result FROM (</xsl:text>
 		<xsl:text>SELECT </xsl:text>
-		<xsl:apply-templates select="display"/>
+		<xsl:apply-templates select="display">
+			<xsl:with-param name="collection" select="@type"/>
+		</xsl:apply-templates>
+		<xsl:text> AS result</xsl:text>
 		<xsl:text> FROM </xsl:text>
 
 		<!-- replace with real view/table names -->
 		<xsl:choose>
 			<xsl:when test="@type = 'contact'">
 				<xsl:text>contact_current</xsl:text>
+			</xsl:when>
+			<xsl:when test="@type = 'organisation'">
+				<xsl:text>organisation_current</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="@type"/>
@@ -24,7 +39,21 @@
 
 		<xsl:apply-templates select="field"/>
 		<xsl:apply-templates select="sort"/>
-		<xsl:text>;</xsl:text>
+		<xsl:choose>
+			<xsl:when test="position() = last()">
+				<xsl:if test="$collections > 1">
+					<xsl:text>) t</xsl:text>
+					<xsl:value-of select="position()"/>
+					<xsl:text>)) q ORDER BY q.sort</xsl:text>
+				</xsl:if>
+				<xsl:text>;</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:text>) t</xsl:text>
+				<xsl:value-of select="position()"/>
+				<xsl:text>) UNION </xsl:text>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 </xsl:stylesheet>
