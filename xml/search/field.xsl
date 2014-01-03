@@ -16,11 +16,12 @@
 		</xsl:choose>
 		<xsl:apply-templates select="../term">
 			<xsl:with-param name="field" select="."/>
-			<xsl:with-param name="or" select="''"/>
 		</xsl:apply-templates>
+		<xsl:if test="count(../term) > 0 and count(../../term) > 0">
+			<xsl:text> OR </xsl:text>
+		</xsl:if>
 		<xsl:apply-templates select="../../term">
 			<xsl:with-param name="field" select="."/>
-			<xsl:with-param name="or" select="' OR '"/>
 		</xsl:apply-templates>
 	</xsl:template>
 

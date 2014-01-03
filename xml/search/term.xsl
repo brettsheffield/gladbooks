@@ -4,10 +4,6 @@
 
 	<xsl:template match="term">
 		<xsl:param name="field"/>
-		<xsl:param name="or"/>
-		<xsl:if test="position() = '1'">
-			<xsl:value-of select="$or"/>
-		</xsl:if>
 		<xsl:value-of select="$field"/>
 		<xsl:text> ILIKE '%</xsl:text>
 		<xsl:value-of select="."/>
