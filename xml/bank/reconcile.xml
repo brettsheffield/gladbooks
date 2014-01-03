@@ -5,7 +5,7 @@
 	<data>
 		<account>1000</account>
 		<bank id="1">
-			<journal>1</journal>
+			<ledger>1</ledger>
 		</bank>
 	</data>
 </request>

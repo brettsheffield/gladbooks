@@ -41,7 +41,7 @@ test("test user login", function() {
 
 	stop();
 	$.ajax({
-		url: '/auth/betty',
+		url: '/auth/',
 		type: 'GET',
 		contentType: 'text/xml',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
@@ -58,7 +58,7 @@ test("test user login - invalid", function() {
 
 	stop();
 	$.ajax({
-		url: '/auth/betty',
+		url: '/auth/',
 		type: 'GET',
 		contentType: 'text/xml',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
@@ -79,7 +79,7 @@ test("test ldap login", function() {
 
 	stop();
 	$.ajax({
-		url: '/auth/betty',
+		url: '/auth/',
 		type: 'GET',
 		contentType: 'text/xml',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
