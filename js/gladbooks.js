@@ -1568,10 +1568,12 @@ function searchTerms(search) {
 	}
 	for (var i=z; i < terms.length; i++) {
 		/* split the word down further and add these as extra search terms */
-		var tok = terms[i].split(/[\W]+/);
-		if (tok.length > 1) {
-			for (var j=0; j < tok.length; j++) {
-				tokens.push(tok[j]);
+		if (isNaN(terms[i])) { /* don't split numbers */
+			var tok = terms[i].split(/[\W]+/);
+			if (tok.length > 1) {
+				for (var j=0; j < tok.length; j++) {
+					tokens.push(tok[j]);
+				}
 			}
 		}
 	}
