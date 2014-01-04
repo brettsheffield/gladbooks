@@ -871,7 +871,7 @@ div.search.results div.tr::before {
   margin-bottom: 2px;
   text-align: center;
   text-transform: uppercase;
-  width: 10%; }
+  width: 10em; }
 
 div.search.results div.tr.contact::before {
   content: 'contact'; }

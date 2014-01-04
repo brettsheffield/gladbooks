@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <request>
 	<data>
-		<search>
+		<search limit="250" offset="0">
 			<collection type="contact">
 				<display>id</display>
 				<display>name</display>
