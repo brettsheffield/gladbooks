@@ -1590,6 +1590,13 @@ function searchRowClick() {
 		console.log('product ' + id);
 		displayElement('products', id);
 	}
+	if ($(this).hasClass('salesinvoice')) {
+		console.log('salesinvoice ' + id);
+		var ref = $(this).find('div.td.ref').text();
+		var si = 'SI-' + ref.replace('/','-') + '.pdf';
+		var url = '/pdf/' + g_orgcode + '/' + si;
+		window.open(url);
+	}
 }
 
 /* split search into terms */

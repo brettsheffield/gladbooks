@@ -58,6 +58,19 @@
 				<field type="numeric">price_buy</field>
 				<field type="numeric">price_sell</field>
 			</collection>
+			<collection type="salesinvoice">
+				<display>id</display>
+				<display>ponumber</display>
+				<display>taxpoint</display>
+				<display>due</display>
+				<display>ref</display>
+				<display>invoicenum</display>
+				<display>total</display>
+				<sort field="issued" order="ASC"/>
+				<field>orgcode</field>
+				<field>ref</field>
+				<field type="numeric">total</field>
+			</collection>
 		</search>
 	</data>
 </request>
