@@ -4,10 +4,19 @@
 
 	<xsl:template match="term">
 		<xsl:param name="field"/>
+		<xsl:param name="type"/>
+		<xsl:param name="match"/>
 		<xsl:value-of select="$field"/>
-		<xsl:text> ILIKE '%</xsl:text>
+		<xsl:value-of select="$match"/>
+		<xsl:text>'</xsl:text>
+		<xsl:if test="$type = 'text'">
+			<xsl:text>%</xsl:text>
+		</xsl:if>
 		<xsl:value-of select="."/>
-		<xsl:text>%'</xsl:text>
+		<xsl:if test="$type = 'text'">
+			<xsl:text>%</xsl:text>
+		</xsl:if>
+		<xsl:text>'</xsl:text>
 		<xsl:if test="position() != last()">
 			<xsl:text> OR </xsl:text>
 		</xsl:if>

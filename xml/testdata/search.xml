@@ -10,6 +10,8 @@
 				<display>line_3</display>
 				<display>town</display>
 				<display>postcode</display>
+				<display>county</display>
+				<display>country</display>
 				<display>email</display>
 				<display>phone</display>
 				<display>mobile</display>
@@ -20,6 +22,8 @@
 				<field>line_3</field>
 				<field>town</field>
 				<field>postcode</field>
+				<field>county</field>
+				<field>country</field>
 				<field>email</field>
 				<field>phone</field>
 				<field>mobile</field>
@@ -50,6 +54,8 @@
 				<sort field="shortname" order="ASC"/>
 				<field>shortname</field>
 				<field>description</field>
+				<field type="numeric">price_buy</field>
+				<field type="numeric">price_sell</field>
 			</collection>
 		</search>
 	</data>

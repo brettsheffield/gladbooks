@@ -973,6 +973,28 @@ div.accordion > div.section > div.content {
 	//min-height: 450px;
 }
 
+/* search results */
+div.search.results {
+	border: solid 1px green;
+}
+div.search.results div.td {
+	padding-left: 5px;
+}
+div.search.results div.id {
+	display: none;
+}
+div.search.results div.tr.contact div.name {
+	width: 20%;
+}
+div.search.results div.tr.organisation div.name {
+	width: 20%;
+}
+div.search.results div.td.price_buy,
+div.search.results div.td.price_sell {
+	text-align: right;
+	width: 5%;
+}
+
 /* play the accordion */
 div.accordion {
 	height: 100%;

@@ -4,15 +4,15 @@
 <xs:simpleType name="collectiontype">
 	<xs:restriction base="xs:string">
 		<xs:enumeration value="contact"/>
+		<xs:enumeration value="journal" />
 		<xs:enumeration value="organisation" />
 		<xs:enumeration value="product" />
-		<xs:enumeration value="purchaseorder" />
 		<xs:enumeration value="purchaseinvoice" />
+		<xs:enumeration value="purchaseorder" />
 		<xs:enumeration value="purchasepayment" />
-		<xs:enumeration value="salesorder" />
 		<xs:enumeration value="salesinvoice" />
+		<xs:enumeration value="salesorder" />
 		<xs:enumeration value="salespayment" />
-		<xs:enumeration value="journal" />
 	</xs:restriction>
 </xs:simpleType>
 

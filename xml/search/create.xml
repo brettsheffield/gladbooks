@@ -32,6 +32,7 @@
 				<display>updated</display>
 				<sort field="updated" order="ASC"/>
 				<field>name</field>
+				<field type="date">updated</field>
 			</collection>
 		</search>
 	</data>
