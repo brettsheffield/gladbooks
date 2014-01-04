@@ -32,6 +32,9 @@
 			<xsl:when test="@type = 'organisation'">
 				<xsl:text>organisation_current</xsl:text>
 			</xsl:when>
+			<xsl:when test="@type = 'product'">
+				<xsl:text>product_current</xsl:text>
+			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="@type"/>
 			</xsl:otherwise>

@@ -10,6 +10,9 @@
 				<display>line_3</display>
 				<display>town</display>
 				<display>postcode</display>
+				<display>email</display>
+				<display>phone</display>
+				<display>mobile</display>
 				<sort field="name" order="ASC"/>
 				<field>name</field>
 				<field>line_1</field>
@@ -17,6 +20,9 @@
 				<field>line_3</field>
 				<field>town</field>
 				<field>postcode</field>
+				<field>email</field>
+				<field>phone</field>
+				<field>mobile</field>
 			</collection>
 			<collection type="organisation">
 				<display>id</display>
@@ -27,6 +33,23 @@
 				<field>name</field>
 				<field>orgcode</field>
 				<field>vatnumber</field>
+			</collection>
+			<collection type="journal">
+				<display>id</display>
+				<display>transactdate</display>
+				<display>description</display>
+				<sort field="id" order="ASC"/>
+				<field>description</field>
+			</collection>
+			<collection type="product">
+				<display>id</display>
+			 	<display>shortname</display>
+			 	<display>description</display>
+			 	<display>price_buy</display>
+			 	<display>price_sell</display>
+				<sort field="shortname" order="ASC"/>
+				<field>shortname</field>
+				<field>description</field>
 			</collection>
 		</search>
 	</data>
