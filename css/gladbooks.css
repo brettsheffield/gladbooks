@@ -853,6 +853,12 @@ div.bank.data div.tr:nth-child(even):not(.selected) {
 div.search.results {
   border: solid 1px green; }
 
+div.search.results div.tr:nth-child(odd):not(.selected) {
+  background-color: white; }
+
+div.search.results div.tr:nth-child(even):not(.selected) {
+  background-color: #eeeeff; }
+
 div.search.results div.td {
   padding-left: 5px; }
 
