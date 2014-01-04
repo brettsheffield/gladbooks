@@ -975,13 +975,42 @@ div.accordion > div.section > div.content {
 
 /* search results */
 div.search.results {
-	border: solid 1px green;
+	border: solid 1px $color-dark;
 }
 div.search.results div.tr:nth-child(odd):not(.selected) {
 	background-color: white;
 }
 div.search.results div.tr:nth-child(even):not(.selected) {
 	background-color: $color-feint;
+}
+div.search.results div.tr::before {
+	background-color: green;
+	border-radius: 5px;
+	color: white;
+	float: right;
+	font-family: serif;
+	font-weight: bold;
+	padding: 1px 5px;
+	position: relative;
+	margin-left: 1em;
+	margin-right: 0.5em;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	text-align: center;
+	text-transform: uppercase;
+	width: 10%;
+}
+div.search.results div.tr.contact::before {
+	content: 'contact';
+}
+div.search.results div.tr.organisation::before {
+	content: 'organisation';
+}
+div.search.results div.tr.product::before {
+	content: 'product';
+}
+div.search.results div.tr.salesinvoice::before {
+	content: 'salesinvoice';
 }
 div.search.results div.td {
 	padding-left: 5px;
