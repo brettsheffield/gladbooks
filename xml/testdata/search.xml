@@ -12,13 +12,20 @@
 				<display>postcode</display>
 				<sort field="name" order="ASC"/>
 				<field>name</field>
+				<field>line_1</field>
+				<field>line_2</field>
+				<field>line_3</field>
+				<field>town</field>
 				<field>postcode</field>
 			</collection>
 			<collection type="organisation">
 			 	<display>name</display>
 			 	<display>orgcode</display>
+				<display>vatnumber</display>
 				<sort field="name" order="ASC"/>
 				<field>name</field>
+				<field>orgcode</field>
+				<field>vatnumber</field>
 			</collection>
 		</search>
 	</data>
