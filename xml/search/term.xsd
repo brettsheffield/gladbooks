@@ -3,7 +3,7 @@
 
 <xs:include schemaLocation="fieldtype.xsd"/>
 
-<xs:complexType name="field">
+<xs:complexType name="term">
 	<xs:simpleContent>
 		<xs:extension base="xs:string">
 			<xs:attribute name="type" type="fieldtype"/>

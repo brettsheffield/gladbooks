@@ -39,7 +39,6 @@
 				<xsl:value-of select="@type"/>
 			</xsl:otherwise>
 		</xsl:choose>
-
 		<xsl:apply-templates select="field"/>
 		<xsl:apply-templates select="sort"/>
 		<xsl:choose>

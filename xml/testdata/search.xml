@@ -43,6 +43,7 @@
 				<display>transactdate</display>
 				<display>description</display>
 				<sort field="id" order="ASC"/>
+				<field type="date">transactdate</field>
 				<field>description</field>
 			</collection>
 			<collection type="product">

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:simpleType name="fieldtype">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="date"/>
+    <xs:enumeration value="numeric" />
+    <xs:enumeration value="organisation" />
+    <xs:enumeration value="text" />
+  </xs:restriction>
+</xs:simpleType>
+
+</xs:schema>
+

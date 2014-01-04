@@ -9,7 +9,7 @@
 	<xs:sequence>
 		<xs:element name="display" type="xs:string" maxOccurs="unbounded"/>
 		<xs:element name="sort" type="sort" minOccurs="0" maxOccurs="unbounded"/>
-		<xs:element name="term" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:element name="term" type="field" minOccurs="0" maxOccurs="unbounded"/>
 		<xs:element name="field" type="field" maxOccurs="unbounded"/>
 	</xs:sequence>
 	<xs:attribute name="type" type="collectiontype" use="required"/>

@@ -1532,8 +1532,20 @@ function searchNow(c) {
 }
 
 function searchStart(doc, terms) {
-	if (terms.length == 0) { return; } /* no search terms */
-	var termstring = '<term>' + terms.join('</term><term>') + '</term>';
+	/* join terms into xml fragment */
+	var termstring = '';
+	if (terms.words.length > 0 && terms.words[0] != '') {
+		termstring = '<term>' + terms.words.join('</term><term>') + '</term>';
+	}
+	if (terms.numbers.length > 0 && terms.numbers[0] != '') {
+		termstring += '<term type="numeric">' + terms.numbers.join('</term><term type="numeric">') + '</term>';
+	}
+	if (terms.dates.length > 0 && terms.dates[0] != '') {
+		termstring += '<term type="date">' + terms.dates.join('</term><term type="date">') + '</term>';
+	}
+	/* do not attempt search without any search terms */
+	if (termstring.length == 0) { return; }
+
 	$(doc).find('request').prepend('<business>' + g_business + '</business>');
 	$(doc).find('request').prepend('<instance>' + g_instance + '</instance>');
 	$(doc).find('search').prepend(termstring);
@@ -1559,26 +1571,41 @@ function searchStart(doc, terms) {
 
 /* split search into terms */
 function searchTerms(search) {
-	var terms = search.split(/[\s]+/);
+	search = search.trim();
+	var terms = new Object();
 	var tokens = new Array();
+	terms.numbers = new Array();
+	terms.dates = new Array();
+	terms.words = search.split(/[\s]+/);
 	var z = 0;
-	if (terms.length > 1) {
-		terms.unshift(search); /* add full search string as term */
+
+	if (terms.words.length > 1) {
+		terms.words.unshift(search); /* add full search string as term */
 		z = 1;
 	}
-	for (var i=z; i < terms.length; i++) {
+	for (var i=z; i < terms.words.length; i++) {
 		/* split the word down further and add these as extra search terms */
-		if (isNaN(terms[i])) { /* don't split numbers */
-			var tok = terms[i].split(/[\W]+/);
+		if (isDate(terms.words[i])) {
+			/* date - move to terms.dates */
+			terms.dates.push(terms.words[i]);
+			terms.words.splice(i, 1);
+		}
+		else if (isNaN(terms.words[i])) { /* don't split numbers */
+			var tok = terms.words[i].split(/[\W]+/);
 			if (tok.length > 1) {
 				for (var j=0; j < tok.length; j++) {
 					tokens.push(tok[j]);
 				}
 			}
 		}
+		else {
+			/* number - move to terms.numbers */
+			terms.numbers.push(terms.words[i]);
+			terms.words.splice(i, 1);
+		}
 	}
-	terms = terms.concat(tokens);
-	if (terms.length == 1 && terms[0] == '') { return null; }
+	terms.words = terms.words.concat(tokens);
+	if (terms.words.length == 1 && terms.words[0] == '') { return null; }
 	return terms;
 }
 

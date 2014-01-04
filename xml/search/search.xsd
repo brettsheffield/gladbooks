@@ -2,10 +2,11 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
 <xs:include schemaLocation="collection.xsd"/>
+<xs:include schemaLocation="field.xsd"/>
 
 <xs:complexType name="search">
 	<xs:sequence>
-		<xs:element name="term" type="xs:string" maxOccurs="unbounded"/>
+		<xs:element name="term" type="field" maxOccurs="unbounded"/>
 		<xs:element name="collection" type="collection" maxOccurs="unbounded"/>
 	</xs:sequence>
 </xs:complexType><!--search-->
