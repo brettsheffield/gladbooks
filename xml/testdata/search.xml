@@ -19,6 +19,7 @@
 				<field>postcode</field>
 			</collection>
 			<collection type="organisation">
+				<display>id</display>
 			 	<display>name</display>
 			 	<display>orgcode</display>
 				<display>vatnumber</display>

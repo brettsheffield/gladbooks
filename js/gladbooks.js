@@ -1532,6 +1532,7 @@ function searchNow(c) {
 }
 
 function searchStart(doc, terms) {
+	if (terms.length == 0) { return; } /* no search terms */
 	var termstring = '<term>' + terms.join('</term><term>') + '</term>';
 	$(doc).find('request').prepend('<business>' + g_business + '</business>');
 	$(doc).find('request').prepend('<instance>' + g_instance + '</instance>');
@@ -1545,6 +1546,7 @@ function searchStart(doc, terms) {
         beforeSend: function (xhr) { setAuthHeader(xhr); },
         success: function(html) {
 			console.log('search complete');
+			if (html == '(null)') { return; }
 			html = html.replace(/&lt;div([^&]+)&gt;/g,'<div$1>');
 			html = html.replace('&lt;/div&gt;','</div>', 'g');
 			addTab('Search', html, true);
@@ -1574,6 +1576,7 @@ function searchTerms(search) {
 		}
 	}
 	terms = terms.concat(tokens);
+	if (terms.length == 1 && terms[0] == '') { return null; }
 	return terms;
 }
 

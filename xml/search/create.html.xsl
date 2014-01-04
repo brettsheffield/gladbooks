@@ -3,7 +3,12 @@
 <xsl:output method="html" encoding="UTF-8" indent="yes" disable-output-escaping="yes" />
 
 <xsl:template match="resources">
-	<xsl:apply-templates select="row"/>
+	<xsl:element name="div">
+		<xsl:attribute name="class">
+			<xsl:text>search results</xsl:text>
+		</xsl:attribute>
+		<xsl:apply-templates select="row"/>
+	</xsl:element>
 </xsl:template>
 
 <xsl:template match="row">
