@@ -17,6 +17,7 @@
 		<xsl:apply-templates select="../term">
 			<xsl:with-param name="field" select="."/>
 			<xsl:with-param name="type" select="@type"/>
+			<xsl:with-param name="match" select="' = '"/>
 		</xsl:apply-templates>
 		<xsl:if test="count(../term) > 0 and count(../../term) > 0">
 			<xsl:text> OR </xsl:text>
@@ -28,6 +29,7 @@
 		</xsl:apply-templates>
 	</xsl:template>
 
+	<!-- field is handled as text if type attribute missing -->
 	<xsl:template match="field[not(@type)]">
 		<xsl:choose>
 			<xsl:when test="position() = '1'">

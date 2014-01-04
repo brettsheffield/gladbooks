@@ -31,6 +31,7 @@
 				<display>name</display>
 				<display>updated</display>
 				<sort field="updated" order="ASC"/>
+				<field type="numeric">id</field>
 				<field>name</field>
 				<field type="date">updated</field>
 			</collection>

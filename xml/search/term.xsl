@@ -6,17 +6,27 @@
 		<xsl:param name="field"/>
 		<xsl:param name="type"/>
 		<xsl:param name="match"/>
-		<xsl:value-of select="$field"/>
-		<xsl:value-of select="$match"/>
-		<xsl:text>'</xsl:text>
-		<xsl:if test="$type = 'text'">
-			<xsl:text>%</xsl:text>
-		</xsl:if>
-		<xsl:value-of select="."/>
-		<xsl:if test="$type = 'text'">
-			<xsl:text>%</xsl:text>
-		</xsl:if>
-		<xsl:text>'</xsl:text>
+
+		<xsl:choose>
+		<xsl:when test="$type = 'numeric' and number(.) != number(.)">
+			<!-- field is numeric, but term isn't - skip -->
+			<xsl:text>false</xsl:text>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="$field"/>
+			<xsl:value-of select="$match"/>
+			<xsl:text>'</xsl:text>
+			<xsl:if test="$type = 'text'">
+				<xsl:text>%</xsl:text>
+			</xsl:if>
+			<xsl:value-of select="."/>
+			<xsl:if test="$type = 'text'">
+				<xsl:text>%</xsl:text>
+			</xsl:if>
+			<xsl:text>'</xsl:text>
+		</xsl:otherwise>
+		</xsl:choose>
+
 		<xsl:if test="position() != last()">
 			<xsl:text> OR </xsl:text>
 		</xsl:if>
