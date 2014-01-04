@@ -9,6 +9,15 @@
 		<xsl:apply-templates select="collection">
 			<xsl:with-param name="collections" select="count(collection)"/>
 		</xsl:apply-templates>
+		<xsl:if test="@limit">
+			<xsl:text> LIMIT </xsl:text>
+			<xsl:value-of select="@limit"/>
+		</xsl:if>
+		<xsl:if test="@offset">
+			<xsl:text> OFFSET </xsl:text>
+			<xsl:value-of select="@offset"/>
+		</xsl:if>
+		<xsl:text>;</xsl:text>
 	</xsl:template>
 
 </xsl:stylesheet>

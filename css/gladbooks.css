@@ -850,9 +850,6 @@ div.bank.data div.tr:nth-child(even):not(.selected) {
   background-color: #eeeeff; }
 
 /* search results */
-div.search.results {
-  border: solid 1px #6e89a5; }
-
 div.search.results div.tr:nth-child(odd):not(.selected) {
   background-color: white; }
 
@@ -878,6 +875,9 @@ div.search.results div.tr::before {
 
 div.search.results div.tr.contact::before {
   content: 'contact'; }
+
+div.search.results div.tr.journal::before {
+  content: 'journal'; }
 
 div.search.results div.tr.organisation::before {
   content: 'organisation'; }

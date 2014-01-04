@@ -9,6 +9,8 @@
 		<xs:element name="term" type="field" maxOccurs="unbounded"/>
 		<xs:element name="collection" type="collection" maxOccurs="unbounded"/>
 	</xs:sequence>
+	<xs:attribute name="limit" type="xs:nonNegativeInteger"/>
+	<xs:attribute name="offset" type="xs:nonNegativeInteger"/>
 </xs:complexType><!--search-->
 
 </xs:schema>

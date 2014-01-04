@@ -3,7 +3,7 @@
 	<instance>test</instance>
 	<business>1</business>
 	<data>
-		<search>
+		<search limit="100" offset="0">
 			<!-- these terms apply globally -->
 			<term>BARNEY</term>
 			<term>Wilma</term>

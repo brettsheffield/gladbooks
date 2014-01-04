@@ -1102,7 +1102,7 @@ customLoginEvents = function(xml) {
         /* have instance, hide login dialog and get list of businesses */
         hideLoginBox();
         prepBusinessSelector();
-		$('input.search-query').change(searchKeyPress);
+		$('input.search-query').off.change(searchKeyPress);
     }
 }
 

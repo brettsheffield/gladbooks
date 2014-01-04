@@ -51,7 +51,6 @@
 					<xsl:value-of select="position()"/>
 					<xsl:text>)) q ORDER BY q.sort</xsl:text>
 				</xsl:if>
-				<xsl:text>;</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:text>) t</xsl:text>
