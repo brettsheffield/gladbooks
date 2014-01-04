@@ -1521,21 +1521,38 @@ function searchLater(c) {
 function searchNow(c) {
 	var terms = searchTerms(c.val());
 	var searchurl = 'search/';
-	var d = new Array(); /* array of deferreds */
 
-	for (var i=0; i < terms.length; i++) {
-		if (terms[i].length > 0) {
-			console.log('term: ' + terms[i]);
-			d.push(getHTML(collection_url(searchurl + terms[i])));
-		}
-	}
-	$.when.apply(null, d)
-	.done(function(bankdata) {
-		hideSpinner();
+	var d = getXML('/testdata/search.xml');
+	d.done(function(xml) {
+		searchStart(xml, terms);
 	})
 	.fail(function() {
-		hideSpinner();
+		console.log('failed to get search definitions');
 	});
+}
+
+function searchStart(doc, terms) {
+	var termstring = '<term>' + terms.join('</term><term>') + '</term>';
+	$(doc).find('request').prepend('<business>' + g_business + '</business>');
+	$(doc).find('request').prepend('<instance>' + g_instance + '</instance>');
+	$(doc).find('search').prepend(termstring);
+	var xml = flattenXml(doc);
+    $.ajax({
+        url: collection_url('search'),
+        type: 'POST',
+        data: xml,
+        contentType: 'text/xml',
+        beforeSend: function (xhr) { setAuthHeader(xhr); },
+        success: function(html) {
+			console.log('search complete');
+			html = html.replace(/&lt;div([^&]+)&gt;/g,'<div$1>');
+			html = html.replace('&lt;/div&gt;','</div>', 'g');
+			addTab('Search', html, true);
+		},
+        error: function(xml) {
+			console.log('search failed');
+		}
+    });
 }
 
 /* split search into terms */

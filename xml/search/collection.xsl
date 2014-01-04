@@ -5,7 +5,7 @@
 	<xsl:include href="sort.xsl"/>
 	<xsl:include href="term.xsl"/>
 	<xsl:include href="field.xsl"/>
-	<xsl:include href="display.xsl"/>
+	<xsl:include href="displayfields.xsl"/>
 
 	<xsl:template match="collection">
 		<xsl:param name="collections"/>
@@ -18,9 +18,9 @@
 		<xsl:text>(SELECT </xsl:text>
 		<xsl:text>nextval('sorted') AS sort,result FROM (</xsl:text>
 		<xsl:text>SELECT </xsl:text>
-		<xsl:apply-templates select="display">
+		<xsl:call-template name="displayfields">
 			<xsl:with-param name="collection" select="@type"/>
-		</xsl:apply-templates>
+		</xsl:call-template>
 		<xsl:text> AS result</xsl:text>
 		<xsl:text> FROM </xsl:text>
 

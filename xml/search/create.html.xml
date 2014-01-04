@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <row>
+    <sort>1</sort>
+    <result>&lt;div class="tr organisation"&gt;&lt;div class="td name"&gt;Fred&lt;/div&gt;&lt;/div&gt;</result>
+  </row>
+  <row>
+    <sort>2</sort>
+    <result>&lt;div class="tr organisation"&gt;&lt;div class="td name"&gt;Barney&lt;/div&gt;&lt;/div&gt;</result>
+  </row>
+</resources>

@@ -9,7 +9,6 @@
 		<xsl:apply-templates select="collection">
 			<xsl:with-param name="collections" select="count(collection)"/>
 		</xsl:apply-templates>
-		<xsl:text>DROP SEQUENCE sorted;</xsl:text>
 	</xsl:template>
 
 </xsl:stylesheet>
