@@ -1562,11 +1562,34 @@ function searchStart(doc, terms) {
 			html = html.replace(/&lt;div([^&]+)&gt;/g,'<div$1>');
 			html = html.replace('&lt;/div&gt;','</div>', 'g');
 			addTab('Search', html, true);
+			searchEvents();
 		},
         error: function(xml) {
 			console.log('search failed');
 		}
     });
+}
+
+/* add events to search results list */
+function searchEvents() {
+	var mytab = activeTab();
+	mytab.find('div.search.results div.tr').click(searchRowClick);
+}
+
+function searchRowClick() {
+	var id = $(this).find('div.td.id').text();
+	if ($(this).hasClass('contact')) {
+		console.log('contact ' + id);
+		displayElement('contacts', id);
+	}
+	if ($(this).hasClass('organisation')) {
+		console.log('organisation ' + id);
+		displayElement('organisations', id);
+	}
+	if ($(this).hasClass('product')) {
+		console.log('product ' + id);
+		displayElement('products', id);
+	}
 }
 
 /* split search into terms */
