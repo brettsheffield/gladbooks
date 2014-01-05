@@ -1106,6 +1106,10 @@ customLoginEvents = function(xml) {
     }
 }
 
+customLogoutActions = function() {
+	$('input.search-query').val(''); /* clear search bar */
+}
+
 function csvToXml(doc) {
     showSpinner('Converting csv to xml...');
 
