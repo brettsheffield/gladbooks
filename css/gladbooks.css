@@ -858,7 +858,7 @@ div.search.results div.tr:nth-child(even):not(.selected) {
 
 div.search.results div.tr::before {
   background-color: green;
-  border-radius: 5px;
+  border-radius: 15px;
   color: white;
   float: right;
   font-family: serif;
