@@ -50,11 +50,11 @@ div#tabs {
   margin-right: auto; }
 
 /* class styles */
-.logo {
+div.logo {
   padding-left: auto;
   padding-right: auto; }
 
-.navbar-search {
+div.navbar-search {
   border-radius: 25px;
   display: block;
   font-size: 14pt;
@@ -765,6 +765,9 @@ div.bank.statement div.results.pager button.cancel,
 div.bank.statement div.results.pager button.save {
   display: none; }
 
+div.results.pager button.save:disabled {
+  color: red; }
+
 div.results.empty {
   background-color: white;
   color: #6e89a5;
@@ -1146,10 +1149,11 @@ div.chzn-search > input {
     min-height: 175px; }
 
   /* search bar */
-  .search-query {
-    float: right;
+  input.search-query {
+    float: left;
+    margin-left: 40%;
     margin-top: -40px;
-    width: 50%; }
+    width: 22%; }
 
   /* menu styling overrides for larger screens */
   nav ul {
@@ -1279,6 +1283,13 @@ div.chzn-search > input {
   #pagearea {
     min-height: 275px; }
 
+  /* search bar */
+  input.search-query {
+    float: left;
+    margin-left: 35%;
+    margin-top: -40px;
+    width: 28%; }
+
   /* menus */
   nav ul {
     font-size: 90%; }
@@ -1350,6 +1361,13 @@ div.chzn-search > input {
   #pagearea {
     min-height: 440px; }
 
+  /* search bar */
+  input.search-query {
+    float: left;
+    margin-left: 28%;
+    margin-top: -40px;
+    width: 33%; }
+
   /* tabs */
   .tablet {
     min-height: 395px; }
@@ -1404,6 +1422,13 @@ div.chzn-search > input {
 
   #pagearea {
     min-height: 490px; }
+
+  /* search bar */
+  input.search-query {
+    float: left;
+    margin-left: 25%;
+    margin-top: -40px;
+    width: 35%; }
 
   /* tabs */
   .tablet {

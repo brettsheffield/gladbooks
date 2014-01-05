@@ -17,6 +17,14 @@ body {
 	min-height: 275px;
 }
 
+/* search bar */
+input.search-query {
+        float: left;
+	margin-left: 35%;
+	margin-top: -40px;
+	width: 28%;
+}
+
 /* menus */
 nav ul {
         font-size: 90%;

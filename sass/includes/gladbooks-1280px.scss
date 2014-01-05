@@ -14,6 +14,14 @@
         min-height: 490px;
 }
 
+/* search bar */
+input.search-query {
+        float: left;
+	margin-left: 25%;
+	margin-top: -40px;
+	width: 35%;
+}    
+
 /* tabs */
 .tablet {
 	min-height: 450px;

@@ -17,6 +17,14 @@ body {
 	min-height: 440px;
 }
 
+/* search bar */
+input.search-query {
+        float: left;
+	margin-left: 28%;
+	margin-top: -40px;
+	width: 33%;
+}    
+
 /* tabs */
 .tablet {
         min-height: 395px;

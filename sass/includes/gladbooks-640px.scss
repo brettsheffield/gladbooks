@@ -18,10 +18,11 @@ body {
 }
 
 /* search bar */
-.search-query {
-	float: right;
+input.search-query {
+	float: left;
+	margin-left: 40%;
 	margin-top: -40px;
-	width: 50%;
+	width: 22%;
 }
 
 /* menu styling overrides for larger screens */

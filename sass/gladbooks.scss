@@ -58,12 +58,12 @@ div#tabs {
 }
 
 /* class styles */
-.logo {
+div.logo {
 	padding-left: auto;
 	padding-right: auto;
 }
 
-.navbar-search {
+div.navbar-search {
 	border-radius: 25px;
 	display: block;
 	font-size: 14pt;
@@ -870,6 +870,9 @@ div.bank.statement div.xml-type {
 div.bank.statement div.results.pager button.cancel,
 div.bank.statement div.results.pager button.save {
 	display: none;
+}
+div.results.pager button.save:disabled {
+	color: red;
 }
 div.results.empty {
 	background-color: white;
