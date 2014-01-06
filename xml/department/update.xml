@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+  <instance>default</instance>
+  <business>1</business>
+  <id>1</id>
+	<data>
+		<department>
+			<name>New Name of Department</name>
+		</department>
+	</data>
+</request>
