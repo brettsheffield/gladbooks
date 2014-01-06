@@ -184,7 +184,7 @@ function bankChange() {
 	mytab.find('div.results.pager').data('offset', 0);
 	mytab.find('div.results.pager').data('order', 'ASC');
 
-	var action = getTabMeta(activeTabId(), 'action');
+	var action = tabActive().action;
 	if (action == 'reconcile') {
 		bankReconcile(account);
 		bankReconcileCancel();
@@ -668,8 +668,8 @@ function bankStatement(account) {
 	var title = '';
 	var sort = false;
 	var tabid = activeTabId();
-	var object = getTabMeta(tabid, 'object');
-	var action = getTabMeta(tabid, 'action');
+	var object = tabById(tabid).object;
+	var action = tabById(tabid).action;
 	var url = object + '.' + action + '/' + account;
 	url += '/' + limit + '/' + offset + '/' + sortfield + '/' + order;
 	url += '/' + reverse;
