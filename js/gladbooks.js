@@ -1088,21 +1088,21 @@ customBusinessNotFound = function(xml) {
 }
 
 customLoginEvents = function(xml) {
-    g_instance = '';
-    $(xml).find('instance').each(function() {
-        g_loggedin = true;
-        g_instance = $(this).text();
-        console.log('Instance selected: ' + g_instance);
-    });
+	console.log('customLoginEvents.gladbooks()');
+	g_instance = $(xml).find('instance').text();
     if (g_instance == '') {
         /* couldn't find instance for user - treat as failed login */
         loginfailed();
     }
     else {
         /* have instance, hide login dialog and get list of businesses */
+        console.log('Instance selected: ' + g_instance);
+        g_loggedin = true;
         hideLoginBox();
         prepBusinessSelector();
-		$('input.search-query').off.change(searchKeyPress);
+		$('input.search-query').off().change(searchKeyPress);
+		/* TODO */
+		//dashboardShow();
     }
 }
 
@@ -1131,6 +1131,11 @@ function csvToXml(doc) {
             displayResultsGeneric(xml, collection, title);
         }
     });
+}
+
+/* load/refresh/display user dashboard */
+function dashboardShow() {
+	addTab('Dashboard', '<div class="dashboard"/>', true);
 }
 
 docKeypress = function() {
