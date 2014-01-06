@@ -108,6 +108,15 @@ nav ul {
 nav ul li:hover > ul {
   display: block; }
 
+/* business selector */
+select.businessselect {
+  border-radius: 15px;
+  padding-left: 15px;
+  padding-right: 10px;
+  margin-left: 10px;
+  margin-top: 7px;
+  width: 150px; }
+
 /* tabs */
 .tablist li:hover li {
   font-size: 80%; }
@@ -1025,14 +1034,6 @@ div.product div.price {
 div.organisation.update div.chzn-container {
   margin: 7px; }
 
-/* business selector */
-.businessselect {
-  border-radius: 15px;
-  padding-left: 15px;
-  padding-right: 10px;
-  margin-left: 10px;
-  margin-top: 7px; }
-
 /* map */
 .map-canvas {
   display: none;
@@ -1294,6 +1295,10 @@ div.chzn-search > input {
   nav ul {
     font-size: 90%; }
 
+  /* business selector */
+  select.businessselect {
+    width: 200px; }
+
   /* tabs */
   .tablet {
     min-height: 230px; }
@@ -1367,6 +1372,10 @@ div.chzn-search > input {
     margin-left: 28%;
     margin-top: -40px;
     width: 33%; }
+
+  /* business selector */
+  select.businessselect {
+    width: 220px; }
 
   /* tabs */
   .tablet {

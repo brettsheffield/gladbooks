@@ -127,6 +127,16 @@ nav ul li:hover > ul {
 	display: block;
 }
 
+/* business selector */
+select.businessselect {
+	border-radius: 15px;
+	padding-left: 15px;
+	padding-right: 10px;
+	margin-left: 10px;
+	margin-top: 7px;
+	width: 150px;
+}
+
 /* tabs */
 .tablist li:hover li { 
 	font-size: 80%;
@@ -1173,15 +1183,6 @@ div.product div.price {
 /* form: organisation.update */
 div.organisation.update div.chzn-container {
 	margin: 7px;
-}
-
-/* business selector */
-.businessselect {
-	border-radius: 15px;
-	padding-left: 15px;
-	padding-right: 10px;
-	margin-left: 10px;
-	margin-top: 7px;
 }
 
 /* map */
