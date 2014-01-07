@@ -1707,18 +1707,21 @@ function submitJournalEntry(event, form, bankid) {
 
 /* override the gladd.js function which sets tab titles */
 tabTitle = function (title, object, action, xml) {
-    if ((object == 'salesorder') && (action == 'update') && (xml[0])) {
-        /* Display Sales Order number as tab title */
-        title = 'SO ' + $(xml[0]).find('order').first().text();
-    }
-    else if ((object == 'contact') && (action == 'update') && (xml[0])) {
-        /* Display Contact name as tab title */
-        title = $(xml[0]).find('name').first().text();
-    }
-    else if ((object == 'organisation') && (action == 'update') && (xml[0])) {
-        /* Display Organisation name as tab title */
-        title = $(xml[0]).find('name').first().text();
-    }
+	var namedobjects = [ 'contact', 'department', 'division', 'organisation',
+		'product'
+	];
+
+	if (namedobjects.indexOf(object) != -1 && action == 'update' && xml[0]) {
+		if (object == 'product') {
+        	title = $(xml[0]).find('shortname').first().text();
+		}
+		else if (object == 'salesorder') {
+        	title = 'SO ' + $(xml[0]).find('order').first().text();
+		}
+		else {
+        	title = $(xml[0]).find('name').first().text();
+		}
+	}
     return title;
 }
 
