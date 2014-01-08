@@ -2130,6 +2130,45 @@ customSubmitFormSuccess = function(object, action, id, collection, xml) {
 	return true;
 }
 
+customClickElement = function(row) {
+    var tab = tabActive();
+
+	/* Some collections should never do anything when clicked */
+	var inert = [ 'salespayments' ];
+	if (inert.indexOf(tab.collection) != -1) { return true; }
+
+    if (tab.collection == 'salesinvoices') {
+        /* view salesinvoice pdf */
+        var a=row.find('td.xml-pdf').find('a');
+        var href=a.attr('href');
+        var si = a.attr('id');
+        var html = '<div class="pdf">';
+        html += '<object class="pdf" data="' + href + '"';
+        html += 'type="application/pdf">';
+        html += 'alt : <a href="' + href + '">PDF</a>';
+        html += '</object></div>';
+        addTab(si, html, true);
+		return true;
+    }
+    else {
+        if (tab.collection == 'accounts') {
+            var id = row.find('td.xml-nominalcode').text();
+        }
+        else {
+            var id = row.find('td.xml-id').text();
+        }
+        if (tab.collection == 'reports/accountsreceivable') {
+            var title = 'Statement: ' + row.find('td.xml-orgcode').text();
+        }
+        else {
+            var title = null;
+        }
+        displayElement(tab.collection, id, title);
+		return true;
+    }
+}
+
+
 /* TODO  - gladd.js functions that have Gladbooks-specific stuff in them: */
 /* handleSubforms()
  * formEvents() - not really, but consider refactoring
@@ -2149,6 +2188,5 @@ customSubmitFormSuccess = function(object, action, id, collection, xml) {
  * fetchElementData()
  * displayResultsGeneric()
  * switchBusiness() - refers to orgcode
- * clickElement()
  */
 
