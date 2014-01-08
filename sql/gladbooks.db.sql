@@ -740,8 +740,10 @@ DECLARE
         neworgcode      TEXT;
         conflicts       INT4;
         idlen           INT4;
+        x		INT4;
 BEGIN
         idlen := 8;
+        x := 0;
         neworgcode := regexp_replace(organisation_name,'[^a-zA-Z0-9]+','','g');
         neworgcode := substr(neworgcode, 1, idlen);
         neworgcode := upper(neworgcode);
@@ -749,11 +751,13 @@ BEGIN
                 WHERE orgcode = neworgcode;
         WHILE conflicts != 0 OR char_length(neworgcode) < idlen LOOP
                 neworgcode = substr(neworgcode, 1, idlen - 1);
-                neworgcode = neworgcode || chr(int4(random() * 25 + 65));
+		x := x + 1;
+                neworgcode = neworgcode || chr(x + 64);
                 SELECT INTO conflicts COUNT(id) FROM organisation
                         WHERE orgcode LIKE neworgcode || '%';
-                IF conflicts > 25 THEN
+                IF x > 25 THEN
                         idlen := idlen + 1;
+        		x := 0;
                 END IF;
         END LOOP;
         RETURN neworgcode;

@@ -66,7 +66,7 @@ CREATE OR REPLACE FUNCTION upgrade_database()
 RETURNS INT4 AS
 $$
 DECLARE
-	vnum		INT4 = 7; -- New version (increment this)
+	vnum		INT4 = 8; -- New version (increment this)
 	instances	INT4;
 	inst		TEXT;
 	oldv		INT4;
@@ -600,6 +600,37 @@ DECLARE
 BEGIN
         SELECT INTO last_pk ledger_pk FROM ledger_pk_counter;
         RETURN last_pk;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION organisation_orgcode(organisation_name TEXT)
+RETURNS TEXT AS
+$$
+DECLARE
+        neworgcode      TEXT;
+        conflicts       INT4;
+        idlen           INT4;
+        x               INT4;
+BEGIN
+        idlen := 8;
+        x := 0;
+        neworgcode := regexp_replace(organisation_name,'[^a-zA-Z0-9]+','','g');
+        neworgcode := substr(neworgcode, 1, idlen);
+        neworgcode := upper(neworgcode);
+        SELECT INTO conflicts COUNT(id) FROM organisation
+                WHERE orgcode = neworgcode;
+        WHILE conflicts != 0 OR char_length(neworgcode) < idlen LOOP
+                neworgcode = substr(neworgcode, 1, idlen - 1);
+                x := x + 1;
+                neworgcode = neworgcode || chr(x + 64);
+                SELECT INTO conflicts COUNT(id) FROM organisation
+                        WHERE orgcode LIKE neworgcode || '%';
+                IF x > 25 THEN
+                        idlen := idlen + 1;
+                        x := 0; 
+                END IF;
+        END LOOP;
+        RETURN neworgcode;
 END;
 $$ LANGUAGE 'plpgsql';
 
