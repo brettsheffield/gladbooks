@@ -13,9 +13,9 @@
 				<xsl:value-of select="product"/>
 				<xsl:text>','</xsl:text>
 			</xsl:when>
-			<xsl:when test="../../product/@id">
+			<xsl:when test="$id">
 				<xsl:text>'</xsl:text>
-				<xsl:value-of select="@id"/>
+				<xsl:value-of select="$id"/>
 				<xsl:text>','</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>

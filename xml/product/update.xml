@@ -2,8 +2,9 @@
 <request>
   <instance>default</instance>
   <business>1</business>
+	<id>1</id>
 	<data>
-		<product id="1">
+		<product>
 		  <account>4000</account>
 			<shortname>Name of Product</shortname>
 			<description>Name of Product</description>

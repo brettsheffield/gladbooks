@@ -48,6 +48,7 @@
 			</collection>
 			<collection type="product">
 				<display>id</display>
+			 	<display>account</display>
 			 	<display>shortname</display>
 			 	<display>description</display>
 			 	<display>price_buy</display>

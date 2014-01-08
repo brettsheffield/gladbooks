@@ -20,6 +20,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
+g_testauthurl = '/test/auth/';
 g_username='alpha';
 g_password='pass';
 g_instance='test';
@@ -38,58 +39,51 @@ test("build authentication hash", function() {
 });
 
 test("test user login", function() {
-
 	stop();
 	$.ajax({
-		url: '/auth/',
+		url: g_testauthurl,
 		type: 'GET',
 		contentType: 'text/xml',
 		beforeSend: function (xhr) { setAuthHeader(xhr); },
-		success: function(xml) { ok(true); start(); },
-		error: function(xml) { ok(false); start(); },
+		success: function(xml) { ok(true); start(); auth_session_logout(); },
+		error: function(xml) { ok(false); start(); auth_session_logout(); },
 	});
-
 });
 
 test("test user login - invalid", function() {
-	var tmp_password = g_password;
-
-	g_password = 'false';
-
+	var username = 'betty';
+	var password = 'false';
 	stop();
 	$.ajax({
-		url: '/auth/',
+		url: g_testauthurl,
 		type: 'GET',
 		contentType: 'text/xml',
-		beforeSend: function (xhr) { setAuthHeader(xhr); },
-		success: function(xml) { ok(false); start(); },
-		error: function(xml) { ok(true); start(); },
+		beforeSend: function (xhr) { setAuthHeader(xhr, username, password); },
+		success: function(xml) {
+			ok(false);
+			start();
+			auth_session_logout();
+		},
+		error: function(xml) {
+			ok(true);
+			start();
+			auth_session_logout();
+		},
 	});
-
-	/* reset password to the test one we're using */
-	g_password = tmp_password;
 });
 
 test("test ldap login", function() {
-	var tmp_username = g_username;
-	var tmp_password = g_password;
-
-	g_username='betty';
-	g_password='ie5a8P40';
-
+	var username='betty';
+	var password='ie5a8P40';
 	stop();
 	$.ajax({
-		url: '/auth/',
+		url: g_testauthurl,
 		type: 'GET',
 		contentType: 'text/xml',
-		beforeSend: function (xhr) { setAuthHeader(xhr); },
-		success: function(xml) { ok(true); start(); },
-		error: function(xml) { ok(false); start(); },
+		beforeSend: function (xhr) { setAuthHeader(xhr, username, password); },
+		success: function(xml) { ok(true); start(); auth_session_logout(); },
+		error: function(xml) { ok(false); start(); auth_session_logout(); },
 	});
-
-	/* reset password to the test one we're using */
-	g_username = tmp_username;
-	g_password = tmp_password;
 });
 
 /* do some POST testing */
@@ -1033,41 +1027,50 @@ function testXmlGet(url1, url2) {
 	});
 }
 
+/* Fetch both a test xml payload to POST, and the expected xml result
+ * POST the payload to the test url, and check that the response matches
+ * the expected result. */
 function testXmlPost(object, testid, id) {
-
     stop();
-	var url = '/testdata/' + padString(testid, 5) + '.xml';
-	$.ajax({
-		url: url,
-		dataType: 'text',
-		beforeSend: function (xhr) { setAuthHeader(xhr); },
-		success: function(xml) {  
-			if (id) {
-				var posturl = collection_url(object) + id;
-			}
-			else {
-				var posturl = collection_url(object);
-			}
-			//xml = xml.replace(/\s{0,}\n\s{0,}/g, ''); /* strip */
-			$.ajax({
-				url: posturl,
-				type: 'POST',
-				data: xml,
-				contentType: 'text/xml',
-				beforeSend: function (xhr) { setAuthHeader(xhr); },
-				success: function(xml) { 
-					ok(true); start(); 
-				},
-				error: function() {
-					ok(false, "POST failed " + posturl);
-					start();
-				},
-			});
-		},
-		error: function() {
-			ok(false, "failed to GET testdata " + url); 
-			start();
-		},
+
+	/* Build test url */
+	var urlPost = collection_url(object);
+	if (id) {
+		urlPost += id;
+	}
+
+	/* fetch the test data and expected result */
+	var urlData = '/testdata/' + padString(testid, 5) + '.xml';
+	var urlResult = '/testdata/' + padString(testid, 5) + '.result.xml';
+	var d = new Array();
+	d.push(getXML(urlData));
+	d.push(getXML(urlResult));
+	$.when.apply(null, d)
+	.done(function(payload) {
+		var payload = flattenXml(payload[0]);
+		var docs = Array.prototype.splice.call(arguments, 1);
+		var result = flattenXml(docs[0][0]);
+		/* POST the testdata and compare the result */
+		$.ajax({
+			url: urlPost,
+			type: 'POST',
+			data: payload,
+			contentType: 'text/xml',
+			beforeSend: function (xhr) { setAuthHeader(xhr); },
+			success: function(response) {
+				var response = flattenXml(response);
+				equal(response, result, "plugin result matches");
+				start(); 
+			},
+			error: function() {
+				ok(false, "POST failed " + posturl);
+				start();
+			},
+		});
+	})
+	.fail(function() {
+		ok(false, "failed to GET testdata"); 
+		start();
 	});
 }
 
@@ -1085,27 +1088,22 @@ module("Strings");
 test("escapeHTML()", function() {
 	var rawstring = '<Pots> & "Pans" & <Stuff>';
 	var cookedstr = '&lt;Pots&gt; &amp; &quot;Pans&quot; &amp; &lt;Stuff&gt;';
-
 	equal(escapeHTML(rawstring), cookedstr, "Escape HTML special characters");
-
 });
 
 test("padString() - add leading zeros", function() {
 	var rawstring = '0';
 	var cookedstring = '0000';
-
-
 	equal(padString(rawstring, 4), cookedstring, "Pad string with leading zeros");
 });
 
 module("XSLT");
 
 test("xslt GET()", function() {
-	
 	testXmlGet('/testxslt/', '/testdata/testxslt.html');
-
 });
 
+/*
 module("Plugin");
 
 test("test plugin function", function() {
@@ -1115,4 +1113,4 @@ test("test plugin function", function() {
 	testXmlPost('plugintest', 12);
 });
 
-
+*/

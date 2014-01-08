@@ -33,7 +33,7 @@
 				<xsl:text>organisation_current</xsl:text>
 			</xsl:when>
 			<xsl:when test="@type = 'product'">
-				<xsl:text>product_current</xsl:text>
+				<xsl:text>productlist</xsl:text>
 			</xsl:when>
 			<xsl:when test="@type = 'salesinvoice'">
 				<xsl:text>salesinvoice_current</xsl:text>

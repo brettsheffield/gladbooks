@@ -8,6 +8,10 @@
     <xs:sequence>
       <xs:element name="instance" type="xs:string"/>
       <xs:element name="business" type="xs:positiveInteger"/>
+			<!-- the following element is added by gladd, and will not be present at 
+					 validation -->
+
+			<!--xs:element name="id" type="xs:positiveInteger"/-->
       <xs:element name="data">
         <xs:complexType>
           <xs:sequence>
