@@ -873,7 +873,7 @@ div.search.results div.tr::before {
   border-radius: 15px;
   color: white;
   float: right;
-  font-family: serif;
+  font-family: sans-serif;
   font-weight: bold;
   padding: 1px 5px;
   position: relative;
@@ -882,7 +882,7 @@ div.search.results div.tr::before {
   margin-top: 2px;
   margin-bottom: 2px;
   text-align: center;
-  text-transform: uppercase;
+  text-transform: capitalize;
   width: 10em; }
 
 div.search.results div.tr.contact::before {
@@ -898,7 +898,7 @@ div.search.results div.tr.product::before {
   content: 'product'; }
 
 div.search.results div.tr.salesinvoice::before {
-  content: 'salesinvoice'; }
+  content: 'sales invoice'; }
 
 div.search.results div.td {
   padding-left: 5px; }
