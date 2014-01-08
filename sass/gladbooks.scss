@@ -996,7 +996,7 @@ div.search.results div.tr:nth-child(even):not(.selected) {
 	background-color: $color-feint;
 }
 div.search.results div.tr::before {
-	background-color: green;
+	background-color: $color-dark;
 	border-radius: 15px;
 	color: white;
 	float: right;

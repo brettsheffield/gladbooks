@@ -869,7 +869,7 @@ div.search.results div.tr:nth-child(even):not(.selected) {
   background-color: #eeeeff; }
 
 div.search.results div.tr::before {
-  background-color: green;
+  background-color: #6e89a5;
   border-radius: 15px;
   color: white;
   float: right;
