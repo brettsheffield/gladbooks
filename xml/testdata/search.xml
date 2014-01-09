@@ -29,7 +29,7 @@
 				<field>mobile</field>
 			</collection>
 			<collection type="organisation">
-				<display>id</display>
+				<display as="id">organisation</display>
 			 	<display>name</display>
 			 	<display>orgcode</display>
 				<display>vatnumber</display>

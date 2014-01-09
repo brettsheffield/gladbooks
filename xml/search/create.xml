@@ -28,6 +28,7 @@
 				<field>email</field>
 			</collection>
 			<collection type="organisation">
+				<display as="id">organisation</display>
 				<display>name</display>
 				<display>updated</display>
 				<sort field="updated" order="ASC"/>

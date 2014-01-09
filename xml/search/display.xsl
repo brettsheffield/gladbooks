@@ -7,7 +7,14 @@
 	<xsl:element name="div">
 		<xsl:attribute name="class">
 			<xsl:text>td </xsl:text>
-			<xsl:value-of select="."/>
+			<xsl:choose>
+				<xsl:when test="@as">
+					<xsl:value-of select="@as"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="."/>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:attribute>
 		<xsl:text>' || COALESCE(CAST(</xsl:text>
 		<xsl:value-of select="."/>
