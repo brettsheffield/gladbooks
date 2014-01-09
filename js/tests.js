@@ -222,6 +222,7 @@ test("create contact", function() {
 		error: function(xml) { ok(false); start(); },
 	});
 
+	//testXmlPost('contacts', 19, undefined, [ 'id', 'contact', 'updated' ]);
 });
 
 test("create billing contact for organisation", function() {
@@ -273,6 +274,7 @@ test("update contact", function() {
 		error: function(xml) { ok(false); start(); },
 	});
 
+	testXmlPost('contacts', 20, 1);
 });
 
 test("get contacts", function() {
@@ -952,7 +954,7 @@ function testXmlGet(url1, url2) {
 /* Fetch both a test xml payload to POST, and the expected xml result
  * POST the payload to the test url, and check that the response matches
  * the expected result. */
-function testXmlPost(object, testid, id) {
+function testXmlPost(object, testid, id, ignorediff) {
     stop();
 
 	d = auth_session_logout(false); /* ensure we have no active cookies */
@@ -1008,6 +1010,15 @@ test("isTabId()", function() {
 	equal(isTabId(4), true, "number returns true");
 	equal(isTabId("4"), true, "numeric string returns true");
 	equal(isTabId("id"), false, "non-numeric string returns false");
+});
+
+test("stripXmlFields()", function() {
+	var before = $('<xml><one>1</one><two>2</two><three>3</three></xml>');
+	var after = '<xml xmlns=\"http://www.w3.org/1999/xhtml\"><one>1</one><three>3</three></xml>';
+	var stripped = stripXmlFields(before, ['two']);
+	stripped = flattenXml(stripped[0]);
+	before = flattenXml(before[0]);
+	equal(before, after, "xml fields stripped correctly");
 });
 
 module("Strings");
