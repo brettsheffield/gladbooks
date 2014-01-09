@@ -260,20 +260,6 @@ test("create shipping contact for organisation", function() {
 });
 
 test("update contact", function() {
-	var xml = createRequestXml();
-	xml += '<contact id="1"><name>Mrs Corrected Name O\'Malley</name></contact></data></request>';
-
-	stop();
-	$.ajax({
-		url: collection_url('contacts') + 1,
-		type: 'POST',
-		data: xml,
-		contentType: 'text/xml',
-		beforeSend: function (xhr) { setAuthHeader(xhr); },
-		success: function(xml) { ok(true); start(); },
-		error: function(xml) { ok(false); start(); },
-	});
-
 	testXmlPost('contacts', 20, 1);
 });
 

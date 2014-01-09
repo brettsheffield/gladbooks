@@ -3,7 +3,7 @@
   <instance>test</instance>
   <business>1</business>
   <data>
-    <contact id="1">
+    <contact>
       <name>Mrs Corrected Name O'Malley</name>
     </contact>
   </data>
