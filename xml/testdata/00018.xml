@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+  <instance>test</instance>
+  <business>1</business>
+  <data>
+    <organisation>
+			<vatnumber>EU 123 45678</vatnumber>
+		</organisation>
+  </data>
+</request>

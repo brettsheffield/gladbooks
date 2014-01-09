@@ -463,88 +463,23 @@ test("update organisation (name)", function() {
 });
 
 test("update organisation (terms)", function() {
-	var xml = createRequestXml();
-	xml += '<organisation id="2"><terms>14</terms></organisation></data></request>';
-
-	stop();
-	$.ajax({
-		url: collection_url('organisations') + 2,
-		type: 'POST',
-		data: xml,
-		contentType: 'text/xml',
-		beforeSend: function (xhr) { setAuthHeader(xhr); },
-		success: function(xml) { ok(true); start(); },
-		error: function(xml) { ok(false); start(); },
-	});
-
+	testXmlPost('organisations', 14, 2);
 });
 
 test("update organisation (is_active)", function() {
-	var xml = createRequestXml();
-	xml += '<organisation id="2" is_active="false"/></data></request>';
-
-	stop();
-	$.ajax({
-		url: collection_url('organisations') + 2,
-		type: 'POST',
-		data: xml,
-		contentType: 'text/xml',
-		beforeSend: function (xhr) { setAuthHeader(xhr); },
-		success: function(xml) { ok(true); start(); },
-		error: function(xml) { ok(false); start(); },
-	});
-
+	testXmlPost('organisations', 15, 2);
 });
 
 test("update organisation (is_suspended)", function() {
-	var xml = createRequestXml();
-	xml += '<organisation id="2" is_suspended="true"/></data></request>';
-
-	stop();
-	$.ajax({
-		url: collection_url('organisations') + 2,
-		type: 'POST',
-		data: xml,
-		contentType: 'text/xml',
-		beforeSend: function (xhr) { setAuthHeader(xhr); },
-		success: function(xml) { ok(true); start(); },
-		error: function(xml) { ok(false); start(); },
-	});
-
+	testXmlPost('organisations', 16, 2);
 });
 
 test("update organisation (is_vatreg)", function() {
-	var xml = createRequestXml();
-	xml += '<organisation id="2" is_vatreg="true"/></data></request>';
-
-	stop();
-	$.ajax({
-		url: collection_url('organisations') + 2,
-		type: 'POST',
-		data: xml,
-		contentType: 'text/xml',
-		beforeSend: function (xhr) { setAuthHeader(xhr); },
-		success: function(xml) { ok(true); start(); },
-		error: function(xml) { ok(false); start(); },
-	});
-
+	testXmlPost('organisations', 17, 2);
 });
 
 test("update organisation (vatreg)", function() {
-	var xml = createRequestXml();
-	xml += '<organisation id="2"><vatnumber>EU 123 45678</vatnumber></organisation></data></request>';
-
-	stop();
-	$.ajax({
-		url: collection_url('organisations') + 2,
-		type: 'POST',
-		data: xml,
-		contentType: 'text/xml',
-		beforeSend: function (xhr) { setAuthHeader(xhr); },
-		success: function(xml) { ok(true); start(); },
-		error: function(xml) { ok(false); start(); },
-	});
-
+	testXmlPost('organisations', 18, 2);
 });
 
 test("link organisation and contact", function() {
