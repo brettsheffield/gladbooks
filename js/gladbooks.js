@@ -1081,6 +1081,13 @@ customFormEvents = function(tab, object, action, id) {
 			mytab.find('select.bankaccount').trigger('change');
 		}
 	}
+	if (object == 'contact' && action == 'update') {
+		var addressFields = ['line_1','line_2','line_3','town','county',
+			'country','postcode'];
+		var selector = addressFields.join('"],input[name="'); 
+		selector = 'input[name="' + selector + '"]';
+		mytab.find(selector).change(mapUpdate);
+	}
 }
 
 customBusinessNotFound = function(xml) {
