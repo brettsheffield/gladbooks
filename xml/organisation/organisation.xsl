@@ -9,7 +9,7 @@
 	<xsl:template match="organisation">
 		<xsl:call-template name="setSearchPath"/>
 
-                <xsl:if test="not(@id)">
+                <xsl:if test="not($id)">
                         <xsl:text>INSERT INTO organisation (</xsl:text>
 			<xsl:if test="@orgcode">
 				<xsl:text>orgcode, </xsl:text>
@@ -55,9 +55,9 @@
 		<xsl:text>authuser,clientip) VALUES (</xsl:text>
 
                 <xsl:choose>
-                        <xsl:when test="@id">
+                        <xsl:when test="$id">
                                 <xsl:text>'</xsl:text>
-                                <xsl:value-of select="@id"/>
+                                <xsl:value-of select="$id"/>
                                 <xsl:text>','</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>

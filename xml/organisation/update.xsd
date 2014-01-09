@@ -18,7 +18,6 @@
 									<xs:element name="billcontact" type="xs:positiveInteger" minOccurs="0"/>
 									<xs:element name="vatnumber" type="xs:string" minOccurs="0"/>
 								</xs:sequence>
-								<xs:attribute name="id" type="xs:string" use="required"/>
 								<xs:attribute name="is_active" type="xs:boolean"/>
 								<xs:attribute name="is_suspended" type="xs:boolean"/>
 								<xs:attribute name="is_vatreg" type="xs:boolean"/>

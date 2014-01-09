@@ -459,20 +459,7 @@ test("create organisation", function() {
 });
 
 test("update organisation (name)", function() {
-	var xml = createRequestXml();
-	xml += '<organisation id="2"><name>My nifty new organisation name to test updates</name></organisation></data></request>';
-
-	stop();
-	$.ajax({
-		url: collection_url('organisations') + 2,
-		type: 'POST',
-		data: xml,
-		contentType: 'text/xml',
-		beforeSend: function (xhr) { setAuthHeader(xhr); },
-		success: function(xml) { ok(true); start(); },
-		error: function(xml) { ok(false); start(); },
-	});
-
+	testXmlPost('organisations', 13, 2);
 });
 
 test("update organisation (terms)", function() {
@@ -1033,11 +1020,16 @@ function testXmlGet(url1, url2) {
 function testXmlPost(object, testid, id) {
     stop();
 
+	d = auth_session_logout(false); /* ensure we have no active cookies */
+
 	/* Build test url */
 	var urlPost = collection_url(object);
 	if (id) {
 		urlPost += id;
 	}
+
+	console.log('instance: ' + g_instance);
+	console.log('urlPost: ' + urlPost);
 
 	/* fetch the test data and expected result */
 	var urlData = '/testdata/' + padString(testid, 5) + '.xml';

@@ -2,9 +2,9 @@
 <request>
   <instance>test</instance>
   <business>1</business>
-	<data>
-		<organisation>
-			<name>Rename of Organisation</name>
-		</organisation>
-	</data>
+  <data>
+    <organisation>
+      <name>Rename of Organisation</name>
+    </organisation>
+  </data>
 </request>
