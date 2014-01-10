@@ -2141,7 +2141,7 @@ customClickElement = function(row) {
     var tab = tabActive();
 
 	/* Some collections should never do anything when clicked */
-	var inert = [ 'salespayments' ];
+	var inert = [ 'accounts', 'salespayments' ];
 	if (inert.indexOf(tab.collection) != -1) { return true; }
 
     if (tab.collection == 'salesinvoices') {
@@ -2158,12 +2158,7 @@ customClickElement = function(row) {
 		return true;
     }
     else {
-        if (tab.collection == 'accounts') {
-            var id = row.find('td.xml-nominalcode').text();
-        }
-        else {
-            var id = row.find('td.xml-id').text();
-        }
+        var id = row.find('td.xml-id').text();
         if (tab.collection == 'reports/accountsreceivable') {
             var title = 'Statement: ' + row.find('td.xml-orgcode').text();
         }
