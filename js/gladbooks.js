@@ -2132,7 +2132,12 @@ customSubmitFormSuccess = function(object, action, id, collection, xml) {
     }
 
     if (object == 'business') {
-        prepBusinessSelector();
+		/* update business selector and switch business */
+		tabActive().close();
+		g_business = $(xml).find('resources > row > id').text();
+		prepBusinessSelector();
+		hideSpinner();
+		return false;
     }
 	return true;
 }

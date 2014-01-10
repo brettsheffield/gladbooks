@@ -37,6 +37,8 @@
 		<xsl:text>');</xsl:text>
 
 		<xsl:text>COMMIT;</xsl:text>
+		<!-- return new resource -->
+		<xsl:text>SELECT * FROM business WHERE id=currval(pg_get_serial_sequence('business','id'));</xsl:text>
 	</xsl:template>
 
 </xsl:stylesheet>
