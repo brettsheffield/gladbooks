@@ -15,8 +15,10 @@
                         <xsl:text>');</xsl:text>
                 </xsl:if>
 
-                <xsl:text>INSERT INTO contactdetail (contact,name,</xsl:text>
-
+                <xsl:text>INSERT INTO contactdetail (contact,</xsl:text>
+                <xsl:if test="name">
+                        <xsl:text>name,</xsl:text>
+                </xsl:if>
                 <xsl:if test="line_1">
                         <xsl:text>line_1,</xsl:text>
                 </xsl:if>
@@ -79,8 +81,8 @@
                                         <xsl:value-of select="name"/>
                                 </xsl:with-param>
                         </xsl:call-template>
+                	<xsl:text>','</xsl:text>
                 </xsl:if>
-                <xsl:text>','</xsl:text>
 
                 <xsl:if test="line_1">
                         <xsl:call-template name="cleanQuote">
