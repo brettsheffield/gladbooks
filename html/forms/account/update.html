@@ -1,0 +1,22 @@
+<div class="account update">
+	<div class="statusmsg clearfix"/>
+	<h2>Edit Chart Account</h2>
+	<form method="post" action="accounts">
+		<table>
+			<thead>
+				<tr>
+					<th>Nominal Code</th>
+					<th>Account Type</th>
+					<th>Account Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><input class="nominalcode" type="text" name="id" /></td>
+					<td><select name="type" class="type populate" data-placeholder="Select account type" data-source="accounttypes"></select></td>
+					<td><input class="description focus" type="text" name="description" placeholder="Account Description"/></td>
+			</tbody>
+		</table>
+		<button class="submit formsubmit">Save</button>
+	</form>
+</div>

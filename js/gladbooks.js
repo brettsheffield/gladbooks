@@ -38,7 +38,7 @@ g_menus = [
 	[ 'organisation.create', getForm, 'organisation', 'create', 'Add New Organisation' ],
 	[ 'organisations', showQuery, 'organisations', 'Organisations', true ],
 	[ 'payables', showHTML, 'help/payables.html', 'Payables', false ],
-	[ 'product.create', getForm, 'product', 'create', 'Add New Product' ],
+	[ 'product.create', showForm, 'product', 'create', 'Add New Product' ],
 	[ 'products', showQuery, 'products', 'Products', true ],
 	[ 'rpt_accountsreceivable', showQuery, 'reports/accountsreceivable', 'Accounts Receivable', true ],
 	[ 'rpt_balancesheet', showHTML, 'reports/balancesheet','Balance Sheet',false, true ],
@@ -91,6 +91,12 @@ g_formdata = [
     [ 'salespayment', 'create',[ 'paymenttype', 'organisations', 'accounts.asset' ], ],
     [ 'salespayment', 'update',[ 'paymenttype', 'organisations', 'accounts.asset' ], ],
 ];
+
+FORMDATA = {
+	'product': {
+		'create': [ 'accounts.revenue' ]
+	}
+}
 
 var g_max_ledgers_per_journal=7;
 var g_frmLedger;
@@ -184,7 +190,7 @@ function bankChange() {
 	mytab.find('div.results.pager').data('offset', 0);
 	mytab.find('div.results.pager').data('order', 'ASC');
 
-	var action = tabActive().action;
+	var action = TABS.active.action;
 	if (action == 'reconcile') {
 		bankReconcile(account);
 		bankReconcileCancel();
@@ -668,8 +674,8 @@ function bankStatement(account) {
 	var title = '';
 	var sort = false;
 	var tabid = activeTabId();
-	var object = tabById(tabid).object;
-	var action = tabById(tabid).action;
+	var object = TABS.byId[tabid].object;
+	var action = TABS.byId[tabid].action;
 	var url = object + '.' + action + '/' + account;
 	url += '/' + limit + '/' + offset + '/' + sortfield + '/' + order;
 	url += '/' + reverse;
@@ -2133,7 +2139,7 @@ customSubmitFormSuccess = function(object, action, id, collection, xml) {
 
     if (object == 'business') {
 		/* update business selector and switch business */
-		tabActive().close();
+		TABS.active.close();
 		g_business = $(xml).find('resources > row > id').text();
 		prepBusinessSelector();
 		hideSpinner();
@@ -2143,10 +2149,10 @@ customSubmitFormSuccess = function(object, action, id, collection, xml) {
 }
 
 customClickElement = function(row) {
-    var tab = tabActive();
+    var tab = TABS.active;
 
 	/* Some collections should never do anything when clicked */
-	var inert = [ 'accounts', 'salespayments' ];
+	var inert = [ 'salespayments' ];
 	if (inert.indexOf(tab.collection) != -1) { return true; }
 
     if (tab.collection == 'salesinvoices') {
@@ -2173,6 +2179,12 @@ customClickElement = function(row) {
         displayElement(tab.collection, id, title);
 		return true;
     }
+}
+
+Form.prototype.customXML = function() {
+	if (this.object == 'product') {
+		this.xml += '<tax id="1"/>';
+	}
 }
 
 

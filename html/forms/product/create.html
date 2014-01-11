@@ -14,7 +14,7 @@
 			</div>
 			<div class="tbody">
 			  <div class="tr clearfix">
-					<div class="td account"><a class="datasource" href="accounts.revenue"></a><select name="account" class="account populate" data-placeholder="Select account" title="You must select an account to post this product against"></select></div>
+					<div class="td account"><select name="account" class="account populate" data-source="accounts.revenue" data-placeholder="Select account" title="You must select an account to post this product against"></select></div>
 					<div class="td shortname"><input class="shortname focus" type="text" name="shortname" placeholder="Short Name" title="A Short Name for the Product which will appear in system menus"/></div>
 					<div class="td description"><input class="description" type="text" name="description" placeholder="Product Description" title="The full description of the product as it should appear on invoices etc."/></div>
 					<div class="td price price_buy"><input class="price" type="text" name="price_buy" placeholder="0.00" title="the price we buy this products at (optional)"/></div>
@@ -25,7 +25,8 @@
 		<div class="info">NB: Standard Rate VAT will be applied automatically.
 			You can change/remove taxes by editing the product after it is saved.
 		</div>
-		<button class="submit formsubmit">Save</button>
-		<button class="reset formreset">Reset</button>
+		<button class="save">Save</button>
+		<button class="reset">Reset</button>
+		<button class="cancel">Cancel</button>
 	</form>
 </div>
