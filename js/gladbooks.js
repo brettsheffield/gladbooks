@@ -85,7 +85,6 @@ g_formdata = [
     [ 'journal', 'create',
 		[ 'accounts', 'divisions', 'departments', 'organisations' ],
 	],  
-    [ 'product', 'create', [ 'accounts.revenue' ], ],
     [ 'salesorder', 'create', [ 'organisations', 'cycles', 'products' ], ],
     [ 'salesorder', 'update', [ 'organisations', 'cycles', 'products' ], ],
     [ 'salespayment', 'create',[ 'paymenttype', 'organisations', 'accounts.asset' ], ],
@@ -94,7 +93,8 @@ g_formdata = [
 
 FORMDATA = {
 	'product': {
-		'create': [ 'accounts.revenue' ]
+		'create': [ 'accounts.revenue' ],
+		'update': [ 'accounts.revenue', 'taxes' ]
 	}
 }
 
@@ -2170,7 +2170,7 @@ customClickElement = function(row) {
     }
     else {
         var id = row.find('td.xml-id').text();
-        if (tab.collection == 'reports/accountsreceivable') {
+        if (tab.collection === 'reports/accountsreceivable') {
             var title = 'Statement: ' + row.find('td.xml-orgcode').text();
         }
         else {
@@ -2182,9 +2182,17 @@ customClickElement = function(row) {
 }
 
 Form.prototype.customXML = function() {
-	if (this.object == 'product') {
+	if (this.object === 'product') {
 		this.xml += '<tax id="1"/>';
 	}
+}
+
+Form.prototype.submitErrorCustom = function(xhr, s, err) {
+	if (this.object === 'salesorder' && this.action === 'process') {
+		statusMessage('Billing run failed', STATUS_CRIT);
+		return true;
+	}
+	return false;
 }
 
 

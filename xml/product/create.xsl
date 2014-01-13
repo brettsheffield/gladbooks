@@ -16,6 +16,20 @@
 		<xsl:text>BEGIN;</xsl:text>
                 <xsl:apply-templates select="data/product"/>
 		<xsl:text>COMMIT;</xsl:text>
+		<xsl:text>SELECT id,account,shortname,</xsl:text>
+		<xsl:text>description,price_buy,price_sell </xsl:text>
+		<xsl:text>FROM productlist </xsl:text>
+		<xsl:text>WHERE id=</xsl:text>
+		<xsl:choose>
+			<xsl:when test="$id">
+				<xsl:text>'</xsl:text>
+				<xsl:value-of select="$id"/>
+				<xsl:text>'</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:text>currval(pg_get_serial_sequence('product','id'));</xsl:text>
+			</xsl:otherwise>
+		</xsl:choose>
         </xsl:template>
 
 </xsl:stylesheet>
