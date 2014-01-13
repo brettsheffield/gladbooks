@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:include schemaLocation="../product_tax/product_tax.xsd"/>
+
+<xs:complexType name="product">
+	<xs:sequence>
+		<xs:element name="account" type="xs:nonNegativeInteger" minOccurs="0"/>
+		<xs:element name="shortname" type="xs:string" minOccurs="0"/>
+		<xs:element name="description" type="xs:string" minOccurs="0"/>
+		<xs:element name="price_buy" type="xs:decimal" minOccurs="0"/>
+		<xs:element name="price_sell" type="xs:decimal" minOccurs="0"/>
+		<xs:element name="tax" type="product_tax" minOccurs="0" maxOccurs="unbounded"/>
+	</xs:sequence>
+	<xs:attribute name="id" type="xs:nonNegativeInteger"/>
+	<xs:attribute name="import_id" type="xs:positiveInteger"/>
+</xs:complexType>
+
+</xs:schema>

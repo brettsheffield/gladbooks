@@ -2,7 +2,7 @@
 	<div class="statusmsg clearfix"/>
 	<h2>Edit Product</h2>
 	<form class="product update" method="post" action="products">
-		<input type="hidden" name="id"/>
+		<input class="nosubmit" type="hidden" name="id"/>
 		<input class="nosubmit" type="hidden" name="account"/>
 	  <div class="formtable">
 			<div class="thead">
@@ -24,8 +24,8 @@
 				</div>
 			</div>
 	  </div>
-		<button class="submit formsubmit">Save</button>
-		<button class="reset formreset">Reset</button>
+		<button class="save">Save</button>
+		<button class="reset">Reset</button>
 	</form>
 	<div class="product_taxes">
 		<form class="subform" action="product_taxes"/>

@@ -23,6 +23,7 @@ BEGIN
 	PERFORM upgrade_0004();
 	PERFORM upgrade_0005();
 	PERFORM upgrade_0006();
+	PERFORM upgrade_0007();
 
 	RETURN 0;
 END;
@@ -66,7 +67,7 @@ CREATE OR REPLACE FUNCTION upgrade_database()
 RETURNS INT4 AS
 $$
 DECLARE
-	vnum		INT4 = 8; -- New version (increment this)
+	vnum		INT4 = 9; -- New version (increment this)
 	instances	INT4;
 	inst		TEXT;
 	oldv		INT4;
@@ -444,6 +445,22 @@ HAVING COALESCE(SUM(sip.amount), ''0.00'') < sic.total
 END;
 $$ LANGUAGE 'plpgsql';
 
+CREATE OR REPLACE FUNCTION upgrade_0007()
+RETURNS INT4 AS
+$$
+BEGIN
+
+        RAISE INFO '0007 - CREATE TRIGGER productdetailupdate';
+
+        EXECUTE '
+CREATE TRIGGER productdetailupdate BEFORE INSERT ON productdetail
+FOR EACH ROW EXECUTE PROCEDURE productdetailupdate();
+        ';
+
+        RETURN 0;
+END;
+$$ LANGUAGE 'plpgsql';
+
 
 CREATE OR REPLACE FUNCTION postpayment(type TEXT, paymentid INT4)
 RETURNS INT4 AS
@@ -591,6 +608,72 @@ BEGIN
         RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION productdetailupdate()
+RETURNS TRIGGER AS
+$$
+DECLARE
+        priorentries    INT4;
+        oaccount        INT4;
+        oshortname      TEXT;
+        odescription    TEXT;
+        oprice_buy      NUMERIC;
+        oprice_sell     NUMERIC;
+        omargin         NUMERIC;
+        omarkup         NUMERIC;
+        ois_available   boolean;
+        ois_offered     boolean;
+BEGIN
+        SELECT INTO priorentries COUNT(id) FROM productdetail
+                WHERE product = NEW.product;
+        IF priorentries > 0 THEN
+                -- This isn't our first time, so use previous values 
+                SELECT INTO
+                        oaccount, oshortname, odescription, oprice_buy,
+                        oprice_sell, omargin, omarkup, ois_available,
+                        ois_offered
+                        account, shortname, description, price_buy,
+                        price_sell, margin, markup, is_available,
+                        is_offered
+                FROM productdetail WHERE id IN (
+                        SELECT MAX(id)
+                        FROM productdetail
+                        GROUP BY product
+                )
+                AND product = NEW.product;
+
+                IF NEW.account IS NULL THEN
+                        NEW.account := oaccount;
+                END IF;
+                IF NEW.shortname IS NULL THEN
+                        NEW.shortname := oshortname;
+                END IF;
+                IF NEW.description IS NULL THEN
+                        NEW.description := odescription;
+                END IF;
+                IF NEW.price_buy IS NULL THEN
+                        NEW.price_buy := oprice_buy;
+                END IF;
+                IF NEW.price_sell IS NULL THEN
+                        NEW.price_sell := oprice_sell;
+                END IF;
+                IF NEW.margin IS NULL THEN
+                        NEW.margin := omargin;
+                END IF;
+                IF NEW.markup IS NULL THEN
+                        NEW.markup := omarkup;
+                END IF;
+                IF NEW.is_available IS NULL THEN
+                        NEW.is_available := ois_available;
+                END IF;
+                IF NEW.is_offered IS NULL THEN
+                        NEW.is_offered := ois_offered;
+                END IF;
+        END IF;
+        RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
 
 CREATE OR REPLACE FUNCTION ledger_id_last()
 returns int4 AS

@@ -277,6 +277,9 @@ CREATE TABLE productdetail (
         clientip        TEXT
 );
 
+CREATE TRIGGER productdetailupdate BEFORE INSERT ON productdetail
+FOR EACH ROW EXECUTE PROCEDURE productdetailupdate();
+
 CREATE OR REPLACE VIEW product_current AS
 SELECT * FROM productdetail
 WHERE id IN (
