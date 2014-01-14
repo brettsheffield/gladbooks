@@ -23,33 +23,33 @@
 /* global variables **********************************************************/
 
 g_menus = [
-	[ 'bank.reconcile', getForm, 'bank', 'reconcile', 'Bank Reconciliation' ],
-	[ 'bank.upload', getForm, 'bank', 'upload', 'Upload Bank Statement' ],
-	[ 'bank.statement', getForm, 'bank', 'statement', 'Bank Statement' ],
-	[ 'bank.test', showHTML, 'help/layouttest.html', 'Layout Test' ],
-	[ 'banking', showHTML, 'help/banking.html', 'Banking', false ],
-	[ 'contact.create', getForm, 'contact', 'create', 'Add New Contact' ],
-	[ 'contacts', showQuery, 'contacts', 'Contacts', true ],
-	[ 'departments.create', getForm, 'department', 'create', 'Add New Department' ],
-	[ 'departments.view', showQuery, 'departments', 'Departments', true ],
-	[ 'divisions.create', getForm, 'division', 'create', 'Add New Division' ],
-	[ 'divisions.view', showQuery, 'divisions', 'Divisions', true ],
-	[ 'help', showHTML, 'help/index.html', 'Help', false ],
-	[ 'organisation.create', getForm, 'organisation', 'create', 'Add New Organisation' ],
-	[ 'organisations', showQuery, 'organisations', 'Organisations', true ],
-	[ 'payables', showHTML, 'help/payables.html', 'Payables', false ],
-	[ 'product.create', showForm, 'product', 'create', 'Add New Product' ],
-	[ 'products', showQuery, 'products', 'Products', true ],
-	[ 'rpt_accountsreceivable', showQuery, 'reports/accountsreceivable', 'Accounts Receivable', true ],
-	[ 'rpt_balancesheet', showHTML, 'reports/balancesheet','Balance Sheet',false, true ],
-	[ 'rpt_profitandloss', showHTML, 'reports/profitandloss','Profit & Loss',false, true ],
-	[ 'rpt_trialbalance', showQuery, 'reports/trialbalance', 'Trial Balance', false ],
-	[ 'salesinvoices', showQuery, 'salesinvoices', 'Sales Invoices', true ],
-	[ 'salesorder.create', getForm, 'salesorder', 'create', 'New Sales Order'],
-	[ 'salesorders', showQuery, 'salesorders', 'Sales Orders', true ],
-	[ 'salesorders.process', getForm, 'salesorder', 'process', 'Manual Billing Run' ],
-	[ 'salespayment.create', getForm, 'salespayment', 'create', 'Enter Sales Payment' ],
-	[ 'salespayments', showQuery, 'salespayments', 'Sales Payments', true ],
+    [ 'bank.reconcile', getForm, 'bank', 'reconcile', 'Bank Reconciliation' ],
+    [ 'bank.upload', getForm, 'bank', 'upload', 'Upload Bank Statement' ],
+    [ 'bank.statement', getForm, 'bank', 'statement', 'Bank Statement' ],
+    [ 'bank.test', showHTML, 'help/layouttest.html', 'Layout Test' ],
+    [ 'banking', showHTML, 'help/banking.html', 'Banking', false ],
+    [ 'contact.create', getForm, 'contact', 'create', 'Add New Contact' ],
+    [ 'contacts', showQuery, 'contacts', 'Contacts', true ],
+    [ 'departments.create', getForm, 'department', 'create', 'Add New Department' ],
+    [ 'departments.view', showQuery, 'departments', 'Departments', true ],
+    [ 'divisions.create', getForm, 'division', 'create', 'Add New Division' ],
+    [ 'divisions.view', showQuery, 'divisions', 'Divisions', true ],
+    [ 'help', showHTML, 'help/index.html', 'Help', false ],
+    [ 'organisation.create', getForm, 'organisation', 'create', 'Add New Organisation' ],
+    [ 'organisations', showQuery, 'organisations', 'Organisations', true ],
+    [ 'payables', showHTML, 'help/payables.html', 'Payables', false ],
+    [ 'product.create', showForm, 'product', 'create', 'Add New Product' ],
+    [ 'products', showQuery, 'products', 'Products', true ],
+    [ 'rpt_accountsreceivable', showQuery, 'reports/accountsreceivable', 'Accounts Receivable', true ],
+    [ 'rpt_balancesheet', showHTML, 'reports/balancesheet','Balance Sheet',false, true ],
+    [ 'rpt_profitandloss', showHTML, 'reports/profitandloss','Profit & Loss',false, true ],
+    [ 'rpt_trialbalance', showQuery, 'reports/trialbalance', 'Trial Balance', false ],
+    [ 'salesinvoices', showQuery, 'salesinvoices', 'Sales Invoices', true ],
+    [ 'salesorder.create', getForm, 'salesorder', 'create', 'New Sales Order'],
+    [ 'salesorders', showQuery, 'salesorders', 'Sales Orders', true ],
+    [ 'salesorders.process', getForm, 'salesorder', 'process', 'Manual Billing Run' ],
+    [ 'salespayment.create', getForm, 'salespayment', 'create', 'Enter Sales Payment' ],
+    [ 'salespayments', showQuery, 'salespayments', 'Sales Payments', true ],
     [ 'business.create', getForm, 'business', 'create', 'Add New Business' ],
     [ 'businessview', showQuery, 'businesses', 'Businesses', true ],
     [ 'chartadd', getForm, 'account', 'create', 'Add New Account' ],
@@ -68,23 +68,23 @@ g_formdata = [
     [ 'account', 'create', [ 'accounttypes' ], ],  
     [ 'bank', 'statement', [ 'accounts.asset' ], ],  
     [ 'bank', 'reconcile',
-		[
-			'accounts.unreconciled',
-			'accounts',
-			'divisions',
-			'departments',
-		],
-	],  
+        [
+            'accounts.unreconciled',
+            'accounts',
+            'divisions',
+            'departments',
+        ],
+    ],  
     [ 'bank', 'reconcile.data', 
-		[
-			'bank.unreconciled',
-			'journal.unreconciled',
-		],
-	],
+        [
+            'bank.unreconciled',
+            'journal.unreconciled',
+        ],
+    ],
     [ 'bank', 'upload', [ 'accounts.asset' ], ],  
     [ 'journal', 'create',
-		[ 'accounts', 'divisions', 'departments', 'organisations' ],
-	],  
+        [ 'accounts', 'divisions', 'departments', 'organisations' ],
+    ],  
     [ 'salesorder', 'create', [ 'organisations', 'cycles', 'products' ], ],
     [ 'salesorder', 'update', [ 'organisations', 'cycles', 'products' ], ],
     [ 'salespayment', 'create',[ 'paymenttype', 'organisations', 'accounts.asset' ], ],
@@ -92,10 +92,10 @@ g_formdata = [
 ];
 
 FORMDATA = {
-	'product': {
-		'create': [ 'accounts.revenue' ],
-		'update': [ 'accounts.revenue', 'taxes' ]
-	}
+    'product': {
+        'create': [ 'accounts.revenue' ],
+        'update': [ 'accounts.revenue', 'taxes' ]
+    }
 }
 
 var g_max_ledgers_per_journal=7;
@@ -106,10 +106,10 @@ var g_xml_relationships = '';
 
 /* bank reconcilition types */
 var rectype = {
-	"suggested": 0,
-	"journal": 1,
-	"salesinvoices": 2,
-	"salespayments": 3
+    "suggested": 0,
+    "journal": 1,
+    "salesinvoices": 2,
+    "salespayments": 3
 };
 
 /* functions ****************************************************************/
@@ -175,370 +175,370 @@ function addSubFormRows(xml, datatable, view, tab) {
 
 /* the selected bank account has changed - do something about that */
 function bankChange() {
-	console.log('bankChange()');
-	var mytab = activeTab();
-	var div = mytab.find('div.bank.data');
+    console.log('bankChange()');
+    var mytab = activeTab();
+    var div = mytab.find('div.bank.data');
 
-	var account = $(this).val();
-	if (account == -1) { /* nothing selected */
-		div.find('div.bank.target').children().fadeOut();
-		div.find('div.bank.suspects').children().fadeOut();
-		return false;
-	}
+    var account = $(this).val();
+    if (account == -1) { /* nothing selected */
+        div.find('div.bank.target').children().fadeOut();
+        div.find('div.bank.suspects').children().fadeOut();
+        return false;
+    }
 
-	/* reset offset in results pager */
-	mytab.find('div.results.pager').data('offset', 0);
-	mytab.find('div.results.pager').data('order', 'ASC');
+    /* reset offset in results pager */
+    mytab.find('div.results.pager').data('offset', 0);
+    mytab.find('div.results.pager').data('order', 'ASC');
 
-	var action = TABS.active.action;
-	if (action == 'reconcile') {
-		bankReconcile(account);
-		bankReconcileCancel();
-	}
-	else if (action == 'statement') {
-		bankStatement(account);
-	}
+    var action = TABS.active.action;
+    if (action == 'reconcile') {
+        bankReconcile(account);
+        bankReconcileCancel();
+    }
+    else if (action == 'statement') {
+        bankStatement(account);
+    }
 }
 
 /* clear junk from div.entries */
 function bankEntriesClear() {
-	/* remove salesinvoices */
-	var mytab = activeTab();
-	mytab.find('div.bank.entries div.tr.salesinvoice').remove();
+    /* remove salesinvoices */
+    var mytab = activeTab();
+    mytab.find('div.bank.entries div.tr.salesinvoice').remove();
 }
 
 /* set up journal form based on row that was clicked */
 function bankJournal(row) {
-	console.log('bankJournal()');
-	var t = activeTab();
-	var journalForm = activeTab().data('journalForm');
-	var j = t.find('div.accordion h3:nth-child(3)');
-	var jtab = j.next();
+    console.log('bankJournal()');
+    var t = activeTab();
+    var journalForm = activeTab().data('journalForm');
+    var j = t.find('div.accordion h3:nth-child(3)');
+    var jtab = j.next();
 
-	jtab.empty().append(journalForm); /* insert journal form */
+    jtab.empty().append(journalForm); /* insert journal form */
 
-	/* populate combos */
-	jtab.find('select.populate:not(.sub)').populate(jtab);
+    /* populate combos */
+    jtab.find('select.populate:not(.sub)').populate(jtab);
 
-	/* work out debit/credit dropdowns */
-	var debit = row.find('div.xml-debit').text();
-	var credit = row.find('div.xml-credit').text();
-	var bdc = (debit > 0) ? 'debit' : 'credit'; /* bank debit/credit */
-	var odc = (debit > 0) ? 'credit' : 'debit'; /* other debit/credit */
+    /* work out debit/credit dropdowns */
+    var debit = row.find('div.xml-debit').text();
+    var credit = row.find('div.xml-credit').text();
+    var bdc = (debit > 0) ? 'debit' : 'credit'; /* bank debit/credit */
+    var odc = (debit > 0) ? 'credit' : 'debit'; /* other debit/credit */
 
-	/* clone a ledger row */
-	var ledgers = jtab.find('fieldset.ledger');
-	var l = ledgers.clone();
+    /* clone a ledger row */
+    var ledgers = jtab.find('fieldset.ledger');
+    var l = ledgers.clone();
 
-	/* populate first ledger entry */
-	var account = t.find('div.bank.selector select.bankaccount').val();
-	var bankid = row.find('div.xml-id').text();
-	var date = row.find('div.xml-date').text();
-	var description = row.find('div.xml-description').text();
-	jtab.find('select.account').val(account);
-	jtab.find('input.transactdate').val(date);
-	jtab.find('input.description').val(description);
-	var amount = (debit > 0) ? debit : credit;
-	jtab.find('input.amount').val(amount);
+    /* populate first ledger entry */
+    var account = t.find('div.bank.selector select.bankaccount').val();
+    var bankid = row.find('div.xml-id').text();
+    var date = row.find('div.xml-date').text();
+    var description = row.find('div.xml-description').text();
+    jtab.find('select.account').val(account);
+    jtab.find('input.transactdate').val(date);
+    jtab.find('input.description').val(description);
+    var amount = (debit > 0) ? debit : credit;
+    jtab.find('input.amount').val(amount);
 
-	/* add more ledger lines */
-	for (var x = 1; x < g_max_ledgers_per_journal; x++) {
-		ledgers.append(l.clone());
-	}
+    /* add more ledger lines */
+    for (var x = 1; x < g_max_ledgers_per_journal; x++) {
+        ledgers.append(l.clone());
+    }
 
-	/* set debit/credit dropdowns */
-	jtab.find('select.type').val(odc);
-	jtab.find('select.type').first().val(bdc);
+    /* set debit/credit dropdowns */
+    jtab.find('select.type').val(odc);
+    jtab.find('select.type').first().val(bdc);
 
-	jtab.find('button.submit').click(function(event) {
-		submitJournalEntry(event, jtab, bankid)
-	});
+    jtab.find('button.submit').click(function(event) {
+        submitJournalEntry(event, jtab, bankid)
+    });
 
-	j.each(accordionClick); /* show journal form */
+    j.each(accordionClick); /* show journal form */
 }
 
 /* user has clicked journal Add button */
 function bankJournalAdd() {
-	console.log('bankJournalAdd()');
-	var mytab = activeTab();
-	var o = new Object();
-	o.date = mytab.find('div.bank.target div.td.xml-date').text();
-	o.description = mytab.find('div.journal input.description').val();
-	o.nominal = mytab.find('div.journal select.nominalcode').val();
-	o.division = mytab.find('div.journal select.division').val();
-	o.department = mytab.find('div.journal select.department').val();
-	o.debit = mytab.find('div.journal input.debit').val();
-	o.credit = mytab.find('div.journal input.credit').val();
+    console.log('bankJournalAdd()');
+    var mytab = activeTab();
+    var o = new Object();
+    o.date = mytab.find('div.bank.target div.td.xml-date').text();
+    o.description = mytab.find('div.journal input.description').val();
+    o.nominal = mytab.find('div.journal select.nominalcode').val();
+    o.division = mytab.find('div.journal select.division').val();
+    o.department = mytab.find('div.journal select.department').val();
+    o.debit = mytab.find('div.journal input.debit').val();
+    o.credit = mytab.find('div.journal input.credit').val();
 
-	/* validate */
-	if (!bankJournalValidate(o)) { return false; }
+    /* validate */
+    if (!bankJournalValidate(o)) { return false; }
 
-	/* default description to bank entry */
-	if (o.description.length == 0) {
-		o.description = mytab.find('div.bank.target div.td.xml-description').text();
-	}
+    /* default description to bank entry */
+    if (o.description.length == 0) {
+        o.description = mytab.find('div.bank.target div.td.xml-description').text();
+    }
 
-	/* build fragment */
-	var j = $('<div class="tr"/>');
-	j.append('<div class="td xml-date">' + o.date + '</div>');
-	j.append('<div class="td xml-description">' + o.description + '</div>');
-	j.append('<div class="td xml-account">' + o.nominal + '</div>');
-	j.append('<div class="td xml-debit">' + decimalPad(o.debit,2) + '</div>');
-	j.append('<div class="td xml-credit">' + decimalPad(o.credit,2) +'</div>');
-	j.append('<div class="td buttons"><button class="del">X</button></div>');
-	j.find('button.del').click(bankJournalDel);
+    /* build fragment */
+    var j = $('<div class="tr"/>');
+    j.append('<div class="td xml-date">' + o.date + '</div>');
+    j.append('<div class="td xml-description">' + o.description + '</div>');
+    j.append('<div class="td xml-account">' + o.nominal + '</div>');
+    j.append('<div class="td xml-debit">' + decimalPad(o.debit,2) + '</div>');
+    j.append('<div class="td xml-credit">' + decimalPad(o.credit,2) +'</div>');
+    j.append('<div class="td buttons"><button class="del">X</button></div>');
+    j.find('button.del').click(bankJournalDel);
 
-	/* append to entries */
-	mytab.find('div.bank.entries').append(j);
+    /* append to entries */
+    mytab.find('div.bank.entries').append(j);
 
-	bankJournalReset();
-	bankTotalsUpdate();
+    bankJournalReset();
+    bankTotalsUpdate();
 }
 
 /* user clicked delete button on entry */
 function bankJournalDel() {
-	var mytab = activeTab();
-	$(this).parents('div.tr').fadeOut(300, function() {
-		if ($(this).hasClass('suggestion')) {
-			var account = mytab.find('select.bankaccount').val();
-			var div = mytab.find('div.bank.target');
-			var row = div.find('div.tr div.td').parents('div.tr');
-			bankSuggest(row, account);
-		}
-		$(this).remove();
-		bankTotalsUpdate();
-	});
+    var mytab = activeTab();
+    $(this).parents('div.tr').fadeOut(300, function() {
+        if ($(this).hasClass('suggestion')) {
+            var account = mytab.find('select.bankaccount').val();
+            var div = mytab.find('div.bank.target');
+            var row = div.find('div.tr div.td').parents('div.tr');
+            bankSuggest(row, account);
+        }
+        $(this).remove();
+        bankTotalsUpdate();
+    });
 }
 
 /* Check new journal entry before adding to entries */
 function bankJournalValidate(o) {
-	if (o.nominal < 0) { return false; } /* TODO: report warning to user */
-	if (decimalPad(o.debit,2) == '0.00' && decimalPad(o.credit,2) == '0.00') { 
-		return false;
-	}
-	return true;
+    if (o.nominal < 0) { return false; } /* TODO: report warning to user */
+    if (decimalPad(o.debit,2) == '0.00' && decimalPad(o.credit,2) == '0.00') { 
+        return false;
+    }
+    return true;
 }
 
 function bankJournalAmountChange() {
-	/* check user entered somthing numeric */
-	if (!$.isNumeric($(this).val())) {
-		$(this).val('');
-		return;
-	}
+    /* check user entered somthing numeric */
+    if (!$.isNumeric($(this).val())) {
+        $(this).val('');
+        return;
+    }
 
-	/* find our opposite number (debit/credit) */
-	if ($(this).hasClass('debit')) {
-		var opp = $(this).parents('div.tr').find('input.credit');
-	}
-	else {
-		var opp = $(this).parents('div.tr').find('input.debit');
-	}
+    /* find our opposite number (debit/credit) */
+    if ($(this).hasClass('debit')) {
+        var opp = $(this).parents('div.tr').find('input.credit');
+    }
+    else {
+        var opp = $(this).parents('div.tr').find('input.debit');
+    }
 
-	/* round and pad to 2 decimal places */
-	var amount = decimalPad(roundHalfEven(Math.abs($(this).val()),2),2);
+    /* round and pad to 2 decimal places */
+    var amount = decimalPad(roundHalfEven(Math.abs($(this).val()),2),2);
 
-	/* if amount is negative, make positive and switch debit/credit */
-	if ($(this).val() < 0) {
-		opp.val(amount);
-		$(this).val('');
-	}
-	else if ($(this).val() > 0) {
-		opp.val(''); /* There can be only one */
-		$(this).val(amount);
-	}
-	else {
-		$(this).val(''); /* clear zero values */
-	}
+    /* if amount is negative, make positive and switch debit/credit */
+    if ($(this).val() < 0) {
+        opp.val(amount);
+        $(this).val('');
+    }
+    else if ($(this).val() > 0) {
+        opp.val(''); /* There can be only one */
+        $(this).val(amount);
+    }
+    else {
+        $(this).val(''); /* clear zero values */
+    }
 }
 
 /* clear values and reset state of journal subform */
 function bankJournalReset() {
-	var mytab = activeTab();
-	var journal = mytab.find('div.bank.journal');
-	journal.show();
-	journal.find('select').each(function() {
-		$(this).val(-1);
-		$(this).trigger('liszt:updated');
-	});
-	journal.find('input').val('');
-	journal.find('input.amount').change(bankJournalAmountChange);
-	journal.find('button.add').off().click(bankJournalAdd);
+    var mytab = activeTab();
+    var journal = mytab.find('div.bank.journal');
+    journal.show();
+    journal.find('select').each(function() {
+        $(this).val(-1);
+        $(this).trigger('liszt:updated');
+    });
+    journal.find('input').val('');
+    journal.find('input.amount').change(bankJournalAmountChange);
+    journal.find('button.add').off().click(bankJournalAdd);
 }
 
 /* Display/recalculate bank totals */
 function bankTotalsUpdate() {
-	console.log('bankTotalsUpdate()');
-	var mytab = activeTab();
-	var debits = decimalPad(0, 2);
-	var credits = decimalPad(0, 2);
-	mytab.find('div.bank.total div.xml-debit').text(debits);
-	mytab.find('div.bank.total div.xml-credit').text(credits);
-	bankTotalsUpdated();
-	mytab.find('div.bank.total').show();
-	var target = mytab.find('div.bank.target div.xml-debit');
-	var entries = mytab.find('div.bank.entries div.xml-debit');
-	target.add(entries).each(function() {
-		if ($.isNumeric($(this).text())) {
-			debits = decimalAdd(debits, $(this).text());
-			debits = decimalPad(debits, 2);
-			mytab.find('div.bank.total div.xml-debit').text(debits);
-			bankTotalsUpdated();
-		}
-	});
-	var target = mytab.find('div.bank.target div.xml-credit');
-	var entries = mytab.find('div.bank.entries div.xml-credit');
-	target.add(entries).each(function() {
-		if ($.isNumeric($(this).text())) {
-			credits = decimalAdd(credits, $(this).text());
-			credits = decimalPad(credits, 2);
-			mytab.find('div.bank.total div.xml-credit').text(credits);
-			bankTotalsUpdated();
-		}
-	});
+    console.log('bankTotalsUpdate()');
+    var mytab = activeTab();
+    var debits = decimalPad(0, 2);
+    var credits = decimalPad(0, 2);
+    mytab.find('div.bank.total div.xml-debit').text(debits);
+    mytab.find('div.bank.total div.xml-credit').text(credits);
+    bankTotalsUpdated();
+    mytab.find('div.bank.total').show();
+    var target = mytab.find('div.bank.target div.xml-debit');
+    var entries = mytab.find('div.bank.entries div.xml-debit');
+    target.add(entries).each(function() {
+        if ($.isNumeric($(this).text())) {
+            debits = decimalAdd(debits, $(this).text());
+            debits = decimalPad(debits, 2);
+            mytab.find('div.bank.total div.xml-debit').text(debits);
+            bankTotalsUpdated();
+        }
+    });
+    var target = mytab.find('div.bank.target div.xml-credit');
+    var entries = mytab.find('div.bank.entries div.xml-credit');
+    target.add(entries).each(function() {
+        if ($.isNumeric($(this).text())) {
+            credits = decimalAdd(credits, $(this).text());
+            credits = decimalPad(credits, 2);
+            mytab.find('div.bank.total div.xml-credit').text(credits);
+            bankTotalsUpdated();
+        }
+    });
 }
 
 /* called any time one of the totals is updated */
 function bankTotalsUpdated() {
-	console.log('bankTotalsUpdated()');
-	var debits = mytab.find('div.bank.total div.xml-debit').text();
-	var credits = mytab.find('div.bank.total div.xml-credit').text();
-	var totals = mytab.find('div.bank.total div.xml-debit')
-		.add(mytab.find('div.bank.total div.xml-credit'));
-	var btnsave = mytab.find('div.results.pager button.save');
-	if (debits == credits) { /* totals are balanced */
-		totals.addClass('balanced');
-		btnsave.removeAttr('disabled');
-	}
-	else {                   /* totals unbalanced */
-		totals.removeClass('balanced');
-		btnsave.attr('disabled','disabled');
-	}
+    console.log('bankTotalsUpdated()');
+    var debits = mytab.find('div.bank.total div.xml-debit').text();
+    var credits = mytab.find('div.bank.total div.xml-credit').text();
+    var totals = mytab.find('div.bank.total div.xml-debit')
+        .add(mytab.find('div.bank.total div.xml-credit'));
+    var btnsave = mytab.find('div.results.pager button.save');
+    if (debits == credits) { /* totals are balanced */
+        totals.addClass('balanced');
+        btnsave.removeAttr('disabled');
+    }
+    else {                   /* totals unbalanced */
+        totals.removeClass('balanced');
+        btnsave.attr('disabled','disabled');
+    }
 }
 
 function bankReconcile(account) {
-	console.log('bankReconcile()');
-	var mytab = activeTab();
-	var account = mytab.find('select.bankaccount').val();
-	var title = '';
-	var div = mytab.find('div.bank.target');
-	var offset = mytab.find('div.results.pager').data('offset');
-	var reverse = mytab.find('div.results.pager').data('reverse');
-	var limit = 1;
-	if (offset == undefined) { offset = 0; }
-	if (reverse == undefined) { reverse = 'ASC'; }
-	mytab.find('div.results.pager').data('offset', offset)
-	mytab.find('div.results.pager').data('reverse', reverse)
-	mytab.find('div.results.pager').data('limit', limit);
-	var url = 'bank.unreconciled/' + account + '/' + limit + '/' + offset
-		+ '/' + reverse;
-	var d = new Array(); /* array of deferreds */
+    console.log('bankReconcile()');
+    var mytab = activeTab();
+    var account = mytab.find('select.bankaccount').val();
+    var title = '';
+    var div = mytab.find('div.bank.target');
+    var offset = mytab.find('div.results.pager').data('offset');
+    var reverse = mytab.find('div.results.pager').data('reverse');
+    var limit = 1;
+    if (offset == undefined) { offset = 0; }
+    if (reverse == undefined) { reverse = 'ASC'; }
+    mytab.find('div.results.pager').data('offset', offset)
+    mytab.find('div.results.pager').data('reverse', reverse)
+    mytab.find('div.results.pager').data('limit', limit);
+    var url = 'bank.unreconciled/' + account + '/' + limit + '/' + offset
+        + '/' + reverse;
+    var d = new Array(); /* array of deferreds */
 
-	bankResultsPager(account, 'reconcile');
-	bankJournalReset();
-	bankTotalsUpdate();
-	bankEntriesClear();
+    bankResultsPager(account, 'reconcile');
+    bankJournalReset();
+    bankTotalsUpdate();
+    bankEntriesClear();
 
-	/* set up save/cancel buttons */
-	var btncancel = mytab.find('div.results.pager button.cancel');
-	btncancel.off().click(bankReconcileCancel);
-	btncancel.removeAttr('disabled');
-	var btnsave = mytab.find('div.results.pager button.save');
-	btnsave.attr('disabled','disabled');
-	btnsave.off().click(bankReconcileSave);
+    /* set up save/cancel buttons */
+    var btncancel = mytab.find('div.results.pager button.cancel');
+    btncancel.off().click(bankReconcileCancel);
+    btncancel.removeAttr('disabled');
+    var btnsave = mytab.find('div.results.pager button.save');
+    btnsave.attr('disabled','disabled');
+    btnsave.off().click(bankReconcileSave);
 
-	showSpinner();
-	activeTab().find('div.suspects').children().fadeOut();
-	d.push(getHTML(collection_url(url)));
-	$.when.apply(null, d)
-	.done(function(bankdata) {
-		div.empty();
-		if (bankdata != '(null)') {
-			div.append(bankdata);
-			var row = div.find('div.tr div.td').parents('div.tr');
-			row.addClass('selected');
-			div.show();
-			bankTotalsUpdate(); 
-			bankSuggest(row, account);
-		}
-		else {
-			div.hide();
-		}
-		hideSpinner();
-	})
-	.fail(function() {
-		statusMessage('error loading data', STATUS_CRIT);
-		hideSpinner();
-	});
+    showSpinner();
+    activeTab().find('div.suspects').children().fadeOut();
+    d.push(getHTML(collection_url(url)));
+    $.when.apply(null, d)
+    .done(function(bankdata) {
+        div.empty();
+        if (bankdata != '(null)') {
+            div.append(bankdata);
+            var row = div.find('div.tr div.td').parents('div.tr');
+            row.addClass('selected');
+            div.show();
+            bankTotalsUpdate(); 
+            bankSuggest(row, account);
+        }
+        else {
+            div.hide();
+        }
+        hideSpinner();
+    })
+    .fail(function() {
+        statusMessage('error loading data', STATUS_CRIT);
+        hideSpinner();
+    });
 }
 
 /* cancel button clicked */
 function bankReconcileCancel() {
-	console.log('bankReconcileCancel()');
-	var mytab = activeTab();
-	mytab.find('div.bank.entries div.tr').fadeOut(300, function() {
-		$(this).remove();
-		bankTotalsUpdate();
-	});
+    console.log('bankReconcileCancel()');
+    var mytab = activeTab();
+    mytab.find('div.bank.entries div.tr').fadeOut(300, function() {
+        $(this).remove();
+        bankTotalsUpdate();
+    });
 }
 
 /* save button clicked */
 function bankReconcileSave() {
-	console.log('bankReconcileSave()');
-	var mytab = activeTab();
-	showSpinner('Saving...');
+    console.log('bankReconcileSave()');
+    var mytab = activeTab();
+    showSpinner('Saving...');
 
-	if (mytab.find('div.entries div.tr.salesinvoice').length > 0) {
-		var account = mytab.find('select.bankaccount').val();
-		var bank = mytab.find('div.bank.target div.td.xml-id').text();
-		bankReconcileSalesInvoice(bank, account);
-		return;
-	}
-	
-	/* Build request xml */
+    if (mytab.find('div.entries div.tr.salesinvoice').length > 0) {
+        var account = mytab.find('select.bankaccount').val();
+        var bank = mytab.find('div.bank.target div.td.xml-id').text();
+        bankReconcileSalesInvoice(bank, account);
+        return;
+    }
+    
+    /* Build request xml */
     var xml = createRequestXml();
 
-	/* add target from bank statement */
-	var target = '';
-	var id = mytab.find('div.bank.target div.tr div.td.xml-id').text();
-	var date = mytab.find('div.bank.target div.tr div.td.xml-date').text();
-	var desc = mytab.find('div.bank.target div.tr div.td.xml-description')
-		.text();
-	var acct = mytab.find('div.bank.target div.tr div.td.xml-account').text();
-	var debit = mytab.find('div.bank.target div.tr div.td.xml-debit').text();
-	var credit = mytab.find('div.bank.target div.tr div.td.xml-credit').text();
-	var amount = (debit > 0) ? debit : credit;
-	xml += '<journal transactdate="' + date + '" description="' + desc + '">';
+    /* add target from bank statement */
+    var target = '';
+    var id = mytab.find('div.bank.target div.tr div.td.xml-id').text();
+    var date = mytab.find('div.bank.target div.tr div.td.xml-date').text();
+    var desc = mytab.find('div.bank.target div.tr div.td.xml-description')
+        .text();
+    var acct = mytab.find('div.bank.target div.tr div.td.xml-account').text();
+    var debit = mytab.find('div.bank.target div.tr div.td.xml-debit').text();
+    var credit = mytab.find('div.bank.target div.tr div.td.xml-credit').text();
+    var amount = (debit > 0) ? debit : credit;
+    xml += '<journal transactdate="' + date + '" description="' + desc + '">';
 
-	/* our xsd schema requires debits to appear before credits */
-	if (debit > 0) {
-		xml += '<debit account="' + acct + '" amount="' + amount + '" ';
-		xml += 'bankid="' + id + '"/>';
-	}
-	else {
-		target = '<credit account="' + acct + '" amount="' + amount + '" ';
-		target += 'bankid="' + id + '"/>';
-	}
+    /* our xsd schema requires debits to appear before credits */
+    if (debit > 0) {
+        xml += '<debit account="' + acct + '" amount="' + amount + '" ';
+        xml += 'bankid="' + id + '"/>';
+    }
+    else {
+        target = '<credit account="' + acct + '" amount="' + amount + '" ';
+        target += 'bankid="' + id + '"/>';
+    }
 
-	/* add debits */
-	mytab.find('div.bank.entries div.tr').each(function() {
-		var amount = $(this).find('div.td.xml-debit').text();
-		if (amount > 0) {
-			xml += '<debit account="' + acct + '" amount="' + amount + '"/>';
-		}
-	});
+    /* add debits */
+    mytab.find('div.bank.entries div.tr').each(function() {
+        var amount = $(this).find('div.td.xml-debit').text();
+        if (amount > 0) {
+            xml += '<debit account="' + acct + '" amount="' + amount + '"/>';
+        }
+    });
 
-	/* add credits */
-	mytab.find('div.bank.entries div.tr').each(function() {
-		var amount = $(this).find('div.td.xml-credit').text();
-		if (amount > 0) {
-			xml += '<credit account="' + acct + '" amount="' + amount + '"/>';
-		}
-	});
-	xml += target;
-	xml += '</journal></data></request>';
-	console.log(xml);
+    /* add credits */
+    mytab.find('div.bank.entries div.tr').each(function() {
+        var amount = $(this).find('div.td.xml-credit').text();
+        if (amount > 0) {
+            xml += '<credit account="' + acct + '" amount="' + amount + '"/>';
+        }
+    });
+    xml += target;
+    xml += '</journal></data></request>';
+    console.log(xml);
 
-	/* POST journal */
+    /* POST journal */
     showSpinner('Saving...');
     $.ajax({
         url: collection_url('journals'),
@@ -548,414 +548,414 @@ function bankReconcileSave() {
         beforeSend: function (xhr) { setAuthHeader(xhr); },
         success: function(xml) {
             hideSpinner();
-			statusMessage('Saved.', STATUS_INFO, 5000);
-			/* clean up, move on */
-			bankReconcileCancel();
-			mytab.find('div.results.pager button.next').trigger('click');
+            statusMessage('Saved.', STATUS_INFO, 5000);
+            /* clean up, move on */
+            bankReconcileCancel();
+            mytab.find('div.results.pager button.next').trigger('click');
         },
         error: function(xml) {
             hideSpinner();
-			statusMessage('Error saving journal', STATUS_CRIT);
+            statusMessage('Error saving journal', STATUS_CRIT);
         }
     });
 }
 
 /* set up pager buttons */
 function bankResultsPager(account, action) {
-	var mytab = activeTab();
-	var pager = mytab.find('div.results.pager');
-	console.log('bankResultsPager(' + account + ', ' + action + ')');
-	pager.find('button.first').off().click(function() {
-		bankResultsPagerFirst(pager, account, action);
-		return false;
-	});
-	pager.find('button.previous').off().click(function() {
-		bankResultsPagerPrevious(pager, account, action);
-		return false;
-	});
-	pager.find('button.next').off().click(function() {
-		bankResultsPagerNext(pager, account, action);
-		return false;
-	});
-	pager.find('button.last').off().click(function() {
-		bankResultsPagerLast(pager, account, action);
-		return false;
-	});
-	pager.find('button.first,button.previous,button.next,button.last')
-	.each(function() {
-		$(this).removeAttr("disabled");
-	});
+    var mytab = activeTab();
+    var pager = mytab.find('div.results.pager');
+    console.log('bankResultsPager(' + account + ', ' + action + ')');
+    pager.find('button.first').off().click(function() {
+        bankResultsPagerFirst(pager, account, action);
+        return false;
+    });
+    pager.find('button.previous').off().click(function() {
+        bankResultsPagerPrevious(pager, account, action);
+        return false;
+    });
+    pager.find('button.next').off().click(function() {
+        bankResultsPagerNext(pager, account, action);
+        return false;
+    });
+    pager.find('button.last').off().click(function() {
+        bankResultsPagerLast(pager, account, action);
+        return false;
+    });
+    pager.find('button.first,button.previous,button.next,button.last')
+    .each(function() {
+        $(this).removeAttr("disabled");
+    });
 }
 
 function bankResultsPagerAction(account, action) {
-	if (action == 'reconcile') {
-		bankReconcile(account);
-	}
-	else if (action == 'statement') {
-		bankStatement(account);
-	}
+    if (action == 'reconcile') {
+        bankReconcile(account);
+    }
+    else if (action == 'statement') {
+        bankStatement(account);
+    }
 }
 
 function bankResultsPagerFirst(pager, account, action) {
-	var order = pager.data('order');
-	var reverse = (order == 'ASC') ? 'ASC' : 'DESC';
-	pager.data('offset', 0);
-	pager.data('reverse', reverse);
-	bankResultsPagerAction(account, action);
+    var order = pager.data('order');
+    var reverse = (order == 'ASC') ? 'ASC' : 'DESC';
+    pager.data('offset', 0);
+    pager.data('reverse', reverse);
+    bankResultsPagerAction(account, action);
 }
 
 function bankResultsPagerPrevious(pager, account, action) {
-	var offset = pager.data('offset');
-	var order = pager.data('order');
-	var reverse = pager.data('reverse');
-	var limit = pager.data('limit');
-	if (order == reverse) {
-		offset -= limit;
-		if (offset < 0) { offset = 0 };
-	}
-	else {
-		offset += limit;
-	}
-	pager.data('offset', offset);
-	bankResultsPagerAction(account, action);
+    var offset = pager.data('offset');
+    var order = pager.data('order');
+    var reverse = pager.data('reverse');
+    var limit = pager.data('limit');
+    if (order == reverse) {
+        offset -= limit;
+        if (offset < 0) { offset = 0 };
+    }
+    else {
+        offset += limit;
+    }
+    pager.data('offset', offset);
+    bankResultsPagerAction(account, action);
 }
 
 function bankResultsPagerNext(pager, account, action) {
-	var offset = pager.data('offset');
-	var order = pager.data('order');
-	var reverse = pager.data('reverse');
-	var limit = pager.data('limit');
-	if (order == reverse) {
-		offset += limit;
-	}
-	else {
-		offset -= limit;
-		if (offset < 0) { offset = 0 };
-	}
-	pager.data('offset', offset);
-	bankResultsPagerAction(account, action);
+    var offset = pager.data('offset');
+    var order = pager.data('order');
+    var reverse = pager.data('reverse');
+    var limit = pager.data('limit');
+    if (order == reverse) {
+        offset += limit;
+    }
+    else {
+        offset -= limit;
+        if (offset < 0) { offset = 0 };
+    }
+    pager.data('offset', offset);
+    bankResultsPagerAction(account, action);
 }
 
 function bankResultsPagerLast(pager, account, action) {
-	var order = pager.data('order');
-	var reverse = (order == 'ASC') ? 'DESC' : 'ASC';
-	pager.data('offset', 0);
-	pager.data('reverse', reverse);
-	bankResultsPagerAction(account, action);
+    var order = pager.data('order');
+    var reverse = (order == 'ASC') ? 'DESC' : 'ASC';
+    pager.data('offset', 0);
+    pager.data('reverse', reverse);
+    bankResultsPagerAction(account, action);
 }
 
 function bankStatement(account) {
-	var mytab = activeTab();
-	var div = mytab.find('div.bank.data');
-	var pager = mytab.find('div.results.pager');
-	var offset = pager.data('offset');
-	var order = pager.data('order');
-	var reverse = pager.data('reverse');
-	var sortfield = pager.data('sortfield');
+    var mytab = activeTab();
+    var div = mytab.find('div.bank.data');
+    var pager = mytab.find('div.results.pager');
+    var offset = pager.data('offset');
+    var order = pager.data('order');
+    var reverse = pager.data('reverse');
+    var sortfield = pager.data('sortfield');
 
-	/* work out how many rows we can fit on a screen */
-	var hbox = mytab.find('div.bank.statement').height();
-	var hhead = 20; /* 20 pixels */
-	var hrow = 20;  /* 20 pixels */
-	var limit = Math.floor((hbox-hhead)/hrow) - 2;
+    /* work out how many rows we can fit on a screen */
+    var hbox = mytab.find('div.bank.statement').height();
+    var hhead = 20; /* 20 pixels */
+    var hrow = 20;  /* 20 pixels */
+    var limit = Math.floor((hbox-hhead)/hrow) - 2;
 
-	/* set defaults */
-	if (offset == undefined) { offset = 0; }
-	if (order == undefined) { order = 'ASC'; }
-	if (reverse == undefined) { reverse = 'ASC'; }
-	if (sortfield == undefined) { sortfield = 'date'; }
+    /* set defaults */
+    if (offset == undefined) { offset = 0; }
+    if (order == undefined) { order = 'ASC'; }
+    if (reverse == undefined) { reverse = 'ASC'; }
+    if (sortfield == undefined) { sortfield = 'date'; }
 
-	pager.data('limit', limit);
-	pager.data('offset', offset);
-	pager.data('order', order);
-	pager.data('reverse', reverse);
-	pager.data('sortfield', sortfield);
+    pager.data('limit', limit);
+    pager.data('offset', offset);
+    pager.data('order', order);
+    pager.data('reverse', reverse);
+    pager.data('sortfield', sortfield);
 
-	var title = '';
-	var sort = false;
-	var tabid = activeTabId();
-	var object = TABS.byId[tabid].object;
-	var action = TABS.byId[tabid].action;
-	var url = object + '.' + action + '/' + account;
-	url += '/' + limit + '/' + offset + '/' + sortfield + '/' + order;
-	url += '/' + reverse;
-	showHTML(collection_url(url), title, div).done(bankStatementEvents);
-	bankResultsPager(account, 'statement');
+    var title = '';
+    var sort = false;
+    var tabid = activeTabId();
+    var object = TABS.byId[tabid].object;
+    var action = TABS.byId[tabid].action;
+    var url = object + '.' + action + '/' + account;
+    url += '/' + limit + '/' + offset + '/' + sortfield + '/' + order;
+    url += '/' + reverse;
+    showHTML(collection_url(url), title, div).done(bankStatementEvents);
+    bankResultsPager(account, 'statement');
 }
 
 /* set up events on bank statement screen */
 function bankStatementEvents() {
-	var mytab = activeTab();
-	mytab.find('div.bank.statement div.tr').off().click(bankStatementRowClick);
-	mytab.find('div.bank.statement div.tr div.th').off()
-		.click(bankStatementHeadingClick);
-	mytab.find('div.pager button.unreconcile').off()
-		.click(bankUnreconcileSelected);
-	mytab.find('div.pager button.selectall').off()
-		.click(bankStatementSelectAll);
-	mytab.find('div.pager button.deselectall').off()
-		.click(bankStatementSelectNone);
-	pagerControls();
+    var mytab = activeTab();
+    mytab.find('div.bank.statement div.tr').off().click(bankStatementRowClick);
+    mytab.find('div.bank.statement div.tr div.th').off()
+        .click(bankStatementHeadingClick);
+    mytab.find('div.pager button.unreconcile').off()
+        .click(bankUnreconcileSelected);
+    mytab.find('div.pager button.selectall').off()
+        .click(bankStatementSelectAll);
+    mytab.find('div.pager button.deselectall').off()
+        .click(bankStatementSelectNone);
+    pagerControls();
 }
 
 /* update state of pager controls depending on where we are in results */
 function pagerControls() {
-	var mytab = activeTab();
-	var pager = mytab.find('div.results.pager');
-	var limit = pager.data('limit');
-	var offset = pager.data('offset');
-	var order = pager.data('order');
-	var reverse = pager.data('reverse');
-	var reversed = (order != reverse);
+    var mytab = activeTab();
+    var pager = mytab.find('div.results.pager');
+    var limit = pager.data('limit');
+    var offset = pager.data('offset');
+    var order = pager.data('order');
+    var reverse = pager.data('reverse');
+    var reversed = (order != reverse);
 
-	/* detect end of results */
-	var rows = mytab.find('div.statement div.tr').length - 1;
-	if (rows < limit) {
-		if (!reversed) {
-			/* partial results, assume end reached */
-			pager.find('button.next').attr('disabled', 'disabled');
-		}
-		else {
-			/* beginning reached with partial results - fetch full page */
-			pager.find('button.previous').attr('disabled', 'disabled');
-			pager.find('button.first').trigger('click');
-		}
-	}
-	else {
-		pager.find('button.previous').removeAttr('disabled');
-		pager.find('button.next').removeAttr('disabled');
-	}
-	if (!reversed && offset == 0) {
-		/* first position */
-		pager.find('button.first').attr('disabled', 'disabled');
-		pager.find('button.previous').attr('disabled', 'disabled');
-	}
-	else if (reversed && offset == 0) {
-		/* end position */
-		pager.find('button.next').attr('disabled', 'disabled');
-		pager.find('button.last').attr('disabled', 'disabled');
-	}
+    /* detect end of results */
+    var rows = mytab.find('div.statement div.tr').length - 1;
+    if (rows < limit) {
+        if (!reversed) {
+            /* partial results, assume end reached */
+            pager.find('button.next').attr('disabled', 'disabled');
+        }
+        else {
+            /* beginning reached with partial results - fetch full page */
+            pager.find('button.previous').attr('disabled', 'disabled');
+            pager.find('button.first').trigger('click');
+        }
+    }
+    else {
+        pager.find('button.previous').removeAttr('disabled');
+        pager.find('button.next').removeAttr('disabled');
+    }
+    if (!reversed && offset == 0) {
+        /* first position */
+        pager.find('button.first').attr('disabled', 'disabled');
+        pager.find('button.previous').attr('disabled', 'disabled');
+    }
+    else if (reversed && offset == 0) {
+        /* end position */
+        pager.find('button.next').attr('disabled', 'disabled');
+        pager.find('button.last').attr('disabled', 'disabled');
+    }
 }
 
 /* bank statement row was clicked */
 function bankStatementRowClick() {
-	var headers = $(this).find('div.th').length;
-	if (headers > 0) {
-		/* this is a heading row - ignore */
-	}
-	else {
-		toggleSelected($(this));
-		bankStatementHaveSelected();
-	}
+    var headers = $(this).find('div.th').length;
+    if (headers > 0) {
+        /* this is a heading row - ignore */
+    }
+    else {
+        toggleSelected($(this));
+        bankStatementHaveSelected();
+    }
 }
 
 function bankStatementHeadingClick() {
-	var heading = $(this).text();
-	console.log('heading clicked: ' + heading);
-	var mytab = activeTab();
-	var pager = mytab.find('div.results.pager');
-	var oldsort = pager.data('sortfield');
-	var sortfield = oldsort;
-	var order = pager.data('order');
-	console.log('sortfield was ' + sortfield + ' ' + order);
-	if (heading) {
-		sortfield = heading;
-		if (sortfield == oldsort) {
-			console.log('heading == sortfield');
-			/* sort in reverse order */
-			var order = (order == 'ASC') ? 'DESC' : 'ASC';
-			pager.data('order', order);
-		}
-		else {
-			/* sort by new field, ASC */
-			console.log('sorting by ' + sortfield);
-			pager.data('sortfield', sortfield);
-			pager.data('order', 'ASC');
-		}
-		var account = mytab.find('select.bankaccount').val();
-		bankStatement(account);
-	}
+    var heading = $(this).text();
+    console.log('heading clicked: ' + heading);
+    var mytab = activeTab();
+    var pager = mytab.find('div.results.pager');
+    var oldsort = pager.data('sortfield');
+    var sortfield = oldsort;
+    var order = pager.data('order');
+    console.log('sortfield was ' + sortfield + ' ' + order);
+    if (heading) {
+        sortfield = heading;
+        if (sortfield == oldsort) {
+            console.log('heading == sortfield');
+            /* sort in reverse order */
+            var order = (order == 'ASC') ? 'DESC' : 'ASC';
+            pager.data('order', order);
+        }
+        else {
+            /* sort by new field, ASC */
+            console.log('sorting by ' + sortfield);
+            pager.data('sortfield', sortfield);
+            pager.data('order', 'ASC');
+        }
+        var account = mytab.find('select.bankaccount').val();
+        bankStatement(account);
+    }
 }
 
 function bankStatementHaveSelected() {
-	var mytab = activeTab();
-	var selected = mytab.find('div.tr.selected').length;
-	if (selected > 0) {
-		mytab.find('div.pager button.unreconcile').removeAttr('disabled');
-	}
-	else {
-		mytab.find('div.pager button.unreconcile').attr('disabled','disabled');
-	}
+    var mytab = activeTab();
+    var selected = mytab.find('div.tr.selected').length;
+    if (selected > 0) {
+        mytab.find('div.pager button.unreconcile').removeAttr('disabled');
+    }
+    else {
+        mytab.find('div.pager button.unreconcile').attr('disabled','disabled');
+    }
 }
 
 function bankStatementSelectAll() {
-	var row = activeTab().find('div.bank.data div.tr');
-	selectAllRows(row);
-	bankStatementHaveSelected();
+    var row = activeTab().find('div.bank.data div.tr');
+    selectAllRows(row);
+    bankStatementHaveSelected();
 }
 
 function bankStatementSelectNone() {
-	var row = activeTab().find('div.bank.data div.tr');
-	deselectAllRows(row);
-	bankStatementHaveSelected();
+    var row = activeTab().find('div.bank.data div.tr');
+    deselectAllRows(row);
+    bankStatementHaveSelected();
 }
 
 /* find suggestions for bank rec */
 function bankSuggest(row, account) {
-	console.log('bankSuggest()');
-	var d = new Array();
-	var id = $(row).find('div.xml-id').text();
-	d.push(getHTML(collection_url('ledger.suggestions/' + id)));
-	d.push(getHTML(collection_url('salesinvoice.suggestions/' + id)));
-	$.when.apply(null, d)
-	.done(function(html) {
-		var docs = Array.prototype.splice.call(arguments, 0);
-		bankSuggestResults(row, docs);
-	})
-	.fail(function() {
-		bankJournal(row);
-	});
-	return d;
+    console.log('bankSuggest()');
+    var d = new Array();
+    var id = $(row).find('div.xml-id').text();
+    d.push(getHTML(collection_url('ledger.suggestions/' + id)));
+    d.push(getHTML(collection_url('salesinvoice.suggestions/' + id)));
+    $.when.apply(null, d)
+    .done(function(html) {
+        var docs = Array.prototype.splice.call(arguments, 0);
+        bankSuggestResults(row, docs);
+    })
+    .fail(function() {
+        bankJournal(row);
+    });
+    return d;
 }
 
 function bankSuggestResults(row, docs) {
-	console.log('bankSuggestResults()')
-	var results = 0;
-	var rows = 0;
-	var mytab = activeTab();
-	var workspace = mytab.find('div.bank.suspects');
-	workspace.empty();
-	for (var i=0; i<docs.length; i++) {
-		var html = docs[i][0];
-		rows = $(html).find('div.bank.suggestion').length;
-		results += rows;
-		if (rows > 0) {
-			/* suggestions found, show them */
-			workspace.append(html);
-			workspace.find('div.bank.suggestion').off().click(bankSuggestionClick);
-		}
-	}
+    console.log('bankSuggestResults()')
+    var results = 0;
+    var rows = 0;
+    var mytab = activeTab();
+    var workspace = mytab.find('div.bank.suspects');
+    workspace.empty();
+    for (var i=0; i<docs.length; i++) {
+        var html = docs[i][0];
+        rows = $(html).find('div.bank.suggestion').length;
+        results += rows;
+        if (rows > 0) {
+            /* suggestions found, show them */
+            workspace.append(html);
+            workspace.find('div.bank.suggestion').off().click(bankSuggestionClick);
+        }
+    }
 }
 
 /* User has clicked on a suggestion row */
 function bankSuggestionClick() {
-	var mytab = activeTab();
-	var row = $(this);
-	var account = mytab.find('select.bankaccount').val();
-	var id = row.find('div.td.xml-id').text();
-	var bank = mytab.find('div.bank.target div.td.xml-id').text();
-	var date = mytab.find('div.bank.target div.td.xml-date').text();
-	var amount = mytab.find('div.bank.target div.td.xml-debit').text();
+    var mytab = activeTab();
+    var row = $(this);
+    var account = mytab.find('select.bankaccount').val();
+    var id = row.find('div.td.xml-id').text();
+    var bank = mytab.find('div.bank.target div.td.xml-id').text();
+    var date = mytab.find('div.bank.target div.td.xml-date').text();
+    var amount = mytab.find('div.bank.target div.td.xml-debit').text();
 
-	/* first, figure out what kind of row this is */
-	if (row.hasClass('ledger')) {
-		row = $(this).detach().off();
-		console.log('suggestion type: ledger');
-		bankReconcileId(bank, id, account);
-	}
-	else if (row.hasClass('salesinvoice')) {
-		console.log('suggestion type: salesinvoice');
-		toggleSelected(row);
-		if (row.hasClass('selected')) {
-			/* SI selected - add appropriate transactions to div.entries */
-			var desc = $(this).find('div.td.xml-description').text();
-			var subtotal = $(this).find('div.td.xml-subtotal').text();
-			var tax = $(this).find('div.td.xml-tax').text();
-			var total = $(this).find('div.td.xml-total').text();
-			var org = $(this).find('div.td.xml-organisation').first().text();
+    /* first, figure out what kind of row this is */
+    if (row.hasClass('ledger')) {
+        row = $(this).detach().off();
+        console.log('suggestion type: ledger');
+        bankReconcileId(bank, id, account);
+    }
+    else if (row.hasClass('salesinvoice')) {
+        console.log('suggestion type: salesinvoice');
+        toggleSelected(row);
+        if (row.hasClass('selected')) {
+            /* SI selected - add appropriate transactions to div.entries */
+            var desc = $(this).find('div.td.xml-description').text();
+            var subtotal = $(this).find('div.td.xml-subtotal').text();
+            var tax = $(this).find('div.td.xml-tax').text();
+            var total = $(this).find('div.td.xml-total').text();
+            var org = $(this).find('div.td.xml-organisation').first().text();
 
-			if (Number(amount) < Number(total)) {
-				total = amount;
-			}
+            if (Number(amount) < Number(total)) {
+                total = amount;
+            }
 
-			/* 1100 - Debtors Control */
-			var dctl = $('<div class="tr salesinvoice"/>');
-			dctl.append('<div class="td xml-id">' + id + '</div>');
-			dctl.append('<div class="td xml-organisation">' + org + '</div>');
-			dctl.append('<div class="td xml-date">' + date + '</div>');
-			dctl.append('<div class="td xml-description">' + desc + '</div>');
-			dctl.append('<div class="td xml-account">1100</div>');
-			dctl.append('<div class="td xml-debit"/>');
-			dctl.append('<div class="td xml-credit">' + total + '</div>');
-			mytab.find('div.bank.entries').append(dctl);
+            /* 1100 - Debtors Control */
+            var dctl = $('<div class="tr salesinvoice"/>');
+            dctl.append('<div class="td xml-id">' + id + '</div>');
+            dctl.append('<div class="td xml-organisation">' + org + '</div>');
+            dctl.append('<div class="td xml-date">' + date + '</div>');
+            dctl.append('<div class="td xml-description">' + desc + '</div>');
+            dctl.append('<div class="td xml-account">1100</div>');
+            dctl.append('<div class="td xml-debit"/>');
+            dctl.append('<div class="td xml-credit">' + total + '</div>');
+            mytab.find('div.bank.entries').append(dctl);
 
-			/* TODO: if VAT cash accounting, need an entry in 2200 - VAT */
+            /* TODO: if VAT cash accounting, need an entry in 2200 - VAT */
 
-		}
-		else {
-			/* SI unselected - remove from div.entries */
-			mytab.find('div.entries div.tr.salesinvoice div.td.xml-id')
-			.each( function() {
-				if ($(this).text() == id) {
-					$(this).parents('div.tr.salesinvoice').remove();
-				}
-			});
-		}
-	}
-	else {
-		console.log('unknown suggestion type');
-	}
+        }
+        else {
+            /* SI unselected - remove from div.entries */
+            mytab.find('div.entries div.tr.salesinvoice div.td.xml-id')
+            .each( function() {
+                if ($(this).text() == id) {
+                    $(this).parents('div.tr.salesinvoice').remove();
+                }
+            });
+        }
+    }
+    else {
+        console.log('unknown suggestion type');
+    }
 
-	/* deal with overpayment */
-	console.log('amount: ' + amount + '; total: ' + total);
-	var overpay = amount;
-	mytab.find('div.bank.suggestions div.tr.salesinvoice.selected')
-	.each(function() {
-		var sitotal = $(this).find('div.td.xml-total').text();
-		console.log('decimalSubtract(' + overpay + ',' + sitotal +')');
-		overpay = decimalPad(decimalSubtract(overpay, sitotal), 2);
-	});
+    /* deal with overpayment */
+    console.log('amount: ' + amount + '; total: ' + total);
+    var overpay = amount;
+    mytab.find('div.bank.suggestions div.tr.salesinvoice.selected')
+    .each(function() {
+        var sitotal = $(this).find('div.td.xml-total').text();
+        console.log('decimalSubtract(' + overpay + ',' + sitotal +')');
+        overpay = decimalPad(decimalSubtract(overpay, sitotal), 2);
+    });
 
-	/* append overpayment if required */
-	mytab.find('div.bank.entries div.overpayment').remove();
-	if (Number(overpay) > 0) {
-		console.log('Overpayment: ' + overpay);
-		/* overpayment - post to suspense account (9999) */
-		var dctl = $('<div class="tr salesinvoice overpayment"/>');
-		dctl.append('<div class="td xml-id">' + id + '</div>');
-		dctl.append('<div class="td xml-organisation">'+org+'</div>');
-		dctl.append('<div class="td xml-date">' + date + '</div>');
-		dctl.append('<div class="td xml-description">Unallocated</div>');
-		dctl.append('<div class="td xml-account">9999</div>');
-		dctl.append('<div class="td xml-debit"/>');
-		dctl.append('<div class="td xml-credit">' + overpay +'</div>');
-		mytab.find('div.bank.entries').append(dctl);
-	}
-	bankTotalsUpdate();
+    /* append overpayment if required */
+    mytab.find('div.bank.entries div.overpayment').remove();
+    if (Number(overpay) > 0) {
+        console.log('Overpayment: ' + overpay);
+        /* overpayment - post to suspense account (9999) */
+        var dctl = $('<div class="tr salesinvoice overpayment"/>');
+        dctl.append('<div class="td xml-id">' + id + '</div>');
+        dctl.append('<div class="td xml-organisation">'+org+'</div>');
+        dctl.append('<div class="td xml-date">' + date + '</div>');
+        dctl.append('<div class="td xml-description">Unallocated</div>');
+        dctl.append('<div class="td xml-account">9999</div>');
+        dctl.append('<div class="td xml-debit"/>');
+        dctl.append('<div class="td xml-credit">' + overpay +'</div>');
+        mytab.find('div.bank.entries').append(dctl);
+    }
+    bankTotalsUpdate();
 }
 
 function bankReconcileSalesInvoice(bank, account) {
-	console.log('bankReconcileSalesInvoice()');
-	var mytab = activeTab();
-	var account = mytab.find('select.bankaccount').val();
-	var date = mytab.find('div.bank.target div.td.xml-date').text();
-	/* 1=cash; 2=cheque; 3=bank transfer */
-	var paymenttype = '3'; /* FIXME: hardcoded */
-	var org = mytab.find('div.bank.entries div.td.xml-organisation').first().text();
-	var amount = mytab.find('div.bank.target div.td.xml-debit').text();
-	var desc = mytab.find('div.bank.target div.td.xml-description').text();
+    console.log('bankReconcileSalesInvoice()');
+    var mytab = activeTab();
+    var account = mytab.find('select.bankaccount').val();
+    var date = mytab.find('div.bank.target div.td.xml-date').text();
+    /* 1=cash; 2=cheque; 3=bank transfer */
+    var paymenttype = '3'; /* FIXME: hardcoded */
+    var org = mytab.find('div.bank.entries div.td.xml-organisation').first().text();
+    var amount = mytab.find('div.bank.target div.td.xml-debit').text();
+    var desc = mytab.find('div.bank.target div.td.xml-description').text();
 
-	/* create salespayment */
+    /* create salespayment */
     var xml = createRequestXml();
-	xml += '<salespayment>';
-	xml += '<transactdate>' + date + '</transactdate>';
-	xml += '<paymenttype>' + paymenttype + '</paymenttype>';
-	xml += '<organisation>' + org + '</organisation>';
-	xml += '<bank>' + bank + '</bank>';
-	xml += '<bankaccount>' + account + '</bankaccount>';
-	xml += '<amount>' + amount + '</amount>';
-	xml += '<description>' + desc + '</description>';
+    xml += '<salespayment>';
+    xml += '<transactdate>' + date + '</transactdate>';
+    xml += '<paymenttype>' + paymenttype + '</paymenttype>';
+    xml += '<organisation>' + org + '</organisation>';
+    xml += '<bank>' + bank + '</bank>';
+    xml += '<bankaccount>' + account + '</bankaccount>';
+    xml += '<amount>' + amount + '</amount>';
+    xml += '<description>' + desc + '</description>';
 
-	/* allocate salespayment against salesinvoice(s) */
-	mytab.find('div.bank.entries div.tr.salesinvoice').each(function() {
-		var siid = $(this).find('div.td.xml-id').text();
-		amount = $(this).find('div.td.xml-credit').text();
-		xml += '<salespaymentallocation>';
-		xml += '<salesinvoice>' + siid + '</salesinvoice>';
-		xml += '<amount>' + amount + '</amount>';
-		xml += '</salespaymentallocation>';
-	});
-	xml += '</salespayment></data></request>';
+    /* allocate salespayment against salesinvoice(s) */
+    mytab.find('div.bank.entries div.tr.salesinvoice').each(function() {
+        var siid = $(this).find('div.td.xml-id').text();
+        amount = $(this).find('div.td.xml-credit').text();
+        xml += '<salespaymentallocation>';
+        xml += '<salesinvoice>' + siid + '</salesinvoice>';
+        xml += '<amount>' + amount + '</amount>';
+        xml += '</salespaymentallocation>';
+    });
+    xml += '</salespayment></data></request>';
 
     $.ajax({
         url: collection_url('salespayments'),
@@ -965,25 +965,25 @@ function bankReconcileSalesInvoice(bank, account) {
         beforeSend: function (xhr) { setAuthHeader(xhr); },
         success: function(xml) {
             hideSpinner();
-			statusMessage('Saved.', STATUS_INFO, 5000);
-			bankReconcile(account); /* show next */
+            statusMessage('Saved.', STATUS_INFO, 5000);
+            bankReconcile(account); /* show next */
         },
         error: function(xml) {
             hideSpinner();
-			statusMessage('Error reconciling transaction', STATUS_CRIT);
+            statusMessage('Error reconciling transaction', STATUS_CRIT);
         }
     });
 }
 
 function bankReconcileId(bank, ledger, account) {
-	console.log('Reconciling bank entry ' + bank + ' against ledger ' +ledger);
+    console.log('Reconciling bank entry ' + bank + ' against ledger ' +ledger);
 
-	/* Build request xml */
+    /* Build request xml */
     var xml = createRequestXml();
-	xml += '<account>' + account + '</account>';
-	xml += '<bank id="' + bank + '">'; 
-	xml += '<ledger>' + ledger + '</ledger>';
-	xml += '</bank></data></request>';
+    xml += '<account>' + account + '</account>';
+    xml += '<bank id="' + bank + '">'; 
+    xml += '<ledger>' + ledger + '</ledger>';
+    xml += '</bank></data></request>';
 
     showSpinner('Reconciling bank item...');
     $.ajax({
@@ -994,25 +994,25 @@ function bankReconcileId(bank, ledger, account) {
         beforeSend: function (xhr) { setAuthHeader(xhr); },
         success: function(xml) {
             hideSpinner();
-			statusMessage('Saved.', STATUS_INFO, 5000);
-			bankReconcile(account); /* show next */
+            statusMessage('Saved.', STATUS_INFO, 5000);
+            bankReconcile(account); /* show next */
         },
         error: function(xml) {
             hideSpinner();
-			statusMessage('Error unreconciling transaction', STATUS_CRIT);
+            statusMessage('Error unreconciling transaction', STATUS_CRIT);
         }
     });
 }
 
 function bankUnreconcileId(id, account, row) {
-	console.log('Unreconciling bank entry ' + id);
+    console.log('Unreconciling bank entry ' + id);
 
-	/* Build request xml */
+    /* Build request xml */
     var xml = createRequestXml();
-	xml += '<account>' + account + '</account>';
-	xml += '<bank id="' + id + '">'; 
-	xml += '<ledger>0</ledger>';
-	xml += '</bank></data></request>';
+    xml += '<account>' + account + '</account>';
+    xml += '<bank id="' + id + '">'; 
+    xml += '<ledger>0</ledger>';
+    xml += '</bank></data></request>';
 
     showSpinner('Unreconciling bank item ' + id + '...');
     $.ajax({
@@ -1023,86 +1023,86 @@ function bankUnreconcileId(id, account, row) {
         beforeSend: function (xhr) { setAuthHeader(xhr); },
         success: function(xml) {
             hideSpinner();
-			statusMessage('Saved.', STATUS_INFO, 5000);
-			row.removeClass('reconciled');
+            statusMessage('Saved.', STATUS_INFO, 5000);
+            row.removeClass('reconciled');
         },
         error: function(xml) {
             hideSpinner();
-			statusMessage('Error unreconciling transaction', STATUS_CRIT);
+            statusMessage('Error unreconciling transaction', STATUS_CRIT);
         }
     });
 }
 
 function bankUnreconcileSelected() {
-	var mytab = activeTab();
-	var selected = mytab.find('div.tr.selected').length;
-	var account = mytab.find('div.bank.selector select.bankaccount').val();
-	console.log(selected + ' rows selected');
-	mytab.find('div.tr.selected.reconciled').each(function() {
-		var id = $(this).find('div.td.xml-id').text();
-		bankUnreconcileId(id, account, $(this));
-	});
+    var mytab = activeTab();
+    var selected = mytab.find('div.tr.selected').length;
+    var account = mytab.find('div.bank.selector select.bankaccount').val();
+    console.log(selected + ' rows selected');
+    mytab.find('div.tr.selected.reconciled').each(function() {
+        var id = $(this).find('div.td.xml-id').text();
+        bankUnreconcileId(id, account, $(this));
+    });
 }
 
 function clickBankRow() {
-	console.log('clickBankRow()');
-	var id = $(this).find('div.xml-id').text();
-	console.log('bank row ' + id + ' selected');
-	selectRowSingular($(this));
-	statusHide();
-	var account = activeTab().find('select.bankaccount').val();
+    console.log('clickBankRow()');
+    var id = $(this).find('div.xml-id').text();
+    console.log('bank row ' + id + ' selected');
+    selectRowSingular($(this));
+    statusHide();
+    var account = activeTab().find('select.bankaccount').val();
 
-	/* populate suspects panel */
-	bankSuggest($(this), account);
+    /* populate suspects panel */
+    bankSuggest($(this), account);
 }
 
 /* override gladd.js function */
 customFormEvents = function(tab, object, action, id) {
-	var mytab = getTabById(tab);
+    var mytab = getTabById(tab);
 
-	/* remove scrollbar from tablet - we'll handle this in the bank.data div */
-	if (object == 'bank') mytab.addClass('noscroll');
+    /* remove scrollbar from tablet - we'll handle this in the bank.data div */
+    if (object == 'bank') mytab.addClass('noscroll');
 
     /* upload button click handler */
-	mytab.find('button.upload').click(function()
-	{
-		uploadFile(csvToXml, '/fileupload/' + g_instance + '/');
-	});
+    mytab.find('button.upload').click(function()
+    {
+        uploadFile(csvToXml, '/fileupload/' + g_instance + '/');
+    });
 
-	mytab.find('select.bankaccount').change(bankChange);
+    mytab.find('select.bankaccount').change(bankChange);
 
-	if (object == 'bank' && action == 'reconcile') {
-		var acct = mytab.find('select.bankaccount').val();
-		console.log('Bank: ' + acct);
-		if (!acct) {
-			/* no unreconciled transactions */
-			console.log('no unreconciled transactions');
-			mytab.find('div.bank.reconcile').empty();
-			closeTab(tab);
-			getForm('bank', 'upload', 'Upload Bank Statement');
-			return;
-		}
-		else {
-			/* Select first item in bank list */
-			mytab.find('select.bankaccount').trigger('change');
-		}
-	}
-	if (object == 'contact' && action == 'update') {
-		var addressFields = ['line_1','line_2','line_3','town','county',
-			'country','postcode'];
-		var selector = addressFields.join('"],input[name="'); 
-		selector = 'input[name="' + selector + '"]';
-		mytab.find(selector).change(mapUpdate);
-	}
+    if (object == 'bank' && action == 'reconcile') {
+        var acct = mytab.find('select.bankaccount').val();
+        console.log('Bank: ' + acct);
+        if (!acct) {
+            /* no unreconciled transactions */
+            console.log('no unreconciled transactions');
+            mytab.find('div.bank.reconcile').empty();
+            closeTab(tab);
+            getForm('bank', 'upload', 'Upload Bank Statement');
+            return;
+        }
+        else {
+            /* Select first item in bank list */
+            mytab.find('select.bankaccount').trigger('change');
+        }
+    }
+    if (object == 'contact' && action == 'update') {
+        var addressFields = ['line_1','line_2','line_3','town','county',
+            'country','postcode'];
+        var selector = addressFields.join('"],input[name="'); 
+        selector = 'input[name="' + selector + '"]';
+        mytab.find(selector).change(mapUpdate);
+    }
 }
 
 customBusinessNotFound = function(xml) {
-	getForm('business', 'create', 'Add New Business');
+    getForm('business', 'create', 'Add New Business');
 }
 
 customLoginEvents = function(xml) {
-	console.log('customLoginEvents.gladbooks()');
-	g_instance = $(xml).find('instance').text();
+    console.log('customLoginEvents.gladbooks()');
+    g_instance = $(xml).find('instance').text();
     if (g_instance == '') {
         /* couldn't find instance for user - treat as failed login */
         loginfailed();
@@ -1113,24 +1113,24 @@ customLoginEvents = function(xml) {
         g_loggedin = true;
         hideLoginBox();
         prepBusinessSelector();
-		$('input.search-query').off().change(searchKeyPress);
-		/* TODO */
-		//dashboardShow();
+        $('input.search-query').off().change(searchKeyPress);
+        /* TODO */
+        //dashboardShow();
     }
 }
 
 customLogoutActions = function() {
-	$('input.search-query').val(''); /* clear search bar */
+    $('input.search-query').val(''); /* clear search bar */
 }
 
 function csvToXml(doc) {
     showSpinner('Converting csv to xml...');
 
-	var sha = $(doc).find('sha1sum').text();
-	if (sha.length != 40) {
-		console.log('invalid sha1sum');
-		return false;
-	}
+    var sha = $(doc).find('sha1sum').text();
+    if (sha.length != 40) {
+        console.log('invalid sha1sum');
+        return false;
+    }
     $.ajax({
         url: collection_url('csvtoxml/' + sha),
         beforeSend: function (xhr) { setAuthHeader(xhr); },
@@ -1148,14 +1148,14 @@ function csvToXml(doc) {
 
 /* load/refresh/display user dashboard */
 function dashboardShow() {
-	addTab('Dashboard', '<div class="dashboard"/>', true);
+    addTab('Dashboard', '<div class="dashboard"/>', true);
 }
 
 docKeypress = function() {
-	var c = $(document.activeElement); /* find control with focus */
-	if (c.hasClass('search-query')) {
-		searchKeyPress();
-	}
+    var c = $(document.activeElement); /* find control with focus */
+    if (c.hasClass('search-query')) {
+        searchKeyPress();
+    }
 }
 
 /* show the form, after setup is complete */
@@ -1274,15 +1274,15 @@ function populateDebitCreditDDowns() {
 }
 
 function postBankData(xml) {
-	var account = activeTab().find('select.bankaccount').val();
-	console.log('Uploading bank statement to account ' + account);
+    var account = activeTab().find('select.bankaccount').val();
+    console.log('Uploading bank statement to account ' + account);
 
-	/* prefix account number to data*/
-	$(xml).find('data').each(function() {
-		$(this).prepend('<account>' + account + '</account>');
-	});
+    /* prefix account number to data*/
+    $(xml).find('data').each(function() {
+        $(this).prepend('<account>' + account + '</account>');
+    });
 
-	var flatxml = flattenXml(xml);
+    var flatxml = flattenXml(xml);
 
     showSpinner('Saving bank data...');
     $.ajax({
@@ -1294,12 +1294,12 @@ function postBankData(xml) {
         success: function(xml) {
             hideSpinner();
             console.log("postBankData() succeeded");
-			statusMessage('Bank Statement uploaded', STATUS_INFO, 5000);
+            statusMessage('Bank Statement uploaded', STATUS_INFO, 5000);
         },
         error: function(xml) {
             hideSpinner();
             console.log("postBankData() failed");
-			statusMessage('Error processing bank statement', STATUS_CRIT);
+            statusMessage('Error processing bank statement', STATUS_CRIT);
         }
     });
 }
@@ -1526,52 +1526,52 @@ function salesorderAddProduct(tab, datatable, id, product, linetext, price, qty)
 /* key pressed in search bar - wait until user pauses before searching */
 var t;
 function searchKeyPress() {
-	var c = $(document.activeElement); /* find control with focus */
-	var ms = 400; /* 400ms delay */
-	t = Date.now() + ms;
-	window.setTimeout(searchLater, ms, c);
+    var c = $(document.activeElement); /* find control with focus */
+    var ms = 400; /* 400ms delay */
+    t = Date.now() + ms;
+    window.setTimeout(searchLater, ms, c);
 }
 
 /* if no keys have been pressed since time was set, begin search */
 function searchLater(c) {
-	if (t <= Date.now()) {
-		searchNow(c);
-	}
+    if (t <= Date.now()) {
+        searchNow(c);
+    }
 }
 
 /* begin search */
 function searchNow(c) {
-	var terms = searchTerms(c.val());
-	var searchurl = 'search/';
+    var terms = searchTerms(c.val());
+    var searchurl = 'search/';
 
-	var d = getXML('/testdata/search.xml');
-	d.done(function(xml) {
-		searchStart(xml, terms);
-	})
-	.fail(function() {
-		console.log('failed to get search definitions');
-	});
+    var d = getXML('/testdata/search.xml');
+    d.done(function(xml) {
+        searchStart(xml, terms);
+    })
+    .fail(function() {
+        console.log('failed to get search definitions');
+    });
 }
 
 function searchStart(doc, terms) {
-	/* join terms into xml fragment */
-	var termstring = '';
-	if (terms.words.length > 0 && terms.words[0] != '') {
-		termstring = '<term>' + terms.words.join('</term><term>') + '</term>';
-	}
-	if (terms.numbers.length > 0 && terms.numbers[0] != '') {
-		termstring += '<term type="numeric">' + terms.numbers.join('</term><term type="numeric">') + '</term>';
-	}
-	if (terms.dates.length > 0 && terms.dates[0] != '') {
-		termstring += '<term type="date">' + terms.dates.join('</term><term type="date">') + '</term>';
-	}
-	/* do not attempt search without any search terms */
-	if (termstring.length == 0) { return; }
+    /* join terms into xml fragment */
+    var termstring = '';
+    if (terms.words.length > 0 && terms.words[0] != '') {
+        termstring = '<term>' + terms.words.join('</term><term>') + '</term>';
+    }
+    if (terms.numbers.length > 0 && terms.numbers[0] != '') {
+        termstring += '<term type="numeric">' + terms.numbers.join('</term><term type="numeric">') + '</term>';
+    }
+    if (terms.dates.length > 0 && terms.dates[0] != '') {
+        termstring += '<term type="date">' + terms.dates.join('</term><term type="date">') + '</term>';
+    }
+    /* do not attempt search without any search terms */
+    if (termstring.length == 0) { return; }
 
-	$(doc).find('request').prepend('<business>' + g_business + '</business>');
-	$(doc).find('request').prepend('<instance>' + g_instance + '</instance>');
-	$(doc).find('search').prepend(termstring);
-	var xml = flattenXml(doc);
+    $(doc).find('request').prepend('<business>' + g_business + '</business>');
+    $(doc).find('request').prepend('<instance>' + g_instance + '</instance>');
+    $(doc).find('search').prepend(termstring);
+    var xml = flattenXml(doc);
     $.ajax({
         url: collection_url('search'),
         type: 'POST',
@@ -1579,86 +1579,86 @@ function searchStart(doc, terms) {
         contentType: 'text/xml',
         beforeSend: function (xhr) { setAuthHeader(xhr); },
         success: function(html) {
-			console.log('search complete');
-			if (html == '(null)') { return; }
-			html = html.replace(/&lt;div([^&]+)&gt;/g,'<div$1>');
-			html = html.replace('&lt;/div&gt;','</div>', 'g');
-			addTab('Search', html, true);
-			searchEvents();
-		},
+            console.log('search complete');
+            if (html == '(null)') { return; }
+            html = html.replace(/&lt;div([^&]+)&gt;/g,'<div$1>');
+            html = html.replace('&lt;/div&gt;','</div>', 'g');
+            addTab('Search', html, true);
+            searchEvents();
+        },
         error: function(xml) {
-			console.log('search failed');
-		}
+            console.log('search failed');
+        }
     });
 }
 
 /* add events to search results list */
 function searchEvents() {
-	var mytab = activeTab();
-	mytab.find('div.search.results div.tr').click(searchRowClick);
+    var mytab = activeTab();
+    mytab.find('div.search.results div.tr').click(searchRowClick);
 }
 
 function searchRowClick() {
-	var id = $(this).find('div.td.id').text();
-	if ($(this).hasClass('contact')) {
-		console.log('contact ' + id);
-		displayElement('contacts', id);
-	}
-	if ($(this).hasClass('organisation')) {
-		console.log('organisation ' + id);
-		displayElement('organisations', id);
-	}
-	if ($(this).hasClass('product')) {
-		console.log('product ' + id);
-		displayElement('products', id);
-	}
-	if ($(this).hasClass('salesinvoice')) {
-		console.log('salesinvoice ' + id);
-		var ref = $(this).find('div.td.ref').text();
-		var si = 'SI-' + ref.replace('/','-') + '.pdf';
-		var url = '/pdf/' + g_orgcode + '/' + si;
-		window.open(url);
-	}
+    var id = $(this).find('div.td.id').text();
+    if ($(this).hasClass('contact')) {
+        console.log('contact ' + id);
+        displayElement('contacts', id);
+    }
+    if ($(this).hasClass('organisation')) {
+        console.log('organisation ' + id);
+        displayElement('organisations', id);
+    }
+    if ($(this).hasClass('product')) {
+        console.log('product ' + id);
+        displayElement('products', id);
+    }
+    if ($(this).hasClass('salesinvoice')) {
+        console.log('salesinvoice ' + id);
+        var ref = $(this).find('div.td.ref').text();
+        var si = 'SI-' + ref.replace('/','-') + '.pdf';
+        var url = '/pdf/' + g_orgcode + '/' + si;
+        window.open(url);
+    }
 }
 
 /* split search into terms */
 function searchTerms(search) {
-	search = search.trim();
-	var terms = new Object();
-	var tokens = new Array();
-	terms.numbers = new Array();
-	terms.dates = new Array();
-	terms.words = search.split(/[\s]+/);
-	var z = 0;
+    search = search.trim();
+    var terms = new Object();
+    var tokens = new Array();
+    terms.numbers = new Array();
+    terms.dates = new Array();
+    terms.words = search.split(/[\s]+/);
+    var z = 0;
 
-	if (terms.words.length > 1) {
-		terms.words.unshift(search); /* add full search string as term */
-		z = 1;
-	}
-	for (var i=z; i < terms.words.length; i++) {
-		/* split the word down further and add these as extra search terms */
-		if (isDate(terms.words[i])) {
-			/* date - move to terms.dates */
-			terms.dates.push(terms.words[i]);
-			terms.words.splice(i, 1);
-		}
-		else if (isNaN(terms.words[i])) { /* don't split numbers */
-			var tok = terms.words[i].split(/[\W]+/);
-			if (tok.length > 1) {
-				for (var j=0; j < tok.length; j++) {
-					tokens.push(tok[j]);
-				}
-			}
-		}
-		else {
-			/* number - move to terms.numbers */
-			terms.numbers.push(terms.words[i]);
-			terms.words.splice(i, 1);
-		}
-	}
-	terms.words = terms.words.concat(tokens);
-	if (terms.words.length == 1 && terms.words[0] == '') { return null; }
-	return terms;
+    if (terms.words.length > 1) {
+        terms.words.unshift(search); /* add full search string as term */
+        z = 1;
+    }
+    for (var i=z; i < terms.words.length; i++) {
+        /* split the word down further and add these as extra search terms */
+        if (isDate(terms.words[i])) {
+            /* date - move to terms.dates */
+            terms.dates.push(terms.words[i]);
+            terms.words.splice(i, 1);
+        }
+        else if (isNaN(terms.words[i])) { /* don't split numbers */
+            var tok = terms.words[i].split(/[\W]+/);
+            if (tok.length > 1) {
+                for (var j=0; j < tok.length; j++) {
+                    tokens.push(tok[j]);
+                }
+            }
+        }
+        else {
+            /* number - move to terms.numbers */
+            terms.numbers.push(terms.words[i]);
+            terms.words.splice(i, 1);
+        }
+    }
+    terms.words = terms.words.concat(tokens);
+    if (terms.words.length == 1 && terms.words[0] == '') { return null; }
+    return terms;
 }
 
 function setupJournalForm(tab) {
@@ -1706,35 +1706,35 @@ function submitJournalEntry(event, form, bankid) {
         contentType: 'text/xml',
         beforeSend: function (xhr) { setAuthHeader(xhr); },
         success: function(xml) {
-			console.log('success');
-			if (bankid) {
-				activeTab().find('select.bankaccount').change();
-			}
-			else {
-				submitJournalEntrySuccess(xml, form);
-			}
-		},
+            console.log('success');
+            if (bankid) {
+                activeTab().find('select.bankaccount').change();
+            }
+            else {
+                submitJournalEntrySuccess(xml, form);
+            }
+        },
         error: function(xml) { submitJournalEntryError(xml); }
     });
 }
 
 /* override the gladd.js function which sets tab titles */
 tabTitle = function (title, object, action, xml) {
-	var namedobjects = [ 'contact', 'department', 'division', 'organisation',
-		'product'
-	];
+    var namedobjects = [ 'contact', 'department', 'division', 'organisation',
+        'product'
+    ];
 
-	if (namedobjects.indexOf(object) != -1 && action == 'update' && xml[0]) {
-		if (object == 'product') {
-        	title = $(xml[0]).find('shortname').first().text();
-		}
-		else if (object == 'salesorder') {
-        	title = 'SO ' + $(xml[0]).find('order').first().text();
-		}
-		else {
-        	title = $(xml[0]).find('name').first().text();
-		}
-	}
+    if (namedobjects.indexOf(object) != -1 && action == 'update' && xml[0]) {
+        if (object == 'product') {
+            title = $(xml[0]).find('shortname').first().text();
+        }
+        else if (object == 'salesorder') {
+            title = 'SO ' + $(xml[0]).find('order').first().text();
+        }
+        else {
+            title = $(xml[0]).find('name').first().text();
+        }
+    }
     return title;
 }
 
@@ -1909,7 +1909,7 @@ function validateJournalEntry(form, bankid) {
             xml += '<journal ';
             xml += 'transactdate="' + $(form).find('.transactdate').val()
                 + '" ';
-			if (bankid) xml += 'bankid="' + bankid + '" ';
+            if (bankid) xml += 'bankid="' + bankid + '" ';
             xml += 'description="'+ escapeHTML($(this).val().trim()) +'">';
         }
         else if ($(this).hasClass('account')) {
@@ -2117,7 +2117,7 @@ function recalculateLineTotal(parentrow, tab) {
 }
 
 function customFormValidation(object, action, id) {
-	if (object == 'account') {
+    if (object == 'account') {
         return validateFormAccount(action, id);
     }
     else if (object == 'product') {
@@ -2138,23 +2138,28 @@ customSubmitFormSuccess = function(object, action, id, collection, xml) {
     }
 
     if (object == 'business') {
-		/* update business selector and switch business */
-		TABS.active.close();
-		g_business = $(xml).find('resources > row > id').text();
-		prepBusinessSelector();
-		hideSpinner();
-		return false;
+        /* update business selector and switch business */
+        TABS.active.close();
+        g_business = $(xml).find('resources > row > id').text();
+        prepBusinessSelector();
+        hideSpinner();
+        return false;
     }
-	return true;
+    return true;
 }
 
 customClickElement = function(row) {
     var tab = TABS.active;
 
-	/* Some collections should never do anything when clicked */
-	var inert = [ 'salespayments' ];
-	if (inert.indexOf(tab.collection) != -1) { return true; }
+    /* Some collections should never do anything when clicked */
+    var inert = [ 'salespayments' ];
+    if (inert.indexOf(tab.collection) != -1) { return true; }
 
+    if (tab.collection == 'products') {
+        var id = row.find('td.xml-id').text();
+        showForm('product', 'update', '', id);
+        return true;
+    }
     if (tab.collection == 'salesinvoices') {
         /* view salesinvoice pdf */
         var a=row.find('td.xml-pdf').find('a');
@@ -2166,7 +2171,7 @@ customClickElement = function(row) {
         html += 'alt : <a href="' + href + '">PDF</a>';
         html += '</object></div>';
         addTab(si, html, true);
-		return true;
+        return true;
     }
     else {
         var id = row.find('td.xml-id').text();
@@ -2177,22 +2182,22 @@ customClickElement = function(row) {
             var title = null;
         }
         displayElement(tab.collection, id, title);
-		return true;
+        return true;
     }
 }
 
 Form.prototype.customXML = function() {
-	if (this.object === 'product') {
-		this.xml += '<tax id="1"/>';
-	}
+    if (this.object === 'product') {
+        this.xml += '<tax id="1"/>';
+    }
 }
 
 Form.prototype.submitErrorCustom = function(xhr, s, err) {
-	if (this.object === 'salesorder' && this.action === 'process') {
-		statusMessage('Billing run failed', STATUS_CRIT);
-		return true;
-	}
-	return false;
+    if (this.object === 'salesorder' && this.action === 'process') {
+        statusMessage('Billing run failed', STATUS_CRIT);
+        return true;
+    }
+    return false;
 }
 
 
