@@ -28,14 +28,14 @@ g_menus = [
     [ 'bank.statement', getForm, 'bank', 'statement', 'Bank Statement' ],
     [ 'bank.test', showHTML, 'help/layouttest.html', 'Layout Test' ],
     [ 'banking', showHTML, 'help/banking.html', 'Banking', false ],
-    [ 'contact.create', getForm, 'contact', 'create', 'Add New Contact' ],
+    [ 'contact.create', showForm, 'contact', 'create', 'Add New Contact' ],
     [ 'contacts', showQuery, 'contacts', 'Contacts', true ],
     [ 'departments.create', showForm, 'department', 'create', 'Add New Department' ],
     [ 'departments.view', showQuery, 'departments', 'Departments', true ],
     [ 'divisions.create', showForm, 'division', 'create', 'Add New Division' ],
     [ 'divisions.view', showQuery, 'divisions', 'Divisions', true ],
     [ 'help', showHTML, 'help/index.html', 'Help', false ],
-    [ 'organisation.create', getForm, 'organisation', 'create', 'Add New Organisation' ],
+    [ 'organisation.create', showForm, 'organisation', 'create', 'Add New Organisation' ],
     [ 'organisations', showQuery, 'organisations', 'Organisations', true ],
     [ 'payables', showHTML, 'help/payables.html', 'Payables', false ],
     [ 'product.create', showForm, 'product', 'create', 'Add New Product' ],
@@ -95,6 +95,9 @@ FORMDATA = {
         'create': [ 'accounttypes' ], 
         'update': [ 'accounttypes' ], 
     },  
+    'organisation': {
+        'update': [ 'contacts', 'relationships' ],
+    },
     'product': {
         'create': [ 'accounts.revenue' ],
         'update': [ 'accounts.revenue', 'taxes' ]
