@@ -2157,7 +2157,8 @@ customClickElement = function(row) {
 
     if (tab.collection == 'products') {
         var id = row.find('td.xml-id').text();
-        showForm('product', 'update', '', id);
+        var name = row.find('td.xml-shortname').text();
+        showForm('product', 'update', 'Product: ' + name, id);
         return true;
     }
     if (tab.collection == 'salesinvoices') {
