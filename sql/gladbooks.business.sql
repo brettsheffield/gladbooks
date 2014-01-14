@@ -37,6 +37,7 @@ CREATE TABLE accounttype (
 	range_min	INT4 NOT NULL,
 	range_max	INT4 NOT NULL,
 	next_id		INT4 NOT NULL DEFAULT 0,
+	last_id		INT4,
 	entered		timestamp with time zone default now()
 );
 -- we don't delete account types

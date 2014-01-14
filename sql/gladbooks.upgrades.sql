@@ -24,6 +24,7 @@ BEGIN
 	PERFORM upgrade_0005();
 	PERFORM upgrade_0006();
 	PERFORM upgrade_0007();
+	PERFORM upgrade_0008();
 
 	RETURN 0;
 END;
@@ -67,7 +68,7 @@ CREATE OR REPLACE FUNCTION upgrade_database()
 RETURNS INT4 AS
 $$
 DECLARE
-	vnum		INT4 = 9; -- New version (increment this)
+	vnum		INT4 = 11; -- New version (increment this)
 	instances	INT4;
 	inst		TEXT;
 	oldv		INT4;
@@ -453,6 +454,7 @@ BEGIN
         RAISE INFO '0007 - CREATE TRIGGER productdetailupdate';
 
         EXECUTE '
+DROP TRIGGER IF EXISTS productdetailupdate ON productdetail;
 CREATE TRIGGER productdetailupdate BEFORE INSERT ON productdetail
 FOR EACH ROW EXECUTE PROCEDURE productdetailupdate();
         ';
@@ -461,6 +463,36 @@ FOR EACH ROW EXECUTE PROCEDURE productdetailupdate();
 END;
 $$ LANGUAGE 'plpgsql';
 
+CREATE OR REPLACE FUNCTION upgrade_0008()
+RETURNS INT4 AS
+$$
+BEGIN
+
+        RAISE INFO '0008 - ALTER TABLE accounttype';
+
+	BEGIN
+		ALTER TABLE accounttype ADD COLUMN last_id INT4;
+	EXCEPTION WHEN duplicate_column THEN
+		--
+	END;
+
+	DROP TRIGGER IF EXISTS accountinsert ON account;
+	CREATE TRIGGER accountinsert AFTER INSERT ON account
+	FOR EACH ROW EXECUTE PROCEDURE accountinsert();
+
+        RETURN 0;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION accountinsert()
+RETURNS TRIGGER AS
+$$
+BEGIN
+        UPDATE accounttype SET last_id = NEW.id
+        WHERE id=NEW.accounttype;
+        RETURN NULL; /* after, so result ignored */
+END;
+$$ LANGUAGE 'plpgsql';
 
 CREATE OR REPLACE FUNCTION postpayment(type TEXT, paymentid INT4)
 RETURNS INT4 AS

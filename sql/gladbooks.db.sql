@@ -303,6 +303,16 @@ $$ LANGUAGE 'plpgsql';
 CREATE TRIGGER set_account_id BEFORE INSERT ON account
 FOR EACH ROW EXECUTE PROCEDURE set_account_id();
 
+CREATE OR REPLACE FUNCTION accountinsert()
+RETURNS TRIGGER AS
+$$
+BEGIN
+	UPDATE accounttype SET last_id = NEW.id
+	WHERE accounttype=NEW.accounttype;
+        RETURN NULL; /* after, so result ignored */
+END;
+$$ LANGUAGE 'plpgsql';
+
 CREATE OR REPLACE FUNCTION journal_id_next()
 returns int4 AS
 $$

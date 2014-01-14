@@ -48,6 +48,15 @@
 		<xsl:copy-of select="$clientip"/>
 		<xsl:text>');</xsl:text>
 		<xsl:text>COMMIT;</xsl:text>
+		
+		<!-- return the record we just created/updated -->
+		<xsl:text>SELECT a.id, a.accounttype </xsl:text>
+		<xsl:text>AS type, a.description </xsl:text>
+		<xsl:text>FROM account a </xsl:text>
+		<xsl:text>INNER JOIN accounttype at </xsl:text>
+		<xsl:text>ON a.id=at.last_id </xsl:text>
+		<xsl:text>;</xsl:text>
+
 	</xsl:template>
 
 </xsl:stylesheet>
