@@ -93,6 +93,7 @@ g_formdata = [
 FORMDATA = {
     'account': {
         'create': [ 'accounttypes' ], 
+        'update': [ 'accounttypes' ], 
     },  
     'product': {
         'create': [ 'accounts.revenue' ],
@@ -2162,7 +2163,9 @@ customClickElement = function(row) {
     var inert = [ 'salespayments' ];
     if (inert.indexOf(tab.collection) != -1) { return true; }
 
-    if (['divisions','departments'].indexOf(tab.collection) !== -1) {
+    if (['accounts','divisions','departments']
+    .indexOf(tab.collection) !== -1) 
+    {
         var id = row.find('td.xml-id').text();
         var name = row.find('td.xml-name').text();
         var object = tab.collection.substr(0,tab.collection.length-1);
