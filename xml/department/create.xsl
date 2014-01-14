@@ -6,6 +6,7 @@
         <xsl:variable name="clientip" select="request/clientip" />
         <xsl:variable name="instance" select="request/instance" />
         <xsl:variable name="business" select="request/business" />
+	<xsl:variable name="id" select="request/id" />
 
 	<xsl:include href="../cleanQuote.xsl"/>
 	<xsl:include href="../setSearchPath.xsl"/>
@@ -32,6 +33,18 @@
 		<xsl:copy-of select="$clientip"/>
 		<xsl:text>');</xsl:text>
 		<xsl:text>COMMIT;</xsl:text>
+                <xsl:text>SELECT id,name FROM department </xsl:text>
+                <xsl:text>WHERE id=</xsl:text>
+                <xsl:choose>
+                        <xsl:when test="$id">
+                                <xsl:text>'</xsl:text>
+                                <xsl:value-of select="$id"/>
+                                <xsl:text>';</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                                <xsl:text>currval(pg_get_serial_sequence('department','id'));</xsl:text>
+                        </xsl:otherwise>
+                </xsl:choose>
 	</xsl:template>
 
 </xsl:stylesheet>

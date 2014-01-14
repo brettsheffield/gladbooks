@@ -30,7 +30,7 @@ g_menus = [
     [ 'banking', showHTML, 'help/banking.html', 'Banking', false ],
     [ 'contact.create', getForm, 'contact', 'create', 'Add New Contact' ],
     [ 'contacts', showQuery, 'contacts', 'Contacts', true ],
-    [ 'departments.create', getForm, 'department', 'create', 'Add New Department' ],
+    [ 'departments.create', showForm, 'department', 'create', 'Add New Department' ],
     [ 'departments.view', showQuery, 'departments', 'Departments', true ],
     [ 'divisions.create', showForm, 'division', 'create', 'Add New Division' ],
     [ 'divisions.view', showQuery, 'divisions', 'Divisions', true ],
@@ -2150,12 +2150,20 @@ customSubmitFormSuccess = function(object, action, id, collection, xml) {
 
 customClickElement = function(row) {
     var tab = TABS.active;
+    var action = 'update';
 
     /* Some collections should never do anything when clicked */
     var inert = [ 'salespayments' ];
     if (inert.indexOf(tab.collection) != -1) { return true; }
 
-    if (tab.collection == 'products') {
+    if (['divisions','departments'].indexOf(tab.collection) !== -1) {
+        var id = row.find('td.xml-id').text();
+        var name = row.find('td.xml-name').text();
+        var object = tab.collection.substr(0,tab.collection.length-1);
+        showForm(object, action, object + ': ' + name, id);
+        return true;
+    }
+    else if (tab.collection == 'products') {
         var id = row.find('td.xml-id').text();
         var name = row.find('td.xml-shortname').text();
         showForm('product', 'update', 'Product: ' + name, id);
