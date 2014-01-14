@@ -52,7 +52,7 @@ g_menus = [
     [ 'salespayments', showQuery, 'salespayments', 'Sales Payments', true ],
     [ 'business.create', getForm, 'business', 'create', 'Add New Business' ],
     [ 'businessview', showQuery, 'businesses', 'Businesses', true ],
-    [ 'chartadd', getForm, 'account', 'create', 'Add New Account' ],
+    [ 'chartadd', showForm, 'account', 'create', 'Add New Account' ],
     [ 'chartview', showQuery, 'accounts', 'Chart of Accounts', true ],
     [ 'journal', setupJournalForm ],
     [ 'ledger', showQuery, 'ledgers', 'General Ledger', true ],
@@ -65,7 +65,6 @@ g_menus = [
  */
 
 g_formdata = [
-    [ 'account', 'create', [ 'accounttypes' ], ],  
     [ 'bank', 'statement', [ 'accounts.asset' ], ],  
     [ 'bank', 'reconcile',
         [
@@ -92,6 +91,9 @@ g_formdata = [
 ];
 
 FORMDATA = {
+    'account': {
+        'create': [ 'accounttypes' ], 
+    },  
     'product': {
         'create': [ 'accounts.revenue' ],
         'update': [ 'accounts.revenue', 'taxes' ]
