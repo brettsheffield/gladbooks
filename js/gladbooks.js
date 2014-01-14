@@ -1987,6 +1987,9 @@ function submitJournalEntryError(xml) {
 function validateNominalCode(code, type) {
     var xml = g_xml_accounttype;
 
+    var tab = TABS.active;
+    var form = tab.form;
+
     statusHide(); /* clear status box */
 
     if (code == '') {
@@ -2003,9 +2006,10 @@ function validateNominalCode(code, type) {
     }
 
     /* find row that refers to this type */
-    var row = $(xml).find('id').filter(function() {
-        return $(this).parent().find('id').text() == type;
-    }).parent();
+    var row = $(form.data['accounttypes']).find('row').filter(function() {
+        return $(this).find('id').text() == type;
+    });
+    console.log(row);
 
     var min = row.find('range_min').text();
     var max = row.find('range_max').text();
