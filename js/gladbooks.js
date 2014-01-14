@@ -32,7 +32,7 @@ g_menus = [
     [ 'contacts', showQuery, 'contacts', 'Contacts', true ],
     [ 'departments.create', getForm, 'department', 'create', 'Add New Department' ],
     [ 'departments.view', showQuery, 'departments', 'Departments', true ],
-    [ 'divisions.create', getForm, 'division', 'create', 'Add New Division' ],
+    [ 'divisions.create', showForm, 'division', 'create', 'Add New Division' ],
     [ 'divisions.view', showQuery, 'divisions', 'Divisions', true ],
     [ 'help', showHTML, 'help/index.html', 'Help', false ],
     [ 'organisation.create', getForm, 'organisation', 'create', 'Add New Organisation' ],
