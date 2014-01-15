@@ -104,6 +104,11 @@ FORMDATA = {
     }
 }
 
+MAPFIELDS = {
+    'contact': ['line_1','line_2','line_3','town','county', 'country',
+                'postcode']
+}
+
 var g_max_ledgers_per_journal=7;
 var g_frmLedger;
 var g_xml_accounttype = '';
@@ -1608,7 +1613,8 @@ function searchRowClick() {
     var id = $(this).find('div.td.id').text();
     if ($(this).hasClass('contact')) {
         console.log('contact ' + id);
-        displayElement('contacts', id);
+        var name = $(this).find('div.td.name').text();
+        showForm('contact', 'update', name, id);
     }
     if ($(this).hasClass('organisation')) {
         console.log('organisation ' + id);
