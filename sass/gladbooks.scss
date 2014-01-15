@@ -850,6 +850,11 @@ div.bank.selector div.chzn-container {
 	float: left;
 	width: 33% !important;
 }
+.chzn-container-multi .chzn-choices .search-field input {
+	padding: 0;
+	margin: 5px;
+	min-height: 27px;
+}
 div.bank.reconcile, 
 div.bank.statement {
 	background-color: beige;
