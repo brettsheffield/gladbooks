@@ -2174,13 +2174,13 @@ customClickElement = function(row) {
     var inert = [ 'salespayments' ];
     if (inert.indexOf(tab.collection) != -1) { return true; }
 
-    if (['accounts','divisions','departments','organisations']
+    if (['accounts','contacts','divisions','departments','organisations']
     .indexOf(tab.collection) !== -1) 
     {
         var id = row.find('td.xml-id').text();
         var name = row.find('td.xml-name').text();
         var object = tab.collection.substr(0,tab.collection.length-1);
-        showForm(object, action, object + ': ' + name, id);
+        showForm(object, action, name, id);
         return true;
     }
     else if (tab.collection == 'products') {
