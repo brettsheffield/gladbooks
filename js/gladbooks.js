@@ -2166,7 +2166,7 @@ customClickElement = function(row) {
     var inert = [ 'salespayments' ];
     if (inert.indexOf(tab.collection) != -1) { return true; }
 
-    if (['accounts','divisions','departments']
+    if (['accounts','divisions','departments','organisations']
     .indexOf(tab.collection) !== -1) 
     {
         var id = row.find('td.xml-id').text();
