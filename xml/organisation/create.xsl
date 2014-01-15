@@ -16,6 +16,11 @@
 		<xsl:text>BEGIN;</xsl:text>
                 <xsl:apply-templates select="data/organisation"/>
 		<xsl:text>COMMIT;</xsl:text>
+
+		<xsl:text>SELECT * FROM organisation_current </xsl:text>
+		<xsl:text>WHERE organisation='</xsl:text>
+		<xsl:value-of select="$id"/>
+		<xsl:text>';</xsl:text>
         </xsl:template>
 
 </xsl:stylesheet>
