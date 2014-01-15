@@ -494,15 +494,11 @@ td.total, input.total,
 .xml-subtotal,
 .xml-tax,
 .xml-total {
-  font-size: 90%;
   text-align: right;
-  white-space: pre;
-  width: 8em; }
+  white-space: pre; }
 
 .qty {
-  font-size: 90%;
-  text-align: right;
-  width: 2em; }
+  text-align: right; }
 
 td.xml-authuser {
   width: 8em; }
@@ -525,16 +521,23 @@ td.xml-id, td.xml-journal {
 td.xml-orgcode {
   width: 10em; }
 
+/*
+td.xml-product {
+}
+
 td.linetext {
-  font-size: 90%;
-  width: 50%; }
+	font-size: 90%;
+	width: 50%;
+}
 
 input.linetext {
-  width: 90%; }
+	width: 90%;
+}
 
 input.qty {
-  width: 4em; }
-
+	width: 4em;
+}
+*/
 .search-choice-close {
   padding: 0; }
 
@@ -564,14 +567,17 @@ div.organisation_contacts td > input {
 div.organisation_contacts tr:not(:first-child) {
   background-color: white; }
 
+/*
 button.addrow {
-  float: right;
-  margin-right: 1em; }
+	float: right;
+	margin-right: 1em;
+}
 
 button.removerow {
-  float: right;
-  margin-right: 1em; }
-
+	float: right;
+	margin-right: 1em;
+}
+*/
 select.relationship {
   height: 16px;
   opacity: 0.0;
@@ -952,6 +958,65 @@ div.accordion h3.selected {
 .ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br,
 .ui-corner-top, .ui-corner-tr {
   border-radius: 0; }
+
+/* salesorder screen */
+div.salesorder div.datatable {
+  font-size: 0.8em;
+  width: 100%; }
+
+div.salesorder div.datatable input,
+div.salesorder div.datatable select {
+  width: 100%; }
+
+div.salesorder div.datatable div.organisation {
+  width: 25%; }
+
+div.salesorder div.datatable div.ponumber {
+  width: 20%; }
+
+div.salesorder div.datatable div.description {
+  width: 20%; }
+
+div.salesorder div.datatable div.cycle {
+  width: 15%; }
+
+div.salesorder div.datatable div.start_date,
+div.salesorder div.datatable div.end_date {
+  width: 10%; }
+
+/* salesorder -> products subform */
+div.salesorder div.datatable div.product {
+  width: 25%; }
+
+div.salesorder div.datatable div.linetext {
+  width: 35%; }
+
+div.salesorder div.datatable div.price {
+  width: 15%; }
+
+div.salesorder div.datatable div.qty {
+  width: 5%; }
+
+div.salesorder div.datatable div.total {
+  width: 15%; }
+
+div.salesorder div.datatable div.btn {
+  text-align: center;
+  width: 5%; }
+
+div.salesorder div.datatable div.btn button.add {
+  display: none;
+  margin-left: auto;
+  margin-right: auto; }
+
+div.salesorder div.datatable div.btn button.add::before {
+  content: "\271A"; }
+
+div.salesorder div.datatable div.tr.sub.template div.btn button.add {
+  display: block; }
+
+div.salesorder div.datatable div.tr.sub.template div.btn button.del {
+  display: none; }
 
 /* totals table (salesorder form) */
 table.totals {
@@ -1356,7 +1421,10 @@ div.chzn-search > input {
 
   div.video {
     min-height: 400px;
-    width: 100%; } }
+    width: 100%; }
+
+  div.salesorder div.datatable {
+    font-size: 0.7em; } }
 /* 
  * gladbooks-1024px.scss
  * sass file for Gladbooks base styles
@@ -1424,7 +1492,10 @@ div.chzn-search > input {
 
   div.pdf {
     min-height: 400px;
-    width: 100%; } }
+    width: 100%; }
+
+  div.salesorder div.datatable {
+    font-size: 0.8em; } }
 /* 
  * gladbooks-1280px.scss
  * sass file for Gladbooks base styles
@@ -1537,7 +1608,10 @@ div.chzn-search > input {
 
   div.pdf {
     min-height: 400px;
-    width: 100%; } }
+    width: 100%; }
+
+  div.salesorder div.datatable {
+    font-size: 1em; } }
 /* 
  * gladbooks-1440px.scss
  * sass file for Gladbooks base styles

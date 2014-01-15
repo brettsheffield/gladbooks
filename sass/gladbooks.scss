@@ -561,16 +561,12 @@ td.total, input.total,
 .xml-subtotal ,
 .xml-tax ,
 .xml-total {
-	font-size: 90%;
 	text-align: right;
 	white-space: pre;
-	width: 8em;
 }
 
 .qty {
-	font-size: 90%;
 	text-align: right;
-	width: 2em;
 }
 
 td.xml-authuser {
@@ -601,6 +597,7 @@ td.xml-orgcode {
 	width: 10em;
 }
 
+/*
 td.xml-product {
 }
 
@@ -616,6 +613,7 @@ input.linetext {
 input.qty {
 	width: 4em;
 }
+*/
 
 .search-choice-close {
 	padding: 0;	
@@ -655,6 +653,7 @@ div.organisation_contacts tr:not(:first-child) {
 	background-color: white;
 }
 
+/*
 button.addrow {
 	float: right;
 	margin-right: 1em;
@@ -664,6 +663,7 @@ button.removerow {
 	float: right;
 	margin-right: 1em;
 }
+*/
 
 select.relationship {
 	height: 16px;
@@ -1082,6 +1082,66 @@ div.accordion h3.selected {
 .ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br,
 .ui-corner-top, .ui-corner-tr {
     border-radius: 0;
+}
+
+/* salesorder screen */
+div.salesorder div.datatable {
+	font-size: 0.8em;
+	width: 100%;
+}
+div.salesorder div.datatable input, 
+div.salesorder div.datatable select {
+	width: 100%;
+}
+div.salesorder div.datatable div.organisation {
+	width: 25%;
+}
+div.salesorder div.datatable div.ponumber {
+	width: 20%;
+}
+div.salesorder div.datatable div.description {
+	width: 20%;
+}
+div.salesorder div.datatable div.cycle {
+	width: 15%;
+}
+div.salesorder div.datatable div.start_date,
+div.salesorder div.datatable div.end_date {
+	width: 10%;
+}
+/* salesorder -> products subform */
+div.salesorder div.datatable div.product {
+	width: 25%;
+}
+div.salesorder div.datatable div.linetext {
+	width: 35%;
+}
+div.salesorder div.datatable div.price {
+	width: 15%;
+}
+div.salesorder div.datatable div.qty {
+	width: 5%;
+}
+div.salesorder div.datatable div.total {
+	width: 15%;
+}
+div.salesorder div.datatable div.btn {
+	text-align: center;
+	width: 5%;
+}
+div.salesorder div.datatable div.btn button.add {
+	display: none;
+	margin-left: auto;
+	margin-right: auto;
+}
+div.salesorder div.datatable div.btn button.add::before {
+	content: "\271A";
+}
+div.salesorder div.datatable div.tr.sub.template div.btn button.add {
+	display: block;
+}
+div.salesorder div.datatable div.tr.sub.template div.btn button.del {
+	display: none;
 }
 
 /* totals table (salesorder form) */

@@ -45,7 +45,7 @@ g_menus = [
     [ 'rpt_profitandloss', showHTML, 'reports/profitandloss','Profit & Loss',false, true ],
     [ 'rpt_trialbalance', showQuery, 'reports/trialbalance', 'Trial Balance', false ],
     [ 'salesinvoices', showQuery, 'salesinvoices', 'Sales Invoices', true ],
-    [ 'salesorder.create', getForm, 'salesorder', 'create', 'New Sales Order'],
+    [ 'salesorder.create', showForm, 'salesorder', 'create','New Sales Order'],
     [ 'salesorders', showQuery, 'salesorders', 'Sales Orders', true ],
     [ 'salesorders.process', getForm, 'salesorder', 'process', 'Manual Billing Run' ],
     [ 'salespayment.create', getForm, 'salespayment', 'create', 'Enter Sales Payment' ],
@@ -100,8 +100,12 @@ FORMDATA = {
     },
     'product': {
         'create': [ 'accounts.revenue' ],
-        'update': [ 'accounts.revenue', 'taxes' ]
-    }
+        'update': [ 'accounts.revenue', 'taxes' ],
+    },
+    'salesorder': {
+        'create': [ 'cycles', 'organisations', 'productcombo' ],
+        'update': [ 'cycles', 'organisations', 'productcombo' ],
+    },
 }
 
 MAPFIELDS = {
@@ -2174,7 +2178,8 @@ customClickElement = function(row) {
     var inert = [ 'salespayments' ];
     if (inert.indexOf(tab.collection) != -1) { return true; }
 
-    if (['accounts','contacts','divisions','departments','organisations']
+    if (['accounts','contacts','divisions','departments','organisations',
+    'salesorders']
     .indexOf(tab.collection) !== -1) 
     {
         var id = row.find('td.xml-id').text();
