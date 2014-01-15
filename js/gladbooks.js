@@ -1612,7 +1612,8 @@ function searchRowClick() {
     }
     if ($(this).hasClass('organisation')) {
         console.log('organisation ' + id);
-        displayElement('organisations', id);
+        var name = $(this).find('div.td.name').text();
+        showForm('organisation', 'update', name, id);
     }
     if ($(this).hasClass('product')) {
         console.log('product ' + id);
@@ -2159,6 +2160,7 @@ customSubmitFormSuccess = function(object, action, id, collection, xml) {
 }
 
 customClickElement = function(row) {
+    console.log('customClickElement()');
     var tab = TABS.active;
     var action = 'update';
 
