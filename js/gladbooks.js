@@ -1629,7 +1629,8 @@ function searchRowClick() {
     }
     if ($(this).hasClass('product')) {
         console.log('product ' + id);
-        displayElement('products', id);
+        var name = $(this).find('div.td.shortname').text();
+        showForm('product', 'update', name, id);
     }
     if ($(this).hasClass('salesinvoice')) {
         console.log('salesinvoice ' + id);
@@ -2201,7 +2202,7 @@ customClickElement = function(row) {
     else if (tab.collection == 'products') {
         var id = row.find('td.xml-id').text();
         var name = row.find('td.xml-shortname').text();
-        showForm('product', 'update', 'Product: ' + name, id);
+        showForm('product', 'update', name, id);
         return true;
     }
     if (tab.collection == 'salesinvoices') {
