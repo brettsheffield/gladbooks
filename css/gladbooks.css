@@ -991,6 +991,7 @@ div.salesorder div.datatable div.product {
 div.salesorder div.datatable div.linetext {
   width: 35%; }
 
+div.salesorder div.datatable div.tr.totals div.td.subtotal,
 div.salesorder div.datatable div.price {
   width: 15%; }
 
@@ -999,6 +1000,12 @@ div.salesorder div.datatable div.qty {
 
 div.salesorder div.datatable div.total {
   width: 15%; }
+
+div.salesorder div.datatable div.total.td input {
+  color: gray;
+  font-size: 100%;
+  font-family: monospace;
+  font-weight: bold; }
 
 div.salesorder div.datatable div.btn {
   text-align: center;
@@ -1017,6 +1024,22 @@ div.salesorder div.datatable div.tr.sub.template div.btn button.add {
 
 div.salesorder div.datatable div.tr.sub.template div.btn button.del {
   display: none; }
+
+div.salesorder div.datatable div.tr.totals {
+  background-color: #6e89a5;
+  border: 1px solid white;
+  color: white;
+  font-size: 1.2em;
+  font-family: monospace; }
+
+div.salesorder div.datatable div.tr.totals input {
+  color: white;
+  font-family: monospace;
+  font-weight: bold;
+  text-align: right;
+  background-color: transparent;
+  border: none;
+  outline: none; }
 
 /* totals table (salesorder form) */
 table.totals {

@@ -29,13 +29,22 @@
 						<div class="th btn">&nbsp;</div>
 					</div>
 					<div class="tr sub template">
-						<div class="td product"><select name="product" class="product populate nosubmit" data-source="productcombo" data-placeholder=" - Select product - "></select></div>
+						<div class="td product"><select name="product" class="product populate nosubmit onchange formfill" data-source="productcombo" data-placeholder=" - Select product - "></select></div>
 						<div class="td linetext"><input class="linetext nosubmit" name="linetext" type="text" placeholder="Line Text"/></div>
 						<div class="td price"><input class="price nosubmit" name="price" type="text" placeholder="0.00"/></div>
 						<div class="td qty"><input class="qty nosubmit" name="qty" type="text" data-default="1" placeholder="1" value="1"/></div>
-						<div class="td total"><input class="total nosubmit clone" name="total" type="text" placeholder="0.00" readonly="true" tabindex="-1"/></div>
+						<div class="td total"><input class="total nosubmit clone" name="total" type="text" placeholder="0.00" readonly="true" tabindex="-1" value="0.00"/></div>
 						<div class="td btn"><button class="add"></button><button class="del">X</button></div>
 					</div>
+				</div>
+				<div class="tr totals">
+					<div class="td product">&nbsp;</div>
+					<div class="td linetext">&nbsp;</div>
+					<div class="td price">&nbsp;</div>
+					<div class="td qty">&nbsp;</div>
+					<div class="td subtotal"><input class="nosubmit" type="text" placeholder="0.00" readonly="true" tabindex="-1" value="0.00"/></div>
+					<!--div class="td taxes">0.00</div>
+					<div class="td total">0.00</div-->
 				</div>
 			</div>
 		</form>
