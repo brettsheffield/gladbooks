@@ -1321,6 +1321,7 @@ function postBankData(xml) {
 
 function prepareSalesOrderData(tag) {
     /* FIXME: this simply doesn't work */
+    /*
     console.log('salesorderitem: ' + tag.tagName);
     if (tag.tagName == 'product') {
         var p = activeTab().find(
@@ -1336,6 +1337,7 @@ function prepareSalesOrderData(tag) {
             'input.nosubmit[name="' + tag.tagName + '"]'
         ).val($(tag).text());
     }
+    */
 }
 
 function productBoxClone(mytab, product) {
@@ -2062,21 +2064,25 @@ function validateNominalCode(code, type) {
 
 
 function customBlurEvents(tab) {
-    var mytab = getTabById(tab);
+    //var mytab = getTabById(tab);
+    /*
     mytab.find('input.price').each(function() {
         $(this).blur(function() {
-            /* pad amounts to two decimal places */
+            // pad amounts to two decimal places
             if ($(this).val().length > 0) {
                 var newamount = decimalPad($(this).val(), 2);
                 $(this).val(newamount);
             }
         });
     });
+    */
+    /*
     mytab.find('input.price, input.qty').each(function() {
         $(this).blur(function() {
             recalculateLineTotal($(this).parent().parent(), tab);
         });
     });
+    */
 }
 
 function customComboChange(combo, xml, tab) {
@@ -2093,6 +2099,7 @@ function customComboChange(combo, xml, tab) {
     }
 
     /* in the salesorder form, dynamically set placeholders to show defaults */
+    /*
     if (mytab.find('div.salesorder')) {
         $(xml).find('row').find('id').each(function() {
             if ($(this).text() == newval) {
@@ -2106,6 +2113,7 @@ function customComboChange(combo, xml, tab) {
             }
         });
     }
+    */
 }
 
 /*****************************************************************************/
