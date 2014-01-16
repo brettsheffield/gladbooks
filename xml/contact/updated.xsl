@@ -11,23 +11,7 @@
 
 <xsl:template match="/">
 	<xsl:call-template name="setSearchPath"/>
-	<xsl:text>SELECT * FROM (</xsl:text>
-		<xsl:text>SELECT contact AS id,</xsl:text>
-		<xsl:text>name,</xsl:text>
-		<xsl:text>line_1,</xsl:text>
-		<xsl:text>line_2,</xsl:text>
-		<xsl:text>line_3,</xsl:text>
-		<xsl:text>town,</xsl:text>
-		<xsl:text>county,</xsl:text>
-		<xsl:text>country,</xsl:text>
-		<xsl:text>postcode,</xsl:text>
-		<xsl:text>email,</xsl:text>
-		<xsl:text>phone,</xsl:text>
-		<xsl:text>phonealt,</xsl:text>
-		<xsl:text>mobile,</xsl:text>
-		<xsl:text>fax </xsl:text>
-		<xsl:text>FROM contact_current</xsl:text>
-	<xsl:text>) t </xsl:text>
+	<xsl:text>SELECT * FROM contact_current</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>
