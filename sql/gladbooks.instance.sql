@@ -129,8 +129,19 @@ FOR EACH ROW EXECUTE PROCEDURE organisationdetailupdate();
 
 CREATE OR REPLACE VIEW organisation_current AS
 SELECT
-	od.*,
-	o.orgcode
+        od.organisation AS id,
+        od.id AS detailid,
+	o.orgcode,
+        od.name,
+        od.terms,
+        od.billcontact,
+        od.is_active,
+        od.is_suspended,
+        od.is_vatreg,
+        od.vatnumber,
+        od.updated,
+        od.authuser,
+        od.clientip
 FROM organisationdetail od
 INNER JOIN organisation o ON o.id = od.organisation
 WHERE od.id IN (

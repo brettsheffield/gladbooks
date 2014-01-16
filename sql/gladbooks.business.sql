@@ -759,7 +759,7 @@ SELECT
 	sp.updated
 
 FROM salespayment_current sp
-INNER JOIN organisation_current o ON o.organisation = sp.organisation
+INNER JOIN organisation_current o ON o.id = sp.organisation
 ORDER BY sp.id ASC;
 
 CREATE TABLE salespaymentallocation (
@@ -1220,7 +1220,7 @@ GROUP BY o.id;
 CREATE OR REPLACE VIEW salesstatement AS
 SELECT
 	'ORG_NAME' as type,
-	o.organisation AS id,
+	o.id,
 	NULL AS salesinvoice,
 	'0001-01-01' AS taxpoint,
 	NULL AS issued,
@@ -1278,7 +1278,7 @@ ORDER BY taxpoint ASC
 
 CREATE OR REPLACE VIEW accountsreceivable AS
 SELECT
-	o.organisation AS id,
+	o.id,
 	o.name,
 	o.orgcode,
 	format_accounting(

@@ -25,6 +25,7 @@ BEGIN
 	PERFORM upgrade_0006();
 	PERFORM upgrade_0007();
 	PERFORM upgrade_0008();
+	PERFORM upgrade_0011();
 
 	RETURN 0;
 END;
@@ -43,6 +44,7 @@ BEGIN
 	-- Run each instance upgrade
 	PERFORM upgrade_0000();
 	PERFORM upgrade_0009();
+	PERFORM upgrade_0010();
 
 	-- Get count of businesses in this instance
 	EXECUTE 'SELECT COUNT(id) FROM '
@@ -69,7 +71,7 @@ CREATE OR REPLACE FUNCTION upgrade_database()
 RETURNS INT4 AS
 $$
 DECLARE
-	vnum		INT4 = 12; -- New version (increment this)
+	vnum		INT4 = 13; -- New version (increment this)
 	instances	INT4;
 	inst		TEXT;
 	oldv		INT4;
@@ -528,6 +530,148 @@ FROM contact_current c
 INNER JOIN organisation_contact oc ON c.id = oc.contact
 INNER JOIN organisation_current o ON o.organisation = oc.organisation
 WHERE oc.relationship = ''1'';
+        ';
+
+        RETURN 0;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION upgrade_0010()
+RETURNS INT4 AS
+$$
+BEGIN
+        RAISE INFO '0010 - update organisation_current and dependencies';
+
+        EXECUTE '
+DROP VIEW IF EXISTS organisation_current CASCADE;
+CREATE OR REPLACE VIEW organisation_current AS
+SELECT
+        od.organisation AS id,
+        od.id AS detailid,
+        o.orgcode,
+        od.name,        
+        od.terms,       
+        od.billcontact,  
+        od.is_active,   
+        od.is_suspended,
+        od.is_vatreg,   
+        od.vatnumber,   
+        od.updated,     
+        od.authuser,    
+        od.clientip
+FROM organisationdetail od
+INNER JOIN organisation o ON o.id = od.organisation
+WHERE od.id IN (
+        SELECT MAX(id)
+        FROM organisationdetail
+        GROUP BY organisation
+);
+
+CREATE OR REPLACE VIEW contact_billing AS
+SELECT c.*, oc.organisation, o.name as orgname
+FROM contact_current c
+INNER JOIN organisation_contact oc ON c.id = oc.contact
+INNER JOIN organisation_current o ON o.id = oc.organisation
+WHERE oc.relationship = ''1'';
+        ';
+
+        RETURN 0;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION upgrade_0011()
+RETURNS INT4 AS
+$$
+BEGIN
+        RAISE INFO '0011 - update organisation_current business dependencies';
+
+        EXECUTE '
+CREATE OR REPLACE VIEW salesstatement AS
+SELECT
+        ''ORG_NAME'' as type,
+        o.id,
+        NULL AS salesinvoice,
+        ''0001-01-01'' AS taxpoint,
+        NULL AS issued,
+        NULL AS due,
+        o.name || '' ('' || o.orgcode || '')'' AS ref,
+        NULL AS subtotal,
+        NULL AS tax,
+        NULL AS total
+FROM organisation_current o
+UNION
+SELECT
+        ''SI'' as type,
+        si.organisation AS id,
+        si.salesinvoice,
+        DATE(si.taxpoint) AS taxpoint,
+        si.issued,
+        si.due,
+        ''Invoice: '' || si.ref AS ref,
+        format_accounting(si.subtotal) AS subtotal,
+        format_accounting(si.tax) AS tax,
+        format_accounting(si.total) AS total
+FROM salesinvoice_current si
+UNION
+SELECT
+        ''SP'' AS type,
+        sp.organisation AS id,
+        NULL AS salesinvoice,
+        DATE(transactdate) AS taxpoint,
+        NULL AS issued,
+        NULL AS due,
+        ''Payment Received'' AS ref,
+        NULL AS subtotal,
+        NULL AS tax,
+        format_accounting(amount) AS total
+FROM salespayment_current sp
+UNION
+SELECT
+        ''TOTAL'' AS type,
+        o.id AS id,
+        NULL AS salesinvoice,
+        NULL AS taxpoint,
+        NULL AS issued,
+        NULL AS due,
+        ''Total Amount Due'' AS ref,
+        NULL AS subtotal,
+        NULL AS tax,
+        format_accounting(
+                COALESCE(oi.invoiced, 0) - COALESCE(op.paid,0)
+        ) AS total
+FROM organisation o
+LEFT JOIN organisation_invoiced oi ON o.id = oi.id
+LEFT JOIN organisation_paid op ON o.id = op.id
+ORDER BY taxpoint ASC
+;
+
+CREATE OR REPLACE VIEW accountsreceivable AS
+SELECT
+        o.id,
+        o.name,
+        o.orgcode,
+        format_accounting(
+                COALESCE(oi.invoiced, 0) - COALESCE(op.paid,0)
+        ) AS total
+FROM organisation_current o
+LEFT JOIN organisation_invoiced oi ON o.id = oi.id
+LEFT JOIN organisation_paid op ON o.id = op.id
+ORDER BY o.id ASC
+;
+
+CREATE OR REPLACE VIEW salespaymentlist AS
+SELECT
+        sp.salespayment AS id,
+        sp.transactdate AS date,
+        o.orgcode,
+        sp.bankaccount as account,
+        sp.amount,
+        sp.updated
+
+FROM salespayment_current sp
+INNER JOIN organisation_current o ON o.id = sp.organisation
+ORDER BY sp.id ASC;
+
         ';
 
         RETURN 0;
