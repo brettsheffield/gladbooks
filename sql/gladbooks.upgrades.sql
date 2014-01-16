@@ -944,6 +944,41 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
+CREATE OR REPLACE FUNCTION taxpoint(years INT4, months INT4, days INT4, start_date DATE, period INT4)
+RETURNS DATE as $$
+DECLARE
+        taxpoint        DATE;
+        y_interval      TEXT;
+        m_interval      TEXT;
+        d_interval      TEXT;
+BEGIN
+        IF start_date IS NULL THEN
+                IF COALESCE(years, '0') <> '0'
+                OR COALESCE(months, '0') <> '0'
+                OR COALESCE(days, '0') <> '0'
+                THEN
+                        RAISE NOTICE 'start_date is null on recurring salesorder';
+                        RETURN NULL;
+                END IF;
+                RETURN DATE(NOW()); -- no start date, tax point is today
+        END IF;
+
+        period := period - 1;
+        taxpoint := start_date;
+
+        y_interval := period * COALESCE(years, '0') || ' year';
+        m_interval := period * COALESCE(months, '0') || ' month';
+        d_interval := period * COALESCE(days, '0') || ' day';
+
+        taxpoint := taxpoint + y_interval::interval;
+        taxpoint := taxpoint + m_interval::interval;
+        taxpoint := taxpoint + d_interval::interval;
+
+        RETURN taxpoint;
+END;
+$$ LANGUAGE 'plpgsql';
+
+
 -------------------------------------------------------------------------------
 -- Start a transaction so upgrades are atomic
 BEGIN WORK;

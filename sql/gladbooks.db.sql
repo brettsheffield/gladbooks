@@ -1907,7 +1907,8 @@ BEGIN
 		OR COALESCE(months, '0') <> '0' 
 		OR COALESCE(days, '0') <> '0' 
 		THEN
-			RAISE EXCEPTION 'start_date is null on recurring salesorder';
+			RAISE NOTICE 'start_date is null on recurring salesorder';
+			RETURN NULL;
 		END IF;
 		RETURN DATE(NOW()); -- no start date, tax point is today
 	END IF;
