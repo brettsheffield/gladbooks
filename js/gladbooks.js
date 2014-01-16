@@ -2152,9 +2152,11 @@ function customFormValidation(object, action, id) {
     else if (object == 'product') {
         return validateFormProduct(action, id);
     }
+    /*
     else if ((object == 'salesorder') && (action != 'process')) {
         return validateFormSalesOrder(action, id);
     }
+    */
     return true;
 }
 
