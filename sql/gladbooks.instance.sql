@@ -67,7 +67,28 @@ CREATE TRIGGER contactdetailupdate BEFORE INSERT ON contactdetail
 FOR EACH ROW EXECUTE PROCEDURE contactdetailupdate();
 
 CREATE OR REPLACE VIEW contact_current AS
-SELECT * FROM contactdetail
+SELECT 
+	contact AS id,
+	id AS detailid,
+	is_active,
+	is_deleted,
+	name,
+	line_1,
+	line_2,
+	line_3,
+	town,
+	county,
+	country,
+	postcode,
+	email,
+	phone,
+	phonealt,
+	mobile,
+	fax,
+	updated,
+	authuser,
+	clientip
+FROM contactdetail
 WHERE id IN (
 	SELECT MAX(id)
 	FROM contactdetail

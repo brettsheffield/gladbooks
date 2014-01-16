@@ -42,6 +42,7 @@ BEGIN
 
 	-- Run each instance upgrade
 	PERFORM upgrade_0000();
+	PERFORM upgrade_0009();
 
 	-- Get count of businesses in this instance
 	EXECUTE 'SELECT COUNT(id) FROM '
@@ -68,7 +69,7 @@ CREATE OR REPLACE FUNCTION upgrade_database()
 RETURNS INT4 AS
 $$
 DECLARE
-	vnum		INT4 = 11; -- New version (increment this)
+	vnum		INT4 = 12; -- New version (increment this)
 	instances	INT4;
 	inst		TEXT;
 	oldv		INT4;
@@ -483,6 +484,56 @@ BEGIN
         RETURN 0;
 END;
 $$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION upgrade_0009()
+RETURNS INT4 AS
+$$
+BEGIN
+        RAISE INFO '0009 - CREATE VIEW contact_current';
+
+        EXECUTE '
+DROP VIEW IF EXISTS contact_billing;
+DROP VIEW IF EXISTS contact_current;
+CREATE OR REPLACE VIEW contact_current AS
+SELECT  
+        contact AS id,
+        id AS detailid,
+        is_active,
+        is_deleted,
+        name,
+        line_1,
+        line_2,
+        line_3,
+        town,
+        county,
+        country,
+        postcode,
+        email,
+        phone,
+        phonealt,
+        mobile,
+        fax,
+        updated,
+        authuser,
+        clientip
+FROM contactdetail
+WHERE id IN (
+        SELECT MAX(id)
+        FROM contactdetail
+        GROUP BY contact
+);
+CREATE VIEW contact_billing AS
+SELECT c.*, oc.organisation, o.name as orgname
+FROM contact_current c
+INNER JOIN organisation_contact oc ON c.id = oc.contact
+INNER JOIN organisation_current o ON o.organisation = oc.organisation
+WHERE oc.relationship = ''1'';
+        ';
+
+        RETURN 0;
+END;
+$$ LANGUAGE 'plpgsql';
+
 
 CREATE OR REPLACE FUNCTION accountinsert()
 RETURNS TRIGGER AS
