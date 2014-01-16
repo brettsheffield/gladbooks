@@ -1,89 +1,56 @@
-<div class="salesorder">
-	<div class="statusmsg clearfix"/>
+<div class="salesorder update">
 	<h2>Edit Sales Order</h2>
 	<div class="tablewrapper">
-	<form class="salesorder form" method="post" action="salesorders">
-		<input type="hidden" name="id"/>
-
-		<table class="datatable">
-			<thead>
-				<th>Customer</th>
-				<th>Purchase Order</th>
-				<th>Comment</th>
-				<th>Cycle</th>
-				<th>Start Date</th>
-				<th>End Date</th>
-			</thead>
-			<tbody>
-				<tr>
-					<td>
-						<input name="customer" class="customer nosubmit" readonly="true" tabindex="-1"/>
-					</td>
-					<td>
-						<input name="ponumber" class="ponumber" autocomplete="off" placeholder="Customer Ref"/>
-					</td>
-					<td>
-						<input name="description" class="socomment" autocomplete="off" placeholder="Comments"/>
-					</td>
-					<td>
-						<a class="datasource" href="cycles" tabindex="-1"></a><select name="cycle" class="cycle populate focus"></select>
-					</td>
-					<td>
-						<input name="start_date" class="datefield" autocomplete="off"/>
-					</td>
-					<td>
-						<input name="end_date" class="datefield" autocomplete="off"/>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</form>
-
-		<div class="salesorderitems">
-			<form class="subform" action="salesorderitems"/>
-			<table class="datatable">
-				<thead>
-					<tr>
-						<th>Product</th>
-						<th>Line Text</th>
-						<th>Price</th>
-						<th>Qty</th>
-						<th>Total</th>
-					</tr>
-					<tr>
-						<td><a class="datasource" href="products" tabindex="-1"></a><select name="product" class="product populate nosubmit" data-placeholder=" - Select product - "></select></td>
-						<td class="linetext"><input class="linetext nosubmit" name="linetext" type="text" placeholder="Line Text"/></td>
-						<td class="price"><input class="price nosubmit" name="price" type="text" placeholder="0.00"/></td>
-						<td class="qty"><input class="qty nosubmit" name="qty" type="text" placeholder="1" value="1"/></td>
-						<td class="total"><input class="total nosubmit clone" name="total" type="text" placeholder="0.00" readonly="true" tabindex="-1"/></td>
-						<td><button class="addrow">Add</button></td>
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>
-			<table class="totals">
-				<tbody>
-					<tr>
-						<td>Sub Total</td>
-						<td class="subtotal">0.00</td>
-						<td class="totalspacer"></td>
-					</tr>
-					<!--tr>
-						<td>Taxes</td>
-						<td class="taxes">0.00</td>
-						<td class="totalspacer"></td>
-					</tr>
-					<tr>
-						<td>Total</td>
-						<td class="gtotal">0.00</td>
-						<td class="totalspacer"></td>
-					</tr-->
-				</tbody>
-			</table>
-		</div>
-		</div> <!-- tablewrapper -->
-		<button class="save">Save</button>
-		<button class="cancel">Cancel</button>
-
+		<form action="salesorders">
+			<div class="datatable">
+				<div class="tr">
+					<div class="th organisation">Customer</div>
+					<div class="th ponumber">Purchase Order</div>
+					<div class="th description">Comment</div>
+					<div class="th cycle">Cycle</div>
+					<div class="th start_date">Start Date</div>
+					<div class="th end_date">End Date</div>
+				</div>
+				<div class="tr">
+					<div class="td organisation"><input type="text" name="customer" class="customer nosubmit" readonly="readonly"/></div>
+					<div class="td ponumber"><input name="ponumber" class="ponumber" autocomplete="off" placeholder="Customer Ref"/></div>
+					<div class="td description"><input name="description" class="socomment" autocomplete="off" placeholder="Comments"/></div>
+					<div class="td cycle"><select name="cycle" class="cycle populate focus" data-source="cycles"></select></div>
+					<div class="td start_date"><input name="start_date" class="datefield" autocomplete="off"/></div>
+					<div class="td end_date"><input name="end_date" class="datefield" autocomplete="off"/></div>
+				</div>
+				<div class="form" data-object="product" data-tag="salesorderitem">
+					<div class="tr">
+						<div class="th product">Product</div>
+						<div class="th linetext">Line Text</div>
+						<div class="th price">Price</div>
+						<div class="th qty">Qty</div>
+						<div class="th total">Total</div>
+						<div class="th btn">&nbsp;</div>
+					</div>
+					<div class="subformwrapper">
+						<div class="tr sub" data-minOccurs="1">
+							<div class="td product"><select name="product" class="product populate onchange formfill" data-source="productcombo" required="required" data-required-message="Please select Product" data-placeholder=" - Select product - "></select></div>
+							<div class="td linetext"><input class="linetext" name="linetext" type="text" placeholder="Line Text"/></div>
+							<div class="td price"><input class="price onchange multiplicand currency" name="price" type="text" placeholder="0.00"/></div>
+							<div class="td qty"><input class="qty onchange multiplicand" name="qty" type="text" data-default="1" placeholder="1" value="1"/></div>
+							<div class="td total"><input class="total sum currency nosubmit onchange" name="total" type="text" placeholder="0.00" readonly="true" tabindex="-1" value="0.00" data-default="0.00"/></div>
+							<div class="td btn"><button class="add"></button><button class="del">X</button></div>
+						</div>
+					</div>
+				</div>
+				<div class="tr totals">
+					<div class="td product">&nbsp;</div>
+					<div class="td linetext">&nbsp;</div>
+					<div class="td price">&nbsp;</div>
+					<div class="td qty">&nbsp;</div>
+					<div class="td subtotal"><input class="subtotal currency nosubmit" type="text" placeholder="0.00" readonly="true" tabindex="-1" value="0.00"/></div>
+					<!--div class="td taxes">0.00</div>
+					<div class="td total">0.00</div-->
+				</div>
+			</div>
+		</form>
+	</div>
+	<button class="save">Save</button>
+	<button class="reset">Reset</button>
 </div>

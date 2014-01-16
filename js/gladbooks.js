@@ -104,7 +104,7 @@ FORMDATA = {
     },
     'salesorder': {
         'create': [ 'cycles', 'organisations', 'productcombo' ],
-        'update': [ 'cycles', 'organisations', 'productcombo' ],
+        'update': [ 'cycles', 'productcombo' ],
     },
 }
 
@@ -2189,8 +2189,7 @@ customClickElement = function(row) {
     var inert = [ 'salespayments' ];
     if (inert.indexOf(tab.collection) != -1) { return true; }
 
-    if (['accounts','contacts','divisions','departments','organisations',
-    'salesorders']
+    if (['accounts','contacts','divisions','departments','organisations']
     .indexOf(tab.collection) !== -1) 
     {
         var id = row.find('td.xml-id').text();
@@ -2205,7 +2204,13 @@ customClickElement = function(row) {
         showForm('product', 'update', name, id);
         return true;
     }
-    if (tab.collection == 'salesinvoices') {
+    else if (tab.collection == 'salesorders') {
+        var id = row.find('td.xml-id').text();
+        var name = 'SO/' + row.find('td.xml-order').text();
+        showForm('salesorder', 'update', name, id);
+        return true;
+    }
+    else if (tab.collection == 'salesinvoices') {
         /* view salesinvoice pdf */
         var a=row.find('td.xml-pdf').find('a');
         var href=a.attr('href');
