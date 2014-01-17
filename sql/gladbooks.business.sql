@@ -504,8 +504,26 @@ CREATE TABLE salesorderitemdetail (
 	clientip	TEXT
 );
 
+DROP TRIGGER IF EXISTS salesorderitemdetailupdate 
+ON salesorderitemdetail;
+CREATE TRIGGER salesorderitemdetailupdate AFTER INSERT 
+ON salesorderitemdetail
+FOR EACH ROW EXECUTE PROCEDURE salesorderitemdetailupdate();
+
 CREATE OR REPLACE VIEW salesorderitem_current AS
-SELECT * FROM salesorderitemdetail
+SELECT 
+	salesorderitem AS id,
+	id AS detailid,
+	salesorder,
+	product,
+	linetext,
+	discount,
+	price,
+	qty,
+	updated,
+	authuser,
+	clientip
+FROM salesorderitemdetail
 WHERE id IN (
 	SELECT MAX(id)
 	FROM salesorderitemdetail

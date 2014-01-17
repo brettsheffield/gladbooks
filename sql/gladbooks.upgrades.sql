@@ -26,7 +26,9 @@ BEGIN
 	PERFORM upgrade_0007();
 	PERFORM upgrade_0008();
 	PERFORM upgrade_0011();
-
+	PERFORM upgrade_0012();
+	--PERFORM upgrade_0013();
+        
 	RETURN 0;
 END;
 $$ LANGUAGE 'plpgsql';
@@ -71,7 +73,7 @@ CREATE OR REPLACE FUNCTION upgrade_database()
 RETURNS INT4 AS
 $$
 DECLARE
-	vnum		INT4 = 13; -- New version (increment this)
+	vnum		INT4 = 17; -- New version (increment this)
 	instances	INT4;
 	inst		TEXT;
 	oldv		INT4;
@@ -490,7 +492,15 @@ $$ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION upgrade_0009()
 RETURNS INT4 AS
 $$
+DECLARE
+	lastupgrade	INT4;
 BEGIN
+	SELECT MAX(id) INTO lastupgrade FROM upgrade;
+	IF lastupgrade >= 9 THEN
+		RAISE INFO '0009 - (skipping)';
+		RETURN 0;
+	END IF;
+
         RAISE INFO '0009 - CREATE VIEW contact_current';
 
         EXECUTE '
@@ -539,7 +549,15 @@ $$ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION upgrade_0010()
 RETURNS INT4 AS
 $$
+DECLARE
+	lastupgrade	INT4;
 BEGIN
+	SELECT MAX(id) INTO lastupgrade FROM instance_upgrade;
+	IF lastupgrade >= 10 THEN
+		RAISE INFO '0010 - (skipping)';
+		RETURN 0;
+	END IF;
+
         RAISE INFO '0010 - update organisation_current and dependencies';
 
         EXECUTE '
@@ -582,7 +600,15 @@ $$ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION upgrade_0011()
 RETURNS INT4 AS
 $$
+DECLARE
+	lastupgrade	INT4;
 BEGIN
+	SELECT MAX(id) INTO lastupgrade FROM upgrade;
+	IF lastupgrade >= 15 THEN
+		RAISE INFO '0011 - (skipping)';
+		RETURN 0;
+	END IF;
+
         RAISE INFO '0011 - update organisation_current business dependencies';
 
         EXECUTE '
@@ -673,6 +699,129 @@ INNER JOIN organisation_current o ON o.id = sp.organisation
 ORDER BY sp.id ASC;
 
         ';
+
+        RETURN 0;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION upgrade_0012()
+RETURNS INT4 AS
+$$
+DECLARE
+	lastupgrade	INT4;
+BEGIN
+	SELECT MAX(id) INTO lastupgrade FROM upgrade;
+	IF lastupgrade >= 16 THEN
+		RAISE INFO '0012 - (skipping)';
+		RETURN 0;
+	END IF;
+
+        RAISE INFO '0012 - replace VIEW salesorderitem_current and dependencies';
+
+        EXECUTE '
+DROP VIEW IF EXISTS salesorderitem_current CASCADE;
+CREATE VIEW salesorderitem_current AS
+SELECT  
+        salesorderitem AS id,
+        id AS detailid,
+        salesorder,
+        product,
+        linetext,
+        discount,
+        price,
+        qty,
+        updated,
+        authuser,
+        clientip
+FROM salesorderitemdetail
+WHERE id IN (
+        SELECT MAX(id)
+        FROM salesorderitemdetail
+        GROUP BY salesorderitem
+)
+AND is_deleted = false;
+
+CREATE OR REPLACE VIEW salesorder_tax AS
+SELECT  so.id AS salesorder,
+        roundhalfeven(SUM(COALESCE(soi.price, p.price_sell, ''0.00'') * soi.qty * tr.rate/100),2) AS tax
+FROM salesorder so
+INNER JOIN salesorderdetail sod ON so.id = sod.salesorder
+INNER JOIN salesorderitem_current soi ON so.id = soi.salesorder
+INNER JOIN product_current p ON p.product = soi.product
+LEFT JOIN (
+        SELECT * FROM product_tax WHERE is_applicable = true
+) pt ON p.product = pt.product
+LEFT JOIN taxrate_current tr ON tr.tax = pt.tax
+WHERE sod.id IN (
+        SELECT MAX(id) FROM salesorderdetail GROUP BY salesorder
+)
+AND sod.is_deleted = false
+AND (tr.valid_from <= salesorder_nextissuedate(so.id)
+        OR tr.valid_from IS NULL)
+AND (tr.valid_to >= salesorder_nextissuedate(so.id) OR tr.valid_to IS NULL)
+GROUP BY so.id, so.organisation, so.ordernum;
+
+CREATE OR REPLACE VIEW salesorder_current AS
+SELECT
+        so.id,
+        so.organisation,
+        so.ordernum,
+        sod.salesorder,
+        sod.quotenumber,
+        sod.ponumber,
+        sod.description,
+        sod.cycle,
+        sod.start_date,
+        sod.end_date,
+        sod.is_open,
+        sod.is_deleted,
+        roundhalfeven(SUM(COALESCE(soi.price, p.price_sell) * soi.qty),2) AS price,
+        roundhalfeven(COALESCE(tx.tax, ''0.00''),2) as tax,
+        roundhalfeven(SUM(COALESCE(soi.price, p.price_sell) * soi.qty) +
+                        COALESCE(tx.tax, ''0.00''),2) AS total
+FROM salesorder so
+INNER JOIN salesorderdetail sod ON so.id = sod.salesorder
+LEFT JOIN salesorderitem_current soi ON so.id = soi.salesorder
+INNER JOIN product_current p ON p.product = soi.product
+LEFT JOIN salesorder_tax tx ON sod.salesorder = tx.salesorder
+WHERE sod.id IN (
+        SELECT MAX(id)
+        FROM salesorderdetail
+        GROUP BY salesorder
+)
+GROUP BY so.id, so.organisation, so.ordernum, tx.tax,
+        sod.salesorder,
+        sod.quotenumber,
+        sod.ponumber,
+        sod.description,
+        sod.cycle,
+        sod.start_date,
+        sod.end_date,
+        sod.is_open,
+        sod.is_deleted
+;
+
+        ';
+
+        RETURN 0;
+END;
+$$ LANGUAGE 'plpgsql';
+
+
+-- Bug? http://www.postgresql.org/message-id/509BEBD1.2090100@booksys.com
+
+CREATE OR REPLACE FUNCTION upgrade_0013()
+RETURNS INT4 AS
+$$
+BEGIN
+
+        RAISE INFO '0013 - CREATE TRIGGER salesorderitemdetailupdate';
+
+	DROP TRIGGER IF EXISTS salesorderitemdetailupdate 
+	ON salesorderitemdetail;
+	CREATE TRIGGER salesorderitemdetailupdate AFTER INSERT 
+	ON salesorderitemdetail
+	FOR EACH ROW EXECUTE PROCEDURE salesorderitemdetailupdate();
 
         RETURN 0;
 END;
@@ -978,6 +1127,62 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
+CREATE OR REPLACE FUNCTION salesorderitemdetailupdate()
+RETURNS TRIGGER AS
+$$
+DECLARE
+        priorentries    INT4;
+        osalesorder     INT4;
+        oproduct        INT4;
+        olinetext       TEXT;
+        odiscount       NUMERIC;
+        oprice          NUMERIC;
+        oqty            NUMERIC;
+        ois_deleted     boolean;
+BEGIN
+        SELECT INTO priorentries COUNT(id) FROM salesorderitemdetail
+                WHERE salesorderitem = NEW.salesorderitem;
+        IF priorentries > 0 THEN
+                -- This isn't our first time, so use previous values 
+                SELECT INTO
+                        osalesorder, oproduct, olinetext, odiscount, oprice,
+                        oqty, ois_deleted
+                        salesorder, product, linetext, discount, price,
+                        qty, is_deleted
+                FROM salesorderitemdetail WHERE id IN (
+                        SELECT MAX(id)
+                        FROM salesorderitemdetail
+                        GROUP BY salesorderitem
+                )
+                AND salesorderitem = NEW.salesorderitem;
+
+                IF NEW.salesorder IS NULL THEN
+                        NEW.salesorder := osalesorder;
+                END IF;
+                IF NEW.product IS NULL THEN
+                        NEW.product := oproduct;
+                END IF;
+                IF NEW.linetext IS NULL THEN
+                        NEW.linetext := olinetext;
+                END IF;
+                IF NEW.discount IS NULL THEN
+                        NEW.discount := odiscount;
+                END IF;
+                IF NEW.price IS NULL THEN
+                        NEW.price := oprice;
+                END IF;
+                IF NEW.qty IS NULL THEN
+                        NEW.qty := oqty;
+                END IF;
+                IF NEW.is_deleted IS NULL THEN
+                        NEW.is_deleted := ois_deleted;
+                END IF;
+        ELSE
+                /* set defaults */
+        END IF;
+        RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
 
 -------------------------------------------------------------------------------
 -- Start a transaction so upgrades are atomic
