@@ -104,7 +104,7 @@ FORMDATA = {
     },
     'salesorder': {
         'create': [ 'cycles', 'organisations', 'productcombo' ],
-        'update': [ 'cycles', 'productcombo' ],
+        'update': [ 'cycles', 'productcombo', 'salesorderitems/{id}/' ],
     },
 }
 
