@@ -35,7 +35,6 @@
 									</xs:element><!--salesorderitem-->
 
 								</xs:sequence>
-								<xs:attribute name="id" type="xs:positiveInteger" use="required"/>
 								<xs:attribute name="is_open" type="xs:boolean"/>
 								<xs:attribute name="is_deleted" type="xs:boolean"/>
 							</xs:complexType>

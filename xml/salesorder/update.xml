@@ -3,7 +3,7 @@
   <instance>default</instance>
   <business>1</business>
 	<data>
-		<salesorder id="1">
+		<salesorder>
 			<cycle>7</cycle>
 			<start_date>2013-05-22</start_date>
 			<salesorderitem id="1">
