@@ -61,7 +61,7 @@
                                 <xsl:text>',</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>
-                                <xsl:text>currval(pg_get_serial_sequence('salesorder','id')),'</xsl:text>
+                                <xsl:text>currval(pg_get_serial_sequence('salesorder','id')),</xsl:text>
                         </xsl:otherwise>
                 </xsl:choose>
 
