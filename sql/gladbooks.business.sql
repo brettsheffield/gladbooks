@@ -1304,7 +1304,7 @@ SELECT
 FROM organisation_current o
 LEFT JOIN organisation_invoiced oi ON o.id = oi.id
 LEFT JOIN organisation_paid op ON o.id = op.id
-ORDER BY o.organisation ASC
+ORDER BY o.id ASC
 ;
 
 EXECUTE 'SELECT default_data(''' || instance || ''',''' || business_id || ''')';

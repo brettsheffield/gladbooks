@@ -29,6 +29,8 @@ BEGIN
 	PERFORM upgrade_0012();
 	--PERFORM upgrade_0013();
 	PERFORM upgrade_0014();
+	PERFORM upgrade_0015();
+	PERFORM upgrade_0016();
         
 	RETURN 0;
 END;
@@ -74,7 +76,7 @@ CREATE OR REPLACE FUNCTION upgrade_database()
 RETURNS INT4 AS
 $$
 DECLARE
-	vnum		INT4 = 18; -- New version (increment this)
+	vnum		INT4 = 20; -- New version (increment this)
 	instances	INT4;
 	inst		TEXT;
 	oldv		INT4;
@@ -871,6 +873,73 @@ AND sod.is_deleted = ''false''
 END;
 $$ LANGUAGE 'plpgsql';
 
+CREATE OR REPLACE FUNCTION upgrade_0015()
+RETURNS INT4 AS
+$$
+DECLARE
+        lastupgrade     INT4;
+BEGIN
+        SELECT MAX(id) INTO lastupgrade FROM upgrade;
+        IF lastupgrade >= 19 THEN
+                RAISE INFO '0015 - (skipping)';
+                RETURN 0;
+        END IF;
+
+        RAISE INFO '0015 - replace VIEW accountsreceivable';
+
+        EXECUTE '
+DROP VIEW IF EXISTS accountsreceivable;
+CREATE VIEW accountsreceivable AS
+SELECT
+        o.id,
+        o.name,
+        o.orgcode,
+        format_accounting(
+                COALESCE(oi.invoiced, 0) - COALESCE(op.paid,0)
+        ) AS total
+FROM organisation_current o
+LEFT JOIN organisation_invoiced oi ON o.id = oi.id
+LEFT JOIN organisation_paid op ON o.id = op.id
+ORDER BY o.id ASC
+;
+        ';
+
+        RETURN 0;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION upgrade_0016()
+RETURNS INT4 AS
+$$
+DECLARE
+        lastupgrade     INT4;
+BEGIN
+        SELECT MAX(id) INTO lastupgrade FROM upgrade;
+        IF lastupgrade >= 20 THEN
+                RAISE INFO '0016 - (skipping)';
+                RETURN 0;
+        END IF;
+
+        RAISE INFO '0016 - replace VIEW salespaymentlist';
+
+        EXECUTE '
+CREATE OR REPLACE VIEW salespaymentlist AS
+SELECT
+        sp.salespayment AS id,
+        sp.transactdate AS date,
+        o.orgcode,
+        sp.bankaccount as account,
+        sp.amount,
+        sp.updated
+
+FROM salespayment_current sp
+INNER JOIN organisation_current o ON o.id = sp.organisation
+ORDER BY sp.id ASC;
+        ';
+
+        RETURN 0;
+END;
+$$ LANGUAGE 'plpgsql';
 
 
 
