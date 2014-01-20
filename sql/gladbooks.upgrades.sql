@@ -28,6 +28,7 @@ BEGIN
 	PERFORM upgrade_0011();
 	PERFORM upgrade_0012();
 	--PERFORM upgrade_0013();
+	PERFORM upgrade_0014();
         
 	RETURN 0;
 END;
@@ -73,7 +74,7 @@ CREATE OR REPLACE FUNCTION upgrade_database()
 RETURNS INT4 AS
 $$
 DECLARE
-	vnum		INT4 = 17; -- New version (increment this)
+	vnum		INT4 = 18; -- New version (increment this)
 	instances	INT4;
 	inst		TEXT;
 	oldv		INT4;
@@ -826,6 +827,51 @@ BEGIN
         RETURN 0;
 END;
 $$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION upgrade_0014()
+RETURNS INT4 AS
+$$
+DECLARE
+	lastupgrade	INT4;
+BEGIN
+	SELECT MAX(id) INTO lastupgrade FROM upgrade;
+	IF lastupgrade >= 17 THEN
+		RAISE INFO '0014 - (skipping)';
+		RETURN 0;
+	END IF;
+
+        RAISE INFO '0014 - replace VIEW salesorderview';
+
+        EXECUTE '
+DROP VIEW salesorderview;
+CREATE OR REPLACE VIEW salesorderview AS
+SELECT
+        so.id,
+        o.name || ''('' || o.orgcode || '')'' AS customer,
+        o.orgcode || ''/'' || lpad(CAST(so.ordernum AS TEXT), 5, ''0'') AS order,
+        sod.ponumber,
+        sod.description,
+        sod.cycle,
+        sod.start_date,
+        sod.end_date
+FROM salesorderdetail sod
+INNER JOIN salesorder so ON so.id = sod.salesorder
+INNER JOIN organisation_current o ON o.id = so.organisation
+WHERE sod.id IN ( 
+        SELECT MAX(id)
+        FROM salesorderdetail
+        GROUP BY salesorder
+)
+AND sod.is_open = ''true''
+AND sod.is_deleted = ''false''
+;
+        ';
+
+        RETURN 0;
+END;
+$$ LANGUAGE 'plpgsql';
+
+
 
 
 CREATE OR REPLACE FUNCTION accountinsert()

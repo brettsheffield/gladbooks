@@ -1184,8 +1184,8 @@ AND sod.is_deleted = 'false'
 
 CREATE OR REPLACE VIEW salesorderview AS
 SELECT
-        sod.salesorder as id,
-        od.name || '(' || o.orgcode || ')' AS customer,
+        so.id,
+        o.name || '(' || o.orgcode || ')' AS customer,
         o.orgcode || '/' || lpad(CAST(so.ordernum AS TEXT), 5, '0') AS order,
         sod.ponumber,
         sod.description,
@@ -1194,8 +1194,7 @@ SELECT
         sod.end_date
 FROM salesorderdetail sod
 INNER JOIN salesorder so ON so.id = sod.salesorder
-INNER JOIN organisation o ON o.id = so.organisation
-INNER JOIN organisationdetail od ON o.id = od.organisation
+INNER JOIN organisation_current o ON o.id = so.organisation
 WHERE sod.id IN (
         SELECT MAX(id)
         FROM salesorderdetail
