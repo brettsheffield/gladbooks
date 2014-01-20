@@ -2250,10 +2250,12 @@ Form.prototype.validateSalesOrder = function() {
         return false;
     }
 
-    if (start_date.val() > end_date.val()) {
-        statusMessage('Start Date cannot be after End Date', STATUS_WARN);
-        start_date.focus();
-        return false;
+    if (start_date.val() !== '' && end_date.val() !== '') {
+        if (start_date.val() > end_date.val()) {
+            statusMessage('Start Date cannot be after End Date', STATUS_WARN);
+            start_date.focus();
+            return false;
+        }
     }
 
     return b;
