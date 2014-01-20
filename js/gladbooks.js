@@ -1740,12 +1740,17 @@ function submitJournalEntry(event, form, bankid) {
 
 /* override the gladd.js function which sets tab titles */
 tabTitle = function (title, object, action, xml) {
-    var namedobjects = [ 'contact', 'department', 'division', 'organisation',
-        'product', 'salesorder'
+    var namedobjects = [ 'account', 'contact', 'department', 'division',
+        'organisation', 'product', 'salesorder'
     ];
-
+    
     if (namedobjects.indexOf(object) != -1 && action == 'update' && xml[0]) {
-        if (object == 'product') {
+        if (object == 'account') {
+            var id = $(xml[0]).find('id').first().text();
+            var desc = $(xml[0]).find('description').first().text();
+            title = id + ' - ' + desc;
+        }
+        else if (object == 'product') {
             title = $(xml[0]).find('shortname').first().text();
         }
         else if (object == 'salesorder') {
