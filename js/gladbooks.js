@@ -2141,6 +2141,7 @@ customSubmitFormSuccess = function(object, action, id, collection, xml) {
         TABS.active.close();
         g_business = $(xml).find('resources > row > id').text();
         prepBusinessSelector();
+        switchBusiness(g_business);
         hideSpinner();
         return false;
     }
