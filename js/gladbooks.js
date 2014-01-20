@@ -2239,8 +2239,16 @@ Form.prototype.validateSalesOrder = function() {
     var b = true;
     var t = this.tab.tablet;
 
+    var cycle = t.find('[name="cycle"]');
     var start_date = t.find('[name="start_date"]');
     var end_date = t.find('[name="end_date"]');
+
+    if (cycle.val() > 1 && start_date.val() === '') {
+        statusMessage('Start Date required for recurring sales orders', 
+            STATUS_WARN);
+        start_date.focus();
+        return false;
+    }
 
     if (start_date.val() > end_date.val()) {
         statusMessage('Start Date cannot be after End Date', STATUS_WARN);
