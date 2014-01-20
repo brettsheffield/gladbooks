@@ -1019,10 +1019,10 @@ div.salesorder div.datatable div.btn button.add {
 div.salesorder div.datatable div.btn button.add::before {
   content: "\271A"; }
 
-div.salesorder div.datatable div.tr.sub:first-child div.btn button.add {
+div.salesorder div.subformwrapper div.tr:first-child div.btn button.add {
   display: block; }
 
-div.salesorder div.datatable div.tr.sub:first-child div.btn button.del {
+div.salesorder div.subformwrapper div.tr:first-child div.btn button.del {
   display: none; }
 
 div.salesorder div.datatable div.tr.totals {
