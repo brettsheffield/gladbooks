@@ -1885,24 +1885,6 @@ function validateFormProduct(action, id) {
     return true;
 }
 
-function validateFormSalesOrder(action, id) {
-    var mytab = activeTab();
-
-    var customer = mytab.find('select.organisations');
-    if (customer.val() < 0) {
-        statusMessage('Please select a Customer', STATUS_WARN);
-        customer.focus();
-        return false;
-    }
-    var products = mytab.find('td.xml-product');
-    if (products.length < 1) {
-        statusMessage('Please add a Product to the Sales Order', STATUS_WARN);
-        return false;
-    }
-
-    return true;
-}
-
 function validateJournalEntry(form, bankid) {
     var xml = createRequestXml();
     var account;
@@ -2146,21 +2128,6 @@ function recalculateLineTotal(parentrow, tab) {
     }
 }
 
-function customFormValidation(object, action, id) {
-    if (object == 'account') {
-        return validateFormAccount(action, id);
-    }
-    else if (object == 'product') {
-        return validateFormProduct(action, id);
-    }
-    /*
-    else if ((object == 'salesorder') && (action != 'process')) {
-        return validateFormSalesOrder(action, id);
-    }
-    */
-    return true;
-}
-
 customSubmitFormSuccess = function(object, action, id, collection, xml) {
     if ((object == 'salesorder') && (action == 'process')) {
         statusMessage('Billing run successful', STATUS_INFO, 5000);
@@ -2250,6 +2217,39 @@ Form.prototype.submitErrorCustom = function(xhr, s, err) {
     return false;
 }
 
+Form.prototype.validateCustom = function() {
+    console.log('Form().validateCustom()');
+    var b = true;
+
+    if (this.object == 'account') {
+        return validateFormAccount(this.action, this.id);
+    }
+    else if (this.object == 'product') {
+        return validateFormProduct(this.action, this.id);
+    }
+    else if ((this.object == 'salesorder') && (this.action != 'process')) {
+        return this.validateSalesOrder();
+    }
+
+    return b;
+}
+
+Form.prototype.validateSalesOrder = function() {
+    console.log('Form().validateSalesOrder()');
+    var b = true;
+    var t = this.tab.tablet;
+
+    var start_date = t.find('[name="start_date"]');
+    var end_date = t.find('[name="end_date"]');
+
+    if (start_date.val() > end_date.val()) {
+        statusMessage('Start Date cannot be after End Date', STATUS_WARN);
+        start_date.focus();
+        return false;
+    }
+
+    return b;
+}
 
 /* TODO  - gladd.js functions that have Gladbooks-specific stuff in them: */
 /* handleSubforms()
