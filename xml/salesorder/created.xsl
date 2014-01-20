@@ -11,7 +11,7 @@
 
 	<xsl:template match="/">
 		<xsl:call-template name="setSearchPath"/>
-		<xsl:text>SELECT * FROM salesorder_current WHERE id=currval(pg_get_serial_sequence('salesorder','id'));</xsl:text>
+		<xsl:text>SELECT * FROM salesorderview WHERE id=currval(pg_get_serial_sequence('salesorder','id'));</xsl:text>
 	</xsl:template>
 
 </xsl:stylesheet>
