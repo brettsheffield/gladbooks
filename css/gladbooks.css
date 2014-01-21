@@ -959,72 +959,93 @@ div.accordion h3.selected {
 .ui-corner-top, .ui-corner-tr {
   border-radius: 0; }
 
-/* salesorder screen */
+/* purchaseorder and salesorder screens */
+div.purchaseorder div.datatable,
 div.salesorder div.datatable {
   font-size: 0.8em;
   width: 100%; }
 
+div.purchaseorder div.datatable input,
+div.purchaseorder div.datatable select,
 div.salesorder div.datatable input,
 div.salesorder div.datatable select {
   width: 100%; }
 
+div.purchaseorder div.datatable div.organisation,
 div.salesorder div.datatable div.organisation {
   width: 25%; }
 
 div.salesorder div.datatable div.ponumber {
   width: 20%; }
 
+div.purchaseorder div.datatable div.description,
 div.salesorder div.datatable div.description {
   width: 20%; }
 
+div.purchaseorder div.datatable div.cycle,
 div.salesorder div.datatable div.cycle {
   width: 15%; }
 
+div.purchaseorder div.datatable div.start_date,
+div.purchaseorder div.datatable div.end_date,
 div.salesorder div.datatable div.start_date,
 div.salesorder div.datatable div.end_date {
   width: 10%; }
 
-/* salesorder -> products subform */
+/* {purchase,sales}order -> products subform */
+div.purchaseorder div.datatable div.product,
 div.salesorder div.datatable div.product {
   width: 25%; }
 
+div.purchaseorder div.datatable div.linetext,
 div.salesorder div.datatable div.linetext {
   width: 35%; }
 
+div.purchaseorder div.datatable div.tr.totals div.td.subtotal,
+div.purchaseorder div.datatable div.price,
 div.salesorder div.datatable div.tr.totals div.td.subtotal,
 div.salesorder div.datatable div.price {
   width: 15%; }
 
+div.purchaseorder div.datatable div.qty,
 div.salesorder div.datatable div.qty {
   width: 5%; }
 
+div.purchaseorder div.datatable div.total,
 div.salesorder div.datatable div.total {
   width: 15%; }
 
+div.purchaseorder div.datatable div.total.td input,
 div.salesorder div.datatable div.total.td input {
   color: gray;
   font-size: 100%;
   font-family: monospace;
   font-weight: bold; }
 
+div.purchaseorder div.datatable div.btn,
 div.salesorder div.datatable div.btn {
   text-align: center;
   width: 5%; }
 
+div.purchaseorder div.datatable div.btn button.add,
 div.salesorder div.datatable div.btn button.add {
   display: none;
   margin-left: auto;
   margin-right: auto; }
 
+div.purchaseorder div.datatable div.btn button.add::before,
 div.salesorder div.datatable div.btn button.add::before {
   content: "\271A"; }
 
+div.purchaseorder div.subformwrapper div.tr:first-child div.btn button.add,
 div.salesorder div.subformwrapper div.tr:first-child div.btn button.add {
   display: block; }
 
+div.purchaseorder div.subformwrapper div.tr:first-child div.btn button.del,
 div.salesorder div.subformwrapper div.tr:first-child div.btn button.del {
   display: none; }
 
+div.purchaseorder div.datatable div.tr.totals,
 div.salesorder div.datatable div.tr.totals {
   background-color: #6e89a5;
   border: 1px solid white;
@@ -1032,6 +1053,7 @@ div.salesorder div.datatable div.tr.totals {
   font-size: 1.2em;
   font-family: monospace; }
 
+div.purchaseorder div.datatable div.tr.totals input,
 div.salesorder div.datatable div.tr.totals input {
   color: white;
   font-family: monospace;

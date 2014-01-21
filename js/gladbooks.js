@@ -38,6 +38,7 @@ g_menus = [
     [ 'organisation.create', showForm, 'organisation', 'create', 'Add New Organisation' ],
     [ 'organisations', showQuery, 'organisations', 'Organisations', true ],
     [ 'payables', showHTML, 'help/payables.html', 'Payables', false ],
+    [ 'purchaseorder.create', showForm, 'purchaseorder', 'create','New Purchase Order'],
     [ 'product.create', showForm, 'product', 'create', 'Add New Product' ],
     [ 'products', showQuery, 'products', 'Products', true ],
     [ 'rpt_accountsreceivable', showQuery, 'reports/accountsreceivable', 'Accounts Receivable', true ],
@@ -101,6 +102,10 @@ FORMDATA = {
     'product': {
         'create': [ 'accounts.revenue' ],
         'update': [ 'accounts.revenue', 'taxes' ],
+    },
+    'purchaseorder': {
+        'create': [ 'cycles', 'organisations', 'productcombo' ],
+        'update': [ 'cycles', 'productcombo', 'purchaseorderitems/{id}/' ],
     },
     'salesorder': {
         'create': [ 'cycles', 'organisations', 'productcombo' ],
