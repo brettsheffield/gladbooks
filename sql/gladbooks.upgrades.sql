@@ -31,6 +31,7 @@ BEGIN
 	PERFORM upgrade_0014();
 	PERFORM upgrade_0015();
 	PERFORM upgrade_0016();
+	PERFORM upgrade_0017();
         
 	RETURN 0;
 END;
@@ -76,7 +77,7 @@ CREATE OR REPLACE FUNCTION upgrade_database()
 RETURNS INT4 AS
 $$
 DECLARE
-	vnum		INT4 = 20; -- New version (increment this)
+	vnum		INT4 = 21; -- New version (increment this)
 	instances	INT4;
 	inst		TEXT;
 	oldv		INT4;
@@ -93,6 +94,7 @@ BEGIN
 	-- Perform upgrades on gladbooks schema
 	RAISE INFO '******** Upgrading gladbooks schema ********';
 	PERFORM upgrade_0003();
+	PERFORM upgrade_0008b();
 
 	EXECUTE 'SELECT COUNT(id) FROM instance;' INTO instances;
 	RAISE INFO 'Found % instances', instances;
@@ -483,6 +485,16 @@ BEGIN
 	EXCEPTION WHEN duplicate_column THEN
 		--
 	END;
+        RETURN 0;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION upgrade_0008b()
+RETURNS INT4 AS
+$$
+BEGIN
+
+        RAISE INFO '0008b - UPDATE TRIGGER accountinsert';
 
 	DROP TRIGGER IF EXISTS accountinsert ON account;
 	CREATE TRIGGER accountinsert AFTER INSERT ON account
@@ -941,7 +953,50 @@ ORDER BY sp.id ASC;
 END;
 $$ LANGUAGE 'plpgsql';
 
+--
+CREATE OR REPLACE FUNCTION upgrade_0017()
+RETURNS INT4 AS
+$$
+DECLARE
+        lastupgrade     INT4;
+BEGIN
+        SELECT MAX(id) INTO lastupgrade FROM upgrade;
+        IF lastupgrade >= 21 THEN
+                RAISE INFO '0017 - (skipping)';
+                RETURN 0;
+        END IF;
 
+        RAISE INFO '0017 - CREATE VIEW purchaseorderview';
+
+        EXECUTE '
+CREATE OR REPLACE VIEW purchaseorderview AS
+SELECT
+        po.id,
+        o.name || ''('' || o.orgcode || '')'' AS supplier,
+        o.orgcode || ''/'' || lpad(CAST(po.ordernum AS TEXT), 5, ''0'') AS order,
+        pod.description,
+        pod.cycle,
+        pod.start_date,
+        pod.end_date
+FROM purchaseorderdetail pod
+INNER JOIN purchaseorder po ON po.id = pod.purchaseorder
+INNER JOIN organisation_current o ON o.id = po.organisation
+WHERE pod.id IN (
+        SELECT MAX(id)
+        FROM purchaseorderdetail
+        GROUP BY purchaseorder
+)
+AND pod.is_open = ''true''
+AND pod.is_deleted = ''false''
+;
+        ';
+
+        RETURN 0;
+END;
+$$ LANGUAGE 'plpgsql';
+
+
+--
 
 CREATE OR REPLACE FUNCTION accountinsert()
 RETURNS TRIGGER AS
