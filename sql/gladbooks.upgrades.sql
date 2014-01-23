@@ -77,7 +77,7 @@ CREATE OR REPLACE FUNCTION upgrade_database()
 RETURNS INT4 AS
 $$
 DECLARE
-	vnum		INT4 = 23; -- New version (increment this)
+	vnum		INT4 = 24; -- New version (increment this)
 	instances	INT4;
 	inst		TEXT;
 	oldv		INT4;
@@ -961,7 +961,7 @@ DECLARE
         lastupgrade     INT4;
 BEGIN
         SELECT MAX(id) INTO lastupgrade FROM upgrade;
-        IF lastupgrade >= 21 THEN
+        IF lastupgrade >= 24 THEN
                 RAISE INFO '0017 - (skipping)';
                 RETURN 0;
         END IF;
