@@ -1142,10 +1142,12 @@ div.salesorder div.datatable div.total {
 }
 div.purchaseorder div.datatable div.total.td input,
 div.salesorder div.datatable div.total.td input {
-	color: gray;
+	color: black;
 	font-size: 100%;
 	font-family: monospace;
 	font-weight: bold;
+	padding-right: 5px;
+	margin-top: 2px;
 }
 div.purchaseorder div.datatable div.btn,
 div.salesorder div.datatable div.btn {
@@ -1187,6 +1189,20 @@ div.salesorder div.datatable div.tr.totals input {
 	background-color:transparent;
 	border: none;
 	outline: none;
+}
+
+select[readonly] {
+	border: none;
+	text-shadow: none;
+}
+input[readonly] {
+	background-color: $color-light;
+	box-shadow: none !important;
+	border: 2px solid white;
+	font-weight: bold;
+	height: 100%;
+	outline: none !important;
+	padding-left: 5px;
 }
 
 /* totals table (salesorder form) */
