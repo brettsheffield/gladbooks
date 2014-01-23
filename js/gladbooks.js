@@ -38,6 +38,7 @@ g_menus = [
     [ 'organisation.create', showForm, 'organisation', 'create', 'Add New Organisation' ],
     [ 'organisations', showQuery, 'organisations', 'Organisations', true ],
     [ 'payables', showHTML, 'help/payables.html', 'Payables', false ],
+    [ 'purchaseorder.list', showQuery, 'purchaseorders', 'Purchase Orders', true ],
     [ 'purchaseorder.create', showForm, 'purchaseorder', 'create','New Purchase Order'],
     [ 'product.create', showForm, 'product', 'create', 'Add New Product' ],
     [ 'products', showQuery, 'products', 'Products', true ],
@@ -2180,6 +2181,12 @@ customClickElement = function(row) {
         var id = row.find('td.xml-id').text();
         var name = row.find('td.xml-shortname').text();
         showForm('product', 'update', name, id);
+        return true;
+    }
+    else if (tab.collection == 'purchaseorders') {
+        var id = row.find('td.xml-id').text();
+        var name = 'PO/' + row.find('td.xml-order').text();
+        showForm('purchaseorder', 'update', name, id);
         return true;
     }
     else if (tab.collection == 'salesorders') {
