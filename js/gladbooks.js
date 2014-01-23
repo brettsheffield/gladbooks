@@ -2245,8 +2245,38 @@ Form.prototype.validateCustom = function() {
     else if (this.object == 'product') {
         return validateFormProduct(this.action, this.id);
     }
+    else if ((this.object == 'purchaseorder') && (this.action != 'process')) {
+        return this.validatePurchaseOrder();
+    }
     else if ((this.object == 'salesorder') && (this.action != 'process')) {
         return this.validateSalesOrder();
+    }
+
+    return b;
+}
+
+Form.prototype.validatePurchaseOrder = function() {
+    console.log('Form().validatePurchaseOrder()');
+    var b = true;
+    var t = this.tab.tablet;
+
+    var cycle = t.find('[name="cycle"]');
+    var start_date = t.find('[name="start_date"]');
+    var end_date = t.find('[name="end_date"]');
+
+    if (cycle.val() > 1 && start_date.val() === '') {
+        statusMessage('Start Date required for recurring purchase orders', 
+            STATUS_WARN);
+        start_date.focus();
+        return false;
+    }
+
+    if (start_date.val() !== '' && end_date.val() !== '') {
+        if (start_date.val() > end_date.val()) {
+            statusMessage('Start Date cannot be after End Date', STATUS_WARN);
+            start_date.focus();
+            return false;
+        }
     }
 
     return b;
