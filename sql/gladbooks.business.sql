@@ -330,6 +330,27 @@ CREATE TABLE purchaseorderdetail (
 		FOREIGN KEY (cycle) REFERENCES cycle(id)
 );
 
+CREATE OR REPLACE VIEW purchaseorderview AS
+SELECT
+        po.id,
+        o.name || '(' || o.orgcode || ')' AS supplier,
+        o.orgcode || '/' || lpad(CAST(po.ordernum AS TEXT), 5, '0') AS order,
+        pod.description,
+        pod.cycle,
+        pod.start_date,
+        pod.end_date
+FROM purchaseorderdetail pod
+INNER JOIN purchaseorder po ON po.id = pod.purchaseorder
+INNER JOIN organisation_current o ON o.id = po.organisation
+WHERE pod.id IN (
+        SELECT MAX(id)
+        FROM purchaseorderdetail
+        GROUP BY purchaseorder
+)
+AND pod.is_open = 'true'
+AND pod.is_deleted = 'false'
+;
+
 CREATE TABLE purchaseorderitem (
 	id		SERIAL PRIMARY KEY,
 	updated		timestamp with time zone default now(),

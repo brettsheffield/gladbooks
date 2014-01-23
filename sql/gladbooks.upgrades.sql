@@ -77,7 +77,7 @@ CREATE OR REPLACE FUNCTION upgrade_database()
 RETURNS INT4 AS
 $$
 DECLARE
-	vnum		INT4 = 21; -- New version (increment this)
+	vnum		INT4 = 23; -- New version (increment this)
 	instances	INT4;
 	inst		TEXT;
 	oldv		INT4;
@@ -849,7 +849,7 @@ DECLARE
 	lastupgrade	INT4;
 BEGIN
 	SELECT MAX(id) INTO lastupgrade FROM upgrade;
-	IF lastupgrade >= 17 THEN
+	IF lastupgrade >= 23 THEN
 		RAISE INFO '0014 - (skipping)';
 		RETURN 0;
 	END IF;
@@ -857,7 +857,7 @@ BEGIN
         RAISE INFO '0014 - replace VIEW salesorderview';
 
         EXECUTE '
-DROP VIEW salesorderview;
+DROP VIEW IF EXISTS salesorderview;
 CREATE OR REPLACE VIEW salesorderview AS
 SELECT
         so.id,

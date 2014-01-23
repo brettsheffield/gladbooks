@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+  <instance>test</instance>
+  <business>1</business>	
+	<data>
+		<purchaseorder is_open="1" is_deleted="0">
+			<organisation>1</organisation>
+			<description>A Purchase Order</description>
+			<cycle>1</cycle>
+			<start_date>2013-04-01</start_date>
+			<end_date>2014-03-31</end_date>
+			<salesitem>
+				<product>1</product>
+				<linetext>Override Default Product Description</linetext>
+				<price>123.45</price>
+				<qty>2</qty>
+			</salesitem>
+			<salesitem>
+				<product>2</product>
+			</salesitem>
+		</purchaseorder>
+	</data>
+</request>

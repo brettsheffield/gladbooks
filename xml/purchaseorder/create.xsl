@@ -6,6 +6,7 @@
         <xsl:variable name="clientip" select="request/clientip" />
         <xsl:variable name="instance" select="request/instance" />
         <xsl:variable name="business" select="request/business" />
+	<xsl:variable name="id" select="request/id" />
 
 	<xsl:include href="../cleanQuote.xsl"/>
 	<xsl:include href="../setSearchPath.xsl"/>
