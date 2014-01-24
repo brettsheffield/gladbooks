@@ -1237,7 +1237,7 @@ BEGIN
 
 	-- fetch terms for organisation --
 	SELECT terms INTO termdays FROM organisation_current
-	WHERE organisation = r_so.organisation;
+	WHERE id = r_so.organisation;
 
 	terminterval := termdays || ' days';
 	due := DATE(NOW()) + terminterval::interval;
@@ -1340,8 +1340,8 @@ BEGIN
 
 	-- add billing contacts
 	FOR r_to IN
-		SELECT contact, name, email FROM contact_current
-		WHERE contact IN (
+		SELECT id, name, email FROM contact_current
+		WHERE id IN (
 			SELECT contact
 			FROM organisation_contact
 			WHERE relationship='1'
