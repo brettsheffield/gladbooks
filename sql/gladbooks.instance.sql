@@ -193,8 +193,8 @@ CREATE TABLE organisation_organisation (
 CREATE OR REPLACE VIEW contact_billing AS
 SELECT c.*, oc.organisation, o.name as orgname
 FROM contact_current c
-INNER JOIN organisation_contact oc ON c.contact = oc.contact
-INNER JOIN organisation_current o ON o.organisation = oc.organisation
+INNER JOIN organisation_contact oc ON c.id = oc.contact
+INNER JOIN organisation_current o ON o.id = oc.organisation
 WHERE oc.relationship = '1';
 /*
 SELECT c.*, o.organisation

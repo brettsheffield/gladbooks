@@ -2079,7 +2079,6 @@ BEGIN
                 WHERE salesorderitem = NEW.salesorderitem;
         IF priorentries > 0 THEN
                 -- This isn't our first time, so use previous values 
-        osalesorder, oproduct, olinetext, odiscount, oprice, oqty, ois_deleted
                 SELECT INTO
 		        osalesorder, oproduct, olinetext, odiscount, oprice,
 			oqty, ois_deleted
