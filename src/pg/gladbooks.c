@@ -26,6 +26,7 @@
 #include <utils/geo_decls.h>
 
 #include <fcntl.h>
+#include <grp.h>
 #include <limits.h>
 #include <signal.h>
 #include <stdio.h>
@@ -62,6 +63,7 @@ Datum create_business_dirs(PG_FUNCTION_ARGS)
         char *dir;
         char *dst;
         int ret = 0;
+        struct group *g = NULL;
 
         /* log something, and return */
         openlog("GLADBOOKS", LOG_PID, LOG_DAEMON);
@@ -71,8 +73,8 @@ Datum create_business_dirs(PG_FUNCTION_ARGS)
         /* TODO: pull directories from config */
         asprintf(&dir, "/var/spool/gladbooks/%s", orgcode);
         syslog(LOG_DEBUG, "Creating directory: %s", dir);
-        umask(022);
-        if (mkdir(dir, 0755) != 0) {
+        umask(002);
+        if (mkdir(dir, 0775) != 0) {
                 if (errno == EEXIST) {
                         syslog(LOG_DEBUG, "Directory '%s' exists.  Skipping.",
                                 dir);
@@ -82,6 +84,22 @@ Datum create_business_dirs(PG_FUNCTION_ARGS)
                         dir, strerror(errno));
                 ret--; 
         }
+
+        /* set group to gladd */
+        g = getgrnam("gladd");
+        if (g == NULL) {
+                syslog(LOG_ERR, "Group gladd does not exist");
+                ret--;
+        }
+        else {
+                syslog(LOG_DEBUG, "Setting directory group to gladd");
+                if (chown(dir, -1, g->gr_gid) == -1) {
+                        syslog(LOG_ERR, "Failed to set group: %s", 
+                                strerror(errno));
+                        ret--;
+                }
+        }
+
         free(dir);
         asprintf(&dir, "/etc/gladbooks/conf.d/%s", orgcode);
         syslog(LOG_DEBUG, "Creating directory: %s", dir);

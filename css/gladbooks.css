@@ -902,6 +902,9 @@ div.search.results div.tr.contact::before {
 div.search.results div.tr.journal::before {
   content: 'journal'; }
 
+div.search.results div.tr.ledger::before {
+  content: 'ledger'; }
+
 div.search.results div.tr.organisation::before {
   content: 'organisation'; }
 
