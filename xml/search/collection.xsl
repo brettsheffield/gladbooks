@@ -29,6 +29,9 @@
 			<xsl:when test="@type = 'contact'">
 				<xsl:text>contact_current</xsl:text>
 			</xsl:when>
+			<xsl:when test="@type = 'ledger'">
+				<xsl:text>generalledger</xsl:text>
+			</xsl:when>
 			<xsl:when test="@type = 'organisation'">
 				<xsl:text>organisation_current</xsl:text>
 			</xsl:when>
