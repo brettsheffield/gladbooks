@@ -5,6 +5,7 @@
 	<xs:restriction base="xs:string">
 		<xs:enumeration value="contact"/>
 		<xs:enumeration value="journal" />
+		<xs:enumeration value="ledger" />
 		<xs:enumeration value="organisation" />
 		<xs:enumeration value="product" />
 		<xs:enumeration value="purchaseinvoice" />
