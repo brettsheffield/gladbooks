@@ -1,14 +1,37 @@
 (incomplete)
 
 == Postgres setup ==
-
 pg_hba.conf - allow from gladd server
 
-As postgres user (or another pg superuser):
-psql
-postgres=# create role dba with superuser noinherit;
-CREATE ROLE
-postgres=# grant dba to gladbook;
-GRANT ROLE
+From a fresh postgres setup (ie no existing gladbooks database)
+
+Create the gladd user:
+# su - postgres
+# postgres:~$ psql
+postgres=# CREATE ROLE dba WITH SUPERUSER NOINHERIT;
+> CREATE ROLE
+postgres=# CREATE user gladd;
+> CREATE ROLE
+postgres=# GRANT dba TO gladd;
+> GRANT ROLE
+postgres=# ALTER USER gladd CREATEDB;
+> ALTER ROLE
+postgres=#\q
+postgres:~$ exit
+
+Added the demo database:
+# su - gladd
+$ cd /usr/local/gladd/gladbooks-ui/sql
+$ make dropdb
+$ make all
+$ make demo
+
+== Reset the db ==
+# su - postgres
+# psql
+postgres=# drop database gladbooks;
+postgres=# drop user gladbooks;
+postgres=# drop user gladd;
+
 
 This allows the user to create the c language functions.
