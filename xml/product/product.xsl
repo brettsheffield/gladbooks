@@ -12,11 +12,13 @@
 			<xsl:if test="@import_id">
 				<xsl:text>import_id,</xsl:text>
 			</xsl:if>
-			<xsl:text>authuser, clientip) VALUES ('</xsl:text>
+			<xsl:text>authuser, clientip) VALUES (</xsl:text>
 			<xsl:if test="@import_id">
+				<xsl:text>'</xsl:text>
                         	<xsl:value-of select="@import_id"/>
-				<xsl:text>','</xsl:text>
+				<xsl:text>',</xsl:text>
 			</xsl:if>
+                        <xsl:text>'</xsl:text>
                         <xsl:copy-of select="$authuser"/>
                         <xsl:text>','</xsl:text>
                         <xsl:copy-of select="$clientip"/>
@@ -46,42 +48,48 @@
                         <xsl:when test="$id">
                                 <xsl:text>'</xsl:text>
                                 <xsl:value-of select="$id"/>
-                                <xsl:text>','</xsl:text>
+                                <xsl:text>',</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>
-                                <xsl:text>currval(pg_get_serial_sequence('product','id')),'</xsl:text>
+                                <xsl:text>currval(pg_get_serial_sequence('product','id')),</xsl:text>
                         </xsl:otherwise>
                 </xsl:choose>
 
 		<xsl:if test="account">
+			<xsl:text>'</xsl:text>
 			<xsl:value-of select="account"/>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 		<xsl:if test="shortname">
+			<xsl:text>'</xsl:text>
 			<xsl:call-template name="cleanQuote">
 				<xsl:with-param name="string">
 					<xsl:value-of select="shortname"/>
 				</xsl:with-param>
 			</xsl:call-template>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 		<xsl:if test="description">
+			<xsl:text>'</xsl:text>
 			<xsl:call-template name="cleanQuote">
 				<xsl:with-param name="string">
 					<xsl:value-of select="description"/>
 				</xsl:with-param>
 			</xsl:call-template>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 		<xsl:if test="price_buy">
+			<xsl:text>'</xsl:text>
 			<xsl:value-of select="price_buy"/>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 		<xsl:if test="price_sell">
+			<xsl:text>'</xsl:text>
 			<xsl:value-of select="price_sell"/>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 
+		<xsl:text>'</xsl:text>
 		<xsl:copy-of select="$authuser"/>
 		<xsl:text>','</xsl:text>
 		<xsl:copy-of select="$clientip"/>

@@ -58,50 +58,58 @@
                         <xsl:when test="$id">
                                 <xsl:text>'</xsl:text>
                                 <xsl:value-of select="$id"/>
-                                <xsl:text>','</xsl:text>
+                                <xsl:text>',</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>
-                                <xsl:text>currval(pg_get_serial_sequence('organisation','id')),'</xsl:text>
+                                <xsl:text>currval(pg_get_serial_sequence('organisation','id')),</xsl:text>
                         </xsl:otherwise>
                 </xsl:choose>
 
 		<xsl:if test="name">
+			<xsl:text>'</xsl:text>
 			<xsl:call-template name="cleanQuote">
 				<xsl:with-param name="string">
 					<xsl:value-of select="name"/>
 				</xsl:with-param>
 			</xsl:call-template>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 		<xsl:if test="terms">
+			<xsl:text>'</xsl:text>
 			<xsl:value-of select="terms"/>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 		<xsl:if test="billcontact">
+			<xsl:text>'</xsl:text>
 			<xsl:value-of select="billcontact"/>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 		<xsl:if test="@is_active">
+			<xsl:text>'</xsl:text>
 			<xsl:value-of select="@is_active"/>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 		<xsl:if test="@is_suspended">
+			<xsl:text>'</xsl:text>
 			<xsl:value-of select="@is_suspended"/>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 		<xsl:if test="@is_vatreg">
+			<xsl:text>'</xsl:text>
 			<xsl:value-of select="@is_vatreg"/>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 		<xsl:if test="vatnumber">
+			<xsl:text>'</xsl:text>
 			<xsl:call-template name="cleanQuote">
 				<xsl:with-param name="string">
 					<xsl:value-of select="vatnumber"/>
 				</xsl:with-param>
 			</xsl:call-template>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 
+		<xsl:text>'</xsl:text>
 		<xsl:copy-of select="$authuser"/>
 		<xsl:text>','</xsl:text>
 		<xsl:copy-of select="$clientip"/>
