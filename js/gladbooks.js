@@ -421,6 +421,7 @@ function bankTotalsUpdate() {
 /* called any time one of the totals is updated */
 function bankTotalsUpdated() {
     console.log('bankTotalsUpdated()');
+    var mytab = activeTab();
     var debits = mytab.find('div.bank.total div.xml-debit').text();
     var credits = mytab.find('div.bank.total div.xml-credit').text();
     var totals = mytab.find('div.bank.total div.xml-debit')
