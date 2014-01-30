@@ -63,7 +63,6 @@
 		</xsl:if>
 
 		<xsl:if test="product_import">
-			<xsl:text>'</xsl:text>
 			<xsl:text>(SELECT id FROM product </xsl:text>
 			<xsl:text>WHERE import_id='</xsl:text>
 			<xsl:value-of select="product_import"/>
