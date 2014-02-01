@@ -5,6 +5,9 @@ pg_hba.conf - allow from gladd server
 
 From a fresh postgres setup (ie no existing gladbooks database)
 
+Remove /tmp/lastpost to fix permission problems
+# rm /tmp/lastpost
+
 Create the gladd user:
 # su - postgres
 # postgres:~$ psql
@@ -22,15 +25,17 @@ postgres:~$ exit
 Added the demo database:
 # su - gladd
 $ cd /usr/local/gladd/gladbooks-ui/sql
-$ make dropdb
-$ make all
+$ make dropdb ## fail is OK if you have already dropped the db
+$ make all    ## will fail is /etc/gladbooks/conf.d/ has old directories
 $ make demo
 
 == Reset the db ==
+As root
+# mv   /etc/gladbooks/conf.d/  /etc/gladbooks/conf.d.XXX
 # su - postgres
 # psql
 postgres=# drop database gladbooks;
-postgres=# drop user gladbooks;
+postgres=# drop user gladbook;
 postgres=# drop user gladd;
 
 
