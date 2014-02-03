@@ -5,9 +5,6 @@ pg_hba.conf - allow from gladd server
 
 From a fresh postgres setup (ie no existing gladbooks database)
 
-Remove /tmp/lastpost to fix permission problems
-# rm /tmp/lastpost
-
 Create the gladd user:
 # su - postgres
 # postgres:~$ psql
