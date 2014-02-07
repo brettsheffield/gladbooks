@@ -829,6 +829,16 @@ div.bank.data div.xml-account {
   overflow: hidden;
   width: 36%; }
 
+div.bank.workspace div.account {
+  width: 18%; }
+
+div.bank.workspace div.debtorcreditor {
+  min-height: 1px;
+  width: 18%; }
+
+div.bank.data div.debtorcreditor * {
+  display: none; }
+
 div.bank.data div.xml-debit,
 div.bank.data div.xml-credit {
   text-align: right;
