@@ -23,7 +23,8 @@
 /* global variables **********************************************************/
 
 g_menus = [
-    [ 'bank.reconcile', getForm, 'bank', 'reconcile', 'Bank Reconciliation' ],
+    [ 'bank.reconcile.old', getForm, 'bank', 'reconcile', 'Bank Reconciliation' ],
+    [ 'bank.reconcile', showForm, 'bank', 'reconcile', 'Bank Reconciliation' ],
     [ 'bank.upload', getForm, 'bank', 'upload', 'Upload Bank Statement' ],
     [ 'bank.statement', getForm, 'bank', 'statement', 'Bank Statement' ],
     [ 'bank.test', showHTML, 'help/layouttest.html', 'Layout Test' ],
