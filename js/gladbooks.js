@@ -1079,6 +1079,25 @@ function clickBankRow() {
     bankSuggest($(this), account);
 }
 
+function nominalAccountChange() {
+    console.log('nominalAccountChange()');
+    var w = $(this).parents('div.bank.workspace');
+    if ($(this).val() === '1100') {
+        console.log('Debtors Control');
+        w.find('div.debtor').show();
+        w.find('div.creditor').hide();
+    }
+    else if ($(this).val() === '2100') {
+        console.log('Creditors Control');
+        w.find('div.debtor').hide();
+        w.find('div.creditor').show();
+    }
+    else {
+        w.find('div.debtor').hide();
+        w.find('div.creditor').hide();
+    }
+}
+
 /* override gladd.js function */
 customFormEvents = function(tab, object, action, id) {
     var mytab = getTabById(tab);
@@ -1093,6 +1112,9 @@ customFormEvents = function(tab, object, action, id) {
     });
 
     mytab.find('select.bankaccount').change(bankChange);
+
+    /* onChange event for account dropdown */
+    mytab.find('select.nominalcode').change(nominalAccountChange);
 
     if (object == 'bank' && action == 'reconcile') {
         var acct = mytab.find('select.bankaccount').val();
