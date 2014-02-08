@@ -73,8 +73,8 @@ g_formdata = [
         [
             'accounts.unreconciled',
             'accounts',
-            'divisions',
-            'departments',
+            'debtors',
+            'creditors',
         ],
     ],  
     [ 'bank', 'reconcile.data', 

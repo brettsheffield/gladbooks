@@ -23,8 +23,12 @@
 					<select name="account" class="nominalcode populate" data-source="accountlist" data-placeholder="Select Nominal Account"></select>
 				</div>
 				<div class="td debtorcreditor">
-					<select name="debtor" class="debtor populate" data-source="debtor"></select>
-					<select name="creditor" class="creditor populate" data-source="creditor"></select>
+					<div class="td debtor">
+						<select name="debtor" class="debtor populate" data-placeholder="Select Debtor" data-source="debtors"></select>
+					</div>
+					<div class="td creditor">
+						<select name="creditor" class="creditor populate" data-placeholder="Select Creditor" data-source="creditors"></select>
+					</div>
 				</div>
 				<div class="td xml-debit">
 					<input class="amount debit" type="number" autocomplete="off" placeholder="0.00"/>

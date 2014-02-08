@@ -937,8 +937,10 @@ div.bank.workspace div.debtorcreditor {
 	min-height: 1px;
 	width: 18%;
 }
-div.bank.data div.debtorcreditor * {
+div.bank.workspace div.debtor,
+div.bank.workspace div.creditor {
 	display: none;
+	width: 100%;
 }
 div.bank.data div.xml-debit,  
 div.bank.data div.xml-credit {
