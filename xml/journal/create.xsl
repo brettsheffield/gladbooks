@@ -67,7 +67,7 @@
 		<xsl:if test="@bankid">
 			<xsl:text>INSERT INTO bankdetail (bank, ledger) VALUES ('</xsl:text>
 			<xsl:value-of select="@bankid"/>
-			<xsl:text>',currval(pg_get_serial_sequence('ledger','id')));</xsl:text>
+			<xsl:text>',ledger_id_last());</xsl:text>
 		</xsl:if>
 	</xsl:template>
 	<xsl:template match="credit">
