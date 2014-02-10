@@ -282,6 +282,9 @@ function bankJournal(row) {
 function bankJournalAdd() {
     console.log('bankJournalAdd()');
     var mytab = activeTab();
+    var w = $(this).parents('div.workspace');
+    var j = $(this).parents('div.tr.journal:first');
+    var newj = j.clone(true,true);
     var o = new Object();
     o.date = mytab.find('div.bank.target div.td.xml-date').text();
     o.description = mytab.find('div.journal input.description').val();
@@ -299,7 +302,10 @@ function bankJournalAdd() {
         o.description = mytab.find('div.bank.target div.td.xml-description').text();
     }
 
+    j.after(newj);
+
     /* build fragment */
+    /*
     var j = $('<div class="tr"/>');
     j.append('<div class="td xml-date">' + o.date + '</div>');
     j.append('<div class="td xml-description">' + o.description + '</div>');
@@ -308,18 +314,26 @@ function bankJournalAdd() {
     j.append('<div class="td xml-credit">' + decimalPad(o.credit,2) +'</div>');
     j.append('<div class="td buttons"><button class="del">X</button></div>');
     j.find('button.del').click(bankJournalDel);
+    */
 
     /* append to entries */
-    mytab.find('div.bank.entries').append(j);
+    //mytab.find('div.bank.entries').append(j);
 
-    bankJournalReset();
+    //bankJournalReset();
     bankTotalsUpdate();
 }
 
 /* user clicked delete button on entry */
 function bankJournalDel() {
     var mytab = activeTab();
-    $(this).parents('div.tr').fadeOut(300, function() {
+    var row = $(this).parents('div.tr');
+
+    if (row.is(':first-child')) {
+        /* this is the first row, so just clear it, not delete */
+        return false; /* TODO */
+    }
+
+    $(this).parents('div.tr').fadeOut(150, function() {
         if ($(this).hasClass('suggestion')) {
             var account = mytab.find('select.bankaccount').val();
             var div = mytab.find('div.bank.target');
@@ -384,6 +398,7 @@ function bankJournalReset() {
     journal.find('input').val('');
     journal.find('input.amount').change(bankJournalAmountChange);
     journal.find('button.add').off().click(bankJournalAdd);
+    journal.find('button.del').off().click(bankJournalDel);
 }
 
 /* Display/recalculate bank totals */
@@ -397,24 +412,34 @@ function bankTotalsUpdate() {
     bankTotalsUpdated();
     mytab.find('div.bank.total').show();
     var target = mytab.find('div.bank.target div.xml-debit');
-    var entries = mytab.find('div.bank.entries div.xml-debit');
+    var entries = mytab.find('div.bank.journal input.debit');
     target.add(entries).each(function() {
+        var debit = '0.00';
         if ($.isNumeric($(this).text())) {
-            debits = decimalAdd(debits, $(this).text());
-            debits = decimalPad(debits, 2);
-            mytab.find('div.bank.total div.xml-debit').text(debits);
-            bankTotalsUpdated();
+            debit = $(this).text();
         }
+        else if ($.isNumeric($(this).val())) {
+            debit = $(this).val();
+        }
+        debits = decimalAdd(debits, debit);
+        debits = decimalPad(debits, 2);
+        mytab.find('div.bank.total div.xml-debit').text(debits);
+        bankTotalsUpdated();
     });
     var target = mytab.find('div.bank.target div.xml-credit');
-    var entries = mytab.find('div.bank.entries div.xml-credit');
+    var entries = mytab.find('div.bank.journal input.credit');
     target.add(entries).each(function() {
+        var credit = '0.00';
         if ($.isNumeric($(this).text())) {
-            credits = decimalAdd(credits, $(this).text());
-            credits = decimalPad(credits, 2);
-            mytab.find('div.bank.total div.xml-credit').text(credits);
-            bankTotalsUpdated();
+            credit = $(this).text();
         }
+        else if ($.isNumeric($(this).val())) {
+            credit = $(this).val();
+        }
+        credits = decimalAdd(credits, credit);
+        credits = decimalPad(credits, 2);
+        mytab.find('div.bank.total div.xml-credit').text(credits);
+        bankTotalsUpdated();
     });
 }
 
@@ -481,7 +506,7 @@ function bankReconcile(account) {
             div.show();
             bankReconcilePresetDebitCredit();
             bankTotalsUpdate();
-            bankSuggest(row, account);
+            //bankSuggest(row, account);
         }
         else {
             div.hide();

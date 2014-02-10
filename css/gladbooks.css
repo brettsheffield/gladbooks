@@ -739,12 +739,18 @@ div.results.pager button.last::before {
 div.bank.journal button.add:before {
   content: "\271A"; }
 
+div.bank.journal.tr:first-child button.del {
+  display: none; }
+
 /*
 div.bank.entries button.del:before {
 	content: "\2718";
 	font-size: 1.2em;
 }
 */
+div.td.buttons button {
+  float: left; }
+
 div.bank.selector div.chzn-container {
   float: left;
   width: 33% !important; }
