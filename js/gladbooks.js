@@ -479,7 +479,8 @@ function bankReconcile(account) {
             var row = div.find('div.tr div.td').parents('div.tr');
             row.addClass('selected');
             div.show();
-            bankTotalsUpdate(); 
+            bankReconcilePresetDebitCredit();
+            bankTotalsUpdate();
             bankSuggest(row, account);
         }
         else {
@@ -501,6 +502,27 @@ function bankReconcileCancel() {
         $(this).remove();
         bankTotalsUpdate();
     });
+}
+
+function bankReconcilePresetDebitCredit() {
+    console.log('bankReconcilePresetDebitCredit()');
+    var mytab = activeTab();
+    var debit = mytab.find('div.bank.target div.td.xml-debit').text();
+    var credit = mytab.find('div.bank.target div.td.xml-credit').text();
+    console.log('debit: ' + debit);
+    console.log('credit: ' + credit);
+    if ($.isNumeric(debit)) {
+        mytab.find('div.bank.workspace input.credit').val(debit);
+        mytab.find('select.nominalcode').val('1100')
+            .trigger("change")
+            .trigger("liszt:updated");
+    }
+    else if ($.isNumeric(credit)) {
+        mytab.find('div.bank.workspace input.debit').val(credit);
+        mytab.find('select.nominalcode').val('2100')
+            .trigger("change")
+            .trigger("liszt:updated");
+    }
 }
 
 /* save button clicked */
