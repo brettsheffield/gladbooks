@@ -589,16 +589,16 @@ function bankReconcileSave() {
     }
 
     /* add debits */
-    mytab.find('div.bank.entries div.tr').each(function() {
-        var amount = $(this).find('div.td.xml-debit').text();
+    mytab.find('div.bank.journal.tr').each(function() {
+        var amount = $(this).find('div.td.xml-debit input').val();
         if (amount > 0) {
             xml += '<debit account="' + acct + '" amount="' + amount + '"/>';
         }
     });
 
     /* add credits */
-    mytab.find('div.bank.entries div.tr').each(function() {
-        var amount = $(this).find('div.td.xml-credit').text();
+    mytab.find('div.bank.journal.tr').each(function() {
+        var amount = $(this).find('div.td.xml-credit input').val();
         if (amount > 0) {
             xml += '<credit account="' + acct + '" amount="' + amount + '"/>';
         }
