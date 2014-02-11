@@ -576,7 +576,9 @@ function bankReconcileSave() {
     var debit = mytab.find('div.bank.target div.tr div.td.xml-debit').text();
     var credit = mytab.find('div.bank.target div.tr div.td.xml-credit').text();
     var amount = (debit > 0) ? debit : credit;
-    xml += '<journal transactdate="' + date + '" description="' + desc + '">';
+    xml += '<journal transactdate="' + date + '" description="';
+    xml += escapeHTML(desc);
+    xml += '">';
 
     /* our xsd schema requires debits to appear before credits */
     if (debit > 0) {
