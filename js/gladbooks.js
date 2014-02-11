@@ -622,7 +622,7 @@ function bankReconcileSave() {
             statusMessage('Saved.', STATUS_INFO, 5000);
             /* clean up, move on */
             bankReconcileCancel();
-            mytab.find('div.results.pager button.next').trigger('click');
+            bankResultsPagerAction(acct, 'reconcile');
         },
         error: function(xml) {
             hideSpinner();
