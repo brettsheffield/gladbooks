@@ -39,7 +39,16 @@
 		<xsl:text>','</xsl:text>
 		<xsl:value-of select="organisation"/>
 		<xsl:text>',</xsl:text>
-		<xsl:text>currval(pg_get_serial_sequence('bank','id')),'</xsl:text>
+		<xsl:choose>
+			<xsl:when test="../@id">
+				<xsl:text>'</xsl:text>
+				<xsl:value-of select="../@id"/>
+				<xsl:text>','</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:text>currval(pg_get_serial_sequence('bank','id')),'</xsl:text>
+			</xsl:otherwise>
+		</xsl:choose>
 		<xsl:value-of select="/request/data/account"/>
 		<xsl:text>','</xsl:text>
 		<xsl:value-of select="../transactdate"/>

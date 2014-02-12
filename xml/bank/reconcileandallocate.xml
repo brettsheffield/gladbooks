@@ -24,7 +24,7 @@
 			</payment>
 			<payment>
 				<organisation>2</organisation>
-				<amount>30.00</amount>
+				<amount>29.00</amount>
 				<description>allocate payment across two invoices</description>
 				<paymentallocation>
 					<invoice>3</invoice>
@@ -32,9 +32,15 @@
 				</paymentallocation>
 				<paymentallocation>
 					<invoice>4</invoice>
-					<amount>10.00</amount>
+					<amount>9.00</amount>
 				</paymentallocation>
 			</payment>
+			<journal>
+				<account>9999</account>
+				<division>1</division>
+				<department>1</department>
+				<credit>1.00</credit>
+			</journal>
 		</bank>
 	</data>
 </request>

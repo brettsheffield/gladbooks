@@ -575,36 +575,44 @@ function bankReconcileSave() {
     t.debit = mytab.find('div.bank.target div.tr div.td.xml-debit').text();
     t.credit = mytab.find('div.bank.target div.tr div.td.xml-credit').text();
     t.amount = (t.debit > 0) ? t.debit : t.credit;
+    t.type = (t.debit > 0) ? 'debit' : 'credit';
     t.debtor = mytab.find('select.debtor').val();
     t.creditor = mytab.find('select.creditor').val();
 
-    /* if 1100 or 2100 create SP or PP respectively */
-    /* FIXME: validate, then find the row with debtor/creditor */
-    /* for each debtor/creditor ... */
-    if (t.acct === '1100') {
-        createPayment(t, 'sales'); /* TODO */
-    }
-    else if (t.acct === '2100') {
-        createPayment(t, 'purchase'); /* TODO */
-    }
-    else {
-        createJournalEntry(t); /* TODO */
-    }
-}
-
-function createPayment(t, type) {
-    console.log('createPayment()');
     var xml = createRequestXml();
-    xml += '<' + type + 'payment>';
+    xml += '<account>' + t.acct + '</account>';
+    xml += '<bank id="' + t.id + '">';
     xml += '<transactdate>' + t.date  + '</transactdate>';
+    xml += '<description>' + escapeHTML(t.desc) + '</description>';
     xml += '<paymenttype>1</paymenttype>'; /* FIXME: hardcoded */
-    xml += '<organisation>' + t.org + '</organisation>'; /* FIXME */
-    xml += '<bank>' + t.id + '</bank>';
-    xml += '<bankaccount>' + t.acct + '</bankaccount>';
-    /* TODO */
-    xml += '</' + type + 'payment></data></request>';
+
+    /* debit/credit */
+    xml += '<' + t.type + '>' + t.amount + '</' + t.type + '>';
+
+    /* process Debtors and Creditors */
+    t.tab.find('div.bank.journal.tr').each(function() {
+        var nominalcode = $(this).find('select.nominalcode').val(); 
+        if (nominalcode === '1100' || nominalcode === '2100') {
+            var s = (t.type === 'debit') ? 'debtor' : 'creditor';
+            var op = (t.type === 'debit') ? 'credit' : 'debit';
+            var org = $(this).find('select.' + s).val();
+            var amount = $(this).find('input.' + op).val();
+            xml += '<payment>';
+            xml += '<organisation>' + org + '</organisation>';
+            xml += '<amount>' + amount + '</amount>';
+            xml += '<description>' + escapeHTML(t.desc) + '</description>';
+            xml += '</payment>';
+        }
+    });
+
+    /* TODO: process supplimentary journals */
+
+    /* TODO: allocations */
+
+    xml += '</bank></data></request>';
+    console.log(xml); /* FIXME: temp */
     t.request = xml;
-    t.url = collection_url(type + 'payments');
+    t.url = collection_url('banks');
     bankReconcilePost(t);
 }
 

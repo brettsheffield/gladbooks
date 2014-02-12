@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
+<xs:include schemaLocation="ledger.xsd"/>
 <xs:include schemaLocation="payment.xsd"/>
 
 <xs:complexType name="bank">
@@ -12,6 +13,7 @@
 		<xs:element name="debit" type="xs:decimal" minOccurs="0"/>
 		<xs:element name="credit" type="xs:decimal" minOccurs="0"/>
 		<xs:element name="payment" type="payment" minOccurs="0" maxOccurs="unbounded" />
+		<xs:element name="journal" type="ledger" minOccurs="0"/>
 	</xs:sequence>
 	<xs:attribute name="id" type="xs:positiveInteger"/>
 </xs:complexType><!--bank-->
