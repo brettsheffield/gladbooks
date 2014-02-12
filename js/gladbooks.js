@@ -575,27 +575,37 @@ function bankReconcileSave() {
     t.debit = mytab.find('div.bank.target div.tr div.td.xml-debit').text();
     t.credit = mytab.find('div.bank.target div.tr div.td.xml-credit').text();
     t.amount = (t.debit > 0) ? t.debit : t.credit;
+    t.debtor = mytab.find('select.debtor').val();
+    t.creditor = mytab.find('select.creditor').val();
 
     /* if 1100 or 2100 create SP or PP respectively */
+    /* FIXME: validate, then find the row with debtor/creditor */
+    /* for each debtor/creditor ... */
     if (t.acct === '1100') {
-        createSalesPayment(t); /* TODO */
+        createPayment(t, 'sales'); /* TODO */
     }
     else if (t.acct === '2100') {
-        createPurchasePayment(t); /* TODO */
+        createPayment(t, 'purchase'); /* TODO */
     }
     else {
         createJournalEntry(t); /* TODO */
     }
 }
 
-function createPurchasePayment() {
-    console.log('createPurchasePayment()');
+function createPayment(t, type) {
+    console.log('createPayment()');
     var xml = createRequestXml();
-}
-
-function createSalesPayment() {
-    console.log('createSalesPayment()');
-    var xml = createRequestXml();
+    xml += '<' + type + 'payment>';
+    xml += '<transactdate>' + t.date  + '</transactdate>';
+    xml += '<paymenttype>1</paymenttype>'; /* FIXME: hardcoded */
+    xml += '<organisation>' + t.org + '</organisation>'; /* FIXME */
+    xml += '<bank>' + t.id + '</bank>';
+    xml += '<bankaccount>' + t.acct + '</bankaccount>';
+    /* TODO */
+    xml += '</' + type + 'payment></data></request>';
+    t.request = xml;
+    t.url = collection_url(type + 'payments');
+    bankReconcilePost(t);
 }
 
 function createJournalEntry(t) {
@@ -632,7 +642,6 @@ function createJournalEntry(t) {
     });
     xml += t.target;
     xml += '</journal></data></request>';
-    console.log(xml);
     t.request = xml;
     t.url = collection_url('journals');
     bankReconcilePost(t);

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+  <instance>test</instance>
+  <business>1</business>
+	<data>
+		<account>1000</account>
+		<bank>
+			<transactdate>2013-04-01</transactdate>
+			<description>Single payment split across two orgs</description>
+			<paymenttype>1</paymenttype>
+			<credit>120.00</credit>
+			<payment>
+				<organisation>1</organisation>
+				<amount>90.00</amount>
+				<description>allocate payment across two invoices</description>
+				<paymentallocation>
+					<invoice>1</invoice>
+					<amount>60.00</amount>
+				</paymentallocation>
+				<paymentallocation>
+					<invoice>2</invoice>
+					<amount>30.00</amount>
+				</paymentallocation>
+			</payment>
+			<payment>
+				<organisation>2</organisation>
+				<amount>30.00</amount>
+				<description>allocate payment across two invoices</description>
+				<paymentallocation>
+					<invoice>3</invoice>
+					<amount>20.00</amount>
+				</paymentallocation>
+				<paymentallocation>
+					<invoice>4</invoice>
+					<amount>10.00</amount>
+				</paymentallocation>
+			</payment>
+		</bank>
+	</data>
+</request>

@@ -2,6 +2,8 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
 <xsl:output method="text" disable-output-escaping="yes" />
 
+	<xsl:include href="payment.xsl"/>
+
 	<xsl:template match="bank">
                 <xsl:if test="not(@id)">
                         <xsl:text>INSERT INTO bank (</xsl:text>
@@ -78,12 +80,6 @@
 			<xsl:value-of select="ledger"/>
 			<xsl:text>',</xsl:text>
 		</xsl:if>
-
-		<xsl:if test="../../salespayment">
-			<xsl:text>'bollocks</xsl:text>
-			<xsl:text>',</xsl:text>
-		</xsl:if>
-
 		<xsl:if test="debit">
 			<xsl:text>'</xsl:text>
 			<xsl:value-of select="debit"/>
@@ -100,6 +96,27 @@
 		<xsl:text>','</xsl:text>
 		<xsl:copy-of select="$clientip"/>
 		<xsl:text>');</xsl:text>
+
+		<xsl:variable name="type">
+			<xsl:choose>
+				<xsl:when test="debit">
+					<xsl:text>sales</xsl:text>
+				</xsl:when>
+				<xsl:when test="credit">
+					<xsl:text>purchase</xsl:text>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:message terminate="yes">
+						Payment type must be debit or credit.
+					</xsl:message>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		
+		<xsl:apply-templates select="payment">
+			<xsl:with-param name="type" select="$type"/>
+		</xsl:apply-templates>
+
 	</xsl:template>
 
 </xsl:stylesheet>
