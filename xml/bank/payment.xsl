@@ -57,6 +57,27 @@
 		<xsl:copy-of select="$clientip"/>
 		<xsl:text>');</xsl:text>
 
+		<xsl:text>INSERT INTO ledger (</xsl:text>
+		<xsl:text>journal,account,</xsl:text>
+		<xsl:if test="$type = 'purchase'">
+			<xsl:text>debit</xsl:text>
+		</xsl:if>
+		<xsl:if test="$type = 'sales'">
+			<xsl:text>credit</xsl:text>
+		</xsl:if>
+		<xsl:text>) VALUES (journal_id_last(),</xsl:text>
+		<!-- 1100 - Debtors Control Account -->
+		<xsl:if test="$type = 'sales'">
+			<xsl:text>'1100','</xsl:text>
+			<xsl:value-of select="amount"/>
+		</xsl:if>
+		<!-- 2100 - Creditors Control Account -->
+		<xsl:if test="$type = 'purchase'">
+			<xsl:text>'2100','</xsl:text>
+			<xsl:value-of select="amount"/>
+		</xsl:if>
+		<xsl:text>');</xsl:text>
+
 		<xsl:apply-templates select="paymentallocation">
 			<xsl:with-param name="type" select="$type"/>
 		</xsl:apply-templates>

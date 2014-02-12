@@ -4,9 +4,9 @@
 
 	<xsl:template match="paymentallocation">
 		<xsl:param name="type"/>
-		<xsl:text>INSERT INTO </xsl:text>
+		<!--xsl:text>INSERT INTO </xsl:text>
 		<xsl:value-of select="$type"/>
-		<xsl:text>paymentallocation();</xsl:text>
+		<xsl:text>paymentallocation();</xsl:text-->
 	</xsl:template>
 
 </xsl:stylesheet>
