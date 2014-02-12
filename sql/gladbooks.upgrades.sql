@@ -1083,7 +1083,7 @@ BEGIN
         'VALUES (journal_id_last(),' ||
         format('''%s'',''%s'');', bankaccount, ABS(amount));
 
-        SELECT journal_id_last() INTO ledgerid;
+        SELECT ledger_id_last() INTO ledgerid;
 
         -- update bank entry, if applicable --
         IF bankid is not null THEN
