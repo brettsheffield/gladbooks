@@ -633,21 +633,27 @@ function createJournalEntry(t) {
     xml += t.target;
     xml += '</journal></data></request>';
     console.log(xml);
+    t.request = xml;
+    t.url = collection_url('journals');
+    bankReconcilePost(t);
+}
 
-    /* POST journal */
+/* POST journal */
+function bankReconcilePost(t) {
     showSpinner('Saving...');
     $.ajax({
-        url: collection_url('journals'),
-        data: xml,
+        url: t.url,
+        data: t.request,
         contentType: 'text/xml',
         type: 'POST',
         beforeSend: function (xhr) { setAuthHeader(xhr); },
         success: function(xml) {
+            t.response = xml;
             bankReconcileNext(t);
         },
         error: function(xml) {
             hideSpinner();
-            statusMessage('Error saving journal', STATUS_CRIT);
+            statusMessage('Error reconciling transaction', STATUS_CRIT);
         }
     });
 }
