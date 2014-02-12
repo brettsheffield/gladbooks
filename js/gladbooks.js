@@ -563,49 +563,74 @@ function bankReconcileSave() {
         return;
     }
     
-    /* Build request xml */
-    var xml = createRequestXml();
-
     /* add target from bank statement */
-    var target = '';
-    var id = mytab.find('div.bank.target div.tr div.td.xml-id').text();
-    var date = mytab.find('div.bank.target div.tr div.td.xml-date').text();
-    var desc = mytab.find('div.bank.target div.tr div.td.xml-description')
+    var t = {};
+    t.tab = mytab;
+    t.target = '';
+    t.id = mytab.find('div.bank.target div.tr div.td.xml-id').text();
+    t.date = mytab.find('div.bank.target div.tr div.td.xml-date').text();
+    t.desc = mytab.find('div.bank.target div.tr div.td.xml-description')
         .text();
-    var acct = mytab.find('div.bank.target div.tr div.td.xml-account').text();
-    var debit = mytab.find('div.bank.target div.tr div.td.xml-debit').text();
-    var credit = mytab.find('div.bank.target div.tr div.td.xml-credit').text();
-    var amount = (debit > 0) ? debit : credit;
-    xml += '<journal transactdate="' + date + '" description="';
-    xml += escapeHTML(desc);
+    t.acct = mytab.find('div.bank.target div.tr div.td.xml-account').text();
+    t.debit = mytab.find('div.bank.target div.tr div.td.xml-debit').text();
+    t.credit = mytab.find('div.bank.target div.tr div.td.xml-credit').text();
+    t.amount = (t.debit > 0) ? t.debit : t.credit;
+
+    /* if 1100 or 2100 create SP or PP respectively */
+    if (t.acct === '1100') {
+        createSalesPayment(t); /* TODO */
+    }
+    else if (t.acct === '2100') {
+        createPurchasePayment(t); /* TODO */
+    }
+    else {
+        createJournalEntry(t); /* TODO */
+    }
+}
+
+function createPurchasePayment() {
+    console.log('createPurchasePayment()');
+    var xml = createRequestXml();
+}
+
+function createSalesPayment() {
+    console.log('createSalesPayment()');
+    var xml = createRequestXml();
+}
+
+function createJournalEntry(t) {
+    console.log('createJournalEntry()');
+    var xml = createRequestXml();
+    xml += '<journal transactdate="' + t.date + '" description="';
+    xml += escapeHTML(t.desc);
     xml += '">';
 
     /* our xsd schema requires debits to appear before credits */
-    if (debit > 0) {
-        xml += '<debit account="' + acct + '" amount="' + amount + '" ';
-        xml += 'bankid="' + id + '"/>';
+    if (t.debit > 0) {
+        xml += '<debit account="' + t.acct + '" amount="' + t.amount + '" ';
+        xml += 'bankid="' + t.id + '"/>';
     }
     else {
-        target = '<credit account="' + acct + '" amount="' + amount + '" ';
-        target += 'bankid="' + id + '"/>';
+        t.target = '<credit account="' + t.acct + '" amount="' + t.amount + '" ';
+        t.target += 'bankid="' + t.id + '"/>';
     }
 
     /* add debits */
-    mytab.find('div.bank.journal.tr').each(function() {
+    t.tab.find('div.bank.journal.tr').each(function() {
         var amount = $(this).find('div.td.xml-debit input').val();
         if (amount > 0) {
-            xml += '<debit account="' + acct + '" amount="' + amount + '"/>';
+            xml += '<debit account="' + t.acct + '" amount="' + amount + '"/>';
         }
     });
 
     /* add credits */
-    mytab.find('div.bank.journal.tr').each(function() {
+    t.tab.find('div.bank.journal.tr').each(function() {
         var amount = $(this).find('div.td.xml-credit input').val();
         if (amount > 0) {
-            xml += '<credit account="' + acct + '" amount="' + amount + '"/>';
+            xml += '<credit account="' + t.acct + '" amount="' + amount + '"/>';
         }
     });
-    xml += target;
+    xml += t.target;
     xml += '</journal></data></request>';
     console.log(xml);
 
@@ -618,17 +643,21 @@ function bankReconcileSave() {
         type: 'POST',
         beforeSend: function (xhr) { setAuthHeader(xhr); },
         success: function(xml) {
-            hideSpinner();
-            statusMessage('Saved.', STATUS_INFO, 5000);
-            /* clean up, move on */
-            bankReconcileCancel();
-            bankResultsPagerAction(acct, 'reconcile');
+            bankReconcileNext(t);
         },
         error: function(xml) {
             hideSpinner();
             statusMessage('Error saving journal', STATUS_CRIT);
         }
     });
+}
+
+/* clean up, move on */
+function bankReconcileNext(t) {
+    hideSpinner();
+    statusMessage('Saved.', STATUS_INFO, 5000);
+    bankReconcileCancel();
+    bankResultsPagerAction(t.acct, 'reconcile');
 }
 
 /* set up pager buttons */
