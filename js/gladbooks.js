@@ -1200,6 +1200,7 @@ function nominalAccountChange() {
 
 /* override gladd.js function */
 customFormEvents = function(tab, object, action, id) {
+    console.log('customFormEvents().gladbooks');
     var mytab = getTabById(tab);
 
     /* remove scrollbar from tablet - we'll handle this in the bank.data div */
@@ -1238,6 +1239,14 @@ customFormEvents = function(tab, object, action, id) {
         var selector = addressFields.join('"],input[name="'); 
         selector = 'input[name="' + selector + '"]';
         mytab.find(selector).change(mapUpdate);
+    }
+
+    /* organisation.update addrow button */
+    if (object == 'organisation' && action == 'update') {
+        mytab.find('button.addrow').click(function() {
+            console.log('organisation.update.addrow()');
+            addSubformEvent($(this), "organisation_contacts", id, tab);
+        });
     }
 }
 
@@ -2181,8 +2190,6 @@ function validateNominalCode(code, type) {
 
     return true;
 }
-
-
 
 function customBlurEvents(tab) {
     //var mytab = getTabById(tab);
