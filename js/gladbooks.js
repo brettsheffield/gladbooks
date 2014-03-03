@@ -589,6 +589,8 @@ function bankReconcileSave() {
     /* debit/credit */
     xml += '<' + t.type + '>' + t.amount + '</' + t.type + '>';
 
+    var supp = '';
+
     /* process Debtors and Creditors */
     t.tab.find('div.bank.journal.tr').each(function() {
         var nominalcode = $(this).find('select.nominalcode').val(); 
@@ -603,9 +605,21 @@ function bankReconcileSave() {
             xml += '<description>' + escapeHTML(t.desc) + '</description>';
             xml += '</payment>';
         }
+        else {
+            var op = (t.type === 'debit') ? 'credit' : 'debit';
+            var amount = $(this).find('input.' + op).val();
+            supp += '<ledger>';
+            supp += '<account>' + nominalcode + '</account>';
+            /* TODO: division & department hardcoded */
+            //supp += '<division>' + '1' + '</division>';
+            //supp += '<department>' + '1' + '</department>';
+            supp += '<' + op + '>' + amount + '</' + op + '>';
+            supp += '</ledger>';
+        }
     });
 
-    /* TODO: process supplimentary journals */
+    /* process supplimentary journals */
+    xml += supp;
 
     /* TODO: allocations */
 

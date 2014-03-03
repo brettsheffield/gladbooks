@@ -35,12 +35,12 @@
 					<amount>9.00</amount>
 				</paymentallocation>
 			</payment>
-			<journal>
+			<ledger>
 				<account>9999</account>
 				<division>1</division>
 				<department>1</department>
 				<credit>1.00</credit>
-			</journal>
+			</ledger>
 		</bank>
 	</data>
 </request>

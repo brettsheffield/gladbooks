@@ -7,8 +7,8 @@
 
 	<xsl:template match="bank">
 
-		<!-- there are payments, so start a journal -->
-		<xsl:if test="payment">
+		<!-- there are payments or ledgers, so start a journal -->
+		<xsl:if test="payment or ledger">
 			<xsl:text>INSERT INTO journal (</xsl:text>
 			<xsl:text>transactdate,description</xsl:text>
 			<xsl:text>) VALUES ('</xsl:text>
@@ -110,12 +110,12 @@
 			<xsl:value-of select="paymenttype"/>
 			<xsl:text>',</xsl:text>
 		</xsl:if>
-		<xsl:if test="ledger">
+		<xsl:if test="@ledger">
 			<xsl:text>'</xsl:text>
-			<xsl:value-of select="ledger"/>
+			<xsl:value-of select="@ledger"/>
 			<xsl:text>',</xsl:text>
 		</xsl:if>
-		<xsl:if test="payment">
+		<xsl:if test="payment or ledger">
 			<xsl:text>ledger_id_last(),</xsl:text>
 		</xsl:if>
 		<xsl:if test="debit">

@@ -4,8 +4,8 @@
 <xs:complexType name="ledger">
 	<xs:sequence>
 		<xs:element name="account" type="xs:nonNegativeInteger"/>
-		<xs:element name="division" type="xs:positiveInteger"/>
-		<xs:element name="department" type="xs:positiveInteger"/>
+		<xs:element name="division" type="xs:positiveInteger" minOccurs="0"/>
+		<xs:element name="department" type="xs:positiveInteger" minOccurs="0"/>
 		<xs:element name="debit" type="xs:decimal" minOccurs="0"/>
 		<xs:element name="credit" type="xs:decimal" minOccurs="0"/>
 	</xs:sequence>

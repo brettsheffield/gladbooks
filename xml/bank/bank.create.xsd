@@ -9,13 +9,13 @@
 		<xs:element name="transactdate" type="xs:date"/>
 		<xs:element name="description" type="xs:string" minOccurs="0"/>
 		<xs:element name="paymenttype" type="xs:positiveInteger"/>
-		<xs:element name="ledger" type="xs:positiveInteger" minOccurs="0"/>
 		<xs:element name="debit" type="xs:decimal" minOccurs="0"/>
 		<xs:element name="credit" type="xs:decimal" minOccurs="0"/>
 		<xs:element name="payment" type="payment" minOccurs="0" maxOccurs="unbounded" />
-		<xs:element name="journal" type="ledger" minOccurs="0"/>
+		<xs:element name="ledger" type="ledger" minOccurs="0"/>
 	</xs:sequence>
 	<xs:attribute name="id" type="xs:positiveInteger"/>
+	<xs:attribute name="ledger" type="xs:positiveInteger"/>
 </xs:complexType><!--bank-->
 
 </xs:schema>
