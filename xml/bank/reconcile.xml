@@ -4,8 +4,6 @@
   <business>1</business>
 	<data>
 		<account>1000</account>
-		<bank id="1">
-			<ledger>1</ledger>
-		</bank>
+		<bank id="1" ledger="1"/>
 	</data>
 </request>

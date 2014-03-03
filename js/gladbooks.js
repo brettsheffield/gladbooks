@@ -72,8 +72,8 @@ g_formdata = [
         [
             'accounts.unreconciled',
             'accounts',
-            'divisions',
-            'departments',
+            'debtors',
+            'creditors',
         ],
     ],  
     [ 'bank', 'reconcile.data', 
@@ -282,6 +282,9 @@ function bankJournal(row) {
 function bankJournalAdd() {
     console.log('bankJournalAdd()');
     var mytab = activeTab();
+    var w = $(this).parents('div.workspace');
+    var j = $(this).parents('div.tr.journal:first');
+    var newj = j.clone(true,true);
     var o = new Object();
     o.date = mytab.find('div.bank.target div.td.xml-date').text();
     o.description = mytab.find('div.journal input.description').val();
@@ -299,7 +302,10 @@ function bankJournalAdd() {
         o.description = mytab.find('div.bank.target div.td.xml-description').text();
     }
 
+    j.after(newj);
+
     /* build fragment */
+    /*
     var j = $('<div class="tr"/>');
     j.append('<div class="td xml-date">' + o.date + '</div>');
     j.append('<div class="td xml-description">' + o.description + '</div>');
@@ -308,18 +314,26 @@ function bankJournalAdd() {
     j.append('<div class="td xml-credit">' + decimalPad(o.credit,2) +'</div>');
     j.append('<div class="td buttons"><button class="del">X</button></div>');
     j.find('button.del').click(bankJournalDel);
+    */
 
     /* append to entries */
-    mytab.find('div.bank.entries').append(j);
+    //mytab.find('div.bank.entries').append(j);
 
-    bankJournalReset();
+    //bankJournalReset();
     bankTotalsUpdate();
 }
 
 /* user clicked delete button on entry */
 function bankJournalDel() {
     var mytab = activeTab();
-    $(this).parents('div.tr').fadeOut(300, function() {
+    var row = $(this).parents('div.tr');
+
+    if (row.is(':first-child')) {
+        /* this is the first row, so just clear it, not delete */
+        return false; /* TODO */
+    }
+
+    $(this).parents('div.tr').fadeOut(150, function() {
         if ($(this).hasClass('suggestion')) {
             var account = mytab.find('select.bankaccount').val();
             var div = mytab.find('div.bank.target');
@@ -384,6 +398,7 @@ function bankJournalReset() {
     journal.find('input').val('');
     journal.find('input.amount').change(bankJournalAmountChange);
     journal.find('button.add').off().click(bankJournalAdd);
+    journal.find('button.del').off().click(bankJournalDel);
 }
 
 /* Display/recalculate bank totals */
@@ -397,30 +412,41 @@ function bankTotalsUpdate() {
     bankTotalsUpdated();
     mytab.find('div.bank.total').show();
     var target = mytab.find('div.bank.target div.xml-debit');
-    var entries = mytab.find('div.bank.entries div.xml-debit');
+    var entries = mytab.find('div.bank.journal input.debit');
     target.add(entries).each(function() {
+        var debit = '0.00';
         if ($.isNumeric($(this).text())) {
-            debits = decimalAdd(debits, $(this).text());
-            debits = decimalPad(debits, 2);
-            mytab.find('div.bank.total div.xml-debit').text(debits);
-            bankTotalsUpdated();
+            debit = $(this).text();
         }
+        else if ($.isNumeric($(this).val())) {
+            debit = $(this).val();
+        }
+        debits = decimalAdd(debits, debit);
+        debits = decimalPad(debits, 2);
+        mytab.find('div.bank.total div.xml-debit').text(debits);
+        bankTotalsUpdated();
     });
     var target = mytab.find('div.bank.target div.xml-credit');
-    var entries = mytab.find('div.bank.entries div.xml-credit');
+    var entries = mytab.find('div.bank.journal input.credit');
     target.add(entries).each(function() {
+        var credit = '0.00';
         if ($.isNumeric($(this).text())) {
-            credits = decimalAdd(credits, $(this).text());
-            credits = decimalPad(credits, 2);
-            mytab.find('div.bank.total div.xml-credit').text(credits);
-            bankTotalsUpdated();
+            credit = $(this).text();
         }
+        else if ($.isNumeric($(this).val())) {
+            credit = $(this).val();
+        }
+        credits = decimalAdd(credits, credit);
+        credits = decimalPad(credits, 2);
+        mytab.find('div.bank.total div.xml-credit').text(credits);
+        bankTotalsUpdated();
     });
 }
 
 /* called any time one of the totals is updated */
 function bankTotalsUpdated() {
     console.log('bankTotalsUpdated()');
+    var mytab = activeTab();
     var debits = mytab.find('div.bank.total div.xml-debit').text();
     var credits = mytab.find('div.bank.total div.xml-credit').text();
     var totals = mytab.find('div.bank.total div.xml-debit')
@@ -478,8 +504,9 @@ function bankReconcile(account) {
             var row = div.find('div.tr div.td').parents('div.tr');
             row.addClass('selected');
             div.show();
-            bankTotalsUpdate(); 
-            bankSuggest(row, account);
+            bankReconcilePresetDebitCredit();
+            bankTotalsUpdate();
+            //bankSuggest(row, account);
         }
         else {
             div.hide();
@@ -502,6 +529,27 @@ function bankReconcileCancel() {
     });
 }
 
+function bankReconcilePresetDebitCredit() {
+    console.log('bankReconcilePresetDebitCredit()');
+    var mytab = activeTab();
+    var debit = mytab.find('div.bank.target div.td.xml-debit').text();
+    var credit = mytab.find('div.bank.target div.td.xml-credit').text();
+    console.log('debit: ' + debit);
+    console.log('credit: ' + credit);
+    if ($.isNumeric(debit)) {
+        mytab.find('div.bank.workspace input.credit').val(debit);
+        mytab.find('select.nominalcode').val('1100')
+            .trigger("change")
+            .trigger("liszt:updated");
+    }
+    else if ($.isNumeric(credit)) {
+        mytab.find('div.bank.workspace input.debit').val(credit);
+        mytab.find('select.nominalcode').val('2100')
+            .trigger("change")
+            .trigger("liszt:updated");
+    }
+}
+
 /* save button clicked */
 function bankReconcileSave() {
     console.log('bankReconcileSave()');
@@ -515,70 +563,138 @@ function bankReconcileSave() {
         return;
     }
     
-    /* Build request xml */
-    var xml = createRequestXml();
-
     /* add target from bank statement */
-    var target = '';
-    var id = mytab.find('div.bank.target div.tr div.td.xml-id').text();
-    var date = mytab.find('div.bank.target div.tr div.td.xml-date').text();
-    var desc = mytab.find('div.bank.target div.tr div.td.xml-description')
+    var t = {};
+    t.tab = mytab;
+    t.target = '';
+    t.id = mytab.find('div.bank.target div.tr div.td.xml-id').text();
+    t.date = mytab.find('div.bank.target div.tr div.td.xml-date').text();
+    t.desc = mytab.find('div.bank.target div.tr div.td.xml-description')
         .text();
-    var acct = mytab.find('div.bank.target div.tr div.td.xml-account').text();
-    var debit = mytab.find('div.bank.target div.tr div.td.xml-debit').text();
-    var credit = mytab.find('div.bank.target div.tr div.td.xml-credit').text();
-    var amount = (debit > 0) ? debit : credit;
-    xml += '<journal transactdate="' + date + '" description="' + desc + '">';
+    t.acct = mytab.find('div.bank.target div.tr div.td.xml-account').text();
+    t.debit = mytab.find('div.bank.target div.tr div.td.xml-debit').text();
+    t.credit = mytab.find('div.bank.target div.tr div.td.xml-credit').text();
+    t.amount = (t.debit > 0) ? t.debit : t.credit;
+    t.type = (t.debit > 0) ? 'debit' : 'credit';
+    t.debtor = mytab.find('select.debtor').val();
+    t.creditor = mytab.find('select.creditor').val();
+
+    var xml = createRequestXml();
+    xml += '<account>' + t.acct + '</account>';
+    xml += '<bank id="' + t.id + '">';
+    xml += '<transactdate>' + t.date  + '</transactdate>';
+    xml += '<description>' + escapeHTML(t.desc) + '</description>';
+    xml += '<paymenttype>1</paymenttype>'; /* FIXME: hardcoded */
+
+    /* debit/credit */
+    xml += '<' + t.type + '>' + t.amount + '</' + t.type + '>';
+
+    var supp = '';
+
+    /* process Debtors and Creditors */
+    t.tab.find('div.bank.journal.tr').each(function() {
+        var nominalcode = $(this).find('select.nominalcode').val(); 
+        if (nominalcode === '1100' || nominalcode === '2100') {
+            var s = (t.type === 'debit') ? 'debtor' : 'creditor';
+            var op = (t.type === 'debit') ? 'credit' : 'debit';
+            var org = $(this).find('select.' + s).val();
+            var amount = $(this).find('input.' + op).val();
+            xml += '<payment>';
+            xml += '<organisation>' + org + '</organisation>';
+            xml += '<amount>' + amount + '</amount>';
+            xml += '<description>' + escapeHTML(t.desc) + '</description>';
+            xml += '</payment>';
+        }
+        else {
+            var op = (t.type === 'debit') ? 'credit' : 'debit';
+            var amount = $(this).find('input.' + op).val();
+            supp += '<ledger>';
+            supp += '<account>' + nominalcode + '</account>';
+            /* TODO: division & department hardcoded */
+            //supp += '<division>' + '1' + '</division>';
+            //supp += '<department>' + '1' + '</department>';
+            supp += '<' + op + '>' + amount + '</' + op + '>';
+            supp += '</ledger>';
+        }
+    });
+
+    /* process supplimentary journals */
+    xml += supp;
+
+    /* TODO: allocations */
+
+    xml += '</bank></data></request>';
+    console.log(xml); /* FIXME: temp */
+    t.request = xml;
+    t.url = collection_url('banks');
+    bankReconcilePost(t);
+}
+
+function createJournalEntry(t) {
+    console.log('createJournalEntry()');
+    var xml = createRequestXml();
+    xml += '<journal transactdate="' + t.date + '" description="';
+    xml += escapeHTML(t.desc);
+    xml += '">';
 
     /* our xsd schema requires debits to appear before credits */
-    if (debit > 0) {
-        xml += '<debit account="' + acct + '" amount="' + amount + '" ';
-        xml += 'bankid="' + id + '"/>';
+    if (t.debit > 0) {
+        xml += '<debit account="' + t.acct + '" amount="' + t.amount + '" ';
+        xml += 'bankid="' + t.id + '"/>';
     }
     else {
-        target = '<credit account="' + acct + '" amount="' + amount + '" ';
-        target += 'bankid="' + id + '"/>';
+        t.target = '<credit account="' + t.acct + '" amount="' + t.amount + '" ';
+        t.target += 'bankid="' + t.id + '"/>';
     }
 
     /* add debits */
-    mytab.find('div.bank.entries div.tr').each(function() {
-        var amount = $(this).find('div.td.xml-debit').text();
+    t.tab.find('div.bank.journal.tr').each(function() {
+        var amount = $(this).find('div.td.xml-debit input').val();
         if (amount > 0) {
-            xml += '<debit account="' + acct + '" amount="' + amount + '"/>';
+            xml += '<debit account="' + t.acct + '" amount="' + amount + '"/>';
         }
     });
 
     /* add credits */
-    mytab.find('div.bank.entries div.tr').each(function() {
-        var amount = $(this).find('div.td.xml-credit').text();
+    t.tab.find('div.bank.journal.tr').each(function() {
+        var amount = $(this).find('div.td.xml-credit input').val();
         if (amount > 0) {
-            xml += '<credit account="' + acct + '" amount="' + amount + '"/>';
+            xml += '<credit account="' + t.acct + '" amount="' + amount + '"/>';
         }
     });
-    xml += target;
+    xml += t.target;
     xml += '</journal></data></request>';
-    console.log(xml);
+    t.request = xml;
+    t.url = collection_url('journals');
+    bankReconcilePost(t);
+}
 
-    /* POST journal */
+/* POST journal */
+function bankReconcilePost(t) {
     showSpinner('Saving...');
     $.ajax({
-        url: collection_url('journals'),
-        data: xml,
+        url: t.url,
+        data: t.request,
         contentType: 'text/xml',
         type: 'POST',
         beforeSend: function (xhr) { setAuthHeader(xhr); },
         success: function(xml) {
-            hideSpinner();
-            statusMessage('Saved.', STATUS_INFO, 5000);
-            /* clean up, move on */
-            bankReconcileCancel();
-            mytab.find('div.results.pager button.next').trigger('click');
+            t.response = xml;
+            bankReconcileNext(t);
         },
         error: function(xml) {
             hideSpinner();
-            statusMessage('Error saving journal', STATUS_CRIT);
+            statusMessage('Error reconciling transaction', STATUS_CRIT);
         }
     });
+}
+
+/* clean up, move on */
+function bankReconcileNext(t) {
+    hideSpinner();
+    statusMessage('Saved.', STATUS_INFO, 5000);
+    bankReconcileCancel();
+    bankResultsPagerAction(t.acct, 'reconcile');
 }
 
 /* set up pager buttons */
@@ -1077,8 +1193,28 @@ function clickBankRow() {
     bankSuggest($(this), account);
 }
 
+function nominalAccountChange() {
+    console.log('nominalAccountChange()');
+    var w = $(this).parents('div.bank.workspace');
+    if ($(this).val() === '1100') {
+        console.log('Debtors Control');
+        w.find('div.debtor').show();
+        w.find('div.creditor').hide();
+    }
+    else if ($(this).val() === '2100') {
+        console.log('Creditors Control');
+        w.find('div.debtor').hide();
+        w.find('div.creditor').show();
+    }
+    else {
+        w.find('div.debtor').hide();
+        w.find('div.creditor').hide();
+    }
+}
+
 /* override gladd.js function */
 customFormEvents = function(tab, object, action, id) {
+    console.log('customFormEvents().gladbooks');
     var mytab = getTabById(tab);
 
     /* remove scrollbar from tablet - we'll handle this in the bank.data div */
@@ -1091,6 +1227,9 @@ customFormEvents = function(tab, object, action, id) {
     });
 
     mytab.find('select.bankaccount').change(bankChange);
+
+    /* onChange event for account dropdown */
+    mytab.find('select.nominalcode').change(nominalAccountChange);
 
     if (object == 'bank' && action == 'reconcile') {
         var acct = mytab.find('select.bankaccount').val();
@@ -1114,6 +1253,14 @@ customFormEvents = function(tab, object, action, id) {
         var selector = addressFields.join('"],input[name="'); 
         selector = 'input[name="' + selector + '"]';
         mytab.find(selector).change(mapUpdate);
+    }
+
+    /* organisation.update addrow button */
+    if (object == 'organisation' && action == 'update') {
+        mytab.find('button.addrow').click(function() {
+            console.log('organisation.update.addrow()');
+            addSubformEvent($(this), "organisation_contacts", id, tab);
+        });
     }
 }
 
@@ -2057,8 +2204,6 @@ function validateNominalCode(code, type) {
 
     return true;
 }
-
-
 
 function customBlurEvents(tab) {
     //var mytab = getTabById(tab);

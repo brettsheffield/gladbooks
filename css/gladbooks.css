@@ -739,12 +739,18 @@ div.results.pager button.last::before {
 div.bank.journal button.add:before {
   content: "\271A"; }
 
+div.bank.journal.tr:first-child button.del {
+  display: none; }
+
 /*
 div.bank.entries button.del:before {
 	content: "\2718";
 	font-size: 1.2em;
 }
 */
+div.td.buttons button {
+  float: left; }
+
 div.bank.selector div.chzn-container {
   float: left;
   width: 33% !important; }
@@ -828,6 +834,18 @@ div.bank.data div.xml-description {
 div.bank.data div.xml-account {
   overflow: hidden;
   width: 36%; }
+
+div.bank.workspace div.account {
+  width: 18%; }
+
+div.bank.workspace div.debtorcreditor {
+  min-height: 1px;
+  width: 18%; }
+
+div.bank.workspace div.debtor,
+div.bank.workspace div.creditor {
+  display: none;
+  width: 100%; }
 
 div.bank.data div.xml-debit,
 div.bank.data div.xml-credit {
