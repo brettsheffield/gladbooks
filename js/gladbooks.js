@@ -355,6 +355,7 @@ function bankJournalValidate(o) {
 }
 
 function bankJournalAmountChange() {
+    console.log('bankJournalAmountChange()');
     /* check user entered somthing numeric */
     if (!$.isNumeric($(this).val())) {
         $(this).val('');
@@ -384,6 +385,7 @@ function bankJournalAmountChange() {
     else {
         $(this).val(''); /* clear zero values */
     }
+    bankTotalsUpdate();
 }
 
 /* clear values and reset state of journal subform */
