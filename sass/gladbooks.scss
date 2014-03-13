@@ -792,6 +792,9 @@ div.bank.journal div.td {
 div.bank.journal select {
 	width: 100%;
 }
+div.bank.journal input.description {
+	display: none;
+}
 div.bank.journal > div.account {
 	width: 22%;
 }

@@ -12,7 +12,7 @@
 		<xs:element name="debit" type="xs:decimal" minOccurs="0"/>
 		<xs:element name="credit" type="xs:decimal" minOccurs="0"/>
 		<xs:element name="payment" type="payment" minOccurs="0" maxOccurs="unbounded" />
-		<xs:element name="ledger" type="ledger" minOccurs="0"/>
+		<xs:element name="ledger" type="ledger" minOccurs="0" maxOccurs="unbounded"/>
 	</xs:sequence>
 	<xs:attribute name="id" type="xs:positiveInteger"/>
 	<xs:attribute name="ledger" type="xs:positiveInteger"/>
