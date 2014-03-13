@@ -754,6 +754,17 @@ div.bank.suggestions div.xml-tax,
 div.bank.entries div.xml-type {
 	display: none;
 }
+div.bank.suggestions div.allocate {
+	width: 10%;
+}
+div.bank.suggestions div.allocate input.allocate {
+	display: none;
+	height: 1.4em;
+	text-align: right;
+}
+div.bank.suggestions div.tr.selected div.allocate input.allocate {
+	display: block;
+}
 div.bank.total {
 	display: none;
 	height: 1.4em;
@@ -802,8 +813,8 @@ div.bank.data div.bank.journal div.td.xml-credit {
 div.bank.suspects {
 	background-color: $color-dark;
 	height: 45%;
-	height: calc((100% - 3.2em) / 2);
-	overflow: hidden;
+	//height: calc((100% - 3.2em) / 2);
+	overflow: auto;
 	width: 100%;
 }
 div.bank.selector {
@@ -849,6 +860,16 @@ div.bank.entries button.del:before {
 	font-size: 1.2em;
 }
 */
+/* temp: hide add/del buttons */
+/*div.bank.journal.tr button.add,
+div.bank.journal.tr button.del {
+	display: none;
+}
+*/
+div.td.xml-total {
+	width: 10em;
+}
+
 div.td.buttons button {
 	float: left;
 }

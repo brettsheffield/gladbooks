@@ -35,6 +35,9 @@
 			<xsl:value-of select="total"/>
 		</div>
 		<div class="td xml-type">SI</div>
+		<div class="td allocate">
+			<input class="allocate" type="text" value="0.00"/>
+		</div>
 	</div>
 </xsl:template>
 

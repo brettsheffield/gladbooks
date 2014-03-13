@@ -605,6 +605,15 @@ function bankReconcileSave() {
             xml += '<organisation>' + org + '</organisation>';
             xml += '<amount>' + amount + '</amount>';
             xml += '<description>' + escapeHTML(t.desc) + '</description>';
+            /* payment allocations */
+            t.tab.find('div.bank.suspects div.tr.selected').each(function() {
+                xml += '<paymentallocation>';
+                var invoice = $(this).find('div.xml-id').text();
+                var allocate = $(this).find('input.allocate').val();
+                xml += '<invoice>' + invoice + '</invoice>';
+                xml += '<amount>' + allocate + '</amount>';
+                xml += '</paymentallocation>';
+            });
             xml += '</payment>';
         }
         else {
@@ -623,13 +632,38 @@ function bankReconcileSave() {
     /* process supplimentary journals */
     xml += supp;
 
-    /* TODO: allocations */
 
     xml += '</bank></data></request>';
     console.log(xml); /* FIXME: temp */
     t.request = xml;
     t.url = collection_url('banks');
     bankReconcilePost(t);
+}
+
+function bankReconcileSuggest() {
+    console.log('bankReconcileSuggest()');
+    var d = new Array();
+    var id = undefined;
+    TABS.active.tablet.find('div.td.debtorcreditor').each(function() {
+        /* display unpaid PI/SI for debtor/creditor account(s) selected */
+        if ($(this).find('div.td.debtor').is(':visible')) {
+            console.log('finding SIs');
+            id = $(this).parents('div.tr').find('select.debtor').val();
+            d.push(getHTML(collection_url('salesinvoice.suggestions/' + id)));
+        }
+        if ($(this).find('div.td.creditor').is(':visible')) {
+            console.log('finding PIs');
+            id = $(this).parents('div.tr').find('select.creditor').val();
+            d.push(getHTML(collection_url('purchaseinvoice.suggestions/' + id)));
+        }
+    });
+    $.when.apply(null, d)
+    .done(function(html) {
+        var docs = Array.prototype.splice.call(arguments, 0);
+        bankSuggestResults(docs);
+    });
+    return d;
+
 }
 
 function createJournalEntry(t) {
@@ -940,6 +974,7 @@ function bankStatementSelectNone() {
 }
 
 /* find suggestions for bank rec */
+/*
 function bankSuggest(row, account) {
     console.log('bankSuggest()');
     var d = new Array();
@@ -956,24 +991,73 @@ function bankSuggest(row, account) {
     });
     return d;
 }
+*/
 
-function bankSuggestResults(row, docs) {
+function bankSuggestResults(docs) {
     console.log('bankSuggestResults()')
     var results = 0;
     var rows = 0;
     var mytab = activeTab();
     var workspace = mytab.find('div.bank.suspects');
+    var html = undefined;
     workspace.empty();
+    if (Object.prototype.toString.call(docs[0]) !== '[object Array]') {
+        docs = [ docs ]; /* force into array */
+    }
+    console.log(docs.length + ' doc(s) returned.');
     for (var i=0; i<docs.length; i++) {
-        var html = docs[i][0];
+        html = docs[i][0];
         rows = $(html).find('div.bank.suggestion').length;
         results += rows;
+        console.log(rows + ' rows(s) found.');
         if (rows > 0) {
             /* suggestions found, show them */
             workspace.append(html);
-            workspace.find('div.bank.suggestion').off().click(bankSuggestionClick);
+            console.log('appending ' + rows + ' row(s)');
         }
     }
+    workspace.find('div.bank.suggestion').off().click(bankSuggestionClick);
+    workspace.find('div.bank.suggestion input.allocate').off()
+        .click(bankAllocateClick)
+        .change(bankAllocateChange);
+}
+
+function bankAllocateClick(event) {
+    event.stopPropagation(); /* prevent bankSuggestionClick() */
+}
+
+function bankAllocateChange(event) {
+    /* validate amount */
+    var mytab = activeTab();
+    var debit = mytab.find('div.bank.target div.td.xml-debit').text();
+    var credit = mytab.find('div.bank.target div.td.xml-debit').text();
+    var max = (debit === '') ? credit : debit;
+    var newval = $(this).val();
+    var sitotal = $(this).parents('div.tr').find('div.td.xml-total').text();
+
+    var allocated = '0.00';
+    mytab.find('div.bank.suggestion input.allocate').each(function() {
+        if (!isNaN($(this).val())) {
+            if (Number($(this).val()) > Number('0.00')) {
+                allocated = decimalAdd(allocated, $(this).val());
+            }
+        }
+    });
+    max = decimalSubtract(max, allocated);
+
+    /* Ensure amount allocated is not more than the amount paid */
+    if (Number(newval) > Number(max)) { newval = max; }
+
+    /* Ensure amount allocated is not more than invoice total */
+    if (Number(newval) > Number(sitotal)) { newval = sitotal; }
+
+    /* Bankers rounding */
+    newval = roundHalfEven(newval, 2);
+
+    /* 2 Decimal Places */
+    newval = decimalPad(newval, 2);
+
+    $(this).val(newval);
 }
 
 /* User has clicked on a suggestion row */
@@ -985,6 +1069,16 @@ function bankSuggestionClick() {
     var bank = mytab.find('div.bank.target div.td.xml-id').text();
     var date = mytab.find('div.bank.target div.td.xml-date').text();
     var amount = mytab.find('div.bank.target div.td.xml-debit').text();
+
+    var allocated = '0.00';
+    mytab.find('div.bank.suggestion input.allocate').each(function() {
+        if (!isNaN($(this).val())) {
+            if (Number($(this).val()) > Number('0.00')) {
+                allocated = decimalAdd(allocated, $(this).val());
+            }
+        }
+    });
+    console.log('allocated: ' + allocated);
 
     /* first, figure out what kind of row this is */
     if (row.hasClass('ledger')) {
@@ -1000,12 +1094,26 @@ function bankSuggestionClick() {
             var desc = $(this).find('div.td.xml-description').text();
             var subtotal = $(this).find('div.td.xml-subtotal').text();
             var tax = $(this).find('div.td.xml-tax').text();
-            var total = $(this).find('div.td.xml-total').text();
+            var sitotal = $(this).find('div.td.xml-total').text();
             var org = $(this).find('div.td.xml-organisation').first().text();
+            var unallocated = decimalSubtract(amount, allocated);
 
-            if (Number(amount) < Number(total)) {
-                total = amount;
+            /* start assuming we will allocate the full amount available */
+            var total = unallocated;
+
+            /* don't allocate more than the amount of the invoice */
+            if (Number(sitotal) < Number(unallocated)) {
+                total = sitotal;
+                console.log(' rule #1');
             }
+            /* don't allocate more than we have left */
+            if (Number(unallocated) < Number(total)) {
+                total = unallocated;
+                console.log(' rule #2');
+            }
+
+            /* format nicely */
+            total = decimalPad(total, 2);
 
             /* 1100 - Debtors Control */
             var dctl = $('<div class="tr salesinvoice"/>');
@@ -1020,6 +1128,9 @@ function bankSuggestionClick() {
 
             /* TODO: if VAT cash accounting, need an entry in 2200 - VAT */
 
+
+            /* fill in allocation amount */
+            row.find('input.allocate').val(total);
         }
         else {
             /* SI unselected - remove from div.entries */
@@ -1029,6 +1140,9 @@ function bankSuggestionClick() {
                     $(this).parents('div.tr.salesinvoice').remove();
                 }
             });
+
+            /* clear allocation amount */
+            row.find('input.allocate').val('');
         }
     }
     else {
@@ -1197,7 +1311,7 @@ function clickBankRow() {
 
 function nominalAccountChange() {
     console.log('nominalAccountChange()');
-    var w = $(this).parents('div.bank.workspace');
+    var w = $(this).parents('div.bank.workspace div.tr');
     if ($(this).val() === '1100') {
         console.log('Debtors Control');
         w.find('div.debtor').show();
@@ -1212,6 +1326,11 @@ function nominalAccountChange() {
         w.find('div.debtor').hide();
         w.find('div.creditor').hide();
     }
+    /* reset debtor/creditor combos */
+    w.find('div.debtorcreditor select').each(function() {
+        $(this).val(-1);
+        //$(this).trigger('liszt:updated');
+    });
 }
 
 /* override gladd.js function */
@@ -2240,6 +2359,9 @@ function customComboChange(combo, xml, tab) {
     if (combo.attr('name') == 'type') {
         var code = activeTab().find('input.nominalcode').val();
         return validateNominalCode(code, newval);
+    }
+    else if (['debtor', 'creditor'].indexOf(combo.attr('name')) !== -1) {
+        return bankReconcileSuggest();
     }
 
     /* in the salesorder form, dynamically set placeholders to show defaults */
