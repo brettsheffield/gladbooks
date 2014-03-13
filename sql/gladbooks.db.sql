@@ -1506,7 +1506,7 @@ BEGIN
 		RAISE INFO 'No billcontact set for organisation %', 
 			r.orgcode;
 		SELECT name FROM organisation_current 
-		WHERE organisation = r.organisation
+		WHERE id = r.organisation
 		INTO item;
 		customer := E'\t' || '{' || item.name || '}' || E'\n' ||
 			E'\t' || '{}' || E'\n' ||
