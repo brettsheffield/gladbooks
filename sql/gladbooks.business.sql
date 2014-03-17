@@ -493,7 +493,7 @@ CREATE TABLE salesorderdetail (
 	quotenumber	INT4 UNIQUE,
 	ponumber	TEXT,
 	description	TEXT,
-	cycle		INT4 references cycle(id) NOT NULL DEFAULT 0,
+	cycle		INT4 references cycle(id) NOT NULL,
 	start_date	date,
 	end_date	date,
 	is_open		boolean DEFAULT true,
@@ -524,6 +524,12 @@ CREATE TABLE salesorderitemdetail (
 	authuser	TEXT,
 	clientip	TEXT
 );
+
+DROP TRIGGER IF EXISTS salesorderdetailupdate 
+ON salesorderdetail;
+CREATE TRIGGER salesorderdetailupdate BEFORE INSERT 
+ON salesorderdetail
+FOR EACH ROW EXECUTE PROCEDURE salesorderdetailupdate();
 
 DROP TRIGGER IF EXISTS salesorderitemdetailupdate 
 ON salesorderitemdetail;
