@@ -1388,7 +1388,7 @@ customFormEvents = function(tab, object, action, id) {
 customBusinessNotFound = function(xml) {
     console.log('Create first business');
     $('nav').hide();
-    $('div.tabheaders').hide();
+    $('div.tabheaders').addClass('invisible');
     $('div.navbar-search').hide();
     getForm('business', 'create', 'Add New Business');
 }
@@ -2430,7 +2430,7 @@ customSubmitFormSuccess = function(object, action, id, collection, xml) {
         prepBusinessSelector();
         switchBusiness(g_business);
         $('nav').show();
-        $('div.tabheaders').show();
+        $('div.tabheaders').removeClass('invisible');
         $('div.navbar-search').show();
         hideSpinner();
         return false;
