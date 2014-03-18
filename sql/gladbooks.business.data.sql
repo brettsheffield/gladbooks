@@ -51,6 +51,8 @@ INSERT INTO division (id, name) VALUES (0, 'default');
 
 -- Reserved nominal codes
 INSERT INTO account (id, accounttype, description)
+	VALUES ('1000', '1000', 'Current Account');
+INSERT INTO account (id, accounttype, description)
 	VALUES ('1100', '1000', 'Debtors Control Account');
 INSERT INTO account (id, accounttype, description)
 	VALUES ('2100', '2000', 'Creditors Control Account');
@@ -70,6 +72,8 @@ INSERT INTO account (id, accounttype, description)
 	VALUES ('3200', '3000', 'Retained Earnings Account');
 INSERT INTO account (id, accounttype, description)
 	VALUES ('4000', '4000', 'General Revenues');
+INSERT INTO account (id, accounttype, description)
+	VALUES ('5000', '5000', 'General Expenditure');
 INSERT INTO account (id, accounttype, description)
 	VALUES ('5100', '5000', 'Shipping');
 INSERT INTO account (id, accounttype, description)
