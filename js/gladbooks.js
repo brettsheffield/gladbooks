@@ -1263,8 +1263,7 @@ function bankUnreconcileId(id, account, row) {
     /* Build request xml */
     var xml = createRequestXml();
     xml += '<account>' + account + '</account>';
-    xml += '<bank id="' + id + '">'; 
-    xml += '<ledger>0</ledger>';
+    xml += '<bank id="' + id + '" unreconcile="true">';
     xml += '</bank></data></request>';
 
     showSpinner('Unreconciling bank item ' + id + '...');

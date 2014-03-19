@@ -63,7 +63,7 @@
 		<xsl:if test="paymenttype">
 			<xsl:text>paymenttype,</xsl:text>
 		</xsl:if>
-		<xsl:if test="ledger or payment">
+		<xsl:if test="ledger or payment or @unreconcile">
 			<xsl:text>ledger,</xsl:text>
 		</xsl:if>
 		<xsl:if test="debit">
@@ -105,6 +105,9 @@
 			<xsl:copy-of select="$account"/>
 			<xsl:text>',</xsl:text>
 		</xsl:if>
+		<xsl:if test="@unreconcile">
+			<xsl:text>'0',</xsl:text>
+		</xsl:if>
 		<xsl:if test="paymenttype">
 			<xsl:text>'</xsl:text>
 			<xsl:value-of select="paymenttype"/>
@@ -143,11 +146,6 @@
 				<xsl:when test="credit">
 					<xsl:text>purchase</xsl:text>
 				</xsl:when>
-				<xsl:otherwise>
-					<xsl:message terminate="yes">
-						Payment type must be debit or credit.
-					</xsl:message>
-				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
 
