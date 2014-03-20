@@ -149,6 +149,7 @@ CREATE TABLE bankdetail (
 	debit		NUMERIC,
 	credit		NUMERIC,
 	updated		timestamp with time zone default now(),
+	is_deleted      boolean DEFAULT false,
 	authuser	TEXT,
 	clientip	TEXT
 );
@@ -162,7 +163,8 @@ WHERE id IN (
 	SELECT MAX(id)
 	FROM bankdetail
 	GROUP BY bank
-);
+)
+AND is_deleted = false;
 
 CREATE TABLE email (
 	id		SERIAL PRIMARY KEY,

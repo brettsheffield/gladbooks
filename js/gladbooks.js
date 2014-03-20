@@ -487,13 +487,15 @@ function bankReconcile(account) {
     bankTotalsUpdate();
     bankEntriesClear();
 
-    /* set up save/cancel buttons */
+    /* set up save/cancel/delete buttons */
     var btncancel = mytab.find('div.results.pager button.cancel');
     btncancel.off().click(bankReconcileCancel);
     btncancel.removeAttr('disabled');
     var btnsave = mytab.find('div.results.pager button.save');
     btnsave.attr('disabled','disabled');
     btnsave.off().click(bankReconcileSave);
+    var btndel = mytab.find('div.results.pager button.delete');
+    btndel.off().click(bankReconcileDelete);
 
     showSpinner();
     activeTab().find('div.suspects').children().fadeOut();
@@ -552,6 +554,26 @@ function bankReconcilePresetDebitCredit() {
     }
 }
 
+/* delete button clicked */
+function bankReconcileDelete() {
+    console.log('bankReconcileDelete()');
+    if (confirm('Really delete this bank entry?')) {
+        console.log('deleting bank entry - user confirmed');
+        var mytab = activeTab();
+        var id = mytab.find('div.bank.target div.td.xml-id').text();
+        var url = collection_url('banks') + id;
+        $.ajax({
+            url: url,
+            type: 'DELETE',
+            beforeSend: function (xhr) { setAuthHeader(xhr); },
+            complete: function(xml) { bankReconcileNext(mytab); }
+        });
+    }
+    else {
+        console.log('delete of bank entry cancelled by user');
+    }
+}
+
 /* save button clicked */
 function bankReconcileSave() {
     console.log('bankReconcileSave()');
@@ -564,7 +586,7 @@ function bankReconcileSave() {
         bankReconcileSalesInvoice(bank, account);
         return;
     }
-    
+
     /* add target from bank statement */
     var t = {};
     t.tab = mytab;
