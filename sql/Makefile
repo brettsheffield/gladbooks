@@ -32,7 +32,7 @@ dropdb:
 reset: dropdb all
 
 upgrade:
-	#psql -v VERBOSITY=terse gladbooks < gladbooks.upgrades.sql
+	psql -v VERBOSITY=terse gladbooks < gladbooks.upgrades.sql
 	#psql -v VERBOSITY=terse gladbooks -c "DROP FUNCTION IF EXISTS create_business(instance VARCHAR(63), business VARCHAR(63), period_start DATE);"
 	#psql gladbooks < gladbooks.business.sql
 	#psql -v VERBOSITY=terse gladbooks < updates/00027.sql
