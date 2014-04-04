@@ -1142,6 +1142,7 @@ DECLARE
 	so_raised		INT4;
 	periods_unissued	INT4;
 	period			INT4;
+	end_date                DATE;
 BEGIN
 	RAISE NOTICE 'Processing salesorder';
 
@@ -1159,7 +1160,12 @@ BEGIN
 	IF so.cycle = '1' THEN
 		so_due := '1';
 	ELSE
-		so_due := periods_between(so.years,so.months,so.days,so.start_date, COALESCE(so.end_date, DATE(NOW())));
+		-- ensure we don't issue future dated invoices
+		end_date := COALESCE(so.end_date, DATE(NOW()));
+		IF end_date > DATE(NOW()) THEN
+			end_date := DATE(NOW());
+		END IF;
+		so_due := periods_between(so.years,so.months,so.days,so.start_date,end_date);
 	END IF;
 
 	-- fetch invoices already raised against this salesorder --
