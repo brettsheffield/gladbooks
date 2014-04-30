@@ -206,7 +206,7 @@ void fixupField(char (*f)[LINE_MAX], int bank, int fld)
                 (*f)[8] = (*f)[6];
                 (*f)[7] = '-';
                 (*f)[6] = (*f)[5];
-                (*f)[6] = (*f)[4];
+                (*f)[5] = (*f)[4];
                 (*f)[4] = '-';
         }
         else if ((bank == BANK_HBOS) && ((fld == 1)||(fld == 4))) {
