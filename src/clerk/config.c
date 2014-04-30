@@ -132,10 +132,7 @@ int add_db (char *value)
 void free_config()
 {
         config_new = NULL;
-        db_free(config->dbs);
         prevdb = NULL;
-        free(config->listenaddr);
-        free(config->smtpserver);
 }
 
 /* free keyvalue struct */
