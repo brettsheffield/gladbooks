@@ -94,11 +94,11 @@ g_formdata = [
 
 FORMDATA = {
     'account': {
-        'create': [ 'accounttypes' ], 
-        'update': [ 'accounttypes' ], 
-    },  
+        'create': [ 'accounttypes' ],
+        'update': [ 'accounttypes' ],
+    },
     'organisation': {
-        'update': [ 'contacts', 'relationships' ],
+        'update': [ 'contactssorted', 'relationships' ],
     },
     'product': {
         'create': [ 'accounts.revenue' ],
