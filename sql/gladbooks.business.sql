@@ -302,6 +302,9 @@ CREATE TABLE product_tax (
         clientip        TEXT
 );
 
+CREATE TRIGGER product_tax_insert AFTER INSERT ON product_tax
+FOR EACH ROW EXECUTE PROCEDURE product_tax_vatcheck();
+
 CREATE TABLE purchaseorder (
 	id		SERIAL PRIMARY KEY,
 	organisation	INT4 NOT NULL,

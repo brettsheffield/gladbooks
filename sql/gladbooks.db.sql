@@ -2068,6 +2068,29 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
+CREATE OR REPLACE FUNCTION product_tax_vatcheck()
+RETURNS TRIGGER AS $$
+DECLARE
+	vatcount        INT4;
+BEGIN
+	SELECT INTO vatcount COUNT(*) FROM product_tax WHERE id IN (
+		SELECT MAX(id)
+		FROM product_tax WHERE tax IN (1,2,3)
+		GROUP BY product,tax
+	)
+	AND product=NEW.product
+	AND is_applicable = TRUE
+	GROUP BY product;
+
+	IF vatcount > 1 THEN
+		RAISE EXCEPTION 'Cannot apply more than one VAT rate to a product.';
+		RETURN NULL;
+	END IF;
+
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
 CREATE OR REPLACE FUNCTION salesorderdetailupdate()
 RETURNS TRIGGER AS
 $$

@@ -39,4 +39,5 @@ upgrade:
 	#psql -v VERBOSITY=terse gladbooks < updates/00028.sql
 	#psql -v VERBOSITY=terse gladbooks < updates/00029.sql
 	psql -v VERBOSITY=terse gladbooks < updates/00030.sql
+	psql -v VERBOSITY=terse gladbooks < updates/00031.sql
 
