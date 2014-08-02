@@ -46,13 +46,14 @@ html, body {
 	background-color: $color-light;
 	color: white;
 	height: 100%;
+	min-height: 480px;
 }
 
 #sitediv {
-	min-height: 100%;
 	height: auto !important;
 	height: 100%;
 	margin: 0 auto -20px; /* bottom margin == height of footer.site */
+	min-height: 100%;
 }
 
 footer.site {
@@ -68,4 +69,25 @@ footer.site, #pagearea-spacer {
 header.site {
 	background-color: white;
 	height: 100px;
+}
+
+nav.site {
+	background-color: darken($color-dark, 10%);
+	margin: 12px 5% auto 5%;
+}
+
+nav.site ul {
+}
+
+nav.site ul li a {
+	color: $color-light;
+	display: block;
+	padding: 10px;
+	text-decoration: none;
+	text-shadow: 0 1px 0 grey;
+	white-space: nowrap;
+}
+
+nav.site ul li a:hover {
+	background: $color-dark;
 }
