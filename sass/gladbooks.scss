@@ -5,6 +5,14 @@
         padding: 0;
 }
 
+menu, ol, ul {
+	padding: 0;
+}
+
+dl, menu, ol, ul {
+	margin: 0;
+}
+
 html, body {
 	background-color: $color-bg;
 	color: black;
@@ -73,21 +81,65 @@ header.site {
 
 nav.site {
 	background-color: darken($color-dark, 10%);
-	margin: 12px 5% auto 5%;
 }
 
-nav.site ul {
+@media all and (min-width: 500px) {
+
+	nav.site > ul > li {
+		float: left;
+	}
+
+	nav.site li:hover ul {
+		position: absolute;
+	}
+
 }
 
 nav.site ul li a {
+	background-color: darken($color-dark, 10%);
 	color: $color-light;
 	display: block;
+	height: 42px;
 	padding: 10px;
 	text-decoration: none;
 	text-shadow: 0 1px 0 grey;
 	white-space: nowrap;
+	-webkit-transition: background-color 0.5s ease;
+	-moz-transition: background-color 0.5s ease;
+	-o-transition: background-color 0.5s ease;
+	-ms-transition: background-color 0.5s ease;
+	transition: background-color 0.5s ease;
 }
 
 nav.site ul li a:hover {
 	background: $color-dark;
+}
+
+nav.site ul ul {
+	background-color: lighten($color-dark, 10%);
+	font-size: 90%;
+	height: 0;
+	overflow: hidden;
+	position: absolute;
+	-webkit-transition: height 2.3s ease-in;
+	-moz-transition: height 2.3s ease-in;
+	-o-transition: height 2.3s ease-in;
+	-ms-transition: height 2.3s ease-in;
+	transition: height 2.3s ease-in;
+}
+
+@media all and (max-width: 500px) {
+	nav.site ul ul {
+		padding-left: 2em;
+		width: 100%;
+	}
+}
+
+nav.site ul li:hover ul {
+	display: block;
+	height: auto;
+}
+
+div.nav-spacer {
+	height: 42px;
 }
