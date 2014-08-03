@@ -90,11 +90,11 @@ nav.site ul li a {
   text-decoration: none;
   text-shadow: 0 1px 0 grey;
   white-space: nowrap;
-  -webkit-transition: background-color 0.5s ease;
-  -moz-transition: background-color 0.5s ease;
-  -o-transition: background-color 0.5s ease;
-  -ms-transition: background-color 0.5s ease;
-  transition: background-color 0.5s ease; }
+  -webkit-transition: background-color 1s ease;
+  -moz-transition: background-color 1s ease;
+  -o-transition: background-color 1s ease;
+  -ms-transition: background-color 1s ease;
+  transition: background-color 1s ease; }
 
 nav.site ul li a:hover {
   background: #6e89a5; }
