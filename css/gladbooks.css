@@ -139,22 +139,24 @@ nav.site ul li:hover > ul {
     padding-left: 2em;
     width: 100%; } }
 div.businessselect {
-  margin-top: 8px;
+  margin-top: 10px;
   margin-bottom: 8px;
   width: 280px; }
 
 select.businessselect {
-  border-radius: 15px;
-  padding-left: 15px;
-  padding-right: 10px;
+  background-color: #56708a;
+  border: 0;
+  color: #b2cde0;
+  padding-left: 6px;
+  -moz-appearance: none;
+  text-indent: 0.01px;
+  text-overflow: '';
+  text-shadow: 0 1px 0 grey;
   width: 280px; }
 
 @media all and (min-width: 500px) {
   div.businessselect {
-    width: 299px; }
-
-  select.businessselect {
-    margin-left: 10px; } }
+    width: 299px; } }
 div.nav-spacer {
   height: 42px; }
 
