@@ -61,13 +61,16 @@ html, body {
 	height: auto !important;
 	height: 100%;
 	margin: 0 auto -20px; /* bottom margin == height of footer.site */
-	min-height: 100%;
+	min-height: 480px;
 }
 
 footer.site {
         background-color: $color-dark;
+	bottom: 0;
         color: white;
+	position: fixed;
         text-align: center;
+	width: 100%;
 }
 
 footer.site, #pagearea-spacer {
@@ -87,7 +90,6 @@ nav.site ul li a {
 	background-color: darken($color-dark, 10%);
 	color: $color-light;
 	display: block;
-	height: 42px;
 	padding: 10px;
 	text-decoration: none;
 	text-shadow: 0 1px 0 grey;
@@ -146,9 +148,18 @@ nav.site ul li:hover > ul {
 		z-index: 1;
 	}
 
+	nav.site ul li a {
+		height: 42px;
+	}
+
 }
 
 @media all and (max-width: 500px) {
+
+	nav.site {
+		font-size: 90%;
+	}
+
 	nav.site ul ul {
 		padding-left: 2em;
 		width: 100%;
@@ -187,3 +198,14 @@ div.centered {
 div.nav-spacer {
 	height: 42px;
 }
+
+div.navbar-search {
+	border-radius: 25px;
+	display: block;
+	font-size: 14pt;
+	margin-bottom: 12px;
+	margin-left: 5%;
+	margin-right: 5%;
+	width: 90%;
+}
+

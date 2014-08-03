@@ -57,12 +57,15 @@ html, body {
   height: 100%;
   margin: 0 auto -20px;
   /* bottom margin == height of footer.site */
-  min-height: 100%; }
+  min-height: 480px; }
 
 footer.site {
   background-color: #6e89a5;
+  bottom: 0;
   color: white;
-  text-align: center; }
+  position: fixed;
+  text-align: center;
+  width: 100%; }
 
 footer.site, #pagearea-spacer {
   height: 20px;
@@ -79,7 +82,6 @@ nav.site ul li a {
   background-color: #56708a;
   color: #b2cde0;
   display: block;
-  height: 42px;
   padding: 10px;
   text-decoration: none;
   text-shadow: 0 1px 0 grey;
@@ -126,8 +128,14 @@ nav.site ul li:hover > ul {
 
   nav.site li:hover li {
     float: none;
-    z-index: 1; } }
+    z-index: 1; }
+
+  nav.site ul li a {
+    height: 42px; } }
 @media all and (max-width: 500px) {
+  nav.site {
+    font-size: 90%; }
+
   nav.site ul ul {
     padding-left: 2em;
     width: 100%; } }
@@ -154,3 +162,12 @@ div.centered {
 
 div.nav-spacer {
   height: 42px; }
+
+div.navbar-search {
+  border-radius: 25px;
+  display: block;
+  font-size: 14pt;
+  margin-bottom: 12px;
+  margin-left: 5%;
+  margin-right: 5%;
+  width: 90%; }
