@@ -107,12 +107,7 @@ nav.site ul ul {
   background-color: #8da3b9;
   font-size: 90%;
   height: 0;
-  overflow: hidden;
-  -webkit-transition: height 2.3s ease-in;
-  -moz-transition: height 2.3s ease-in;
-  -o-transition: height 2.3s ease-in;
-  -ms-transition: height 2.3s ease-in;
-  transition: height 2.3s ease-in; }
+  overflow: hidden; }
 
 nav.site ul li:hover > ul {
   height: auto;
