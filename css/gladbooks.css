@@ -171,3 +171,6 @@ div.navbar-search {
   margin-left: 5%;
   margin-right: 5%;
   width: 90%; }
+
+input.search-query {
+  width: 100%; }
