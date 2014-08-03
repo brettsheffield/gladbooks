@@ -59,14 +59,12 @@ div.centered {
 	background-color: $color-light;
 	color: white;
 	height: 100%;
-	min-height: 480px;
 }
 
 #sitediv {
 	height: auto !important;
 	height: 100%;
 	margin: 0 auto -20px; /* bottom margin == height of footer.site */
-	min-height: 480px;
 }
 
 footer.site {
