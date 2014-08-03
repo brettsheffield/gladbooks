@@ -122,18 +122,27 @@ nav.site ul li:hover > ul {
 
   nav.site ul ul ul {
     left: 100%;
-    position: absolute;
     top: 0; }
 
   nav.site li:hover li {
     float: none;
-    z-index: 1; }
-
-  nav.site ul ul li:hover li {
-    background-color: green; } }
+    z-index: 1; } }
 @media all and (max-width: 500px) {
   nav.site ul ul {
     padding-left: 2em;
     width: 100%; } }
+select.businessselect {
+  border-radius: 15px;
+  padding-left: 15px;
+  padding-right: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%; }
+
+@media all and (min-width: 700px) {
+  select.businessselect {
+    margin-left: 10px;
+    margin-top: 7px;
+    width: 300px; } }
 div.nav-spacer {
   height: 42px; }
