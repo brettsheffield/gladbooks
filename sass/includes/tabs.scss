@@ -1,0 +1,110 @@
+/* tabs */
+.tablist li:hover li { 
+	font-size: 80%;
+}
+
+.tablist li:hover a {
+	background: $color-dark
+}
+
+.tablist li:hover li a:hover {
+	background: $color-dark;
+	color: $color-light;
+	text-shadow: 0 1px 0 gray;
+}
+
+.tabs {
+	margin-left: 5%;
+	margin-right: 5%;
+	min-height: 100px;
+}
+
+.tabheaders {
+	background-color: darken($color-dark, 10%);
+        padding: 0;
+}
+
+.tablist {
+        padding: 0;
+}
+
+.tabheaders ul > li {
+        display: block;
+	float: left;
+	padding-top: 1em;
+	padding-bottom: 1em;
+	width: 100%;
+}
+
+.tabheaders ul li a {
+	padding: 0 10px;
+}
+
+.tabheaders li {
+	background: $color-dark;
+	border-radius: 5px 5px 0px 0px;
+	border: solid darken($color-dark, 10%) solid 1px;
+	border-bottom: 0;
+	font-family: monospace;
+	margin-right: 1px;
+	list-style: none;
+	text-shadow: 0 1px 0 gray;
+}
+
+div.tabhead div > a {
+	color: $color-light;
+	text-decoration: none;
+}
+
+.tabheaders li.active,
+.tabheaders li:hover,
+.tabheaders li:hover a {
+	background: white;
+	border-radius: 5px 5px 0px 0px;
+	text-shadow: 0 1px 0 black;
+}
+
+.tabheaders li.active > div > div > a,
+.tabheaders li:hover > div > div > a {
+	color: $color-dark;
+	text-shadow: 0;
+}
+
+.tablet {
+	background: white;
+	border: solid 1px $color-dark;
+	color: $color-dark;
+	float: left;
+	display: none;
+	overflow: auto;
+	width: 100%;
+}
+
+.tablet.noscroll {
+	overflow: hidden;
+}
+
+.active {
+	display: block;
+}
+
+.tabcloser {
+	float: right;
+}
+
+div.tabhead {
+}
+
+div.tabtitle {
+	float: left;
+	overflow: hidden;
+	padding: 0;
+	text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 85%;
+}
+
+div.tabx {
+	float: right;
+}
