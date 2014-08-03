@@ -25,6 +25,10 @@ html, body {
   box-sizing: border-box;
   /* Opera/IE 8+ */ }
 
+div.centered {
+  margin-left: auto;
+  margin-right: auto; }
+
 #logo {
   display: block;
   padding-top: 0.2em;
@@ -156,10 +160,6 @@ select.businessselect {
 
   select.businessselect {
     margin-left: 10px; } }
-div.centered {
-  margin-left: auto;
-  margin-right: auto; }
-
 div.nav-spacer {
   height: 42px; }
 
