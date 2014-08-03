@@ -75,12 +75,6 @@ header.site {
 nav.site {
   background-color: #56708a; }
 
-@media all and (min-width: 500px) {
-  nav.site > ul > li {
-    float: left; }
-
-  nav.site li:hover ul {
-    position: absolute; } }
 nav.site ul li a {
   background-color: #56708a;
   color: #b2cde0;
@@ -99,25 +93,47 @@ nav.site ul li a {
 nav.site ul li a:hover {
   background: #6e89a5; }
 
+nav.site ul {
+  list-style: none;
+  position: relative; }
+
 nav.site ul ul {
   background-color: #8da3b9;
   font-size: 90%;
   height: 0;
   overflow: hidden;
-  position: absolute;
   -webkit-transition: height 2.3s ease-in;
   -moz-transition: height 2.3s ease-in;
   -o-transition: height 2.3s ease-in;
   -ms-transition: height 2.3s ease-in;
   transition: height 2.3s ease-in; }
 
+nav.site ul li:hover > ul {
+  height: auto;
+  overflow: visible; }
+
+@media all and (min-width: 500px) {
+  nav.site ul > li {
+    float: left;
+    position: relative; }
+
+  nav.site li ul {
+    position: absolute; }
+
+  nav.site ul ul ul {
+    left: 100%;
+    position: absolute;
+    top: 0; }
+
+  nav.site li:hover li {
+    float: none;
+    z-index: 1; }
+
+  nav.site ul ul li:hover li {
+    background-color: green; } }
 @media all and (max-width: 500px) {
   nav.site ul ul {
     padding-left: 2em;
     width: 100%; } }
-nav.site ul li:hover ul {
-  display: block;
-  height: auto; }
-
 div.nav-spacer {
   height: 42px; }
