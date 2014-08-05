@@ -170,6 +170,8 @@ nav.site {
 	background-color: darken($color-dark, 10%);
 	display: none;
 	font-size: 90%;
+	margin-top: 5px;
+	z-index: 1;
 }
 
 @media all and (min-width: $small-screen-width) {
@@ -179,6 +181,7 @@ nav.site {
 	}
 	nav.site {
 		display: block;
+		margin-top: 0;
 	}
 }
 
@@ -287,6 +290,10 @@ select.businessselect {
 		width: 150px;
 	}
 
+	div.nav-spacer {
+		height: 42px;
+	}
+
 }
 
 @media all and (min-width: 1024px) {
@@ -297,9 +304,6 @@ select.businessselect {
 
 }
 
-div.nav-spacer {
-	height: 42px;
-}
 
 div.navbar-search {
 	border-radius: 25px;
