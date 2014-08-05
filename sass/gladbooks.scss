@@ -1,6 +1,10 @@
+$small-screen-width: 1024px;
+$small-screen-height: 768px;
+
 @import "sass/includes/gladbooks-color.scss";
 @import "sass/includes/login.scss";
 @import "sass/includes/tabs.scss";
+
 
 *, p {
 	margin: 0;
@@ -43,7 +47,7 @@ div.centered {
         margin-right: auto;
 }
 
-@media all and (max-width: 500px) {
+@media all and (max-width: $small-screen-width) {
 
 	#logo {
 		display: none;
@@ -69,7 +73,7 @@ div.centered {
 	background-color: $color-light;
 	color: white;
 	height: 100%;
-	overflow: auto;
+	position: relative;
 }
 
 #sitediv {
@@ -103,7 +107,7 @@ header.site, #pagearea-spacer-top {
 	height: 40px;
 }
 
-@media all and (min-width: 500px) {
+@media all and (min-width: $small-screen-width) {
 
 	header.site, #pagearea-spacer-top {
 		background-color: white;
@@ -121,11 +125,54 @@ div.navicon {
 	width: 1.8em;
 }
 
+div.navitab {
+	background-color: darken($color-dark, 10%);
+	color: $color-light;
+	float: right;
+	font-size: 200%;
+	padding: 1px 10px;
+	height: 40px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 1.8em;
+}
+
+div.navitab-box-back {
+	border: solid 2px $color-light;
+	float: left;
+	margin-top: 4px;
+	margin-left: 1px;
+	height: 25px;
+	width: 25px;
+}
+
+div.navitab-box-front {
+	background-color: darken($color-dark, 10%);
+	border: solid 2px $color-light;
+	font-size: 12pt;
+	float: left;
+	margin-top: -20px;
+	margin-left: 6px;
+	height: 25px;
+	opacity: 1.0;
+	text-align: center;
+	width: 25px;
+}
+
+@media all and (min-width: $small-screen-width) {
+
+	div.navitab {
+		display: none;
+	}
+
+}
+
 nav.site {
 	background-color: darken($color-dark, 10%);
 }
 
-@media all and (max-width: 500px) {
+@media all and (max-width: $small-screen-width) {
 
 	div.navicon {
 		display: block;
@@ -171,7 +218,7 @@ nav.site ul li:hover > ul {
 	overflow: visible;
 }
 
-@media all and (min-width: 500px) {
+@media all and (min-width: $small-screen-width) {
 
 	nav.site ul > li {
 		float: left;
@@ -198,7 +245,7 @@ nav.site ul li:hover > ul {
 
 }
 
-@media all and (max-width: 500px) {
+@media all and (max-width: $small-screen-width) {
 
 	nav.site {
 		font-size: 90%;
@@ -213,6 +260,8 @@ nav.site ul li:hover > ul {
 div.businessselect {
 	margin-top: 11px;
 	margin-bottom: 8px;
+	text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
 	width: 280px;
 }
 
@@ -230,13 +279,18 @@ select.businessselect {
 	width: 280px;
 }
 
-@media all and (min-width: 500px) {
+@media all and (min-width: $small-screen-width) {
 
-	div.businessselect {
-		width: 299px;
+	div.businessselect, select.businessselect {
+		width: 150px;
 	}
 
-	select.businessselect {
+}
+
+@media all and (min-width: 1024px) {
+
+	div.businessselect, select.businessselect {
+		width: 299px;
 	}
 
 }
@@ -255,7 +309,7 @@ div.navbar-search {
 	width: 90%;
 }
 
-@media all and (min-width: 500px) {
+@media all and (min-width: $small-screen-width) {
 
 	div.navbar-search {
 		display: block;

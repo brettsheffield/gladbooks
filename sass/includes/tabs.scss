@@ -4,11 +4,12 @@ div.tabs {
 	min-height: 100px;
 }
 
-@media all and (min-width: 500px) {
+@media all and (min-width: $small-screen-width) {
 
 	div.tabs {
 		margin-left: 2%;
 		margin-right: 2%;
+		margin-top: 39px;
 	}
 
 }
@@ -42,7 +43,7 @@ div.tabs {
 	width: 100%;
 }
 
-@media all and (min-width: 500px) {
+@media all and (min-width: $small-screen-width) {
 
 	.tabheaders ul > li {
 		border: 0;
@@ -65,7 +66,7 @@ div.tabs {
 	text-shadow: 0 1px 0 gray;
 }
 
-@media all and (min-width: 500px) {
+@media all and (min-width: $small-screen-width) {
 
 	.tabheaders li {
 		border-radius: 5px 5px 0px 0px;
@@ -86,7 +87,7 @@ div.tabhead div > a {
 	text-shadow: 0 1px 0 black;
 }
 
-@media all and (min-width: 500px) {
+@media all and (min-width: $small-screen-width) {
 
 	.tabheaders li.active,
 	.tabheaders li:hover,
@@ -109,18 +110,18 @@ div.tabhead div > a {
 	display: none;
 	height: auto !important;
 	height: 100%;
-	margin: 0 auto -200px;
+	margin: 19px 0 0 0;
 	overflow: auto;
 	width: 100%;
 }
 
-@media all and (min-width: 500px) {
+@media all and (min-width: $small-screen-width) {
 
 	.tablet {
 		border: solid 1px $color-dark;
 		float: left;
 		height: 100%;
-		overflow: auto;
+		margin: 0 auto -200px;
 		width: 100%;
 	}
 }
@@ -147,7 +148,7 @@ div.tabtitle {
 	width: 85%;
 }
 
-@media all and (max-width: 500px) {
+@media all and (max-width: $small-screen-width) {
 
 	div.tabhead {
 		background-color: $color-light;
@@ -165,11 +166,6 @@ div.tabx {
 }
 
 @media only screen and (min-width: 640px) {
-
-	.tablet {
-		//height: 140px; /* TODO: fix height */
-		overflow: auto;
-	}
 
 	.tabheaders ul > li {
 		padding-top: 0;
@@ -194,7 +190,7 @@ div.tabx {
 
 }
 
-@media only screen and (min-width: 800px) {
+@media only screen and (min-width: $small-screen-width) {
 
 	.tablet {
 		//min-height: 230px;
