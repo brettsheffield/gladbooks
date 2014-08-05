@@ -40,17 +40,17 @@ div.centered {
 }
 
 #logo {
-	display: block;
+	display: none;
         padding-top: 0.2em;
         padding-bottom: 0.1em;
         margin-left: auto;
         margin-right: auto;
 }
 
-@media all and (max-width: $small-screen-width) {
+@media all and (min-width: $small-screen-width) {
 
 	#logo {
-		display: none;
+		display: block;
 	}
 
 }
@@ -62,7 +62,6 @@ div.centered {
 	position: fixed;
 	left: 0;
 	top: 0;
-	z-index: 10;
 	width: 100%;
 	height: 100%;
 	opacity: 0.8;
@@ -119,7 +118,6 @@ header.site, #pagearea-spacer-top {
 div.navicon {
 	background-color: darken($color-dark, 10%);
 	color: $color-light;
-	display: none;
 	font-size: 200%;
 	padding: 1px 10px;
 	width: 1.8em;
@@ -170,15 +168,17 @@ div.navitab-box-front {
 
 nav.site {
 	background-color: darken($color-dark, 10%);
+	display: none;
+	font-size: 90%;
 }
 
-@media all and (max-width: $small-screen-width) {
+@media all and (min-width: $small-screen-width) {
 
 	div.navicon {
-		display: block;
+		display: none;
 	}
 	nav.site {
-		display: none;
+		display: block;
 	}
 }
 
@@ -206,11 +206,17 @@ nav.site ul {
 	position: relative;
 }
 
+nav.site li {
+	z-index: 99;
+}
+
 nav.site ul ul {
 	background-color: lighten($color-dark, 10%);
 	font-size: 90%;
 	height: 0;
 	overflow: hidden;
+	padding-left: 2em;
+	width: 100%;
 }
 
 nav.site ul li:hover > ul {
@@ -243,17 +249,13 @@ nav.site ul li:hover > ul {
 		height: 42px;
 	}
 
-}
-
-@media all and (max-width: $small-screen-width) {
-
 	nav.site {
-		font-size: 90%;
+		font-size: 100%;
 	}
 
 	nav.site ul ul {
-		padding-left: 2em;
-		width: 100%;
+		padding-left: 0;
+		width: auto;
 	}
 }
 

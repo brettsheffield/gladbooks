@@ -114,7 +114,7 @@ div.tabs {
   text-shadow: 0 1px 0 gray; }
 
 .tabheaders {
-  background-color: #56708a;
+  background-color: #b2cde0;
   padding: 0; }
 
 .tablist {
@@ -201,17 +201,27 @@ div.tabtitle {
   white-space: nowrap;
   width: 85%; }
 
-@media all and (max-width: 1024px) {
-  div.tabhead {
-    background-color: #b2cde0;
-    border-bottom: solid #56708a 1px;
-    position: fixed;
-    text-align: center;
-    width: 100%; } }
-div.tabx {
-  float: right; }
+div.tabhead {
+  background-color: #b2cde0;
+  border-bottom: solid #56708a 1px;
+  position: fixed;
+  text-align: center;
+  width: 100%; }
 
-@media only screen and (min-width: 640px) {
+div.tabx {
+  display: none; }
+
+@media all and (min-width: 1024px) {
+  div.tabhead {
+    background-color: white;
+    border-bottom: 0;
+    border-radius: 15px 15px;
+    position: relative;
+    text-align: left; }
+
+  div.tabx {
+    display: block; } }
+@media all and (min-width: 1024px) {
   .tabheaders ul > li {
     padding-top: 0;
     padding-bottom: 0;
@@ -228,29 +238,12 @@ div.tabx {
     margin: 0; }
 
   ul.tablist > li {
-    width: 33.0%;
-    /* three tabs per line */ } }
-@media only screen and (min-width: 1024px) {
-  ul li a {
-    padding: 10px 15px; }
-
-  ul.tablist > li {
     font-size: 10pt;
     line-height: 18pt; }
 
-  div.tabtitle {
-    width: 87%; } }
-@media only screen and (min-width: 1024px) {
   ul li a {
-    padding: 10px 15px; } }
-@media only screen and (min-width: 1280px) {
-  ul.tablist > li {
-    width: 24.9%;
-    /* four tabs per line */ }
+    padding: 10px 15px; }
 
-  div.tabtitle {
-    width: 90%; } }
-@media only screen and (min-width: 1500px) {
   ul.tablist > li {
     width: 19.9%;
     /* five tabs per line */ } }
@@ -285,15 +278,15 @@ div.centered {
   margin-right: auto; }
 
 #logo {
-  display: block;
+  display: none;
   padding-top: 0.2em;
   padding-bottom: 0.1em;
   margin-left: auto;
   margin-right: auto; }
 
-@media all and (max-width: 1024px) {
+@media all and (min-width: 1024px) {
   #logo {
-    display: none; } }
+    display: block; } }
 /* mask to grey out whole site */
 #mask {
   background: #000;
@@ -302,7 +295,6 @@ div.centered {
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 10;
   width: 100%;
   height: 100%;
   opacity: 0.8;
@@ -349,7 +341,6 @@ header.site, #pagearea-spacer-top {
 div.navicon {
   background-color: #56708a;
   color: #b2cde0;
-  display: none;
   font-size: 200%;
   padding: 1px 10px;
   width: 1.8em; }
@@ -390,14 +381,16 @@ div.navitab-box-front {
   div.navitab {
     display: none; } }
 nav.site {
-  background-color: #56708a; }
+  background-color: #56708a;
+  display: none;
+  font-size: 90%; }
 
-@media all and (max-width: 1024px) {
+@media all and (min-width: 1024px) {
   div.navicon {
-    display: block; }
+    display: none; }
 
   nav.site {
-    display: none; } }
+    display: block; } }
 nav.site ul li a {
   background-color: #56708a;
   color: #b2cde0;
@@ -419,11 +412,16 @@ nav.site ul {
   list-style: none;
   position: relative; }
 
+nav.site li {
+  z-index: 99; }
+
 nav.site ul ul {
   background-color: #8da3b9;
   font-size: 90%;
   height: 0;
-  overflow: hidden; }
+  overflow: hidden;
+  padding-left: 2em;
+  width: 100%; }
 
 nav.site ul li:hover > ul {
   height: auto;
@@ -446,14 +444,14 @@ nav.site ul li:hover > ul {
     z-index: 1; }
 
   nav.site ul li a {
-    height: 42px; } }
-@media all and (max-width: 1024px) {
+    height: 42px; }
+
   nav.site {
-    font-size: 90%; }
+    font-size: 100%; }
 
   nav.site ul ul {
-    padding-left: 2em;
-    width: 100%; } }
+    padding-left: 0;
+    width: auto; } }
 div.businessselect {
   margin-top: 11px;
   margin-bottom: 8px;
