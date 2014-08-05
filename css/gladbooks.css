@@ -95,10 +95,12 @@ form.signin input::-webkit-input-placeholder {
 
 /* tabs */
 div.tabs {
-  margin-left: 5%;
-  margin-right: 5%;
   min-height: 100px; }
 
+@media all and (min-width: 500px) {
+  div.tabs {
+    margin-left: 2%;
+    margin-right: 2%; } }
 .tablist li:hover li {
   font-size: 80%; }
 
@@ -120,23 +122,28 @@ div.tabs {
 .tabheaders ul > li {
   display: block;
   float: left;
-  padding-top: 1em;
-  padding-bottom: 1em;
   width: 100%; }
 
+@media all and (min-width: 500px) {
+  .tabheaders ul > li {
+    border: 0;
+    padding-top: 1em;
+    padding-bottom: 1em; } }
 .tabheaders ul li a {
   padding: 0 10px; }
 
 .tabheaders li {
   background: #6e89a5;
-  border-radius: 5px 5px 0px 0px;
-  border: solid #56708a solid 1px;
   border-bottom: 0;
   font-family: monospace;
   margin-right: 1px;
   list-style: none;
   text-shadow: 0 1px 0 gray; }
 
+@media all and (min-width: 500px) {
+  .tabheaders li {
+    border-radius: 5px 5px 0px 0px;
+    border: solid #56708a solid 1px; } }
 div.tabhead div > a {
   color: #b2cde0;
   text-decoration: none; }
@@ -145,9 +152,13 @@ div.tabhead div > a {
 .tabheaders li:hover,
 .tabheaders li:hover a {
   background: white;
-  border-radius: 5px 5px 0px 0px;
   text-shadow: 0 1px 0 black; }
 
+@media all and (min-width: 500px) {
+  .tabheaders li.active,
+  .tabheaders li:hover,
+  .tabheaders li:hover a {
+    border-radius: 5px 5px 0px 0px; } }
 .tabheaders li.active > div > div > a,
 .tabheaders li:hover > div > div > a {
   color: #6e89a5;
@@ -155,13 +166,22 @@ div.tabhead div > a {
 
 .tablet {
   background: white;
-  border: solid 1px #6e89a5;
   color: #6e89a5;
   float: left;
   display: none;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -200px;
   overflow: auto;
   width: 100%; }
 
+@media all and (min-width: 500px) {
+  .tablet {
+    border: solid 1px #6e89a5;
+    float: left;
+    height: 100%;
+    overflow: auto;
+    width: 100%; } }
 .tablet.noscroll {
   overflow: hidden; }
 
@@ -180,12 +200,18 @@ div.tabtitle {
   white-space: nowrap;
   width: 85%; }
 
+@media all and (max-width: 500px) {
+  div.tabhead {
+    background-color: #b2cde0;
+    border-bottom: solid #56708a 1px;
+    position: fixed;
+    text-align: center;
+    width: 100%; } }
 div.tabx {
   float: right; }
 
 @media only screen and (min-width: 640px) {
   .tablet {
-    height: 140px;
     overflow: auto; }
 
   .tabheaders ul > li {
@@ -207,9 +233,6 @@ div.tabx {
     width: 33.0%;
     /* three tabs per line */ } }
 @media only screen and (min-width: 800px) {
-  .tablet {
-    min-height: 230px; }
-
   ul li a {
     padding: 10px 15px; }
 
@@ -220,31 +243,16 @@ div.tabx {
   div.tabtitle {
     width: 87%; } }
 @media only screen and (min-width: 1024px) {
-  .tablet {
-    min-height: 395px; }
-
   ul li a {
     padding: 10px 15px; } }
 @media only screen and (min-width: 1280px) {
-  .tablet {
-    min-height: 450px; }
-
   ul.tablist > li {
     width: 24.9%;
     /* four tabs per line */ }
 
   div.tabtitle {
     width: 90%; } }
-@media only screen and (min-width: 1366px) {
-  .tablet {
-    min-height: 395px; } }
-@media only screen and (min-width: 1440px) {
-  .tablet {
-    min-height: 530px; } }
 @media only screen and (min-width: 1500px) {
-  .tablet {
-    min-height: 655px; }
-
   ul.tablist > li {
     width: 19.9%;
     /* five tabs per line */ } }
@@ -285,6 +293,9 @@ div.centered {
   margin-left: auto;
   margin-right: auto; }
 
+@media all and (max-width: 500px) {
+  #logo {
+    display: none; } }
 /* mask to grey out whole site */
 #mask {
   background: #000;
@@ -302,7 +313,8 @@ div.centered {
 #pagearea {
   background-color: #b2cde0;
   color: white;
-  height: 100%; }
+  height: 100%;
+  overflow: auto; }
 
 #sitediv {
   height: auto !important;
@@ -318,17 +330,41 @@ footer.site {
   text-align: center;
   width: 100%; }
 
-footer.site, #pagearea-spacer {
+footer.site, #pagearea-spacer-bottom {
   height: 20px;
   /* height == #sitediv bottom margin */ }
 
 header.site {
-  background-color: white;
-  height: 100px; }
+  background-color: #56708a;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%; }
+
+header.site, #pagearea-spacer-top {
+  height: 40px; }
+
+@media all and (min-width: 500px) {
+  header.site, #pagearea-spacer-top {
+    background-color: white;
+    height: 100px; } }
+div.navicon {
+  background-color: #56708a;
+  color: #b2cde0;
+  display: none;
+  font-size: 200%;
+  padding: 1px 10px;
+  width: 1.8em; }
 
 nav.site {
   background-color: #56708a; }
 
+@media all and (max-width: 500px) {
+  div.navicon {
+    display: block; }
+
+  nav.site {
+    display: none; } }
 nav.site ul li a {
   background-color: #56708a;
   color: #b2cde0;
@@ -411,12 +447,15 @@ div.nav-spacer {
 
 div.navbar-search {
   border-radius: 25px;
-  display: block;
+  display: none;
   font-size: 14pt;
   margin-bottom: 12px;
   margin-left: 5%;
   margin-right: 5%;
   width: 90%; }
 
+@media all and (min-width: 500px) {
+  div.navbar-search {
+    display: block; } }
 input.search-query {
   width: 100%; }

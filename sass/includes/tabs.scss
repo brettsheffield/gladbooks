@@ -1,9 +1,16 @@
 /* tabs */
 
 div.tabs {
-	margin-left: 5%;
-	margin-right: 5%;
 	min-height: 100px;
+}
+
+@media all and (min-width: 500px) {
+
+	div.tabs {
+		margin-left: 2%;
+		margin-right: 2%;
+	}
+
 }
 
 .tablist li:hover li { 
@@ -32,9 +39,17 @@ div.tabs {
 .tabheaders ul > li {
         display: block;
 	float: left;
-	padding-top: 1em;
-	padding-bottom: 1em;
 	width: 100%;
+}
+
+@media all and (min-width: 500px) {
+
+	.tabheaders ul > li {
+		border: 0;
+		padding-top: 1em;
+		padding-bottom: 1em;
+	}
+
 }
 
 .tabheaders ul li a {
@@ -43,13 +58,20 @@ div.tabs {
 
 .tabheaders li {
 	background: $color-dark;
-	border-radius: 5px 5px 0px 0px;
-	border: solid darken($color-dark, 10%) solid 1px;
 	border-bottom: 0;
 	font-family: monospace;
 	margin-right: 1px;
 	list-style: none;
 	text-shadow: 0 1px 0 gray;
+}
+
+@media all and (min-width: 500px) {
+
+	.tabheaders li {
+		border-radius: 5px 5px 0px 0px;
+		border: solid darken($color-dark, 10%) solid 1px;
+	}
+
 }
 
 div.tabhead div > a {
@@ -61,8 +83,17 @@ div.tabhead div > a {
 .tabheaders li:hover,
 .tabheaders li:hover a {
 	background: white;
-	border-radius: 5px 5px 0px 0px;
 	text-shadow: 0 1px 0 black;
+}
+
+@media all and (min-width: 500px) {
+
+	.tabheaders li.active,
+	.tabheaders li:hover,
+	.tabheaders li:hover a {
+		border-radius: 5px 5px 0px 0px;
+	}
+
 }
 
 .tabheaders li.active > div > div > a,
@@ -73,12 +104,25 @@ div.tabhead div > a {
 
 .tablet {
 	background: white;
-	border: solid 1px $color-dark;
 	color: $color-dark;
 	float: left;
 	display: none;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -200px;
 	overflow: auto;
 	width: 100%;
+}
+
+@media all and (min-width: 500px) {
+
+	.tablet {
+		border: solid 1px $color-dark;
+		float: left;
+		height: 100%;
+		overflow: auto;
+		width: 100%;
+	}
 }
 
 .tablet.noscroll {
@@ -93,9 +137,6 @@ div.tabhead div > a {
 	float: right;
 }
 
-div.tabhead {
-}
-
 div.tabtitle {
 	float: left;
 	overflow: hidden;
@@ -106,6 +147,19 @@ div.tabtitle {
 	width: 85%;
 }
 
+@media all and (max-width: 500px) {
+
+	div.tabhead {
+		background-color: $color-light;
+		border-bottom: solid darken($color-dark, 10%) 1px;
+		position: fixed;
+		text-align: center;
+		width: 100%;
+	}
+
+}
+
+
 div.tabx {
 	float: right;
 }
@@ -113,7 +167,7 @@ div.tabx {
 @media only screen and (min-width: 640px) {
 
 	.tablet {
-		height: 140px;
+		//height: 140px; /* TODO: fix height */
 		overflow: auto;
 	}
 
@@ -139,10 +193,11 @@ div.tabx {
 	}
 
 }
+
 @media only screen and (min-width: 800px) {
 
 	.tablet {
-		min-height: 230px;
+		//min-height: 230px;
 	}
 
 	ul li a {
@@ -162,7 +217,7 @@ div.tabx {
 @media only screen and (min-width: 1024px) {
 
 	.tablet {
-		min-height: 395px;
+		//min-height: 395px;
 	}
 
 	ul li a {
@@ -174,7 +229,7 @@ div.tabx {
 @media only screen and (min-width: 1280px) {
 
 	.tablet {
-		min-height: 450px;
+		//min-height: 450px;
 	}
 
 	ul.tablist > li {
@@ -190,7 +245,7 @@ div.tabx {
 @media only screen and (min-width: 1366px) {
 
 	.tablet {
-		min-height: 395px;
+		//min-height: 395px;
 	}
 
 }
@@ -198,7 +253,7 @@ div.tabx {
 @media only screen and (min-width: 1440px) {
 
 	.tablet {
-		min-height: 530px;
+		//min-height: 530px;
 	}
 
 }
@@ -206,7 +261,7 @@ div.tabx {
 @media only screen and (min-width: 1500px) {
 
 	.tablet {
-		min-height: 655px;
+		//min-height: 655px;
 	}
 
 	ul.tablist > li {

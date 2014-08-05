@@ -43,6 +43,14 @@ div.centered {
         margin-right: auto;
 }
 
+@media all and (max-width: 500px) {
+
+	#logo {
+		display: none;
+	}
+
+}
+
 /* mask to grey out whole site */
 #mask {
 	background: #000;
@@ -61,6 +69,7 @@ div.centered {
 	background-color: $color-light;
 	color: white;
 	height: 100%;
+	overflow: auto;
 }
 
 #sitediv {
@@ -78,17 +87,52 @@ footer.site {
 	width: 100%;
 }
 
-footer.site, #pagearea-spacer {
+footer.site, #pagearea-spacer-bottom {
         height: 20px; /* height == #sitediv bottom margin */
 }
 
 header.site {
-	background-color: white;
-	height: 100px;
+	background-color: darken($color-dark, 10%);
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+
+header.site, #pagearea-spacer-top {
+	height: 40px;
+}
+
+@media all and (min-width: 500px) {
+
+	header.site, #pagearea-spacer-top {
+		background-color: white;
+		height: 100px;
+	}
+
+}
+
+div.navicon {
+	background-color: darken($color-dark, 10%);
+	color: $color-light;
+	display: none;
+	font-size: 200%;
+	padding: 1px 10px;
+	width: 1.8em;
 }
 
 nav.site {
 	background-color: darken($color-dark, 10%);
+}
+
+@media all and (max-width: 500px) {
+
+	div.navicon {
+		display: block;
+	}
+	nav.site {
+		display: none;
+	}
 }
 
 nav.site ul li a {
@@ -194,6 +238,7 @@ select.businessselect {
 
 	select.businessselect {
 	}
+
 }
 
 div.nav-spacer {
@@ -202,12 +247,20 @@ div.nav-spacer {
 
 div.navbar-search {
 	border-radius: 25px;
-	display: block;
+	display: none;
 	font-size: 14pt;
 	margin-bottom: 12px;
 	margin-left: 5%;
 	margin-right: 5%;
 	width: 90%;
+}
+
+@media all and (min-width: 500px) {
+
+	div.navbar-search {
+		display: block;
+	}
+
 }
 
 input.search-query {
