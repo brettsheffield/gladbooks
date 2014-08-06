@@ -97,8 +97,8 @@ header.site {
 	z-index: 5;
 }
 
-header.site, #pagearea-spacer-top {
-	//height: 40px;
+#pagearea-spacer-top {
+	height: 38px;
 }
 
 @media all and (min-width: $small-screen-width) {
@@ -115,10 +115,26 @@ header.site, #pagearea-spacer-top {
 
 }
 
+nav.mobile {
+	background-color: darken($color-dark, 10%);
+	height: 38px;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+
+@media all and (min-width: $small-screen-width) {
+	nav.mobile {
+		display: none;
+	}
+}
+
 div.navicon {
 	background-color: darken($color-dark, 10%);
 	color: $color-light;
 	font-size: 200%;
+	height: 100%;
 	padding: 1px 10px;
 	width: 1.8em;
 }
@@ -129,7 +145,6 @@ div.navitab {
 	float: right;
 	font-size: 200%;
 	padding: 1px 10px;
-	height: 38px;
 	position: absolute;
 	right: 0;
 	top: 0;
@@ -160,9 +175,6 @@ div.navitab-box-front {
 
 @media all and (min-width: $small-screen-width) {
 
-	div.navitab {
-		display: none;
-	}
 
 }
 
@@ -177,9 +189,6 @@ nav.site {
 
 @media all and (min-width: $small-screen-width) {
 
-	div.navicon {
-		display: none;
-	}
 	nav.site {
 		border-top: 0;
 		display: block;

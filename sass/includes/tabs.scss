@@ -107,8 +107,6 @@ div.tabhead div > a {
 	background: white;
 	color: $color-dark;
 	display: none;
-	//height: auto !important;
-	//margin: 19px 0 0 0;
 	width: 100%;
 }
 
@@ -116,8 +114,6 @@ div.tabhead div > a {
 
 	.tablet {
 		border: solid 1px $color-dark;
-		//height: 75%;
-		//height: calc(100% - 25px);
 		margin: 0 auto -200px;
 		width: 100%;
 	}
@@ -148,7 +144,6 @@ div.tabtitle {
 div.tabhead {
 	background-color: $color-light;
 	border-bottom: solid darken($color-dark, 10%) 1px;
-	//position: fixed;
 	text-align: center;
 	width: 100%;
 }

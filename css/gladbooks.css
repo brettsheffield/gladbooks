@@ -319,6 +319,9 @@ header.site {
   width: 100%;
   z-index: 5; }
 
+#pagearea-spacer-top {
+  height: 38px; }
+
 @media all and (min-width: 1024px) {
   header.site {
     position: inherit; }
@@ -326,10 +329,22 @@ header.site {
   header.site, #pagearea-spacer-top {
     background-color: white;
     height: auto; } }
+nav.mobile {
+  background-color: #56708a;
+  height: 38px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%; }
+
+@media all and (min-width: 1024px) {
+  nav.mobile {
+    display: none; } }
 div.navicon {
   background-color: #56708a;
   color: #b2cde0;
   font-size: 200%;
+  height: 100%;
   padding: 1px 10px;
   width: 1.8em; }
 
@@ -339,7 +354,6 @@ div.navitab {
   float: right;
   font-size: 200%;
   padding: 1px 10px;
-  height: 38px;
   position: absolute;
   right: 0;
   top: 0;
@@ -365,9 +379,6 @@ div.navitab-box-front {
   text-align: center;
   width: 25px; }
 
-@media all and (min-width: 1024px) {
-  div.navitab {
-    display: none; } }
 nav.site {
   background-color: #56708a;
   border-top: 5px solid #b2cde0;
@@ -377,9 +388,6 @@ nav.site {
   z-index: 1; }
 
 @media all and (min-width: 1024px) {
-  div.navicon {
-    display: none; }
-
   nav.site {
     border-top: 0;
     display: block;
