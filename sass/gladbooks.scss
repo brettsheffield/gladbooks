@@ -65,7 +65,7 @@ html, body {
 #pagearea {
 	background-color: $color-light;
 	color: white;
-	height: 100%;
+	//height: 100%;
 	position: relative;
 }
 
@@ -174,11 +174,6 @@ div.navitab-box-front {
 	width: 25px;
 }
 
-@media all and (min-width: $small-screen-width) {
-
-
-}
-
 nav.site {
 	background-color: darken($color-dark, 10%);
 	border-top: 5px solid $color-light;
@@ -268,6 +263,7 @@ nav.site ul li:hover > ul {
 		padding-left: 0;
 		width: auto;
 	}
+
 }
 
 div.businessselect {

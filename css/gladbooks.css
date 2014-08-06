@@ -94,9 +94,6 @@ form.signin input::-webkit-input-placeholder {
   background: #ddd; }
 
 /* tabs */
-div.tabs {
-  min-height: 100px; }
-
 @media all and (min-width: 1024px) {
   div.tabs {
     margin-left: 2%;
@@ -167,14 +164,11 @@ div.tabhead div > a {
 .tablet {
   background: white;
   color: #6e89a5;
-  display: none;
   width: 100%; }
 
 @media all and (min-width: 1024px) {
   .tablet {
-    border: solid 1px #6e89a5;
-    margin: 0 auto -200px;
-    width: 100%; } }
+    border: solid 1px #6e89a5; } }
 .tablet.noscroll {
   overflow: hidden; }
 
@@ -290,7 +284,6 @@ html, body {
 #pagearea {
   background-color: #b2cde0;
   color: white;
-  height: 100%;
   position: relative; }
 
 #sitediv {

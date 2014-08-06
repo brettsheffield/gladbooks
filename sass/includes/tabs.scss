@@ -1,9 +1,5 @@
 /* tabs */
 
-div.tabs {
-	min-height: 100px;
-}
-
 @media all and (min-width: $small-screen-width) {
 
 	div.tabs {
@@ -106,7 +102,7 @@ div.tabhead div > a {
 .tablet {
 	background: white;
 	color: $color-dark;
-	display: none;
+	//display: none;
 	width: 100%;
 }
 
@@ -114,8 +110,6 @@ div.tabhead div > a {
 
 	.tablet {
 		border: solid 1px $color-dark;
-		margin: 0 auto -200px;
-		width: 100%;
 	}
 }
 
