@@ -101,7 +101,7 @@ div.tabs {
   div.tabs {
     margin-left: 2%;
     margin-right: 2%;
-    margin-top: 45px; } }
+    height: 100%; } }
 .tablist li:hover li {
   font-size: 80%; }
 
@@ -170,7 +170,6 @@ div.tabhead div > a {
   color: #6e89a5;
   display: none;
   margin: 19px 0 0 0;
-  overflow: auto;
   width: 100%; }
 
 @media all and (min-width: 1024px) {
@@ -305,7 +304,8 @@ div.centered {
   height: auto !important;
   height: 100%;
   margin: 0 auto -20px;
-  /* bottom margin == height of footer.site */ }
+  /* bottom margin == height of footer.site */
+  overflow: hidden; }
 
 footer.site {
   background-color: #6e89a5;
@@ -321,19 +321,14 @@ footer.site, #pagearea-spacer-bottom {
 
 header.site {
   background-color: #56708a;
-  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 5; }
 
-header.site, #pagearea-spacer-top {
-  height: 40px; }
-
 @media all and (min-width: 1024px) {
   header.site, #pagearea-spacer-top {
-    background-color: white;
-    height: 100px; } }
+    background-color: white; } }
 div.navicon {
   background-color: #56708a;
   color: #b2cde0;
@@ -378,6 +373,7 @@ div.navitab-box-front {
     display: none; } }
 nav.site {
   background-color: #56708a;
+  border-top: 5px solid #b2cde0;
   display: none;
   font-size: 90%;
   margin-top: 5px;
@@ -388,6 +384,7 @@ nav.site {
     display: none; }
 
   nav.site {
+    border-top: 0;
     display: block;
     margin-top: 0; } }
 nav.site ul li a {

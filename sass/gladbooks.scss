@@ -79,6 +79,7 @@ div.centered {
 	height: auto !important;
 	height: 100%;
 	margin: 0 auto -20px; /* bottom margin == height of footer.site */
+	overflow: hidden;
 }
 
 footer.site {
@@ -96,7 +97,7 @@ footer.site, #pagearea-spacer-bottom {
 
 header.site {
 	background-color: darken($color-dark, 10%);
-	position: fixed;
+	//position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
@@ -104,14 +105,14 @@ header.site {
 }
 
 header.site, #pagearea-spacer-top {
-	height: 40px;
+	//height: 40px;
 }
 
 @media all and (min-width: $small-screen-width) {
 
 	header.site, #pagearea-spacer-top {
 		background-color: white;
-		height: 100px;
+		//height: 100px;
 	}
 
 }
@@ -169,6 +170,7 @@ div.navitab-box-front {
 
 nav.site {
 	background-color: darken($color-dark, 10%);
+	border-top: 5px solid $color-light;
 	display: none;
 	font-size: 90%;
 	margin-top: 5px;
@@ -181,6 +183,7 @@ nav.site {
 		display: none;
 	}
 	nav.site {
+		border-top: 0;
 		display: block;
 		margin-top: 0;
 	}

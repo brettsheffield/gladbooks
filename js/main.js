@@ -6,7 +6,7 @@ $(document).ready(function() {
 function navicon() {
     $('div.navicon').click(function() {
         $('nav.site').toggle();
-        $('div.tabhead').toggle();
+        //$('div.tabhead').toggle();
     });
 }
 
