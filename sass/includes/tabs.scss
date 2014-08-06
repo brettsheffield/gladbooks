@@ -9,7 +9,6 @@ div.tabs {
 	div.tabs {
 		margin-left: 2%;
 		margin-right: 2%;
-		height: 100%;
 	}
 
 }
@@ -117,6 +116,8 @@ div.tabhead div > a {
 
 	.tablet {
 		border: solid 1px $color-dark;
+		//height: 100%;
+		//height: calc(100% - 20px);
 		margin: 0 auto -200px;
 		width: 100%;
 	}

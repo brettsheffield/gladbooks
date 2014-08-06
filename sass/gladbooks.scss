@@ -79,7 +79,6 @@ div.centered {
 	height: auto !important;
 	height: 100%;
 	margin: 0 auto -20px; /* bottom margin == height of footer.site */
-	overflow: hidden;
 }
 
 footer.site {
@@ -97,7 +96,7 @@ footer.site, #pagearea-spacer-bottom {
 
 header.site {
 	background-color: darken($color-dark, 10%);
-	//position: fixed;
+	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
@@ -105,14 +104,19 @@ header.site {
 }
 
 header.site, #pagearea-spacer-top {
-	//height: 40px;
+	height: 40px;
 }
 
 @media all and (min-width: $small-screen-width) {
 
+	header.site {
+		position: inherit;
+	}
+
 	header.site, #pagearea-spacer-top {
 		background-color: white;
 		//height: 100px;
+		height: auto;
 	}
 
 }

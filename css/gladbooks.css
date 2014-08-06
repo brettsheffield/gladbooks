@@ -100,8 +100,7 @@ div.tabs {
 @media all and (min-width: 1024px) {
   div.tabs {
     margin-left: 2%;
-    margin-right: 2%;
-    height: 100%; } }
+    margin-right: 2%; } }
 .tablist li:hover li {
   font-size: 80%; }
 
@@ -304,8 +303,7 @@ div.centered {
   height: auto !important;
   height: 100%;
   margin: 0 auto -20px;
-  /* bottom margin == height of footer.site */
-  overflow: hidden; }
+  /* bottom margin == height of footer.site */ }
 
 footer.site {
   background-color: #6e89a5;
@@ -321,14 +319,22 @@ footer.site, #pagearea-spacer-bottom {
 
 header.site {
   background-color: #56708a;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 5; }
 
+header.site, #pagearea-spacer-top {
+  height: 40px; }
+
 @media all and (min-width: 1024px) {
+  header.site {
+    position: inherit; }
+
   header.site, #pagearea-spacer-top {
-    background-color: white; } }
+    background-color: white;
+    height: auto; } }
 div.navicon {
   background-color: #56708a;
   color: #b2cde0;
