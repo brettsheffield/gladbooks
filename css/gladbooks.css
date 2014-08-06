@@ -335,7 +335,8 @@ nav.mobile {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%; }
+  width: 100%;
+  z-index: 6; }
 
 @media all and (min-width: 1024px) {
   nav.mobile {

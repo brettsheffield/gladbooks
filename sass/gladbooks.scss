@@ -122,6 +122,7 @@ nav.mobile {
 	top: 0;
 	left: 0;
 	width: 100%;
+	z-index: 6;
 }
 
 @media all and (min-width: $small-screen-width) {
