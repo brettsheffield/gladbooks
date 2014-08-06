@@ -168,7 +168,6 @@ div.tabhead div > a {
   background: white;
   color: #6e89a5;
   display: none;
-  margin: 19px 0 0 0;
   width: 100%; }
 
 @media all and (min-width: 1024px) {
@@ -197,7 +196,6 @@ div.tabtitle {
 div.tabhead {
   background-color: #b2cde0;
   border-bottom: solid #56708a 1px;
-  position: fixed;
   text-align: center;
   width: 100%; }
 
@@ -266,10 +264,6 @@ html, body {
   box-sizing: border-box;
   /* Opera/IE 8+ */ }
 
-div.centered {
-  margin-left: auto;
-  margin-right: auto; }
-
 #logo {
   display: none;
   padding-top: 0.2em;
@@ -319,14 +313,11 @@ footer.site, #pagearea-spacer-bottom {
 
 header.site {
   background-color: #56708a;
-  position: fixed;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 5; }
-
-header.site, #pagearea-spacer-top {
-  height: 40px; }
 
 @media all and (min-width: 1024px) {
   header.site {
@@ -348,7 +339,7 @@ div.navitab {
   float: right;
   font-size: 200%;
   padding: 1px 10px;
-  height: 40px;
+  height: 38px;
   position: absolute;
   right: 0;
   top: 0;

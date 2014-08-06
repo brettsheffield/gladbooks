@@ -5,7 +5,6 @@ $small-screen-height: 768px;
 @import "sass/includes/login.scss";
 @import "sass/includes/tabs.scss";
 
-
 *, p {
 	margin: 0;
         padding: 0;
@@ -32,11 +31,6 @@ html, body {
         -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
         -moz-box-sizing: border-box;    /* Firefox, other Gecko */
         box-sizing: border-box;         /* Opera/IE 8+ */
-}
-
-div.centered {
-	margin-left: auto;
-	margin-right: auto;
 }
 
 #logo {
@@ -96,7 +90,7 @@ footer.site, #pagearea-spacer-bottom {
 
 header.site {
 	background-color: darken($color-dark, 10%);
-	position: fixed;
+	position: relative;
 	top: 0;
 	left: 0;
 	width: 100%;
@@ -104,7 +98,7 @@ header.site {
 }
 
 header.site, #pagearea-spacer-top {
-	height: 40px;
+	//height: 40px;
 }
 
 @media all and (min-width: $small-screen-width) {
@@ -135,7 +129,7 @@ div.navitab {
 	float: right;
 	font-size: 200%;
 	padding: 1px 10px;
-	height: 40px;
+	height: 38px;
 	position: absolute;
 	right: 0;
 	top: 0;
