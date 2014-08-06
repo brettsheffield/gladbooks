@@ -107,10 +107,8 @@ div.tabhead div > a {
 .tablet {
 	background: white;
 	color: $color-dark;
-	float: left;
 	display: none;
-	height: auto !important;
-	height: 100%;
+	//height: auto !important;
 	margin: 19px 0 0 0;
 	overflow: auto;
 	width: 100%;
@@ -120,8 +118,6 @@ div.tabhead div > a {
 
 	.tablet {
 		border: solid 1px $color-dark;
-		float: left;
-		height: 100%;
 		margin: 0 auto -200px;
 		width: 100%;
 	}
