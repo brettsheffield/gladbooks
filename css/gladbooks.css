@@ -176,7 +176,7 @@ div.tabhead div > a {
   .tablet {
     border: solid 1px #6e89a5;
     overflow: auto;
-    position: absolute;
+    height: 75%;
     top: 0;
     bottom: 0; } }
 .tablet.noscroll {

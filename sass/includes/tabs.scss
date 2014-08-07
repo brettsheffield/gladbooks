@@ -116,8 +116,7 @@ div.tabhead div > a {
 	.tablet {
 		border: solid 1px $color-dark;
 		overflow: auto;
-		position: absolute;
-		//height: auto;
+		height: 75%;
 		top: 0;
 		bottom: 0;
 	}
