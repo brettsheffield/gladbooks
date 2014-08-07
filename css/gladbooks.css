@@ -97,7 +97,10 @@ form.signin input::-webkit-input-placeholder {
 @media all and (min-width: 1024px) {
   div.tabs {
     margin-left: 2%;
-    margin-right: 2%; } }
+    margin-right: 2%;
+    position: relative;
+    height: auto;
+    bottom: 0; } }
 .tablist li:hover li {
   font-size: 80%; }
 
@@ -167,8 +170,15 @@ div.tabhead div > a {
   width: 100%; }
 
 @media all and (min-width: 1024px) {
+  .tabcontent {
+    position: relative; }
+
   .tablet {
-    border: solid 1px #6e89a5; } }
+    border: solid 1px #6e89a5;
+    overflow: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0; } }
 .tablet.noscroll {
   overflow: hidden; }
 
@@ -243,7 +253,7 @@ dl, menu, ol, ul {
   margin: 0; }
 
 html, body {
-  background-color: gainsboro;
+  background-color: #b2cde0;
   color: black;
   font-size: 10pt;
   font-family: verdana,helvetica,arial,sans-serif;

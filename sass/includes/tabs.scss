@@ -5,6 +5,9 @@
 	div.tabs {
 		margin-left: 2%;
 		margin-right: 2%;
+		position: relative;
+		height: auto;
+		bottom: 0;
 	}
 
 }
@@ -102,14 +105,21 @@ div.tabhead div > a {
 .tablet {
 	background: white;
 	color: $color-dark;
-	//display: none;
 	width: 100%;
 }
 
 @media all and (min-width: $small-screen-width) {
 
+	.tabcontent {
+		position: relative;
+	}
 	.tablet {
 		border: solid 1px $color-dark;
+		overflow: auto;
+		position: absolute;
+		//height: auto;
+		top: 0;
+		bottom: 0;
 	}
 }
 
