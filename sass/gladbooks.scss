@@ -52,7 +52,6 @@ html, body {
 /* mask to grey out whole site */
 #mask {
 	background: #000;
-	display: none;  /* temp */
 	position: fixed;
 	left: 0;
 	top: 0;
@@ -330,3 +329,5 @@ div.navbar-search {
 input.search-query {
 	width: 100%;
 }
+
+@import "sass/includes/misc.scss";

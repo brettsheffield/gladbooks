@@ -1,0 +1,53 @@
+/* 
+ * gladbooks-1366px.scss
+ * sass file for Gladbooks base styles
+ * Large screen edition
+ */
+
+@media only screen and (min-width: 1366px) {
+
+/* forms */
+.contact.form input,
+.organisation.form input {
+        width: 40%;
+}
+
+/* map */
+.map-canvas {
+        height: 395px;
+	width: 395px;
+} 
+
+/* report panels */
+div.report {
+	font-size: 80%;
+}
+div.panel.left {
+        float: left;
+        width: 500px;
+}
+div.panel.right {
+        float: right;
+        width: 500px;
+}
+
+/* accordion */
+div.bank.suspects div.accordion > div.section > div.content {
+        height: 322px;
+}      
+
+/* pdf */
+object.pdf {
+        height: 420px;
+        width: 100%;
+}               
+div.pdf {
+        min-height: 400px;
+        width: 100%;
+} 
+
+div.salesorder div.datatable {
+        font-size: 1em;
+}          
+
+}

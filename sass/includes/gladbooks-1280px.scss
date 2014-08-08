@@ -1,23 +1,15 @@
 /* 
- * gladbooks-1440px.scss
+ * gladbooks-1280px.scss
  * sass file for Gladbooks base styles
  * Large screen edition
  */
 
-@media only screen and (min-width: 1440px) {
-
-#pagearea {
-        min-height: 575px;
-}
-
-.tablet {
-	min-height: 530px;
-}
+@media only screen and (min-width: 1280px) {
 
 /* forms */
 .contact.form input,
 .organisation.form input {
-        width: 40%;
+        width: 33%;
 }
 
 /* map */
@@ -32,24 +24,21 @@ div.report {
 }
 div.panel.left {
         float: left;
-        width: 500px;
+        width: 450px;
 }
 div.panel.right {
         float: right;
-        width: 500px;
+        width: 450px;
 }
 
 /* accordion */
-div.accordion > div.section > div.content {
-	min-height: 448px;
-}
 div.bank.suspects div.accordion > div.section > div.content {
-	height: 457px;
-}  
+        height: 377px;
+}
 
 /* pdf */
 object.pdf {
-        height: 420px;
+        height: 445px;
         width: 100%;
 }               
 div.pdf {

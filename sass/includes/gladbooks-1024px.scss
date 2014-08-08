@@ -1,65 +1,59 @@
 /* 
- * gladbooks-1366px.scss
+ * gladbooks-1024px.scss
  * sass file for Gladbooks base styles
- * Large screen edition
  */
 
-@media only screen and (min-width: 1366px) {
+@media only screen and (min-width: 1024px) {
 
-#logo {
-        margin-left: 3.5%;
-}
-
-#pagearea {
-        min-height: 440px;
-}
-
-.tablet {
-	min-height: 395px;
+body {
+        font-size: 12pt;
 }
 
 /* forms */
 .contact.form input,
 .organisation.form input {
-        width: 40%;
+        width: 49%;
 }
 
 /* map */
 .map-canvas {
         height: 395px;
-	width: 395px;
-} 
+}
 
-/* report panels */
+/* *report panels , NULL*/
 div.report {
-	font-size: 80%;
+	font-size: 75%;
 }
 div.panel.left {
-        float: left;
-        width: 500px;
+	float: left;
+        width: 350px;
 }
+
 div.panel.right {
-        float: right;
-        width: 500px;
+	float: right;
+        width: 350px;
 }
 
 /* accordion */
+div.accordion > div.section > div.content {
+	min-height: 312px;
+}
 div.bank.suspects div.accordion > div.section > div.content {
         height: 322px;
-}      
+} 
 
 /* pdf */
 object.pdf {
-        height: 420px;
+        height: 396px;
         width: 100%;
-}               
+}
 div.pdf {
         min-height: 400px;
         width: 100%;
-} 
+}
 
 div.salesorder div.datatable {
-        font-size: 1em;
-}          
+        font-size: 0.8em;
+}   
 
 }

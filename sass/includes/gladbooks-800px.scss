@@ -9,51 +9,6 @@ body {
         font-size: 12pt;
 }
 
-#logo {
-	margin-left: 3%;
-}
-
-#pagearea {
-	min-height: 275px;
-}
-
-/* search bar */
-input.search-query {
-        float: left;
-	margin-left: 35%;
-	margin-top: -40px;
-	width: 28%;
-}
-
-/* menus */
-nav ul {
-        font-size: 90%;
-}
-
-/* business selector */
-select.businessselect {
-	width: 200px;
-}
-
-/* tabs */
-.tablet {
-        min-height: 230px;
-}
-
-ul li a {
-        padding: 10px 15px;
-}
-
-ul.tablist > li {
-	font-size: 10pt;
-	line-height: 18pt;
-}
-
-div.tabtitle {
-        width: 87%;
-}
-
-
 /* map */
 .map-canvas {
         height: 230px;

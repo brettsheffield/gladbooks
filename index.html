@@ -10,12 +10,11 @@
         <meta name="description" content="Gladbooks Accounting System">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/h5boiler.css">
+				<link rel="stylesheet" href="css/jquery-ui.css"/>
+				<link rel="stylesheet" href="css/chosen.css"/>
         <link rel="stylesheet" href="css/gladbooks.css">
-        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
     </head>
     <body>
 				<div id="mask"></div>
@@ -43,9 +42,7 @@
 									<li>
 										<div class="businessselect">
 											<select class="businessselect">
-												<!--option>&lt;select business&gt;</option-->
-												<option>Gladserv Ltd</option>
-												<option>Libre Llamas Enterprises Ltd</option>
+												<option>&lt;select business&gt;</option>
 											</select>
 										</div>
 									</li>
@@ -55,28 +52,123 @@
 											<li>
 												<a href="#">Business</a>
 												<ul>
-													<li><a href="#">Add New Business</a></li>
+													<!--li><a href="#businessview">View Businesses</a></li-->
+													<li><a href="#business.create">Add New Business</a></li>
 												</ul>
 											</li>
 											<li>
 												<a href="#">Chart of Accounts</a>
 												<ul>
-													<li><a href="#">Chart of Accounts</a></li>
-													<li><a href="#">Add New Account</a></li>
+													<li><a href="#chartview">View Chart of Accounts</a></li>
+													<li><a href="#chartadd">Add New Account</a></li>
 												</ul>
 											</li>
-											<li><a href="#">Divisions</a></li>
-											<li><a href="#">Departments</a></li>
-											<li><a href="#">Journal</a></li>
+											<li>
+												<a href="#">Division</a>
+												<ul>
+													<li><a href="#divisions.view">View Divisions</a></li>
+													<li><a href="#divisions.create">Add New Division</a></li>
+												</ul>
+											</li>
+											<li>
+												<a href="#">Department</a>
+												<ul>
+													<li><a href="#departments.view">View Departments</a></li>
+													<li><a href="#departments.create">Add New Department</a></li>
+												</ul>
+											</li>
+											<li>
+												<a href="#">Journal</a>
+												<ul>
+													<li><a href="#journal">Manual Journal Entry</a></li>
+												</ul>
+											</li>
 										</ul>
 									</li>
-									<li><a href="#">Contacts</a></li>
-									<li><a href="#">Banking</a></li>
-									<li><a href="#">Receivables</a></li>
-									<li><a href="#">Payables</a></li>
-									<li><a href="#">Reports</a></li>
-									<li><a href="#">Help</a></li>
-									<li><a href="#">Logout</a></li>
+									<li>
+										<a href="#">Contacts</a>
+										<ul>
+											<li>
+												<a href="#">Organisations</a>
+												<ul>
+													<li><a href="#organisations">View Organisations</a></li>
+													<li><a href="#organisation.create">Add New Organisation</a></li>
+												</ul>
+											</li>
+											<li>
+												<a href="#">Contacts</a>
+												<ul>
+													<li><a href="#contacts">View Contacts</a></li>
+													<li><a href="#contact.create">Add New Contacts</a></li>
+												</ul>
+											</li>
+										</ul>
+									</li>
+									<li>
+										<a href="#">Banking</a>
+										<ul>
+											<li><a href="#bank.upload">Upload Bank Statement</a></li>
+											<li><a href="#bank.statement">View Bank Statement</a></li>
+											<li><a href="#bank.reconcile">Bank Reconciliation</a></li>
+										</ul>
+									</li>
+									<li>
+										<a href="#">Receivables</a>
+										<ul>
+											<li>
+												<a href="#">Products</a>
+												<ul>
+													<li><a href="#products">View Products</a></li>
+													<li><a href="#product.create">Create Product</a></li>
+												</ul>
+											</li>
+											<li>
+												<a href="#">Sales Orders</a>
+												<ul>
+													<li><a href="#salesorders">View Sales Orders</a></li>
+													<li><a href="#salesorder.create">Create Sales Order</a></li>
+												</ul>
+											</li>
+											<li>
+												<a href="#">Sales Invoices</a>
+												<ul>
+													<li><a href="#salesinvoices">View Sales Invoices</a></li>
+												</ul>
+											</li>
+											<li>
+												<a href="#">Sales Payments</a>
+												<ul>
+													<li><a href="#salespayments">View Sales Payments</a></li>
+													<li><a href="#salespayment.create">Enter Sales Payment</a></li>
+												</ul>
+											</li>
+											<li><a href="#salesorders.process">Manual Billing Run</a></li>
+										</ul>
+									</li>
+									<li>
+										<a href="#">Payables</a>
+										<ul>
+											<li>
+												<a href="#">Purchase Orders</a>
+												<ul>
+													<li><a href="#purchaseorder.list">View Purchase Orders</a></li>
+													<li><a href="#purchaseorder.create">Create Purchase Order</a></li>
+												</ul>
+											</li>
+										</ul>
+									</li>
+									<li>
+										<a href="#">Reports</a>
+										<ul>
+											<li><a href="#ledger">General Ledger</a></li>
+											<li><a href="#rpt_trialbalance">Trial Balance</a></li>
+											<li><a href="#rpt_balancesheet">Balance Sheet</a></li>
+											<li><a href="#rpt_profitandloss">Profit &amp; Loss</a></li>
+											<li><a href="#rpt_accountsreceivable">Accounts Receivable</a></li>
+										</ul>
+									</li>
+									<li><a href="#help">Help</a></li>
+									<li><a class="logout-window" href="#logout">Logout</a></li>
 								</ul>
 								<div class="nav-spacer"></div>
 							</nav>
@@ -99,44 +191,44 @@
 							</form>
 						</div><!-- login-box -->
 
-						<!--
+						<div class="dataformdiv template">
+							<h2 class="formtitle">Journal Entry</h2>
+							<form method="post" class="journalform" action="/journal/">
+								<fieldset class="journal">
+									<caption>Transaction Date</caption>
+									<input class="transactdate datefield" autocomplete="off" required/>
+									<br/>
+									<caption>Description / Narrative</caption>
+									<input class="description" autocomplete="off" placeholder="Enter a description of this journal entry" required/>
+								</fieldset>
+								<fieldset class="ledger">
+									<select class="account">
+									</select>
+									<select class="division">
+									</select>
+									<select class="department">
+									</select>
+									<select class="type">
+									</select>
+									<input class="amount" autocomplete="off" placeholder="0.00"/>
+								</fieldset>
+							</form>
+							<button id="journalsubmit" class="submit">Post Journal</button>
+							<p class="journalstatus"/>
+						</div><!--dataformdiv-->
+
+						<div id="loading-div-background">
+							<div id="loading-div" class="ui-corner-all" >
+								<img class="spinner" src="/img/spinner.gif" alt="Loading.."/>
+								<h2 class="spinwaittxt">Please wait....</h2>
+							</div><!-- loading-div -->
+						</div><!-- loading-div-background -->
+
 						<div class="tabs clearfix">
 							<div class="tabheaders clearfix">
 								<ul class="tablist"/>
 							</div>
 							<div class="tabcontent"></div>
-						</div>--><!-- tabs -->
-
-						<div class="tabs clearfix">
-							<div class="tabheaders clearfix">
-								<ul class="tablist">
-									<li id="tabli0" class="tabhead business1 tablet0 accounts refresh active">
-										<div id="tabhead0" class="tabhead clearfix">
-											<div class="tabtitle">
-												<a class="tabtitle" href="0">Chart of Accounts</a>
-											</div>
-											<div class="tabx">
-												<a id="tabcloser0" class="tabcloser" href="0">X</a>
-											</div>
-										</div>
-									</li>
-								</ul>
-							</div><!-- tabheaders -->
-							<div class="tabcontent">
-								<div id="tab0" class="business1 tablet0 accounts refresh tablet active">
-									<a class="source" href="/bacs/1/accounts/"></a>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer pellentesque dignissim elit, in accumsan ipsum condimentum eget. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla nulla augue, lobortis sodales metus ac, vulputate dapibus ante. Pellentesque nisi libero, facilisis et pellentesque condimentum, dictum nec dui. Vivamus aliquam diam ipsum, at malesuada lectus porttitor eu. Mauris mollis, metus ac vulputate porta, nunc urna consequat enim, non vestibulum quam urna a lectus. Suspendisse tellus urna, tempus sed viverra eu, porttitor porttitor neque. Vivamus id odio eleifend, dapibus metus vel, vehicula libero. Aenean adipiscing nunc turpis, non dignissim leo commodo dictum. Integer fermentum massa eget felis consequat, in hendrerit tellus pulvinar. Nulla facilisis et arcu volutpat faucibus. In sapien tellus, semper non diam sed, fermentum suscipit purus. Phasellus tincidunt dolor tempus, facilisis nulla tempor, aliquet sapien. Phasellus quis risus ut mi dapibus sagittis. Pellentesque pharetra cursus elit sollicitudin ultrices. Duis lobortis vestibulum pulvinar.</p>
-
-<p>Integer porttitor nulla lorem, et commodo lectus hendrerit non. Suspendisse lectus nisl, congue quis justo in, aliquam consequat urna. Praesent facilisis orci et lectus scelerisque faucibus. Suspendisse sed ornare ante. Donec convallis risus ut scelerisque ultrices. Nulla a nisl nunc. In aliquet viverra molestie. Praesent sed est sed purus pellentesque aliquam eu ut est. Suspendisse vitae justo in tortor hendrerit aliquet ac vitae purus. Donec pulvinar, metus quis laoreet congue, lorem lectus pretium eros, vel tristique purus velit in justo. Mauris nulla orci, venenatis vitae leo eget, tristique convallis sapien.</p>
-
-<p>Nam at quam ligula. Vivamus nec diam ac ipsum lobortis pellentesque. Nullam et dolor eu nulla interdum cursus eget eu purus. Praesent gravida felis in molestie vehicula. Sed ut nunc arcu. Nunc tempus ligula lacus, ac pretium mauris auctor in. Etiam tempus mollis metus id varius.</p>
-
-	<p>Pellentesque sollicitudin eros quam, sed condimentum libero volutpat eu. Praesent eu mauris a velit laoreet pulvinar. Donec nulla turpis, commodo quis vulputate sed, tempus quis tellus. Nullam sollicitudin lectus nec porta tristique. Ut ante nisi, elementum quis placerat ac, ullamcorper sit amet nulla. Proin et eros nec lacus aliquet malesuada vitae ut justo. Fusce urna lectus, pulvinar tincidunt diam et, auctor posuere sapien. Sed libero lorem, imperdiet id iaculis vel, laoreet vitae mauris. In bibendum interdum tristique. Vivamus vehicula odio iaculis nisi gravida rutrum venenatis eu felis. Maecenas tempor est quis metus lobortis varius. Praesent semper dapibus dui, quis commodo nibh congue ac. Quisque risus quam, suscipit a mattis a, condimentum non felis.</p>
-
-<p>Nunc faucibus lobortis est ac venenatis. Duis ac urna sem. Duis ac metus et lorem iaculis ullamcorper at vel libero. Duis id leo consequat, vehicula dolor sit amet, mattis lacus. Curabitur facilisis diam nec ipsum euismod, a porta lacus elementum. Curabitur imperdiet sagittis arcu nec sollicitudin. Mauris at nisi dapibus, luctus tortor eu, auctor diam. Nulla ante tellus, consectetur vitae risus condimentum, dignissim pharetra nisi. Nunc risus nisl, suscipit eu bibendum ut, tincidunt ut enim. Sed tellus orci, convallis molestie fermentum ac, volutpat a enim. Proin tempus arcu molestie, porta erat sit amet, ornare urna. </p>
-								</div><!-- tablet -->
-							</div><!-- tabcontent -->
-
 						</div><!-- tabs -->
 
 						<div id="pagearea-spacer-bottom"></div>
@@ -144,16 +236,10 @@
 				</div><!-- sitediv -->
 
 				<footer class="site">
-					<!--&copy; 2014 Gladbooks Limited-->
+					&copy; 2014 Gladbooks Limited
 				</footer>
 
-        <!--script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script-->
-        <script src="js/plugins.js"></script>
-				<script src="js/jquery/1.10.2/jquery.min.js"></script>
-        <script src="js/main.js"></script>
-
-				<!--
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
 				<script src="js/jquery/1.10.2/jquery.min.js"></script>
 				<script src="js/jquery-ui/1.10.0/jquery-ui.js"></script>
 				<script src="js/jquery.tablesorter.js"></script>
@@ -161,9 +247,9 @@
 				<script src="js/chosen.jquery.js"></script>
 				<script src="js/big.min.js"></script>
 				<script src="js/moment.min.js"></script>
-				-->
 
-        <!--script src="js/gladd.js"></script>
-        <script src="js/gladbooks.js"></script-->
+        <script src="js/gladd.js"></script>
+        <script src="js/gladbooks.js"></script>
+				<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     </body>
 </html>
