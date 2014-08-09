@@ -167,6 +167,7 @@ div.tabhead div > a {
 .tablet {
   background: white;
   color: #6e89a5;
+  display: none;
   width: 100%; }
 
 @media all and (min-width: 1024px) {
