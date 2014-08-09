@@ -136,6 +136,7 @@ div.tabhead div > a {
 }
 
 div.tabtitle {
+	border-radius: 5px 0 0 0;
 	float: left;
 	overflow: hidden;
 	padding: 0;
@@ -146,10 +147,13 @@ div.tabtitle {
 }
 
 div.tabhead {
-	background-color: $color-light;
 	border-bottom: solid darken($color-dark, 10%) 1px;
 	text-align: center;
 	width: 100%;
+}
+
+.active div.tabhead {
+	background-color: white;
 }
 
 div.tabx {
@@ -160,9 +164,8 @@ div.tabx {
 @media all and (min-width: $small-screen-width) {
 
 	div.tabhead {
-		background-color: white;
 		border-bottom: 0;
-		border-radius: 15px 15px;
+		border-radius: 5px 5px 0 0;
 		position: relative;
 		text-align: left;
 	}

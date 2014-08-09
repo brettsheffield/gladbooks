@@ -190,6 +190,7 @@ div.tabhead div > a {
   float: right; }
 
 div.tabtitle {
+  border-radius: 5px 0 0 0;
   float: left;
   overflow: hidden;
   padding: 0;
@@ -199,19 +200,20 @@ div.tabtitle {
   width: 85%; }
 
 div.tabhead {
-  background-color: #b2cde0;
   border-bottom: solid #56708a 1px;
   text-align: center;
   width: 100%; }
+
+.active div.tabhead {
+  background-color: white; }
 
 div.tabx {
   display: none; }
 
 @media all and (min-width: 1024px) {
   div.tabhead {
-    background-color: white;
     border-bottom: 0;
-    border-radius: 15px 15px;
+    border-radius: 5px 5px 0 0;
     position: relative;
     text-align: left; }
 
