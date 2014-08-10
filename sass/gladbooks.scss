@@ -2,8 +2,6 @@ $small-screen-width: 1024px;
 $small-screen-height: 768px;
 
 @import "sass/includes/gladbooks-color.scss";
-@import "sass/includes/login.scss";
-@import "sass/includes/tabs.scss";
 
 *, p {
 	margin: 0;
@@ -330,4 +328,6 @@ input.search-query {
 	width: 100%;
 }
 
+@import "sass/includes/login.scss";
+@import "sass/includes/tabs.scss";
 @import "sass/includes/misc.scss";
