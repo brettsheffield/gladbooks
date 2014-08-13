@@ -67,7 +67,7 @@ g_menus = [
  */
 
 g_formdata = [
-    [ 'bank', 'statement', [ 'accounts.asset' ], ],  
+    [ 'bank', 'statement', [ 'accounts.asset' ], ],
     [ 'bank', 'reconcile',
         [
             'accounts.unreconciled',
@@ -75,17 +75,17 @@ g_formdata = [
             'debtors',
             'creditors',
         ],
-    ],  
-    [ 'bank', 'reconcile.data', 
+    ],
+    [ 'bank', 'reconcile.data',
         [
             'bank.unreconciled',
             'journal.unreconciled',
         ],
     ],
-    [ 'bank', 'upload', [ 'accounts.asset' ], ],  
+    [ 'bank', 'upload', [ 'accounts.asset' ], ],
     [ 'journal', 'create',
         [ 'accounts', 'divisions', 'departments', 'organisations' ],
-    ],  
+    ],
     [ 'salesorder', 'create', [ 'organisations', 'cycles', 'products' ], ],
     [ 'salesorder', 'update', [ 'organisations', 'cycles', 'products' ], ],
     [ 'salespayment', 'create',[ 'paymenttype', 'organisations', 'accounts.asset' ], ],
@@ -348,7 +348,7 @@ function bankJournalDel() {
 /* Check new journal entry before adding to entries */
 function bankJournalValidate(o) {
     if (o.nominal < 0) { return false; } /* TODO: report warning to user */
-    if (decimalPad(o.debit,2) == '0.00' && decimalPad(o.credit,2) == '0.00') { 
+    if (decimalPad(o.debit,2) == '0.00' && decimalPad(o.credit,2) == '0.00') {
         return false;
     }
     return true;
@@ -617,7 +617,7 @@ function bankReconcileSave() {
 
     /* process Debtors and Creditors */
     t.tab.find('div.bank.journal.tr').each(function() {
-        var nominalcode = $(this).find('select.nominalcode').val(); 
+        var nominalcode = $(this).find('select.nominalcode').val();
         if (nominalcode === '1100' || nominalcode === '2100') {
             var s = (t.type === 'debit') ? 'debtor' : 'creditor';
             var op = (t.type === 'debit') ? 'credit' : 'debit';
@@ -1256,7 +1256,7 @@ function bankReconcileId(bank, ledger, account) {
     /* Build request xml */
     var xml = createRequestXml();
     xml += '<account>' + account + '</account>';
-    xml += '<bank id="' + bank + '">'; 
+    xml += '<bank id="' + bank + '">';
     xml += '<ledger>' + ledger + '</ledger>';
     xml += '</bank></data></request>';
 
@@ -1392,7 +1392,7 @@ customFormEvents = function(tab, object, action, id) {
     if (object == 'contact' && action == 'update') {
         var addressFields = ['line_1','line_2','line_3','town','county',
             'country','postcode'];
-        var selector = addressFields.join('"],input[name="'); 
+        var selector = addressFields.join('"],input[name="');
         selector = 'input[name="' + selector + '"]';
         mytab.find(selector).change(mapUpdate);
     }
@@ -2042,7 +2042,7 @@ tabTitle = function (title, object, action, xml) {
     var namedobjects = [ 'account', 'contact', 'department', 'division',
         'organisation', 'product', 'purchaseorder', 'salesorder'
     ];
-    
+
     if (namedobjects.indexOf(object) != -1 && action == 'update' && xml[0]) {
         if (object == 'account') {
             var id = $(xml[0]).find('id').first().text();
@@ -2469,7 +2469,7 @@ customClickElement = function(row) {
     if (inert.indexOf(tab.collection) != -1) { return true; }
 
     if (['accounts','contacts','divisions','departments','organisations']
-    .indexOf(tab.collection) !== -1) 
+    .indexOf(tab.collection) !== -1)
     {
         var id = row.find('td.xml-id').text();
         var name = row.find('td.xml-name').text();
@@ -2565,7 +2565,7 @@ Form.prototype.validatePurchaseOrder = function() {
     var end_date = t.find('[name="end_date"]');
 
     if (cycle.val() > 1 && start_date.val() === '') {
-        statusMessage('Start Date required for recurring purchase orders', 
+        statusMessage('Start Date required for recurring purchase orders',
             STATUS_WARN);
         start_date.focus();
         return false;
@@ -2592,7 +2592,7 @@ Form.prototype.validateSalesOrder = function() {
     var end_date = t.find('[name="end_date"]');
 
     if (cycle.val() > 1 && start_date.val() === '') {
-        statusMessage('Start Date required for recurring sales orders', 
+        statusMessage('Start Date required for recurring sales orders',
             STATUS_WARN);
         start_date.focus();
         return false;
