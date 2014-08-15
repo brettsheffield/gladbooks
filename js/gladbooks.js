@@ -995,26 +995,6 @@ function bankStatementSelectNone() {
     bankStatementHaveSelected();
 }
 
-/* find suggestions for bank rec */
-/*
-function bankSuggest(row, account) {
-    console.log('bankSuggest()');
-    var d = new Array();
-    var id = $(row).find('div.xml-id').text();
-    d.push(getHTML(collection_url('ledger.suggestions/' + id)));
-    d.push(getHTML(collection_url('salesinvoice.suggestions/' + id)));
-    $.when.apply(null, d)
-    .done(function(html) {
-        var docs = Array.prototype.splice.call(arguments, 0);
-        bankSuggestResults(row, docs);
-    })
-    .fail(function() {
-        bankJournal(row);
-    });
-    return d;
-}
-*/
-
 function bankSuggestResults(docs) {
     console.log('bankSuggestResults()')
     var results = 0;
