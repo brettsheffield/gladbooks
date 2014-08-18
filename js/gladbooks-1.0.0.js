@@ -22,6 +22,8 @@
 
 /* global variables **********************************************************/
 
+g_gladbooks_version = '1.0.0';
+
 g_menus = [
     [ 'bank.reconcile', getForm, 'bank', 'reconcile', 'Bank Reconciliation' ],
     [ 'bank.upload', getForm, 'bank', 'upload', 'Upload Bank Statement' ],
