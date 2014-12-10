@@ -1263,7 +1263,7 @@ BEGIN
 			soi.product,
 			COALESCE(soi.linetext, p.description) AS linetext,
 			soi.discount,
-			COALESCE(soi.price, p.price_sell) as price,
+			COALESCE(soi.price, p.price_sell, '0.00') as price,
 			soi.qty
 		FROM salesorderitem_current soi
 		INNER JOIN product_current p ON p.product = soi.product
