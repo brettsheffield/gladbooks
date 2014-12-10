@@ -751,9 +751,9 @@ SELECT 	sod.id,
 	so.invoicenum,
 	o.orgcode || '/' || to_char(invoicenum, 'FM0000') AS ref,
         roundhalfeven(COALESCE(sod.subtotal, 
-	SUM(COALESCE(soi.price, p.price_sell) * soi.qty)),2) AS subtotal,
+	SUM(COALESCE(soi.price, p.price_sell, '0.00') * soi.qty)),2) AS subtotal,
 	COALESCE(sod.tax, sit.tax, '0.00') AS tax,
-	roundhalfeven(COALESCE(sod.total, SUM(COALESCE(soi.price, p.price_sell)
+	roundhalfeven(COALESCE(sod.total, SUM(COALESCE(soi.price, p.price_sell, '0.00')
 	* soi.qty) + COALESCE(sod.tax, sit.tax, '0.00')),2) AS total
 FROM salesinvoicedetail sod
 INNER JOIN salesinvoice so ON so.id = sod.salesinvoice
