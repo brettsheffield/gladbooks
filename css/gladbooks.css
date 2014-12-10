@@ -728,7 +728,10 @@ td.total, input.total,
 .xml-amount,
 .xml-subtotal,
 .xml-tax,
-.xml-total {
+.xml-total,
+table.datatable th.xml-total,
+table.datatable th.xml-subtotal,
+table.datatable th.xml-tax {
   text-align: right;
   white-space: pre; }
 
