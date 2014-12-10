@@ -597,9 +597,9 @@ SELECT
 	sod.end_date,
 	sod.is_open,
 	sod.is_deleted,
-	roundhalfeven(SUM(COALESCE(soi.price, p.price_sell) * soi.qty),2) AS price,
+	roundhalfeven(SUM(COALESCE(soi.price, p.price_sell, '0.00') * soi.qty),2) AS price,
 	roundhalfeven(COALESCE(tx.tax, '0.00'),2) as tax,
-	roundhalfeven(SUM(COALESCE(soi.price, p.price_sell) * soi.qty) +
+	roundhalfeven(SUM(COALESCE(soi.price, p.price_sell, '0.00') * soi.qty) +
 	                COALESCE(tx.tax, '0.00'),2) AS total
 FROM salesorder so
 INNER JOIN salesorderdetail sod ON so.id = sod.salesorder
