@@ -1,7 +1,7 @@
 <div class="salespayment create">
 	<div class="statusmsg clearfix"/>
 	<h2>Enter Sales Payment</h2>
-	<form method="post" action="salespayments">
+	<form action="salespayments">
 	  <table class="datatable">
 			<thead>
 				<tr>
@@ -15,14 +15,14 @@
 			<tbody>
 				<tr>
 					<td><input name="transactdate" class="datefield" autocomplete="off"/></td>
-					<td><a class="datasource" href="paymenttype" tabindex="-1"></a><select name="paymenttype" class="paymenttype populate" data-placeholder="Select Payment Type" title="Select Payment Type"></select></td>
-					<td><a class="datasource" href="organisations" tabindex="-1"></a><select name="organisation" class="organisations populate" data-placeholder="Select Customer" title="You must select a customer to post this payment against"></select></td>
-					<td><a class="datasource" href="accounts.asset" tabindex="-1"></a><select name="bankaccount" class="account populate" data-placeholder="Select account" title="You must select an account to post this product against"></select></td>
-					<td><input class="amount" type="text" name="amount" placeholder="0.00" title="amount paid"/></td>
+					<td><select name="paymenttype" class="paymenttype populate" data-placeholder="Select Payment Type" title="Select Payment Type" data-source="paymenttype"></select></td>
+					<td><select name="organisation" class="organisations populate" data-placeholder="Select Customer" title="You must select a customer to post this payment against" data-source="organisations"></select></td>
+					<td><select name="bankaccount" class="account populate" data-placeholder="Select account" title="You must select an account to post this product against" data-source="accounts.asset"></select></td>
+					<td><input class="amount currency onchange" type="text" name="amount" placeholder="0.00" title="amount paid"/></td>
 				</tr>
 			</tbody>
 	  </table>
-		<button class="submit formsubmit">Save</button>
-		<button class="reset formreset">Reset</button>
 	</form>
+	<button class="save">Save</button>
+	<button class="reset">Reset</button>
 </div>

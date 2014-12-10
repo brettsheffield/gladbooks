@@ -53,7 +53,7 @@ g_menus = [
     [ 'salesorder.create', showForm, 'salesorder', 'create','New Sales Order'],
     [ 'salesorders', showQuery, 'salesorders', 'Sales Orders', true ],
     [ 'salesorders.process', getForm, 'salesorder', 'process', 'Manual Billing Run' ],
-    [ 'salespayment.create', getForm, 'salespayment', 'create', 'Enter Sales Payment' ],
+    [ 'salespayment.create', showForm, 'salespayment', 'create', 'Enter Sales Payment' ],
     [ 'salespayments', showQuery, 'salespayments', 'Sales Payments', true ],
     [ 'business.create', getForm, 'business', 'create', 'Add New Business' ],
     [ 'businessview', showQuery, 'businesses', 'Businesses', true ],
@@ -91,8 +91,6 @@ g_formdata = [
     ],
     [ 'salesorder', 'create', [ 'organisations', 'cycles', 'products' ], ],
     [ 'salesorder', 'update', [ 'organisations', 'cycles', 'products' ], ],
-    [ 'salespayment', 'create',[ 'paymenttype', 'organisations', 'accounts.asset' ], ],
-    [ 'salespayment', 'update',[ 'paymenttype', 'organisations', 'accounts.asset' ], ],
 ];
 
 FORMDATA = {
@@ -114,6 +112,10 @@ FORMDATA = {
     'salesorder': {
         'create': [ 'cycles', 'organisations', 'productcombo' ],
         'update': [ 'cycles', 'productcombo', 'salesorderitems/{id}/' ],
+    },
+    'salespayment': {
+        'create': [ 'paymenttype', 'organisations', 'accounts.asset' ],
+        'update': [ 'paymenttype', 'organisations', 'accounts.asset' ],
     },
 }
 
