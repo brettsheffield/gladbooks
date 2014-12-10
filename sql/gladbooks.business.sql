@@ -1195,7 +1195,7 @@ ORDER BY shortname ASC
 CREATE OR REPLACE VIEW salesorderlist AS
 SELECT
         sod.salesorder as id,
-        so.organisation AS customer,
+        o.name AS customer,
         o.orgcode || '/' || lpad(CAST(so.ordernum AS TEXT), 5, '0') AS order,
         sod.ponumber,
         sod.description,
@@ -1204,7 +1204,7 @@ SELECT
         sod.end_date
 FROM salesorderdetail sod
 INNER JOIN salesorder so ON so.id = sod.salesorder
-INNER JOIN organisation o ON o.id = so.organisation
+INNER JOIN organisation_current o ON o.id = so.organisation
 WHERE sod.id IN (
         SELECT MAX(id)
         FROM salesorderdetail
