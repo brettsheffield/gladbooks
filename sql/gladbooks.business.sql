@@ -1198,7 +1198,7 @@ SELECT
         o.name AS customer,
         o.orgcode || '/' || lpad(CAST(so.ordernum AS TEXT), 5, '0') AS order,
         sod.ponumber,
-        sod.description,
+        sod.description as comment,
         sod.cycle,
         sod.start_date,
         sod.end_date
