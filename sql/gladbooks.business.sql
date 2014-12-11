@@ -600,7 +600,9 @@ SELECT
 	roundhalfeven(SUM(COALESCE(soi.price, p.price_sell, '0.00') * soi.qty),2) AS price,
 	roundhalfeven(COALESCE(tx.tax, '0.00'),2) as tax,
 	roundhalfeven(SUM(COALESCE(soi.price, p.price_sell, '0.00') * soi.qty) +
-	                COALESCE(tx.tax, '0.00'),2) AS total
+	                COALESCE(tx.tax, '0.00'),2) AS total,
+	so.updated AS created,
+	sod.updated AS modified
 FROM salesorder so
 INNER JOIN salesorderdetail sod ON so.id = sod.salesorder
 LEFT JOIN salesorderitem_current soi ON so.id = soi.salesorder
@@ -620,7 +622,8 @@ GROUP BY so.id, so.organisation, so.ordernum, tx.tax,
 	sod.start_date,
 	sod.end_date,
 	sod.is_open,
-	sod.is_deleted
+	sod.is_deleted,
+	sod.updated
 ;
 
 /*  not used - intended for overriding taxes
@@ -1216,24 +1219,20 @@ ORDER BY shortname ASC
 
 CREATE OR REPLACE VIEW salesorderlist AS
 SELECT
-        sod.salesorder as id,
+        so.id,
         o.name AS customer,
         o.orgcode || '/' || lpad(CAST(so.ordernum AS TEXT), 5, '0') AS order,
-        sod.ponumber,
-        sod.description as comment,
-        sod.cycle,
-        sod.start_date,
-        sod.end_date
-FROM salesorderdetail sod
-INNER JOIN salesorder so ON so.id = sod.salesorder
+        so.ponumber,
+        so.description as comment,
+        so.cycle,
+        so.start_date,
+        so.end_date,
+	so.created,
+	so.modified
+FROM salesorder_current so
 INNER JOIN organisation_current o ON o.id = so.organisation
-WHERE sod.id IN (
-        SELECT MAX(id)
-        FROM salesorderdetail
-        GROUP BY salesorder
-)
-AND sod.is_open = 'true'
-AND sod.is_deleted = 'false'
+WHERE so.is_open = 'true'
+AND so.is_deleted = 'false'
 ;
 
 CREATE OR REPLACE VIEW salesorderview AS
