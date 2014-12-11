@@ -98,6 +98,9 @@ FORMDATA = {
         'create': [ 'accounttypes' ],
         'update': [ 'accounttypes' ],
     },
+    'journal': {
+        'delete': [ 'journallines/{id}/' ],
+    },
     'organisation': {
         'update': [ 'contactssorted', 'relationships' ],
     },
@@ -1382,6 +1385,10 @@ customFormEvents = function(tab, object, action, id) {
         mytab.find(selector).change(mapUpdate);
     }
 
+    if (object === 'journal') {
+        customFormEventsJournal(tab, object, action, id, mytab);
+    }
+
     /* organisation.update addrow button */
     if (object == 'organisation' && action == 'update') {
         mytab.find('button.addrow').click(function() {
@@ -1392,6 +1399,13 @@ customFormEvents = function(tab, object, action, id) {
 
     if (object === 'salesorder') {
         customFormEventsSalesOrder(tab, object, action, id, mytab);
+    }
+}
+
+function customFormEventsJournal(tab, object, action, id, mytab) {
+    var reverseid = mytab.find('input[name="reverseid"]').val();
+    if (!($.isNumeric(reverseid))) {
+        mytab.find('button.save').removeClass('hidden');
     }
 }
 
@@ -2494,6 +2508,12 @@ customClickElement = function(row) {
         var name = row.find('td.xml-name').text();
         var object = tab.collection.substr(0,tab.collection.length-1);
         showForm(object, action, name, id);
+        return true;
+    }
+    else if (tab.collection === 'ledgers') {
+        /* display whole journal, not just one ledger */
+        var id = row.find('td.xml-journal').text();
+        showForm('journal', 'delete', 'Journal #' + id, id);
         return true;
     }
     else if (tab.collection == 'products') {

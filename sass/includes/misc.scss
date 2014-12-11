@@ -827,7 +827,58 @@ div.accordion h3.selected {
     border-radius: 0;
 }
 
+/* journal view screen */
+div.journal div.datatable {
+	font-size: 0.8em;
+	width: 100%;
+}
+div.journal div.datatable div.id, 
+div.journal div.datatable div.reverseid {
+	width: 5%;
+}
+div.journal div.datatable div.transactdate {
+	width: 10%;
+}
+div.journal div.datatable div.description {
+	width: 20%;
+}
+div.journal div.datatable div.entered {
+	width: 20%;
+}
+div.journal div.datatable div.authuser {
+	width: 10%;
+}
+div.journal div.datatable div.clientip {
+	width: 30%;
+}
+
+div.journal div.datatable div.form div.account{
+	width: 10%;
+}
+div.journal div.datatable div.form div.division {
+	width: 15%;
+}
+div.journal div.datatable div.form div.department {
+	width: 15%;
+}
+div.journal div.datatable div.form div.debit,
+div.journal div.datatable div.form div.credit {
+	text-align: right;
+	width: 15%;
+}
+div.journal div.datatable div.form div.padding {
+	width: 30%;
+}
+div.journal div.datatable div.form input.debit,
+div.journal div.datatable div.form input.credit {
+	text-align: right;
+}
+div.journal div.datatable div.form input {
+	width: 100%;
+}
+
 /* purchaseorder and salesorder screens */
+div.journal div.datatable,
 div.purchaseorder div.datatable,
 div.salesorder div.datatable {
 	font-size: 0.8em;

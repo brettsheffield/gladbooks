@@ -1,0 +1,47 @@
+<div class="journal delete">
+	<div class="tablewrapper">
+		<form class="journal" action="journals">
+			<div class="datatable">
+				<div class="tr">
+					<div class="th id">#</div>
+					<div class="th reverseid">Reverse #</div>
+					<div class="th transactdate">Transaction Date</div>
+					<div class="th description">Description</div>
+					<div class="th entered">Entered</div>
+					<div class="th authuser">User</div>
+					<div class="th clientip">IP</div>
+				</div>
+				<div class="tr">
+					<div class="td id"><input type="text" name="id" readonly="readonly"/></div>
+					<div class="td reverseid"><input type="text" name="reverseid" readonly="readonly"/></div>
+					<div class="td transactdate"><input type="text" name="transactdate" class="transactdate nosubmit" readonly="readonly"/></div>
+					<div class="td description"><input name="description" class="description" readonly="readonly"/></div>
+					<div class="td entered"><input name="entered" class="entered" readonly="readonly"/></div>
+					<div class="td authuser"><input name="authuser" class="authuser" readonly="readonly"/></div>
+					<div class="td clientip"><input name="clientip" class="clientip" readonly="readonly"/></div>
+				</div>
+				<div class="form" data-object="journallines" data-tag="journalline">
+					<div class="tr">
+						<div class="th account">Account</div>
+						<div class="th division">Division</div>
+						<div class="th department">Department</div>
+						<div class="th debit">Debit</div>
+						<div class="th credit">Credit</div>
+						<div class="th padding">&nbsp;</div>
+					</div>
+					<div class="subformwrapper">
+						<div class="tr" data-minOccurs="1">
+							<div class="td account"><input class="account nosubmit" name="account" type="text"/></div>
+							<div class="td division"><input class="division nosubmit" name="division" type="text"/></div>
+							<div class="td department"><input class="department nosubmit" name="department" type="text"/></div>
+							<div class="td debit"><input class="debit currency nosubmit" name="debit" type="text"/></div>
+							<div class="td credit"><input class="credit currency nosubmit" name="credit" type="text"/></div>
+							<div class="td padding">&nbsp;</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<button class="save hidden">Reverse This Journal</button>
+</div>
