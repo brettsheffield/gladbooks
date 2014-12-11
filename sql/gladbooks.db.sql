@@ -1158,7 +1158,12 @@ BEGIN
 
 	-- figure out how many salesinvoices there should be --
 	IF so.cycle = '1' THEN
-		so_due := '1';
+		-- do not issue 'once' invoices before start_date
+		IF so.start_date > DATE(NOW()) THEN
+			so_due := '0';
+		ELSE
+			so_due := '1';
+		END IF;
 	ELSE
 		-- ensure we don't issue future dated invoices
 		end_date := COALESCE(so.end_date, DATE(NOW()));
