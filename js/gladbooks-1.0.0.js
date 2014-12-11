@@ -2177,6 +2177,14 @@ function validateFormProduct(action, id) {
     return true;
 }
 
+function validateFormSalesPayment(action, id) {
+    var mytab = activeTab();
+    var type = mytab.find('select[name="paymenttype"] option:selected').text();
+    var desc = mytab.find('input[name="description"]');
+    desc.val(type);
+    return true;
+}
+
 function validateJournalEntry(form, bankid) {
     var xml = createRequestXml();
     var account;
@@ -2535,6 +2543,9 @@ Form.prototype.validateCustom = function() {
     }
     else if ((this.object == 'salesorder') && (this.action != 'process')) {
         return this.validateSalesOrder();
+    }
+    else if (this.object == 'salespayment') {
+        return validateFormSalesPayment(this.action, this.id);
     }
 
     return b;
