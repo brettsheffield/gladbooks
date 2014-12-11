@@ -1401,8 +1401,6 @@ function customFormEventsSalesOrder(tab, object, action, id, mytab) {
         var start_date = mytab.find('div.start_date');
         var end_date = mytab.find('div.end_date');
         var cycle = $(this).find('option:selected').text();
-
-        console.log('mindset to cycle: ' + cycle);
         if (cycle === 'never') {
             start_date.addClass('hidden');
         }
