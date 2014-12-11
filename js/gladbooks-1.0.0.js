@@ -1389,7 +1389,35 @@ customFormEvents = function(tab, object, action, id) {
             addSubformEvent($(this), "organisation_contacts", id, tab);
         });
     }
+
+    if (object === 'salesorder') {
+        customFormEventsSalesOrder(tab, object, action, id, mytab);
+    }
 }
+
+function customFormEventsSalesOrder(tab, object, action, id, mytab) {
+    mytab.find('select[name="cycle"]').change(function() {
+        console.log('salesorder.cycle changed');
+        var start_date = mytab.find('div.start_date');
+        var end_date = mytab.find('div.end_date');
+        var cycle = $(this).find('option:selected').text();
+
+        console.log('mindset to cycle: ' + cycle);
+        if (cycle === 'never') {
+            start_date.addClass('hidden');
+        }
+        else {
+            start_date.removeClass('hidden');
+        }
+        if (cycle === 'never' || cycle === 'once') {
+            end_date.addClass('hidden');
+        }
+        else {
+            end_date.removeClass('hidden');
+        }
+    });
+}
+
 
 customBusinessNotFound = function(xml) {
     console.log('Create first business');
