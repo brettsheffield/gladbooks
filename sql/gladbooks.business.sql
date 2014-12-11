@@ -87,6 +87,7 @@ CREATE RULE nodel_journal_pk_counter AS ON DELETE TO journal_pk_counter
 
 CREATE TABLE journal (
 	id		INT4 DEFAULT journal_id_next(),
+	reverseid	INT4 references journal(id) ON DELETE RESTRICT DEFAULT NULL,
 	transactdate	date,
 	description	TEXT,
 	entered		timestamp with time zone default now(),
