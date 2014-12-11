@@ -54,8 +54,8 @@
 				<display>account</display>
 				<display>division</display>
 				<display>department</display>
-				<display>debit</display>
-				<display>credit</display>
+				<display>fdebit</display>
+				<display>fcredit</display>
 				<sort field="id" order="ASC"/>
 				<field type="date">date</field>
 				<field>narrative</field>
