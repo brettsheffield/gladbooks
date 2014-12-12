@@ -2349,7 +2349,6 @@ function validateNominalCode(code, type) {
     var row = $(form.data['accounttypes']).find('row').filter(function() {
         return $(this).find('id').text() == type;
     });
-    console.log(row);
 
     var min = row.find('range_min').text();
     var max = row.find('range_max').text();
