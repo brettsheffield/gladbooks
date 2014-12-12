@@ -1507,6 +1507,7 @@ div.organisation.update div.chzn-container {
 
 /* status msg boxes */
 div.statusmsg {
+  background-color: white;
   float: right;
   padding: 0.5em 2em;
   position: fixed;
@@ -1517,7 +1518,6 @@ div.statusmsg {
   z-index: 10; }
 
 .info {
-  background-color: white;
   border: 1px solid #6e89a5;
   color: #6e89a5; }
 
