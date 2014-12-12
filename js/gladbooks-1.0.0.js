@@ -2566,7 +2566,18 @@ Form.prototype.customXML = function() {
 }
 
 Form.prototype.submitErrorCustom = function(xhr, s, err) {
-    if (this.object === 'salesorder' && this.action === 'process') {
+    var xml = xhr.responseXML;
+    var responsecode = $(xml).find('responsecode').text();
+    var responsetext = $(xml).find('responsetext').text();
+    if (this.object === 'account' && this.action === 'create') {
+        if (responsecode === '23505') {
+            var nomcode = this.tab.find('input.nominalcode').val();
+            statusMessage('Unable to save account - nominal code ' + nomcode +
+                ' already exists', STATUS_WARN);
+            return true;
+        }
+    }
+    else if (this.object === 'salesorder' && this.action === 'process') {
         statusMessage('Billing run failed', STATUS_CRIT);
         return true;
     }
