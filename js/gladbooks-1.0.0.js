@@ -2565,6 +2565,14 @@ Form.prototype.customXML = function() {
     }
 }
 
+/* override object variables etc. */
+Form.prototype.overrides = function() {
+    if (this.object === 'journal') {
+        this.prompts['delete'] = 'Reverse this journal?';
+        this.prompts['deletestatus'] = 'Reversing journal...';
+    }
+}
+
 Form.prototype.submitErrorCustom = function(xhr, s, err) {
     var xml = xhr.responseXML;
     var responsecode = $(xml).find('responsecode').text();
