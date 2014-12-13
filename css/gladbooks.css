@@ -1408,7 +1408,8 @@ input[readonly] {
   border: 2px solid white;
   font-weight: bold;
   outline: none !important;
-  padding-left: 5px; }
+  padding-left: 5px;
+  width: 100%; }
 
 /* totals table (salesorder form) */
 table.totals {
