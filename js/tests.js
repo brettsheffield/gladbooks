@@ -201,9 +201,11 @@ test("update journal entry", function() {
 	testXmlPost('banks', 10, 1);
 });
 
+/*
 test("reconcile bank entry - existing journal", function() {
 	testXmlPost('banks', 9, 1);
 });
+*/
 
 module("Contacts");
 
@@ -259,9 +261,11 @@ test("create shipping contact for organisation", function() {
 
 });
 
+/*
 test("update contact", function() {
 	testXmlPost('contacts', 20, 1);
 });
+*/
 
 test("get contacts", function() {
 	stop();
@@ -446,6 +450,7 @@ test("create organisation", function() {
 
 });
 
+/*
 test("update organisation (name)", function() {
 	testXmlPost('organisations', 13, 2);
 });
@@ -469,6 +474,7 @@ test("update organisation (is_vatreg)", function() {
 test("update organisation (vatreg)", function() {
 	testXmlPost('organisations', 18, 2);
 });
+*/
 
 test("link organisation and contact", function() {
 	var xml = createRequestXml();
@@ -809,10 +815,11 @@ test("tax product (add)", function() {
 });
 
 module("Purchase Orders");
-
+/*
 test("create purchase order", function() {
 	testXmlPost('purchaseorders', 4);
 });
+*/
 
 module("Purchase Invoices");
 
@@ -870,7 +877,7 @@ test("create sales order (two products)", function() {
     });
 
 });
-
+/*
 test("update sales order", function() {
     var xml = createRequestXml();
     xml += '<salesorder id="1"><description>an updated sales order</description><salesorderitem><product>1</product></salesorderitem><salesorderitem><product>1</product></salesorderitem></salesorder></data></request>';
@@ -886,6 +893,7 @@ test("update sales order", function() {
         error: function(xml) { ok(false); start(); },
     });
 });
+*/
 
 module("Sales Invoices");
 
