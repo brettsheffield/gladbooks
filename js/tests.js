@@ -978,7 +978,7 @@ function testXmlPost(object, testid, id, ignorediff) {
 				start(); 
 			},
 			error: function() {
-				ok(false, "POST failed " + posturl);
+				ok(false, "POST failed " + urlPost);
 				start();
 			},
 		});
