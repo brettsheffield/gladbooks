@@ -26,42 +26,42 @@ g_gladbooks_version = '1.0.0';
 console.log('Loaded gladbooks.js version ' + g_gladbooks_version);
 
 g_menus = [
-    [ 'bank.reconcile', getForm, 'bank', 'reconcile', 'Bank Reconciliation' ],
-    [ 'bank.upload', getForm, 'bank', 'upload', 'Upload Bank Statement' ],
-    [ 'bank.statement', getForm, 'bank', 'statement', 'Bank Statement' ],
-    [ 'bank.test', showHTML, 'help/layouttest.html', 'Layout Test' ],
-    [ 'banking', showHTML, 'help/banking.html', 'Banking', false ],
-    [ 'contact.create', showForm, 'contact', 'create', 'Add New Contact' ],
-    [ 'contacts', showQuery, 'contacts', 'Contacts', true ],
-    [ 'departments.create', showForm, 'department', 'create', 'Add New Department' ],
-    [ 'departments.view', showQuery, 'departments', 'Departments', true ],
-    [ 'divisions.create', showForm, 'division', 'create', 'Add New Division' ],
-    [ 'divisions.view', showQuery, 'divisions', 'Divisions', true ],
-    [ 'help', showHTML, 'help/index.html', 'Help', false ],
-    [ 'organisation.create', showForm, 'organisation', 'create', 'Add New Organisation' ],
-    [ 'organisations', showQuery, 'organisations', 'Organisations', true ],
-    [ 'payables', showHTML, 'help/payables.html', 'Payables', false ],
-    [ 'purchaseorder.list', showQuery, 'purchaseorders', 'Purchase Orders', true ],
-    [ 'purchaseorder.create', showForm, 'purchaseorder', 'create','New Purchase Order'],
-    [ 'product.create', showForm, 'product', 'create', 'Add New Product' ],
-    [ 'products', showQuery, 'products', 'Products', true ],
-    [ 'rpt_accountsreceivable', showQuery, 'reports/accountsreceivable', 'Accounts Receivable', true ],
-    [ 'rpt_balancesheet', showHTML, 'reports/balancesheet','Balance Sheet',false, true ],
-    [ 'rpt_profitandloss', showHTML, 'reports/profitandloss','Profit & Loss',false, true ],
-    [ 'rpt_trialbalance', showQuery, 'reports/trialbalance', 'Trial Balance', false ],
-    [ 'salesinvoices', showQuery, 'salesinvoices', 'Sales Invoices', true ],
-    [ 'salesorder.create', showForm, 'salesorder', 'create','New Sales Order'],
-    [ 'salesorders', showQuery, 'salesorders', 'Sales Orders', true ],
-    [ 'salesorders.process', getForm, 'salesorder', 'process', 'Manual Billing Run' ],
-    [ 'salespayment.create', showForm, 'salespayment', 'create', 'Enter Sales Payment' ],
-    [ 'salespayments', showQuery, 'salespayments', 'Sales Payments', true ],
-    [ 'business.create', getForm, 'business', 'create', 'Add New Business' ],
-    [ 'businessview', showQuery, 'businesses', 'Businesses', true ],
-    [ 'chartadd', showForm, 'account', 'create', 'Add New Account' ],
-    [ 'chartview', showQuery, 'accounts', 'Chart of Accounts', true ],
-    [ 'journal', setupJournalForm ],
-    [ 'ledger', showQuery, 'ledgers', 'General Ledger', true ],
-    [ 'logout', logout ],
+    ['bank.reconcile', getForm, 'bank', 'reconcile', 'Bank Reconciliation'],
+    ['bank.upload', getForm, 'bank', 'upload', 'Upload Bank Statement'],
+    ['bank.statement', getForm, 'bank', 'statement', 'Bank Statement'],
+    ['bank.test', showHTML, 'help/layouttest.html', 'Layout Test'],
+    ['banking', showHTML, 'help/banking.html', 'Banking', false],
+    ['contact.create', showForm, 'contact', 'create', 'Add New Contact'],
+    ['contacts', showQuery, 'contacts', 'Contacts', true],
+    ['departments.create', showForm, 'department', 'create', 'Add New Department'],
+    ['departments.view', showQuery, 'departments', 'Departments', true],
+    ['divisions.create', showForm, 'division', 'create', 'Add New Division'],
+    ['divisions.view', showQuery, 'divisions', 'Divisions', true],
+    ['help', showHTML, 'help/index.html', 'Help', false],
+    ['organisation.create', showForm, 'organisation', 'create', 'Add New Organisation'],
+    ['organisations', showQuery, 'organisations', 'Organisations', true],
+    ['payables', showHTML, 'help/payables.html', 'Payables', false],
+    ['purchaseorder.list', showQuery, 'purchaseorders', 'Purchase Orders', true],
+    ['purchaseorder.create', showForm, 'purchaseorder', 'create', 'New Purchase Order'],
+    ['product.create', showForm, 'product', 'create', 'Add New Product'],
+    ['products', showQuery, 'products', 'Products', true],
+    ['rpt_accountsreceivable', showQuery, 'reports/accountsreceivable', 'Accounts Receivable', true],
+    ['rpt_balancesheet', showHTML, 'reports/balancesheet', 'Balance Sheet', false, true],
+    ['rpt_profitandloss', showHTML, 'reports/profitandloss', 'Profit & Loss', false, true],
+    ['rpt_trialbalance', showQuery, 'reports/trialbalance', 'Trial Balance', false],
+    ['salesinvoices', showQuery, 'salesinvoices', 'Sales Invoices', true],
+    ['salesorder.create', showForm, 'salesorder', 'create', 'New Sales Order'],
+    ['salesorders', showQuery, 'salesorders', 'Sales Orders', true],
+    ['salesorders.process', getForm, 'salesorder', 'process', 'Manual Billing Run'],
+    ['salespayment.create', showForm, 'salespayment', 'create', 'Enter Sales Payment'],
+    ['salespayments', showQuery, 'salespayments', 'Sales Payments', true],
+    ['business.create', getForm, 'business', 'create', 'Add New Business'],
+    ['businessview', showQuery, 'businesses', 'Businesses', true],
+    ['chartadd', showForm, 'account', 'create', 'Add New Account'],
+    ['chartview', showQuery, 'accounts', 'Chart of Accounts', true],
+    ['journal', setupJournalForm],
+    ['ledger', showQuery, 'ledgers', 'General Ledger', true],
+    ['logout', logout],
 ];
 
 /* data sources for each form
@@ -70,64 +70,59 @@ g_menus = [
  */
 
 g_formdata = [
-    [ 'bank', 'statement', [ 'accounts.asset' ], ],
-    [ 'bank', 'reconcile',
-        [
-            'accounts.unreconciled',
-            'accounts',
-            'debtors',
-            'creditors',
-        ],
-    ],
-    [ 'bank', 'reconcile.data',
-        [
-            'bank.unreconciled',
-            'journal.unreconciled',
-        ],
-    ],
-    [ 'bank', 'upload', [ 'accounts.asset' ], ],
-    [ 'journal', 'create',
-        [ 'accounts', 'divisions', 'departments', 'organisations' ],
-    ],
-    [ 'salesorder', 'create', [ 'organisations', 'cycles', 'products' ], ],
-    [ 'salesorder', 'update', [ 'organisations', 'cycles', 'products' ], ],
+    ['bank', 'statement', ['accounts.asset'], ],
+    ['bank', 'reconcile', [
+        'accounts.unreconciled',
+        'accounts',
+        'debtors',
+        'creditors',
+    ], ],
+    ['bank', 'reconcile.data', [
+        'bank.unreconciled',
+        'journal.unreconciled',
+    ], ],
+    ['bank', 'upload', ['accounts.asset'], ],
+    ['journal', 'create', ['accounts', 'divisions', 'departments', 'organisations'], ],
+    ['salesorder', 'create', ['organisations', 'cycles', 'products'], ],
+    ['salesorder', 'update', ['organisations', 'cycles', 'products'], ],
 ];
 
 FORMDATA = {
     'account': {
-        'create': [ 'accounttypes' ],
-        'update': [ 'accounttypes' ],
+        'create': ['accounttypes'],
+        'update': ['accounttypes'],
     },
     'journal': {
-        'delete': [ 'journallines/{id}/' ],
+        'delete': ['journallines/{id}/'],
     },
     'organisation': {
-        'update': [ 'contactssorted', 'relationships' ],
+        'update': ['contactssorted', 'relationships'],
     },
     'product': {
-        'create': [ 'accounts.revenue' ],
-        'update': [ 'accounts.revenue', 'taxes' ],
+        'create': ['accounts.revenue'],
+        'update': ['accounts.revenue', 'taxes'],
     },
     'purchaseorder': {
-        'create': [ 'cycles', 'organisations', 'productcombo' ],
-        'update': [ 'cycles', 'productcombo', 'purchaseorderitems/{id}/' ],
+        'create': ['cycles', 'organisations', 'productcombo'],
+        'update': ['cycles', 'productcombo', 'purchaseorderitems/{id}/'],
     },
     'salesorder': {
-        'create': [ 'cycles', 'organisations', 'productcombo' ],
-        'update': [ 'cycles', 'productcombo', 'salesorderitems/{id}/' ],
+        'create': ['cycles', 'organisations', 'productcombo'],
+        'update': ['cycles', 'productcombo', 'salesorderitems/{id}/'],
     },
     'salespayment': {
-        'create': [ 'paymenttype', 'organisations', 'accounts.asset' ],
-        'update': [ 'paymenttype', 'organisations', 'accounts.asset' ],
+        'create': ['paymenttype', 'organisations', 'accounts.asset'],
+        'update': ['paymenttype', 'organisations', 'accounts.asset'],
     },
 }
 
 MAPFIELDS = {
-    'contact': ['line_1','line_2','line_3','town','county', 'country',
-                'postcode']
+    'contact': ['line_1', 'line_2', 'line_3', 'town', 'county', 'country',
+        'postcode'
+    ]
 }
 
-var g_max_ledgers_per_journal=7;
+var g_max_ledgers_per_journal = 7;
 var g_frmLedger;
 var g_xml_accounttype = '';
 var g_xml_business = ''
@@ -292,7 +287,7 @@ function bankJournalAdd() {
     var mytab = activeTab();
     var w = $(this).parents('div.workspace');
     var j = $(this).parents('div.tr.journal:first');
-    var newj = j.clone(true,true);
+    var newj = j.clone(true, true);
     var o = new Object();
     o.date = mytab.find('div.bank.target div.td.xml-date').text();
     o.description = mytab.find('div.journal input.description').val();
@@ -303,7 +298,9 @@ function bankJournalAdd() {
     o.credit = mytab.find('div.journal input.credit').val();
 
     /* validate */
-    if (!bankJournalValidate(o)) { return false; }
+    if (!bankJournalValidate(o)) {
+        return false;
+    }
 
     /* default description to bank entry */
     if (o.description.length == 0) {
@@ -312,22 +309,6 @@ function bankJournalAdd() {
 
     j.after(newj);
 
-    /* build fragment */
-    /*
-    var j = $('<div class="tr"/>');
-    j.append('<div class="td xml-date">' + o.date + '</div>');
-    j.append('<div class="td xml-description">' + o.description + '</div>');
-    j.append('<div class="td xml-account">' + o.nominal + '</div>');
-    j.append('<div class="td xml-debit">' + decimalPad(o.debit,2) + '</div>');
-    j.append('<div class="td xml-credit">' + decimalPad(o.credit,2) +'</div>');
-    j.append('<div class="td buttons"><button class="del">X</button></div>');
-    j.find('button.del').click(bankJournalDel);
-    */
-
-    /* append to entries */
-    //mytab.find('div.bank.entries').append(j);
-
-    //bankJournalReset();
     bankTotalsUpdate();
 }
 
@@ -355,8 +336,10 @@ function bankJournalDel() {
 
 /* Check new journal entry before adding to entries */
 function bankJournalValidate(o) {
-    if (o.nominal < 0) { return false; } /* TODO: report warning to user */
-    if (decimalPad(o.debit,2) == '0.00' && decimalPad(o.credit,2) == '0.00') {
+    if (o.nominal < 0) {
+        return false;
+    } /* TODO: report warning to user */
+    if (decimalPad(o.debit, 2) == '0.00' && decimalPad(o.credit, 2) == '0.00') {
         return false;
     }
     return true;
@@ -379,7 +362,7 @@ function bankJournalAmountChange() {
     }
 
     /* round and pad to 2 decimal places */
-    var amount = decimalPad(roundHalfEven(Math.abs($(this).val()),2),2);
+    var amount = decimalPad(roundHalfEven(Math.abs($(this).val()), 2), 2);
 
     /* if amount is negative, make positive and switch debit/credit */
     if ($(this).val() < 0) {
@@ -466,9 +449,9 @@ function bankTotalsUpdated() {
         totals.addClass('balanced');
         btnsave.removeAttr('disabled');
     }
-    else {                   /* totals unbalanced */
+    else { /* totals unbalanced */
         totals.removeClass('balanced');
-        btnsave.attr('disabled','disabled');
+        btnsave.attr('disabled', 'disabled');
     }
 }
 
@@ -481,13 +464,17 @@ function bankReconcile(account) {
     var offset = mytab.find('div.results.pager').data('offset');
     var reverse = mytab.find('div.results.pager').data('reverse');
     var limit = 1;
-    if (offset == undefined) { offset = 0; }
-    if (reverse == undefined) { reverse = 'ASC'; }
+    if (offset == undefined) {
+        offset = 0;
+    }
+    if (reverse == undefined) {
+        reverse = 'ASC';
+    }
     mytab.find('div.results.pager').data('offset', offset)
     mytab.find('div.results.pager').data('reverse', reverse)
     mytab.find('div.results.pager').data('limit', limit);
-    var url = 'bank.unreconciled/' + account + '/' + limit + '/' + offset
-        + '/' + reverse;
+    var url = 'bank.unreconciled/' + account + '/' + limit + '/' + offset + '/'
+        + reverse;
     var d = new Array(); /* array of deferreds */
 
     bankResultsPager(account, 'reconcile');
@@ -500,7 +487,7 @@ function bankReconcile(account) {
     btncancel.off().click(bankReconcileCancel);
     btncancel.removeAttr('disabled');
     var btnsave = mytab.find('div.results.pager button.save');
-    btnsave.attr('disabled','disabled');
+    btnsave.attr('disabled', 'disabled');
     btnsave.off().click(bankReconcileSave);
     var btndel = mytab.find('div.results.pager button.delete');
     btndel.off().click(bankReconcileDelete);
@@ -509,26 +496,25 @@ function bankReconcile(account) {
     activeTab().find('div.suspects').children().fadeOut();
     d.push(getHTML(collection_url(url)));
     $.when.apply(null, d)
-    .done(function(bankdata) {
-        div.empty();
-        if (bankdata != '(null)') {
-            div.append(bankdata);
-            var row = div.find('div.tr div.td').parents('div.tr');
-            row.addClass('selected');
-            div.show();
-            bankReconcilePresetDebitCredit();
-            bankTotalsUpdate();
-            //bankSuggest(row, account);
-        }
-        else {
-            div.hide();
-        }
-        hideSpinner();
-    })
-    .fail(function() {
-        statusMessage('error loading data', STATUS_CRIT);
-        hideSpinner();
-    });
+        .done(function(bankdata) {
+            div.empty();
+            if (bankdata != '(null)') {
+                div.append(bankdata);
+                var row = div.find('div.tr div.td').parents('div.tr');
+                row.addClass('selected');
+                div.show();
+                bankReconcilePresetDebitCredit();
+                bankTotalsUpdate();
+            }
+            else {
+                div.hide();
+            }
+            hideSpinner();
+        })
+        .fail(function() {
+            statusMessage('error loading data', STATUS_CRIT);
+            hideSpinner();
+        });
 }
 
 /* cancel button clicked */
@@ -573,8 +559,12 @@ function bankReconcileDelete() {
         $.ajax({
             url: url,
             type: 'DELETE',
-            beforeSend: function (xhr) { setAuthHeader(xhr); },
-            complete: function(xml) { bankReconcileNext(mytab); }
+            beforeSend: function(xhr) {
+                setAuthHeader(xhr);
+            },
+            complete: function(xml) {
+                bankReconcileNext(mytab);
+            }
         });
     }
     else {
@@ -614,7 +604,7 @@ function bankReconcileSave() {
     var xml = createRequestXml();
     xml += '<account>' + t.acct + '</account>';
     xml += '<bank id="' + t.id + '">';
-    xml += '<transactdate>' + t.date  + '</transactdate>';
+    xml += '<transactdate>' + t.date + '</transactdate>';
     xml += '<description>' + escapeHTML(t.desc) + '</description>';
     xml += '<paymenttype>1</paymenttype>'; /* FIXME: hardcoded */
 
@@ -688,10 +678,10 @@ function bankReconcileSuggest() {
         }
     });
     $.when.apply(null, d)
-    .done(function(html) {
-        var docs = Array.prototype.splice.call(arguments, 0);
-        bankSuggestResults(docs);
-    });
+        .done(function(html) {
+            var docs = Array.prototype.splice.call(arguments, 0);
+            bankSuggestResults(docs);
+        });
     return d;
 
 }
@@ -743,7 +733,9 @@ function bankReconcilePost(t) {
         data: t.request,
         contentType: 'text/xml',
         type: 'POST',
-        beforeSend: function (xhr) { setAuthHeader(xhr); },
+        beforeSend: function(xhr) {
+            setAuthHeader(xhr);
+        },
         success: function(xml) {
             t.response = xml;
             bankReconcileNext(t);
@@ -785,9 +777,9 @@ function bankResultsPager(account, action) {
         return false;
     });
     pager.find('button.first,button.previous,button.next,button.last')
-    .each(function() {
-        $(this).removeAttr("disabled");
-    });
+        .each(function() {
+            $(this).removeAttr("disabled");
+        });
 }
 
 function bankResultsPagerAction(account, action) {
@@ -814,7 +806,9 @@ function bankResultsPagerPrevious(pager, account, action) {
     var limit = pager.data('limit');
     if (order == reverse) {
         offset -= limit;
-        if (offset < 0) { offset = 0 };
+        if (offset < 0) {
+            offset = 0
+        };
     }
     else {
         offset += limit;
@@ -833,7 +827,9 @@ function bankResultsPagerNext(pager, account, action) {
     }
     else {
         offset -= limit;
-        if (offset < 0) { offset = 0 };
+        if (offset < 0) {
+            offset = 0
+        };
     }
     pager.data('offset', offset);
     bankResultsPagerAction(account, action);
@@ -860,13 +856,21 @@ function bankStatement(account) {
     var hbox = mytab.find('div.bank.statement').height();
     var hhead = 20; /* 20 pixels */
     var hrow = 20;  /* 20 pixels */
-    var limit = Math.floor((hbox-hhead)/hrow) - 2;
+    var limit = Math.floor((hbox - hhead) / hrow) - 2;
 
     /* set defaults */
-    if (offset == undefined) { offset = 0; }
-    if (order == undefined) { order = 'ASC'; }
-    if (reverse == undefined) { reverse = 'ASC'; }
-    if (sortfield == undefined) { sortfield = 'date'; }
+    if (offset == undefined) {
+        offset = 0;
+    }
+    if (order == undefined) {
+        order = 'ASC';
+    }
+    if (reverse == undefined) {
+        reverse = 'ASC';
+    }
+    if (sortfield == undefined) {
+        sortfield = 'date';
+    }
 
     pager.data('limit', limit);
     pager.data('offset', offset);
@@ -987,7 +991,7 @@ function bankStatementHaveSelected() {
         mytab.find('div.pager button.unreconcile').removeAttr('disabled');
     }
     else {
-        mytab.find('div.pager button.unreconcile').attr('disabled','disabled');
+        mytab.find('div.pager button.unreconcile').attr('disabled', 'disabled');
     }
 }
 
@@ -1012,10 +1016,10 @@ function bankSuggestResults(docs) {
     var html = undefined;
     workspace.empty();
     if (Object.prototype.toString.call(docs[0]) !== '[object Array]') {
-        docs = [ docs ]; /* force into array */
+        docs = [docs]; /* force into array */
     }
     console.log(docs.length + ' doc(s) returned.');
-    for (var i=0; i<docs.length; i++) {
+    for (var i = 0; i < docs.length; i++) {
         html = docs[i][0];
         rows = $(html).find('div.bank.suggestion').length;
         results += rows;
@@ -1056,10 +1060,14 @@ function bankAllocateChange(event) {
     max = decimalSubtract(max, allocated);
 
     /* Ensure amount allocated is not more than the amount paid */
-    if (Number(newval) > Number(max)) { newval = max; }
+    if (Number(newval) > Number(max)) {
+        newval = max;
+    }
 
     /* Ensure amount allocated is not more than invoice total */
-    if (Number(newval) > Number(sitotal)) { newval = sitotal; }
+    if (Number(newval) > Number(sitotal)) {
+        newval = sitotal;
+    }
 
     /* Bankers rounding */
     newval = roundHalfEven(newval, 2);
@@ -1138,18 +1146,17 @@ function bankSuggestionClick() {
 
             /* TODO: if VAT cash accounting, need an entry in 2200 - VAT */
 
-
             /* fill in allocation amount */
             row.find('input.allocate').val(total);
         }
         else {
             /* SI unselected - remove from div.entries */
             mytab.find('div.entries div.tr.salesinvoice div.td.xml-id')
-            .each( function() {
-                if ($(this).text() == id) {
-                    $(this).parents('div.tr.salesinvoice').remove();
-                }
-            });
+                .each(function() {
+                    if ($(this).text() == id) {
+                        $(this).parents('div.tr.salesinvoice').remove();
+                    }
+                });
 
             /* clear allocation amount */
             row.find('input.allocate').val('');
@@ -1163,11 +1170,11 @@ function bankSuggestionClick() {
     console.log('amount: ' + amount + '; total: ' + total);
     var overpay = amount;
     mytab.find('div.bank.suggestions div.tr.salesinvoice.selected')
-    .each(function() {
-        var sitotal = $(this).find('div.td.xml-total').text();
-        console.log('decimalSubtract(' + overpay + ',' + sitotal +')');
-        overpay = decimalPad(decimalSubtract(overpay, sitotal), 2);
-    });
+        .each(function() {
+            var sitotal = $(this).find('div.td.xml-total').text();
+            console.log('decimalSubtract(' + overpay + ',' + sitotal + ')');
+            overpay = decimalPad(decimalSubtract(overpay, sitotal), 2);
+        });
 
     /* append overpayment if required */
     mytab.find('div.bank.entries div.overpayment').remove();
@@ -1176,12 +1183,12 @@ function bankSuggestionClick() {
         /* overpayment - post to suspense account (9999) */
         var dctl = $('<div class="tr salesinvoice overpayment"/>');
         dctl.append('<div class="td xml-id">' + id + '</div>');
-        dctl.append('<div class="td xml-organisation">'+org+'</div>');
+        dctl.append('<div class="td xml-organisation">' + org + '</div>');
         dctl.append('<div class="td xml-date">' + date + '</div>');
         dctl.append('<div class="td xml-description">Unallocated</div>');
         dctl.append('<div class="td xml-account">9999</div>');
         dctl.append('<div class="td xml-debit"/>');
-        dctl.append('<div class="td xml-credit">' + overpay +'</div>');
+        dctl.append('<div class="td xml-credit">' + overpay + '</div>');
         mytab.find('div.bank.entries').append(dctl);
     }
     bankTotalsUpdate();
@@ -1225,7 +1232,9 @@ function bankReconcileSalesInvoice(bank, account) {
         data: xml,
         contentType: 'text/xml',
         type: 'POST',
-        beforeSend: function (xhr) { setAuthHeader(xhr); },
+        beforeSend: function(xhr) {
+            setAuthHeader(xhr);
+        },
         success: function(xml) {
             hideSpinner();
             statusMessage('Saved.', STATUS_INFO, 5000);
@@ -1239,7 +1248,7 @@ function bankReconcileSalesInvoice(bank, account) {
 }
 
 function bankReconcileId(bank, ledger, account) {
-    console.log('Reconciling bank entry ' + bank + ' against ledger ' +ledger);
+    console.log('Reconciling bank entry ' + bank + ' against ledger ' + ledger);
 
     /* Build request xml */
     var xml = createRequestXml();
@@ -1254,7 +1263,9 @@ function bankReconcileId(bank, ledger, account) {
         data: xml,
         contentType: 'text/xml',
         type: 'POST',
-        beforeSend: function (xhr) { setAuthHeader(xhr); },
+        beforeSend: function(xhr) {
+            setAuthHeader(xhr);
+        },
         success: function(xml) {
             hideSpinner();
             statusMessage('Saved.', STATUS_INFO, 5000);
@@ -1282,7 +1293,9 @@ function bankUnreconcileId(id, account, row) {
         data: xml,
         contentType: 'text/xml',
         type: 'POST',
-        beforeSend: function (xhr) { setAuthHeader(xhr); },
+        beforeSend: function(xhr) {
+            setAuthHeader(xhr);
+        },
         success: function(xml) {
             hideSpinner();
             statusMessage('Saved.', STATUS_INFO, 5000);
@@ -1338,7 +1351,6 @@ function nominalAccountChange() {
     /* reset debtor/creditor combos */
     w.find('div.debtorcreditor select').each(function() {
         $(this).val(-1);
-        //$(this).trigger('liszt:updated');
     });
 }
 
@@ -1351,8 +1363,7 @@ customFormEvents = function(tab, object, action, id) {
     if (object == 'bank') mytab.addClass('noscroll');
 
     /* upload button click handler */
-    mytab.find('button.upload').click(function()
-    {
+    mytab.find('button.upload').click(function() {
         uploadFile(csvToXml, '/fileupload/' + g_instance + '/');
     });
 
@@ -1378,8 +1389,9 @@ customFormEvents = function(tab, object, action, id) {
         }
     }
     if (object == 'contact' && action == 'update') {
-        var addressFields = ['line_1','line_2','line_3','town','county',
-            'country','postcode'];
+        var addressFields = ['line_1', 'line_2', 'line_3', 'town', 'county',
+            'country', 'postcode'
+        ];
         var selector = addressFields.join('"],input[name="');
         selector = 'input[name="' + selector + '"]';
         mytab.find(selector).change(mapUpdate);
@@ -1472,7 +1484,9 @@ function csvToXml(doc) {
     }
     $.ajax({
         url: collection_url('csvtoxml/' + sha),
-        beforeSend: function (xhr) { setAuthHeader(xhr); },
+        beforeSend: function(xhr) {
+            setAuthHeader(xhr);
+        },
         dataType: 'xml',
         success: function(xml) {
             xml = fixXMLDates(xml);
@@ -1526,7 +1540,7 @@ function finishJournalForm(tab) {
         dateFormat: "yy-mm-dd",
         constrainInput: true
     });
-    transactdate.datepicker("setDate",currentDate);
+    transactdate.datepicker("setDate", currentDate);
 
     /* set up click() events */
     $('button#journalsubmit').click(function(event) {
@@ -1534,8 +1548,7 @@ function finishJournalForm(tab) {
     });
 
     /* set up blur() events */
-    $('div.tablet.active.business'
-                        + g_business).find('input.amount').each(function() {
+    $('div.tablet.active.business' + g_business).find('input.amount').each(function() {
         $(this).blur(function() {
             /* pad amounts to two decimal places */
             var newamount = decimalPad($(this).val(), 2);
@@ -1629,7 +1642,9 @@ function postBankData(xml) {
         data: flatxml,
         contentType: 'text/xml',
         type: 'POST',
-        beforeSend: function (xhr) { setAuthHeader(xhr); },
+        beforeSend: function(xhr) {
+            setAuthHeader(xhr);
+        },
         success: function(xml) {
             hideSpinner();
             console.log("postBankData() succeeded");
@@ -1644,31 +1659,15 @@ function postBankData(xml) {
 }
 
 function prepareSalesOrderData(tag) {
-    /* FIXME: this simply doesn't work */
-    /*
-    console.log('salesorderitem: ' + tag.tagName);
-    if (tag.tagName == 'product') {
-        var p = activeTab().find(
-            'select.nosubmit[name="' + tag.tagName + '"]'
-        );
-        p.find(
-            'option[value="' + $(tag).text()  + '"]'
-        ).attr('selected', 'selected');
-        p.trigger("change");
-    }
-    else {
-        activeTab().find(
-            'input.nosubmit[name="' + tag.tagName + '"]'
-        ).val($(tag).text());
-    }
-    */
 }
 
 function productBoxClone(mytab, product) {
     var productBox = $('<td class="xml-product"></td>');
     var productCombo = mytab.find('select.product.nosubmit').clone(true);
     productCombo.removeAttr("id");
-    productCombo.css({display: "inline-block"});
+    productCombo.css({
+        display: "inline-block"
+    });
     productCombo.removeClass('chzn-done nosubmit');
     productCombo.addClass('chosify sub');
     productCombo.val(product);
@@ -1688,7 +1687,9 @@ function relationshipCombo(datatable, tag, id, tab) {
     var combo = datatable.find('select.relationship.nosubmit').clone();
 
     combo.removeAttr("id");
-    combo.css({display: "inline-block"});
+    combo.css({
+        display: "inline-block"
+    });
     combo.removeClass('chzn-done nosubmit');
     combo.addClass('chosify sub');
 
@@ -1696,7 +1697,7 @@ function relationshipCombo(datatable, tag, id, tab) {
     markComboSelections(combo, tag.text());
 
     var td = $('<td class="noclick">'
-        + '<input type="hidden" name="id" value="' + id + '"/>');
+            + '<input type="hidden" name="id" value="' + id + '"/>');
 
     combo.change(function() {
         console.log('combo.change()');
@@ -1705,7 +1706,7 @@ function relationshipCombo(datatable, tag, id, tab) {
             var org = getTabById(tab).find('input[name="id"]').first().val();
             var contact = trow.find('input[name="id"]').val();
             var relationships = new Array();
-            for (var x=0; x < combo[0].options.length; x++) {
+            for (var x = 0; x < combo[0].options.length; x++) {
                 if (combo[0].options[x].selected) {
                     relationships.push(x);
                 }
@@ -1739,7 +1740,7 @@ function relationshipUpdate(organisation, contact, relationships, refresh) {
 
     /* any other relationship types we've been given */
     if (relationships) {
-        for (var x=0; x < relationships.length; x++) {
+        for (var x = 0; x < relationships.length; x++) {
             xml += '<relationship id="' + relationships[x] + '"/>';
         }
     }
@@ -1757,7 +1758,9 @@ function relationshipUpdate(organisation, contact, relationships, refresh) {
         data: xml,
         contentType: 'text/xml',
         type: 'POST',
-        beforeSend: function (xhr) { setAuthHeader(xhr); },
+        beforeSend: function(xhr) {
+            setAuthHeader(xhr);
+        },
         complete: function(xml) {
             console.log('relationship updated');
             if (refresh) {
@@ -1780,8 +1783,7 @@ function resetSalesOrderProductDefaults() {
     });
 }
 
-function salesorderAddProduct(tab, datatable, id, product, linetext, price, qty)
-{
+function salesorderAddProduct(tab, datatable, id, product, linetext, price, qty) {
     console.log('salesorderAddProduct()');
     console.log('Adding product ' + product + ' to salesorder');
     var mytab = getTabById(tab);
@@ -1835,7 +1837,7 @@ function salesorderAddProduct(tab, datatable, id, product, linetext, price, qty)
     row.append('<td class="removerow"><button class="removerow">X</button></td>');
 
     /* add handler to remove row */
-    row.find('button.removerow').click(function () {
+    row.find('button.removerow').click(function() {
         $(this).parent().parent().fadeOut(300, function() {
             if ($(this).find('input[name="subid"]').val() != null) {
                 $(this).find('input[name="is_deleted"]').val('1');
@@ -1866,6 +1868,7 @@ function salesorderAddProduct(tab, datatable, id, product, linetext, price, qty)
 
 /* key pressed in search bar - wait until user pauses before searching */
 var t;
+
 function searchKeyPress() {
     var c = $(document.activeElement); /* find control with focus */
     var ms = 400; /* 400ms delay */
@@ -1887,11 +1890,11 @@ function searchNow(c) {
 
     var d = getXML('/testdata/search.xml');
     d.done(function(xml) {
-        searchStart(xml, terms);
-    })
-    .fail(function() {
-        console.log('failed to get search definitions');
-    });
+            searchStart(xml, terms);
+        })
+        .fail(function() {
+            console.log('failed to get search definitions');
+        });
 }
 
 function searchStart(doc, terms) {
@@ -1901,13 +1904,17 @@ function searchStart(doc, terms) {
         termstring = '<term>' + terms.words.join('</term><term>') + '</term>';
     }
     if (terms.numbers.length > 0 && terms.numbers[0] != '') {
-        termstring += '<term type="numeric">' + terms.numbers.join('</term><term type="numeric">') + '</term>';
+        termstring += '<term type="numeric">'
+            + terms.numbers.join('</term><term type="numeric">') + '</term>';
     }
     if (terms.dates.length > 0 && terms.dates[0] != '') {
-        termstring += '<term type="date">' + terms.dates.join('</term><term type="date">') + '</term>';
+        termstring += '<term type="date">'
+            + terms.dates.join('</term><term type="date">') + '</term>';
     }
     /* do not attempt search without any search terms */
-    if (termstring.length == 0) { return; }
+    if (termstring.length == 0) {
+        return;
+    }
 
     $(doc).find('request').prepend('<business>' + g_business + '</business>');
     $(doc).find('request').prepend('<instance>' + g_instance + '</instance>');
@@ -1918,12 +1925,16 @@ function searchStart(doc, terms) {
         type: 'POST',
         data: xml,
         contentType: 'text/xml',
-        beforeSend: function (xhr) { setAuthHeader(xhr); },
+        beforeSend: function(xhr) {
+            setAuthHeader(xhr);
+        },
         success: function(html) {
             console.log('search complete');
-            if (html == '(null)') { return; }
-            html = html.replace(/&lt;div([^&]+)&gt;/g,'<div$1>');
-            html = html.replace('&lt;/div&gt;','</div>', 'g');
+            if (html == '(null)') {
+                return;
+            }
+            html = html.replace(/&lt;div([^&]+)&gt;/g, '<div$1>');
+            html = html.replace('&lt;/div&gt;', '</div>', 'g');
             addTab('Search', html, true);
             searchEvents();
         },
@@ -1959,7 +1970,7 @@ function searchRowClick() {
     if ($(this).hasClass('salesinvoice')) {
         console.log('salesinvoice ' + id);
         var ref = $(this).find('div.td.ref').text();
-        var si = 'SI-' + ref.replace('/','-') + '.pdf';
+        var si = 'SI-' + ref.replace('/', '-') + '.pdf';
         var url = '/pdf/' + g_orgcode + '/' + si;
         window.open(url);
     }
@@ -1979,7 +1990,7 @@ function searchTerms(search) {
         terms.words.unshift(search); /* add full search string as term */
         z = 1;
     }
-    for (var i=z; i < terms.words.length; i++) {
+    for (var i = z; i < terms.words.length; i++) {
         /* split the word down further and add these as extra search terms */
         if (isDate(terms.words[i])) {
             /* date - move to terms.dates */
@@ -1989,7 +2000,7 @@ function searchTerms(search) {
         else if (isNaN(terms.words[i])) { /* don't split numbers */
             var tok = terms.words[i].split(/[\W]+/);
             if (tok.length > 1) {
-                for (var j=0; j < tok.length; j++) {
+                for (var j = 0; j < tok.length; j++) {
                     tokens.push(tok[j]);
                 }
             }
@@ -2001,7 +2012,9 @@ function searchTerms(search) {
         }
     }
     terms.words = terms.words.concat(tokens);
-    if (terms.words.length == 1 && terms.words[0] == '') { return null; }
+    if (terms.words.length == 1 && terms.words[0] == '') {
+        return null;
+    }
     return terms;
 }
 
@@ -2010,24 +2023,30 @@ function setupJournalForm(tab) {
     /* load dropdown contents */
     $.ajax({
         url: collection_url('divisions'),
-        beforeSend: function (xhr) { setAuthHeader(xhr); },
-        success: function (xml) {
+        beforeSend: function(xhr) {
+            setAuthHeader(xhr);
+        },
+        success: function(xml) {
             populateDivisionsDDowns(xml, tab);
         }
     });
 
     $.ajax({
         url: collection_url('departments'),
-        beforeSend: function (xhr) { setAuthHeader(xhr); },
-        success: function (xml) {
+        beforeSend: function(xhr) {
+            setAuthHeader(xhr);
+        },
+        success: function(xml) {
             populateDepartmentsDDowns(xml, tab);
         }
     });
 
     $.ajax({
         url: collection_url('accounts'),
-        beforeSend: function (xhr) { setAuthHeader(xhr); },
-        success: function (xml) {
+        beforeSend: function(xhr) {
+            setAuthHeader(xhr);
+        },
+        success: function(xml) {
             populateAccountsDDowns(xml, tab);
         }
     });
@@ -2048,7 +2067,9 @@ function submitJournalEntry(event, form, bankid) {
         type: 'POST',
         data: xml,
         contentType: 'text/xml',
-        beforeSend: function (xhr) { setAuthHeader(xhr); },
+        beforeSend: function(xhr) {
+            setAuthHeader(xhr);
+        },
         success: function(xml) {
             console.log('success');
             if (bankid) {
@@ -2058,13 +2079,15 @@ function submitJournalEntry(event, form, bankid) {
                 submitJournalEntrySuccess(xml, form);
             }
         },
-        error: function(xml) { submitJournalEntryError(xml); }
+        error: function(xml) {
+            submitJournalEntryError(xml);
+        }
     });
 }
 
 /* override the gladd.js function which sets tab titles */
-tabTitle = function (title, object, action, xml) {
-    var namedobjects = [ 'account', 'contact', 'department', 'division',
+tabTitle = function(title, object, action, xml) {
+    var namedobjects = ['account', 'contact', 'department', 'division',
         'organisation', 'product', 'purchaseorder', 'salesorder'
     ];
 
@@ -2116,7 +2139,9 @@ function taxProduct(product, tax, refresh, tab) {
         data: xml,
         contentType: 'text/xml',
         type: 'POST',
-        beforeSend: function (xhr) { setAuthHeader(xhr); },
+        beforeSend: function(xhr) {
+            setAuthHeader(xhr);
+        },
         complete: function(xml) {
             if (refresh) {
                 loadSubformData('product_taxes', product, tab);
@@ -2135,11 +2160,10 @@ function updateSalesOrderTotals(tab) {
     var mytab = getTabById(tab);
     var x = 0;
 
-    mytab.find('input.total:not(.clone)').each(function()
-    {
+    mytab.find('input.total:not(.clone)').each(function() {
         /* get line total, stripping commas */
         x = $(this).val().replace(',', '');
-        if ((! isNaN(x)) && (x != '')) {
+        if ((!isNaN(x)) && (x != '')) {
             subtotal = subtotal.plus(Big(x));
         }
     });
@@ -2148,15 +2172,13 @@ function updateSalesOrderTotals(tab) {
 
     /* update sub total */
     subtotal = decimalPad(subtotal, 2);
-    mytab.find('table.totals').find('td.subtotal').each(function()
-    {
+    mytab.find('table.totals').find('td.subtotal').each(function() {
         $(this).text(formatThousands(subtotal));
     });
 
     /* update grand total */
     gtotal = decimalPad(gtotal, 2);
-    mytab.find('table.totals').find('td.gtotal').each(function()
-    {
+    mytab.find('table.totals').find('td.gtotal').each(function() {
         $(this).text(formatThousands(gtotal));
     });
 }
@@ -2249,10 +2271,9 @@ function validateJournalEntry(form, bankid) {
         if ($(this).hasClass('description')) {
             xml = createRequestXml();
             xml += '<journal ';
-            xml += 'transactdate="' + $(form).find('.transactdate').val()
-                + '" ';
+            xml += 'transactdate="' + $(form).find('.transactdate').val() + '" ';
             if (bankid) xml += 'bankid="' + bankid + '" ';
-            xml += 'description="'+ escapeHTML($(this).val().trim()) +'">';
+            xml += 'description="' + escapeHTML($(this).val().trim()) + '">';
         }
         else if ($(this).hasClass('account')) {
             account = $(this).val();
@@ -2372,11 +2393,8 @@ function validateNominalCode(code, type) {
     else if ((code < min) || (code > max)) { /* must be in defined range */
         console.log('nominal code out of range');
         statusMessage('Nominal Codes for ' + typename
-            + ' must lie between ' + min + ' and ' + max, STATUS_WARN);
+                + ' must lie between ' + min + ' and ' + max, STATUS_WARN);
         return false;
-    }
-    else { /* ensure code hasn't been used */
-        /* TODO */
     }
     console.log('Nominal code is within acceptable range');
 
@@ -2384,25 +2402,6 @@ function validateNominalCode(code, type) {
 }
 
 function customBlurEvents(tab) {
-    //var mytab = getTabById(tab);
-    /*
-    mytab.find('input.price').each(function() {
-        $(this).blur(function() {
-            // pad amounts to two decimal places
-            if ($(this).val().length > 0) {
-                var newamount = decimalPad($(this).val(), 2);
-                $(this).val(newamount);
-            }
-        });
-    });
-    */
-    /*
-    mytab.find('input.price, input.qty').each(function() {
-        $(this).blur(function() {
-            recalculateLineTotal($(this).parent().parent(), tab);
-        });
-    });
-    */
 }
 
 function customComboChange(combo, xml, tab) {
@@ -2420,23 +2419,6 @@ function customComboChange(combo, xml, tab) {
     else if (['debtor', 'creditor'].indexOf(combo.attr('name')) !== -1) {
         return bankReconcileSuggest();
     }
-
-    /* in the salesorder form, dynamically set placeholders to show defaults */
-    /*
-    if (mytab.find('div.salesorder')) {
-        $(xml).find('row').find('id').each(function() {
-            if ($(this).text() == newval) {
-                var desc = $(this).parent().find('description').text();
-                var price = $(this).parent().find('price_sell').text();
-                price = decimalPad(price, 2);
-                var parentrow = combo.parent().parent();
-                parentrow.find('input.linetext').attr('placeholder', desc);
-                parentrow.find('input.price').attr('placeholder', price);
-                recalculateLineTotal(parentrow, tab);
-            }
-        });
-    }
-    */
 }
 
 /*****************************************************************************/
@@ -2497,15 +2479,16 @@ customClickElement = function(row) {
     var action = 'update';
 
     /* Some collections should never do anything when clicked */
-    var inert = [ 'salespayments' ];
-    if (inert.indexOf(tab.collection) != -1) { return true; }
+    var inert = ['salespayments'];
+    if (inert.indexOf(tab.collection) != -1) {
+        return true;
+    }
 
-    if (['accounts','contacts','divisions','departments','organisations']
-    .indexOf(tab.collection) !== -1)
-    {
+    if (['accounts', 'contacts', 'divisions', 'departments', 'organisations']
+        .indexOf(tab.collection) !== -1) {
         var id = row.find('td.xml-id').text();
         var name = row.find('td.xml-name').text();
-        var object = tab.collection.substr(0,tab.collection.length-1);
+        var object = tab.collection.substr(0, tab.collection.length - 1);
         showForm(object, action, name, id);
         return true;
     }
@@ -2535,8 +2518,8 @@ customClickElement = function(row) {
     }
     else if (tab.collection == 'salesinvoices') {
         /* view salesinvoice pdf */
-        var a=row.find('td.xml-pdf').find('a');
-        var href=a.attr('href');
+        var a = row.find('td.xml-pdf').find('a');
+        var href = a.attr('href');
         var si = a.attr('id');
         var html = '<div class="pdf">';
         html += '<object class="pdf" data="' + href + '"';
@@ -2689,4 +2672,3 @@ Form.prototype.validateSalesOrder = function() {
  * displayResultsGeneric()
  * switchBusiness() - refers to orgcode
  */
-
