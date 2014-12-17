@@ -62,9 +62,9 @@
                         </xsl:otherwise>
                 </xsl:choose>
                 <xsl:choose>
-                        <xsl:when test="../../salesorder/@id">
+                        <xsl:when test="$id">
                                 <xsl:text>'</xsl:text>
-                                <xsl:value-of select="../../salesorder/@id"/>
+                                <xsl:value-of select="$id"/>
                                 <xsl:text>',</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>
