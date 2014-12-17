@@ -10,8 +10,16 @@
                         <xsl:text>INSERT INTO </xsl:text>
 			<xsl:value-of select="$parentobject"/>
 			<xsl:text>item (</xsl:text>
+                        <xsl:if test="@uuid">
+                                <xsl:text>uuid, </xsl:text>
+                        </xsl:if>
 			<xsl:text>authuser, clientip) </xsl:text>
 			<xsl:text>VALUES (</xsl:text>
+                        <xsl:if test="@uuid">
+			        <xsl:text>'</xsl:text>
+                                <xsl:value-of select="@uuid"/>
+                                <xsl:text>',</xsl:text>
+                        </xsl:if>
 			<xsl:text>'</xsl:text>
                         <xsl:copy-of select="$authuser"/>
                         <xsl:text>','</xsl:text>
