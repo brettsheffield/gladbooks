@@ -511,6 +511,7 @@ CREATE TABLE salesorderdetail (
 
 CREATE TABLE salesorderitem (
 	id		SERIAL PRIMARY KEY,
+        uuid            uuid,
 	updated		timestamp with time zone default now(),
 	authuser	TEXT,
 	clientip	TEXT
@@ -545,19 +546,21 @@ FOR EACH ROW EXECUTE PROCEDURE salesorderitemdetailupdate();
 
 CREATE OR REPLACE VIEW salesorderitem_current AS
 SELECT 
-	salesorderitem AS id,
-	id AS detailid,
+	soi.id,
+	soid.id AS detailid,
+        uuid,
 	salesorder,
 	product,
 	linetext,
 	discount,
 	price,
 	qty,
-	updated,
-	authuser,
-	clientip
-FROM salesorderitemdetail
-WHERE id IN (
+	soid.updated,
+	soid.authuser,
+	soid.clientip
+FROM salesorderitem soi
+INNER JOIN salesorderitemdetail soid ON soi.id = soid.salesorderitem 
+WHERE soid.id IN (
 	SELECT MAX(id)
 	FROM salesorderitemdetail
 	GROUP BY salesorderitem

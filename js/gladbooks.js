@@ -2575,6 +2575,41 @@ Form.prototype.submitErrorCustom = function(xhr, s, err) {
     return false;
 }
 
+Form.prototype.submitSuccessCustom = function(xml) {
+    if (this.object === 'salesorder') {
+        return this.submitSuccessCustomSalesOrder(xml);
+    }
+    return false;
+}
+
+/* go through salesorder subform rows, filling in missing id data */
+Form.prototype.submitSuccessCustomSalesOrder = function(xml) {
+    var form = this.tab.tablet.find('div.' + this.object + '.' + this.action
+            + ' form');
+    var ctr = 0;
+    form.find('div.form div.subformwrapper div.tr').each(function() {
+            var id = $(this).data('id');
+            var uuid = $(this).data('uuid');
+            ctr++;
+            if (id === undefined) {
+                console.log('row #' + ctr + ' has no id');
+                if (uuid !== undefined) {
+                    console.log('row has uuid');
+                    id = $(xml).find('uuid:contains(' + uuid +')')
+                        .closest('row').find('id').text();
+                    if (id !== undefined) {
+                        console.log(uuid + ' => id #' + id);
+                        $(this).data('id', id);
+                    }
+                    else {
+                        console.log('no id found for ' + uuid);
+                    }
+                }
+            }
+    });
+    return true;
+}
+
 Form.prototype.validateCustom = function() {
     console.log('Form().validateCustom()');
     var b = true;

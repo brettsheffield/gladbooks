@@ -4,7 +4,15 @@
 
 	<xsl:template match="salesorderitem">
                 <xsl:if test="not(@id)">
-                        <xsl:text>INSERT INTO salesorderitem (authuser, clientip) VALUES ('</xsl:text>
+                        <xsl:text>INSERT INTO salesorderitem (</xsl:text>
+                        <xsl:if test="@uuid">
+                                <xsl:text>uuid, </xsl:text>
+                        </xsl:if>
+                        <xsl:text>authuser, clientip) VALUES ('</xsl:text>
+                        <xsl:if test="@uuid">
+                                <xsl:value-of select="@uuid"/>
+                                <xsl:text>','</xsl:text>
+                        </xsl:if>
                         <xsl:copy-of select="$authuser"/>
                         <xsl:text>','</xsl:text>
                         <xsl:copy-of select="$clientip"/>

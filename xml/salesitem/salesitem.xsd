@@ -12,6 +12,7 @@
     <xs:element name="price" type="xs:decimal" minOccurs="0"/>
     <xs:element name="qty" type="xs:decimal" minOccurs="0"/>
   </xs:sequence>
+  <xs:attribute name="uuid" type="xs:string"/>
 </xs:complexType>
 
 </xs:schema>

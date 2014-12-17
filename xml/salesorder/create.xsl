@@ -16,6 +16,12 @@
 		<xsl:text>BEGIN;</xsl:text>
                 <xsl:apply-templates select="data/salesorder"/>
 		<xsl:text>COMMIT;</xsl:text>
+                <xsl:if test="$id">
+                        <xsl:text>SELECT * FROM salesorderitem_current WHERE uuid IS NOT NULL </xsl:text>
+                        <xsl:text>AND salesorder='</xsl:text>
+                        <xsl:copy-of select="$id"/>
+                        <xsl:text>';</xsl:text>
+                </xsl:if>
         </xsl:template>
 
 </xsl:stylesheet>
