@@ -321,6 +321,8 @@ CREATE TABLE purchaseorder (
 CREATE TABLE purchaseorderdetail (
 	id		SERIAL PRIMARY KEY,
 	purchaseorder	INT4 NOT NULL,
+	quotenumber	INT4 UNIQUE,
+	ponumber	TEXT,
 	description	TEXT,
 	cycle		INT4,
 	start_date	date,
@@ -371,6 +373,7 @@ CREATE TABLE purchaseorderitemdetail (
 	purchaseorder	INT4 REFERENCES purchaseorder(id) NOT NULL,
 	product		INT4 REFERENCES product(id) NOT NULL,
 	linetext	TEXT,
+	discount	NUMERIC,
 	price		NUMERIC,
 	qty		NUMERIC DEFAULT '1',
 	is_deleted	boolean DEFAULT false,

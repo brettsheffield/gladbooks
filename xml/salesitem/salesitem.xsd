@@ -4,15 +4,17 @@
 <xs:complexType name="salesitem">
   <xs:sequence>
     <xs:choice>
-      <xs:element name="product" type="xs:positiveInteger"/>
-      <xs:element name="product_import" type="xs:positiveInteger"/>
+      <xs:element name="product" type="xs:positiveInteger" minOccurs="0"/>
+      <xs:element name="product_import" type="xs:positiveInteger" minOccurs="0"/>
     </xs:choice>
     <xs:element name="linetext" type="xs:string" minOccurs="0"/>
     <xs:element name="discount" type="xs:decimal" minOccurs="0"/>
     <xs:element name="price" type="xs:decimal" minOccurs="0"/>
     <xs:element name="qty" type="xs:decimal" minOccurs="0"/>
   </xs:sequence>
+  <xs:attribute name="id" type="xs:positiveInteger"/>
   <xs:attribute name="uuid" type="xs:string"/>
+  <xs:attribute name="is_deleted" type="xs:boolean"/>
 </xs:complexType>
 
 </xs:schema>

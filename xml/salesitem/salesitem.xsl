@@ -85,45 +85,52 @@
 		<xsl:if test="product">
 			<xsl:text>'</xsl:text>
 			<xsl:value-of select="product"/>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 
 		<xsl:if test="product_import">
+		        <xsl:text>'</xsl:text>
 			<xsl:text>(SELECT id FROM product </xsl:text>
 			<xsl:text>WHERE import_id='</xsl:text>
 			<xsl:value-of select="product_import"/>
-			<xsl:text>'),'</xsl:text>
+			<xsl:text>'),</xsl:text>
 		</xsl:if>
 
 		<xsl:if test="linetext">
+		        <xsl:text>'</xsl:text>
 			<xsl:call-template name="cleanQuote">
 				<xsl:with-param name="string">
 					<xsl:value-of select="linetext"/>
 				</xsl:with-param>
 			</xsl:call-template>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 
 		<xsl:if test="discount">
+		        <xsl:text>'</xsl:text>
 			<xsl:value-of select="discount"/>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 
 		<xsl:if test="price">
+		        <xsl:text>'</xsl:text>
 			<xsl:value-of select="price"/>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 
 		<xsl:if test="qty">
+		        <xsl:text>'</xsl:text>
 			<xsl:value-of select="qty"/>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 
 		<xsl:if test="is_deleted">
+		        <xsl:text>'</xsl:text>
 			<xsl:value-of select="is_deleted"/>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 
+		<xsl:text>'</xsl:text>
 		<xsl:copy-of select="$authuser"/>
 		<xsl:text>','</xsl:text>
 		<xsl:copy-of select="$clientip"/>
