@@ -42,8 +42,14 @@
 		<xsl:if test="start_date">
 			<xsl:text>start_date,</xsl:text>
 		</xsl:if>
+                <xsl:if test="start_date = ''">
+			<xsl:text>start_date_null,</xsl:text>
+		</xsl:if>
 		<xsl:if test="end_date">
 			<xsl:text>end_date,</xsl:text>
+		</xsl:if>
+                <xsl:if test="end_date = ''">
+			<xsl:text>end_date_null,</xsl:text>
 		</xsl:if>
 		<xsl:if test="@is_open">
 			<xsl:text>is_open,</xsl:text>
@@ -58,61 +64,84 @@
                         <xsl:when test="$id">
                                 <xsl:text>'</xsl:text>
                                 <xsl:value-of select="$id"/>
-                                <xsl:text>','</xsl:text>
+                                <xsl:text>',</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>
-                                <xsl:text>currval(pg_get_serial_sequence('purchaseorder','id')),'</xsl:text>
+                                <xsl:text>currval(pg_get_serial_sequence('purchaseorder','id')),</xsl:text>
                         </xsl:otherwise>
                 </xsl:choose>
 
 		<xsl:if test="quotenumber">
+			<xsl:text>'</xsl:text>
 			<xsl:call-template name="cleanQuote">
 				<xsl:with-param name="string">
 					<xsl:value-of select="quotenumber"/>
 				</xsl:with-param>
 			</xsl:call-template>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 
 		<xsl:if test="ponumber">
+			<xsl:text>'</xsl:text>
 			<xsl:call-template name="cleanQuote">
 				<xsl:with-param name="string">
 					<xsl:value-of select="ponumber"/>
 				</xsl:with-param>
 			</xsl:call-template>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 
 		<xsl:if test="description">
+			<xsl:text>'</xsl:text>
 			<xsl:call-template name="cleanQuote">
 				<xsl:with-param name="string">
 					<xsl:value-of select="description"/>
 				</xsl:with-param>
 			</xsl:call-template>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 
 		<xsl:if test="cycle">
+			<xsl:text>'</xsl:text>
 			<xsl:value-of select="cycle"/>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 		<xsl:if test="start_date">
-			<xsl:value-of select="start_date"/>
-			<xsl:text>','</xsl:text>
+                        <xsl:choose>
+                                <xsl:when test="start_date != ''">
+                                        <xsl:text>'</xsl:text>
+                                        <xsl:value-of select="start_date"/>
+                                        <xsl:text>',</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                        <xsl:text>NULL,true,</xsl:text>
+                                </xsl:otherwise>
+                        </xsl:choose> 
 		</xsl:if>
 		<xsl:if test="end_date">
-			<xsl:value-of select="end_date"/>
-			<xsl:text>','</xsl:text>
+                        <xsl:choose>
+                                <xsl:when test="end_date != ''">
+                                        <xsl:text>'</xsl:text>
+                                        <xsl:value-of select="end_date"/>
+                                        <xsl:text>',</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                        <xsl:text>NULL,true,</xsl:text>
+                                </xsl:otherwise>
+                        </xsl:choose> 
 		</xsl:if>
 		<xsl:if test="@is_open">
+			<xsl:text>'</xsl:text>
 			<xsl:value-of select="@is_open"/>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 		<xsl:if test="@is_deleted">
+			<xsl:text>'</xsl:text>
 			<xsl:value-of select="@is_deleted"/>
-			<xsl:text>','</xsl:text>
+			<xsl:text>',</xsl:text>
 		</xsl:if>
 
+		<xsl:text>'</xsl:text>
 		<xsl:copy-of select="$authuser"/>
 		<xsl:text>','</xsl:text>
 		<xsl:copy-of select="$clientip"/>

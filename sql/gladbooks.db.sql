@@ -2175,10 +2175,14 @@ BEGIN
                 IF NEW.cycle IS NULL THEN
                         NEW.cycle := ocycle;
                 END IF;
-                IF NEW.start_date IS NULL THEN
+                IF NEW.start_date_null THEN
+                        NEW.start_date := NULL;
+                ELSIF NEW.start_date IS NULL THEN
                         NEW.start_date := ostart_date;
                 END IF;
-                IF NEW.end_date IS NULL THEN
+                IF NEW.end_date_null THEN
+                        NEW.end_date := NULL;
+                ELSIF NEW.end_date IS NULL THEN
                         NEW.end_date := oend_date;
                 END IF;
                 IF NEW.is_open IS NULL THEN
@@ -2300,10 +2304,14 @@ BEGIN
                 IF NEW.cycle IS NULL THEN
                         NEW.cycle := ocycle;
                 END IF;
-                IF NEW.start_date IS NULL THEN
+                IF NEW.start_date_null THEN
+                        NEW.start_date := NULL;
+                ELSIF NEW.start_date IS NULL THEN
                         NEW.start_date := ostart_date;
                 END IF;
-                IF NEW.end_date IS NULL THEN
+                IF NEW.end_date_null THEN
+                        NEW.end_date := NULL;
+                ELSIF NEW.end_date IS NULL THEN
                         NEW.end_date := oend_date;
                 END IF;
                 IF NEW.is_open IS NULL THEN

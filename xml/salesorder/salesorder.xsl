@@ -43,9 +43,15 @@
 		<xsl:if test="start_date">
 			<xsl:text>start_date,</xsl:text>
 		</xsl:if>
+                <xsl:if test="start_date = ''">
+                        <xsl:text>start_date_null,</xsl:text>
+                </xsl:if>
 		<xsl:if test="end_date">
 			<xsl:text>end_date,</xsl:text>
 		</xsl:if>
+                <xsl:if test="end_date = ''">
+                        <xsl:text>end_date_null,</xsl:text>
+                </xsl:if>
 		<xsl:if test="@is_open">
 			<xsl:text>is_open,</xsl:text>
 		</xsl:if>
@@ -101,16 +107,30 @@
 			<xsl:value-of select="cycle"/>
 			<xsl:text>',</xsl:text>
 		</xsl:if>
-		<xsl:if test="start_date">
-			<xsl:text>'</xsl:text>
-			<xsl:value-of select="start_date"/>
-			<xsl:text>',</xsl:text>
-		</xsl:if>
-		<xsl:if test="end_date">
-			<xsl:text>'</xsl:text>
-			<xsl:value-of select="end_date"/>
-			<xsl:text>',</xsl:text>
-		</xsl:if>
+                <xsl:if test="start_date">
+                        <xsl:choose>
+                                <xsl:when test="start_date != ''">
+                                        <xsl:text>'</xsl:text>
+                                        <xsl:value-of select="start_date"/>
+                                        <xsl:text>',</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                        <xsl:text>NULL,true,</xsl:text>
+                                </xsl:otherwise>
+                        </xsl:choose>
+                </xsl:if>
+                <xsl:if test="end_date">
+                        <xsl:choose>
+                                <xsl:when test="end_date != ''">
+                                        <xsl:text>'</xsl:text>
+                                        <xsl:value-of select="end_date"/>
+                                        <xsl:text>',</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                        <xsl:text>NULL,true,</xsl:text>
+                                </xsl:otherwise>
+                        </xsl:choose>
+                </xsl:if>
 		<xsl:if test="@is_open">
 			<xsl:text>'</xsl:text>
 			<xsl:value-of select="@is_open"/>

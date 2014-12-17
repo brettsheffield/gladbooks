@@ -326,7 +326,9 @@ CREATE TABLE purchaseorderdetail (
 	description	TEXT,
 	cycle		INT4,
 	start_date	date,
+	start_date_null	boolean DEFAULT false,
 	end_date	date,
+	end_date_null	boolean DEFAULT false,
 	is_open		boolean DEFAULT true,
 	is_deleted	boolean DEFAULT false,
 	updated		timestamp with time zone default now(),
@@ -381,6 +383,18 @@ CREATE TABLE purchaseorderitemdetail (
 	authuser	TEXT,
 	clientip	TEXT
 );
+
+DROP TRIGGER IF EXISTS purchaseorderdetailupdate
+ON purchaseorderdetail;
+CREATE TRIGGER purchaseorderdetailupdate BEFORE INSERT
+ON purchaseorderdetail
+FOR EACH ROW EXECUTE PROCEDURE purchaseorderdetailupdate();
+
+DROP TRIGGER IF EXISTS purchaseorderitemdetailupdate
+ON purchaseorderitemdetail;
+CREATE TRIGGER purchaseorderitemdetailupdate BEFORE INSERT
+ON purchaseorderitemdetail
+FOR EACH ROW EXECUTE PROCEDURE purchaseorderitemdetailupdate();
 
 CREATE OR REPLACE VIEW purchaseorderitem_current AS
 SELECT 
@@ -519,7 +533,9 @@ CREATE TABLE salesorderdetail (
 	description	TEXT,
 	cycle		INT4 references cycle(id) NOT NULL,
 	start_date	date,
+	start_date_null	boolean DEFAULT false,
 	end_date	date,
+	end_date_null	boolean DEFAULT false,
 	is_open		boolean DEFAULT true,
 	is_deleted	boolean DEFAULT false,
 	updated		timestamp with time zone default now(),

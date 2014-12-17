@@ -1,9 +1,9 @@
-CREATE OR REPLACE FUNCTION purchaseorderdetailupdate()
+CREATE OR REPLACE FUNCTION salesorderdetailupdate()
 RETURNS TRIGGER AS
 $$
 DECLARE
         priorentries    INT4;
-        opurchaseorder     INT4;
+        osalesorder     INT4;
         oquotenumber    INT4;
         oponumber       TEXT;
         odescription    TEXT;
@@ -13,24 +13,24 @@ DECLARE
         ois_open        boolean;
         ois_deleted     boolean;
 BEGIN
-        SELECT INTO priorentries COUNT(id) FROM purchaseorderdetail
-                WHERE purchaseorder = NEW.purchaseorder;
+        SELECT INTO priorentries COUNT(id) FROM salesorderdetail
+                WHERE salesorder = NEW.salesorder;
         IF priorentries > 0 THEN
                 -- This isn't our first time, so use previous values 
                 SELECT INTO
-                        opurchaseorder, oquotenumber, oponumber, odescription,
+                        osalesorder, oquotenumber, oponumber, odescription,
                         ocycle, ostart_date, oend_date, ois_open, ois_deleted
-                        purchaseorder, quotenumber, ponumber, description,
+                        salesorder, quotenumber, ponumber, description,
                         cycle, start_date, end_date, is_open, is_deleted
-                FROM purchaseorderdetail WHERE id IN (
+                FROM salesorderdetail WHERE id IN (
                         SELECT MAX(id)
-                        FROM purchaseorderdetail
-                        GROUP BY purchaseorder
+                        FROM salesorderdetail
+                        GROUP BY salesorder
                 )
-                AND purchaseorder = NEW.purchaseorder;
+                AND salesorder = NEW.salesorder;
 
-                IF NEW.purchaseorder IS NULL THEN
-                        NEW.purchaseorder := opurchaseorder;
+                IF NEW.salesorder IS NULL THEN
+                        NEW.salesorder := osalesorder;
                 END IF;
                 IF NEW.quotenumber IS NULL THEN
                         NEW.quotenumber := oquotenumber;
