@@ -8,7 +8,7 @@
 		<xs:element name="description" type="xs:string" minOccurs="0"/>
 		<xs:element name="price_buy" type="xs:decimal" minOccurs="0"/>
 		<xs:element name="price_sell" type="xs:decimal" minOccurs="0"/>
-		<xs:element name="tax" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:element name="tax" type="xs:integer" minOccurs="0" maxOccurs="unbounded"/>
 	</xs:sequence>
 	<xs:attribute name="id" type="xs:nonNegativeInteger"/>
 	<xs:attribute name="import_id" type="xs:positiveInteger"/>

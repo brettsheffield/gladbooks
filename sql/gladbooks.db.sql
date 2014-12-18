@@ -599,6 +599,22 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
+CREATE OR REPLACE FUNCTION producttaxupdate()
+RETURNS TRIGGER AS
+$$
+BEGIN
+        -- Applying a tax of -1 (VAT Exempt) means we should remove all VAT
+        IF NEW.tax = -1 THEN
+                DELETE FROM product_tax 
+                WHERE product = NEW.product
+                AND tax IN (1,2,3);
+                RETURN NULL;
+        END IF;
+        
+        RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
 -- trigger to ensure business has a related organisation, 
 -- creating one if required
 CREATE OR REPLACE FUNCTION businessorganisation()
@@ -2317,6 +2333,16 @@ BEGIN
 			NEW.cycle := '0';
                 END IF;
         END IF;
+        
+        -- Prevent creation of salesorder with recurring cycle if start_date is NULL
+        IF NEW.cycle > 1 AND NEW.start_date IS NULL THEN
+                RAISE EXCEPTION 'Recurring salesorder cannot have NULL start_date';
+        END IF;
+        
+        IF NEW.start_date > NEW.end_date THEN
+                RAISE EXCEPTION 'start_date cannot be greater than end_date';
+        END IF;
+
         RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';

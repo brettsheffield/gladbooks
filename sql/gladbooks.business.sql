@@ -295,6 +295,9 @@ CREATE TABLE product_tax (
         clientip        TEXT
 );
 
+CREATE TRIGGER product_tax_pre_insert BEFORE INSERT ON product_tax
+FOR EACH ROW EXECUTE PROCEDURE producttaxupdate();
+
 CREATE TRIGGER product_tax_insert AFTER INSERT ON product_tax
 FOR EACH ROW EXECUTE PROCEDURE product_tax_vatcheck();
 
@@ -315,10 +318,10 @@ SELECT
         pd.updated,
         pd.authuser,
         pd.clientip, 
-        MIN(pt.tax) AS tax
+        COALESCE(MIN(pt.tax),'-1') AS tax
 FROM product p
 INNER JOIN productdetail pd ON p.id = pd.product
-INNER JOIN product_tax pt ON p.id = pt.product
+LEFT JOIN product_tax pt ON p.id = pt.product
 WHERE pd.id IN (
         SELECT MAX(id)
         FROM productdetail
