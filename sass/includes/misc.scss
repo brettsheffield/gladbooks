@@ -1078,15 +1078,14 @@ div.td {
 }
 
 /* form: product.create & product.update */
-div.product div.td {
+div.product div.tablewrapper {
+        font-size: 60%;
 }
-div.product input {
-	width: 95%;
+div.product input,
+div.product select {
+        width: 100%;
 }
 div.product div.account {
-	width: 20%;
-}
-div.product div.th.account {
 	width: 20%;
 }
 div.product div.shortname {

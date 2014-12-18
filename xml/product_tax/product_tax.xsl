@@ -22,7 +22,7 @@
 				<xsl:text>currval(pg_get_serial_sequence('product','id')),'</xsl:text>
 			</xsl:otherwise>
 		</xsl:choose>
-		<xsl:value-of select="@id"/>
+		<xsl:value-of select="."/>
 		<xsl:text>','</xsl:text>
        		<xsl:copy-of select="$authuser"/>
 		<xsl:text>','</xsl:text>

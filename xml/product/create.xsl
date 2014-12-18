@@ -17,8 +17,8 @@
                 <xsl:apply-templates select="data/product"/>
 		<xsl:text>COMMIT;</xsl:text>
 		<xsl:text>SELECT id,account,shortname,</xsl:text>
-		<xsl:text>description,price_buy,price_sell </xsl:text>
-		<xsl:text>FROM productlist </xsl:text>
+		<xsl:text>description,price_buy,price_sell,tax </xsl:text>
+		<xsl:text>FROM product_current </xsl:text>
 		<xsl:text>WHERE id=</xsl:text>
 		<xsl:choose>
 			<xsl:when test="$id">

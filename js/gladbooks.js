@@ -2113,43 +2113,6 @@ tabTitle = function(title, object, action, xml) {
     return title;
 }
 
-/* apply tax to product */
-function taxProduct(product, tax, refresh, tab) {
-    console.log('Taxing product');
-    var xml = createRequestXml();
-    statusHide();
-
-    /* prevent more than one VAT rate being applied to a single product */
-    var has_tax = activeTab().find('td.product_taxes').text().indexOf('VAT');
-    if ((has_tax > 0) && (tax <= 3)) {
-        statusMessage("Only one type of VAT may be applied.", STATUS_WARN);
-        return;
-    }
-
-    xml += '<tax id="' + tax + '">';
-    xml += '<product>' + product + '</product>';
-    xml += '</tax>';
-    xml += '</data></request>';
-
-    var url = collection_url('product_taxes');
-
-    console.log('POST ' + url);
-    $.ajax({
-        url: url,
-        data: xml,
-        contentType: 'text/xml',
-        type: 'POST',
-        beforeSend: function(xhr) {
-            setAuthHeader(xhr);
-        },
-        complete: function(xml) {
-            if (refresh) {
-                loadSubformData('product_taxes', product, tab);
-            }
-        }
-    });
-}
-
 function updateSalesOrderTotals(tab) {
     /* FIXME: uncaught exception: NaN */
     console.log('Updating salesorder totals');
@@ -2543,9 +2506,6 @@ customClickElement = function(row) {
 }
 
 Form.prototype.customXML = function() {
-    if (this.object === 'product') {
-        this.xml += '<tax id="1"/>';
-    }
 }
 
 /* override object variables etc. */
