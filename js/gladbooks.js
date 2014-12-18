@@ -2528,6 +2528,12 @@ Form.prototype.submitErrorCustom = function(xhr, s, err) {
             return true;
         }
     }
+    else if (this.object === 'product') {
+        if (responsecode === 'P0001') {
+            statusMessage(responsetext, STATUS_WARN);
+            return true;
+        }
+    }
     else if (this.object === 'salesorder' && this.action === 'process') {
         statusMessage('Billing run failed', STATUS_CRIT);
         return true;

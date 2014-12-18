@@ -595,6 +595,16 @@ BEGIN
                         NEW.is_offered := ois_offered;
                 END IF;
         END IF;
+       
+        -- ensure shortname hasn't been used for a different product
+        -- can't just use a key here
+        SELECT INTO priorentries COUNT(id) FROM product_current 
+        WHERE product != NEW.product
+        AND shortname = NEW.shortname;
+        IF priorentries > 0 THEN
+                RAISE EXCEPTION 'Product shortname "%" must be unique', NEW.shortname;
+        END IF;
+
         RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
