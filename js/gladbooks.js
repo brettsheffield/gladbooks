@@ -103,8 +103,8 @@ FORMDATA = {
         'update': ['accounts.revenue', 'taxes'],
     },
     'purchaseorder': {
-        'create': ['cycles', 'organisations', 'productcombo'],
-        'update': ['cycles', 'productcombo', 'purchaseorderitems/{id}/'],
+        'create': ['cycles', 'organisations', 'productcombo_purchase'],
+        'update': ['cycles', 'productcombo_purchase', 'purchaseorderitems/{id}/'],
     },
     'salesorder': {
         'create': ['cycles', 'organisations', 'productcombo'],
