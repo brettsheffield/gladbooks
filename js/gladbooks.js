@@ -2576,7 +2576,9 @@ Form.prototype.submitErrorCustom = function(xhr, s, err) {
 }
 
 Form.prototype.submitSuccessCustom = function(xml) {
-    if (['purchaseorder', 'salesorder'].indexOf(this.object) !== -1) {
+    if ((['purchaseorder', 'salesorder'].indexOf(this.object) !== -1)
+    && (this.action === 'update'))
+    {
         this.processReturnedData = false;
     }
     return false;
