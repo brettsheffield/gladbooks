@@ -488,9 +488,36 @@ CREATE TABLE purchaseinvoicedetail (
 	clientip	TEXT
 );
 
+DROP TRIGGER IF EXISTS purchaseinvoicedetailupdate
+ON purchaseinvoicedetail;
+CREATE TRIGGER purchaseinvoicedetailupdate BEFORE INSERT
+ON purchaseinvoicedetail
+FOR EACH ROW EXECUTE PROCEDURE purchaseinvoicedetailupdate();
+
 CREATE OR REPLACE VIEW purchaseinvoice_current AS
-SELECT * FROM purchaseinvoicedetail
-WHERE id IN (
+SELECT
+        pi.id,
+        pid.id as detailid,
+        organisation,
+        invoicenum,
+        ref,
+        ponumber,
+        description,
+        taxpoint,
+        endpoint,
+        issued,
+        journal,
+        due,
+        subtotal,
+        tax,
+        total,
+        pdf,
+        pid.updated,
+        pid.authuser,
+        pid.clientip
+FROM purchaseinvoice pi
+INNER JOIN purchaseinvoicedetail pid ON pi.id = pid.purchaseinvoice 
+WHERE pid.id IN (
 	SELECT MAX(id)
 	FROM purchaseinvoicedetail
 	GROUP BY purchaseinvoice

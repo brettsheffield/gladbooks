@@ -2483,6 +2483,12 @@ customClickElement = function(row) {
         showForm('product', 'update', name, id);
         return true;
     }
+    else if (tab.collection == 'purchaseinvoices') {
+        var id = row.find('td.xml-id').text();
+        var name = 'Edit Purchase Invoice #' + id;
+        showForm('purchaseinvoice', 'update', name, id);
+        return true;
+    }
     else if (tab.collection == 'purchaseorders') {
         var id = row.find('td.xml-id').text();
         var name = 'PO/' + row.find('td.xml-order').text();
@@ -2546,12 +2552,12 @@ Form.prototype.onChangeCustomPurchaseInvoice = function(ctl) {
             vat = exvat.times(vatrate);
             vat = decimalPad(roundHalfEven(vat, 2), 2);
             tax.val(vat);
-            tax.data('old', vat);
+            tax.addClass('dirty');
         }
         if (!total.hasClass('userdefined')) {
             incvat = decimalPad(roundHalfEven(decimalAdd(exvat, vat), 2), 2);
             total.val(incvat);
-            total.data('old', incvat);
+            total.addClass('dirty');
         }
     }
 }
@@ -2704,7 +2710,6 @@ Form.prototype.validateSalesOrder = function() {
  * btnClickRemoveRow()
  * submitForm()
  * submitFormError()
- * collectionObject()
  * fetchElementData()
  * displayResultsGeneric()
  * switchBusiness() - refers to orgcode

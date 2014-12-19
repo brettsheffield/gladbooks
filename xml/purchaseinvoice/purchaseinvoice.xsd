@@ -12,9 +12,9 @@
 		<xs:element name="taxpoint" type="xs:date" minOccurs="0"/>
 		<xs:element name="issued" type="xs:date" minOccurs="0"/>
 		<xs:element name="due" type="xs:date" minOccurs="0"/>
-		<xs:element name="subtotal" type="xs:decimal"/>
-		<xs:element name="tax" type="xs:decimal"/>
-		<xs:element name="total" type="xs:decimal"/>
+		<xs:element name="subtotal" type="xs:decimal" minOccurs="0"/>
+		<xs:element name="tax" type="xs:decimal" minOccurs="0"/>
+		<xs:element name="total" type="xs:decimal" minOccurs="0"/>
 		<xs:element name="pdf" type="xs:string" minOccurs="0"/>
 
 		<xs:element name="purchaseitem" type="salesitem" minOccurs="0" maxOccurs="unbounded"/>
