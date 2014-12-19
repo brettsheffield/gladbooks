@@ -1,0 +1,38 @@
+<div class="purchaseinvoice create">
+	<h2>New Purchase Invoice</h2>
+	<div class="tablewrapper">
+		<form action="purchaseinvoices">
+			<div class="datatable">
+				<div class="tr">
+					<div class="th organisation">Supplier</div>
+					<div class="th ref">Ref #</div>
+					<div class="th ponumber">Purchase Order #</div>
+					<div class="th description">Comment</div>
+				</div>
+				<div class="tr">
+					<div class="td organisation"><select name="organisation" class="organisations populate focus" data-source="organisations" data-placeholder=" - Select Supplier - " required="required" data-required-message="Please select Supplier" ></select></div>
+					<div class="td ref"><input name="ref" class="ref" autocomplete="off" placeholder="Supplier Reference"/></div>
+					<div class="td ponumber"><input name="ponumber" class="ponumber" autocomplete="off" placeholder="Our Reference"/></div>
+					<div class="td description"><input name="description" class="socomment" autocomplete="off" placeholder="Comments"/></div>
+        </div>
+				<div class="tr">
+					<div class="th taxpoint">Tax Point</div>
+					<div class="th due">Due Date</div>
+					<div class="th subtotal">Ex VAT</div>
+					<div class="th tax">VAT</div>
+					<div class="th total">Total</div>
+				</div>
+				<div class="tr">
+					<div class="td taxpoint"><input name="taxpoint" class="datefield" autocomplete="off"/></div>
+					<div class="td due"><input name="due" class="datefield" autocomplete="off"/></div>
+          <div class="td subtotal"><input class="subtotal currency" type="text" name="subtotal" placeholder="0.00" data-required-message="Ex VAT Total"/></div>
+          <div class="td tax"><input class="tax currency" type="text" name="tax" placeholder="0.00" data-required-message="VAT"/></div>
+          <div class="td total"><input class="total currency" type="text" name="total" placeholder="0.00" data-required-message="Inc VAT Total"/></div>
+           
+				</div>
+			</div>
+		</form>
+	</div>
+	<button class="save">Save</button>
+	<button class="reset">Reset</button>
+</div>

@@ -41,6 +41,8 @@ g_menus = [
     ['organisation.create', showForm, 'organisation', 'create', 'Add New Organisation'],
     ['organisations', showQuery, 'organisations', 'Organisations', true],
     ['payables', showHTML, 'help/payables.html', 'Payables', false],
+    ['purchaseinvoice.list', showQuery, 'purchaseinvoices', 'Purchase Invoices', true],
+    ['purchaseinvoice.create', showForm, 'purchaseinvoice', 'create', 'New Purchase Invoice'],
     ['purchaseorder.list', showQuery, 'purchaseorders', 'Purchase Orders', true],
     ['purchaseorder.create', showForm, 'purchaseorder', 'create', 'New Purchase Order'],
     ['product.create', showForm, 'product', 'create', 'Add New Product'],
@@ -101,6 +103,10 @@ FORMDATA = {
     'product': {
         'create': ['accounts.revenue'],
         'update': ['accounts.revenue', 'taxes'],
+    },
+    'purchaseinvoice': {
+        'create': ['organisations'],
+        'update': ['organisations'],
     },
     'purchaseorder': {
         'create': ['cycles', 'organisations', 'productcombo_purchase'],

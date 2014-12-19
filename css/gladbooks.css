@@ -573,7 +573,8 @@ button#journalsubmit {
 	min-width: 20em;
 	max-width: 95%;
 }*/
-input.amount {
+input.amount,
+input.currency {
   text-align: right; }
 
 button.cancel,
@@ -819,6 +820,9 @@ button.removerow {
 	margin-right: 1em;
 }
 */
+select {
+  width: 100%; }
+
 select.relationship {
   height: 16px;
   opacity: 0.0;
@@ -826,9 +830,6 @@ select.relationship {
 
 select.cycle {
   width: 10em; }
-
-select.organisations {
-  width: 20em; }
 
 select.account,
 select.contactlink,
@@ -1291,13 +1292,33 @@ div.journal div.datatable div.form input.credit {
 div.journal div.datatable div.form input {
   width: 100%; }
 
-/* purchaseorder and salesorder screens */
+/* purchaseinvoice, purchaseorder and salesorder screens */
+div.purchaseinvoice div.datatable div.organisation {
+  width: 20%; }
+
+div.purchaseinvoice div.datatable div.ref {
+  width: 10%; }
+
+div.purchaseinvoice div.datatable div.ponumber {
+  width: 10%; }
+
+div.purchaseinvoice div.datatable div.taxpoint,
+div.purchaseinvoice div.datatable div.due {
+  width: 10%; }
+
+div.purchaseinvoice div.datatable div.subtotal,
+div.purchaseinvoice div.datatable div.tax,
+div.purchaseinvoice div.datatable div.total {
+  width: 15%; }
+
 div.journal div.datatable,
+div.purchaseinvoice div.datatable,
 div.purchaseorder div.datatable,
 div.salesorder div.datatable {
   font-size: 0.8em;
   width: 100%; }
 
+div.purchaseinvoice div.datatable input,
 div.purchaseorder div.datatable input,
 div.purchaseorder div.datatable select,
 div.salesorder div.datatable input,
@@ -1334,6 +1355,9 @@ div.purchaseorder div.datatable div.linetext,
 div.salesorder div.datatable div.linetext {
   width: 35%; }
 
+div.purchaseinvoice div.datatable div.subtotal,
+div.purchaseinvoice div.datatable div.tax,
+div.purchaseinvoice div.datatable div.total,
 div.purchaseorder div.datatable div.tr.totals div.td.subtotal,
 div.purchaseorder div.datatable div.price,
 div.salesorder div.datatable div.tr.totals div.td.subtotal,
