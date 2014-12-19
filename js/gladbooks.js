@@ -2566,6 +2566,9 @@ Form.prototype.validateCustom = function() {
     else if (this.object == 'product') {
         return validateFormProduct(this.action, this.id);
     }
+    else if (this.object == 'purchaseinvoice') {
+        return this.validatePurchaseInvoice();
+    }
     else if ((this.object == 'purchaseorder') && (this.action != 'process')) {
         return this.validatePurchaseOrder();
     }
@@ -2577,6 +2580,17 @@ Form.prototype.validateCustom = function() {
     }
 
     return b;
+}
+
+Form.prototype.validatePurchaseInvoice = function() {
+    console.log('Form().validatePurchaseInvoice()');
+    var t = this.tab.tablet;
+    var taxpoint = t.find('[name="taxpoint"]');
+    var due = t.find('[name="taxpoint"]');
+    var subtotal = t.find('[name="subtotal"]');
+    var tax = t.find('[name="tax"]');
+    var total = t.find('[name="total"]');
+    return true;
 }
 
 Form.prototype.validatePurchaseOrder = function() {
