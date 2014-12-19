@@ -2514,6 +2514,38 @@ customClickElement = function(row) {
 Form.prototype.customXML = function() {
 }
 
+Form.prototype.onChangeCustom = function(ctl) {
+    if (this.object === 'purchaseinvoice') {
+        this.onChangeCustomPurchaseInvoice(ctl);
+    }
+}
+
+Form.prototype.onChangeCustomPurchaseInvoice = function(ctl) {
+    var t = this.tab.tablet;
+    var exvat = Big(0);
+    var incvat = Big(0);
+    var subtotal = t.find('[name="subtotal"]');
+    var tax = t.find('[name="tax"]');
+    var total = t.find('[name="total"]');
+    var vat = Big(0);
+    var vatrate = Big(0.2); /* TODO: fetch from database */
+
+    if (ctl.hasClass('subtotal')) {
+        exvat = Big(subtotal.val());
+        if (!tax.hasClass('userdefined')) {
+            vat = exvat.times(vatrate);
+            vat = decimalPad(roundHalfEven(vat, 2), 2);
+            tax.val(vat);
+            tax.data('old', vat);
+        }
+        if (!total.hasClass('userdefined')) {
+            incvat = decimalPad(roundHalfEven(decimalAdd(exvat, vat), 2), 2);
+            total.val(incvat);
+            total.data('old', incvat);
+        }
+    }
+}
+
 /* override object variables etc. */
 Form.prototype.overrides = function() {
     if (this.object === 'journal') {
