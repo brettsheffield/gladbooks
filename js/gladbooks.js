@@ -2528,6 +2528,10 @@ customClickElement = function(row) {
 }
 
 Form.prototype.customXML = function() {
+    if (this.object === 'product' && this.action === 'create') {
+        /* apply Standard Rate VAT by default to new products */
+        this.xml += '<tax>1</tax>';
+    }
 }
 
 Form.prototype.onChangeCustom = function(ctl) {
