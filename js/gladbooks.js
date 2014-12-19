@@ -1337,6 +1337,16 @@ function clickBankRow() {
     bankSuggest($(this), account);
 }
 
+function collectionObjectCustom(collection) {
+    if (collection === 'purchaseinvoices') {
+        return 'purchaseinvoice';
+    }
+    if (collection === 'salesinvoices') {
+        return 'salesinvoice';
+    }
+    return ''
+}
+
 function nominalAccountChange() {
     console.log('nominalAccountChange()');
     var w = $(this).parents('div.bank.workspace div.tr');
