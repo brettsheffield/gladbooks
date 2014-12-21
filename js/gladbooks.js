@@ -105,8 +105,8 @@ FORMDATA = {
         'update': ['accounts.revenue', 'taxes'],
     },
     'purchaseinvoice': {
-        'create': ['organisations'],
-        'update': ['organisations'],
+        'create': ['organisations', 'taxrate'],
+        'update': ['organisations', 'taxrate'],
     },
     'purchaseorder': {
         'create': ['cycles', 'organisations', 'productcombo_purchase'],
@@ -2548,7 +2548,18 @@ Form.prototype.onChangeCustomPurchaseInvoice = function(ctl) {
     var tax = t.find('[name="tax"]');
     var total = t.find('[name="total"]');
     var vat = Big(0);
-    var vatrate = Big(0.2); /* TODO: fetch from database */
+    var taxrates = $(this.data['taxrate']);
+    var std = taxrates.find('resources row').filter(function() {
+        return $(this).find('id').text() === '1';
+    });
+    var vatrate = std.find('rate').text();
+    if ($.isNumeric(vatrate)) {
+        vatrate = Big(vatrate).div('100');
+    }
+    else {
+        console.log('vat rate not found');
+        return false;
+    }
 
     if (ctl.hasClass('subtotal')) {
         exvat = Big(subtotal.val());
