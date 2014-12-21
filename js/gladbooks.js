@@ -2568,11 +2568,15 @@ Form.prototype.onChangeCustomPurchaseInvoice = function(ctl) {
             vat = decimalPad(roundHalfEven(vat, 2), 2);
             tax.val(vat);
             tax.addClass('dirty');
+            tax.data('prev', tax.val());
+            tax.trigger('blur');
         }
         if (!total.hasClass('userdefined')) {
             incvat = decimalPad(roundHalfEven(decimalAdd(exvat, vat), 2), 2);
             total.val(incvat);
             total.addClass('dirty');
+            total.data('prev', total.val());
+            total.trigger('blur');
         }
     }
 }
