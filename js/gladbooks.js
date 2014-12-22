@@ -2581,6 +2581,38 @@ Form.prototype.onChangeCustomPurchaseInvoice = function(ctl) {
     }
 }
 
+Form.prototype.onKeyPressCustom = function(e, ctl) {
+    console.log('Form().onKeyPressCustom()');
+    /* set end_date based on start_date */
+    if (ctl.attr('name') === 'end_date' && e.which === 43) {
+        /* user pressed '+' key */
+        var advance = ctl.val();
+        var start_date = ctl.closest('div.tr')
+            .find('input[name="start_date"]').val();
+        if (start_date !== undefined) {
+            if ($.isNumeric(advance) && isDate(start_date)) {
+                advance = parseInt(advance);
+                var d = moment(start_date).add(advance, 'days');
+                ctl.val(d.format('YYYY-MM-DD'));
+            }
+        }
+    }
+    /* set due date based on taxpoint */
+    if (ctl.attr('name') === 'due' && e.which === 43) {
+        /* user pressed '+' key */
+        var advance = ctl.val();
+        var start_date = ctl.closest('div.tr')
+            .find('input[name="taxpoint"]').val();
+        if (start_date !== undefined) {
+            if ($.isNumeric(advance) && isDate(start_date)) {
+                advance = parseInt(advance);
+                var d = moment(start_date).add(advance, 'days');
+                ctl.val(d.format('YYYY-MM-DD'));
+            }
+        }
+    }
+}
+
 /* override object variables etc. */
 Form.prototype.overrides = function() {
     if (this.object === 'journal') {
