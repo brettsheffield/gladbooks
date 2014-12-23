@@ -660,7 +660,6 @@ function bankReconcileSave() {
 
 
     xml += '</bank></data></request>';
-    console.log(xml); /* FIXME: temp */
     t.request = xml;
     t.url = collection_url('banks');
     bankReconcilePost(t);
@@ -2582,7 +2581,6 @@ Form.prototype.onChangeCustomPurchaseInvoice = function(ctl) {
 }
 
 Form.prototype.onKeyPressCustom = function(e, ctl) {
-    console.log('Form().onKeyPressCustom()');
     /* set end_date based on start_date */
     if (ctl.attr('name') === 'end_date' && e.which === 43) {
         /* user pressed '+' key */
