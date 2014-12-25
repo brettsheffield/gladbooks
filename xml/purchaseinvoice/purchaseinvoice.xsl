@@ -31,8 +31,14 @@
 		<xsl:if test="period">
 			<xsl:text>period,</xsl:text>
 		</xsl:if>
+		<xsl:if test="ref">
+			<xsl:text>ref,</xsl:text>
+		</xsl:if>
 		<xsl:if test="ponumber">
 			<xsl:text>ponumber,</xsl:text>
+		</xsl:if>
+		<xsl:if test="description">
+			<xsl:text>description,</xsl:text>
 		</xsl:if>
 		<xsl:if test="taxpoint">
 			<xsl:text>taxpoint,</xsl:text>
@@ -92,11 +98,31 @@
 			<xsl:text>',</xsl:text>
 		</xsl:if>
 
+		<xsl:if test="ref">
+                        <xsl:text>'</xsl:text>
+			<xsl:call-template name="cleanQuote">
+				<xsl:with-param name="string">
+					<xsl:value-of select="ref"/>
+				</xsl:with-param>
+			</xsl:call-template>
+			<xsl:text>',</xsl:text>
+		</xsl:if>
+
 		<xsl:if test="ponumber">
                         <xsl:text>'</xsl:text>
 			<xsl:call-template name="cleanQuote">
 				<xsl:with-param name="string">
 					<xsl:value-of select="ponumber"/>
+				</xsl:with-param>
+			</xsl:call-template>
+			<xsl:text>',</xsl:text>
+		</xsl:if>
+
+		<xsl:if test="description">
+                        <xsl:text>'</xsl:text>
+			<xsl:call-template name="cleanQuote">
+				<xsl:with-param name="string">
+					<xsl:value-of select="description"/>
 				</xsl:with-param>
 			</xsl:call-template>
 			<xsl:text>',</xsl:text>
@@ -166,6 +192,22 @@
 		<xsl:apply-templates select="salesitem">
 			<xsl:with-param name="parentobject" select="'purchaseinvoice'" />
 		</xsl:apply-templates>
+                
+                <!-- post this now? -->
+                <xsl:if test="@post">
+                        <xsl:text>SELECT post_purchaseinvoice(</xsl:text>
+                        <xsl:choose>
+                                <xsl:when test="$id">
+                                        <xsl:text>'</xsl:text>
+                                        <xsl:value-of select="$id"/>
+                                        <xsl:text>'</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                        <xsl:text>currval(pg_get_serial_sequence('purchaseinvoice','id'))</xsl:text>
+                                </xsl:otherwise>
+                        </xsl:choose>
+		        <xsl:text>);</xsl:text>
+                </xsl:if>
 	</xsl:template>
 
 </xsl:stylesheet>

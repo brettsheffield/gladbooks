@@ -7,6 +7,7 @@
 	<xs:sequence>
 		<xs:element name="period" type="xs:positiveInteger" minOccurs="0"/>
 		<xs:element name="organisation" type="xs:positiveInteger" minOccurs="0"/>
+		<xs:element name="ref" type="xs:string" minOccurs="0"/>
 		<xs:element name="ponumber" type="xs:string" minOccurs="0"/>
 		<xs:element name="description" type="xs:string" minOccurs="0"/>
 		<xs:element name="taxpoint" type="xs:date" minOccurs="0"/>
@@ -20,6 +21,7 @@
 		<xs:element name="purchaseitem" type="salesitem" minOccurs="0" maxOccurs="unbounded"/>
 	</xs:sequence>
 	<xs:attribute name="purchaseorder" type="xs:string"/>
+	<xs:attribute name="post" type="xs:boolean"/>
 </xs:complexType>
 
 </xs:schema>

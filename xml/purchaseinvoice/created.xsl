@@ -11,7 +11,11 @@
 
 	<xsl:template match="/">
 		<xsl:call-template name="setSearchPath"/>
-		<xsl:text>SELECT * FROM purchaseinvoice_current WHERE id=currval(pg_get_serial_sequence('purchaseinvoice','id'));</xsl:text>
+                <xsl:text>SELECT pi.id, o.name AS organisation, ref, ponumber, description, taxpoint, due, subtotal, tax, total, pi.updated, pi.authuser, pi.clientip </xsl:text>
+                <xsl:text>FROM purchaseinvoice_current pi </xsl:text>
+                <xsl:text>INNER JOIN organisation_current o </xsl:text>
+                <xsl:text>ON o.id = pi.organisation </xsl:text>
+		<xsl:text>WHERE pi.id=currval(pg_get_serial_sequence('purchaseinvoice','id'));</xsl:text>
 	</xsl:template>
 
 </xsl:stylesheet>

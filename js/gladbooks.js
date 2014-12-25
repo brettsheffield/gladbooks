@@ -1369,7 +1369,8 @@ function nominalAccountChange() {
     });
 }
 
-/* override gladd.js function */
+/* override gladd.js function
+ * deprecated - use Form.prototype.eventsCustom() instead */
 customFormEvents = function(tab, object, action, id) {
     console.log('customFormEvents().gladbooks');
     var mytab = getTabById(tab);
@@ -2527,9 +2528,29 @@ customClickElement = function(row) {
 }
 
 Form.prototype.customXML = function() {
+    var xml = $.parseXML(this.xml);
     if (this.object === 'product' && this.action === 'create') {
         /* apply Standard Rate VAT by default to new products */
-        this.xml += '<tax>1</tax>';
+        $(xml).find(this.object).append('<tax>1</tax>');
+    }
+    else if (this.object === 'purchaseinvoice' && !this.draft) {
+        /* not a draft, so tell api to post the journal */
+        $(xml).find(this.object).attr('post', true);
+    }
+    this.xml = flattenXml(xml);
+}
+
+Form.prototype.eventsCustom = function() {
+    var form = this;
+    var t = this.tab.tablet;
+    if (this.object === 'purchaseinvoice') {
+        form.draft = true;
+        t.find('button.post').click(function() {
+            if (form.validate()) {
+                form.draft = false;
+                form.submit();
+            }
+        });
     }
 }
 
