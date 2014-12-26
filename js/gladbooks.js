@@ -2543,7 +2543,13 @@ Form.prototype.customXML = function() {
 Form.prototype.eventsCustom = function() {
     var form = this;
     var t = this.tab.tablet;
-    if (this.object === 'purchaseinvoice') {
+    if (this.object === 'journal') {
+        t.find('input[name="reverseid"]').click(function() {
+            var id = $(this).val();
+            showForm('journal', 'delete', 'Journal #' + id, id);
+        });
+    }
+    else if (this.object === 'purchaseinvoice') {
         form.draft = true;
         t.find('button.post').click(function() {
             if (form.validate()) {
