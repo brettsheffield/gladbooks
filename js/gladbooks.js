@@ -41,7 +41,7 @@ g_menus = [
     ['organisation.create', showForm, 'organisation', 'create', 'Add New Organisation'],
     ['organisations', showQuery, 'organisations', 'Organisations', true],
     ['payables', showHTML, 'help/payables.html', 'Payables', false],
-    ['purchaseinvoice.list', showQuery, 'purchaseinvoices', 'Purchase Invoices', true],
+    ['purchaseinvoice.list', showQuery, 'purchaseinvoicelist', 'Purchase Invoices', true],
     ['purchaseinvoice.create', showForm, 'purchaseinvoice', 'create', 'New Purchase Invoice'],
     ['purchaseorder.list', showQuery, 'purchaseorders', 'Purchase Orders', true],
     ['purchaseorder.create', showForm, 'purchaseorder', 'create', 'New Purchase Order'],
@@ -2483,7 +2483,7 @@ customClickElement = function(row) {
         showForm('product', 'update', name, id);
         return true;
     }
-    else if (tab.collection == 'purchaseinvoices') {
+    else if (tab.collection == 'purchaseinvoicelist') {
         var id = row.find('td.xml-id').text();
         var name = 'Purchase Invoice #' + id;
         showForm('purchaseinvoice', 'update', name, id);
@@ -2640,9 +2640,18 @@ Form.prototype.onKeyPressCustom = function(e, ctl) {
 
 /* override object variables etc. */
 Form.prototype.overrides = function() {
+    var t = this.tab.tablet;
     if (this.object === 'journal') {
         this.prompts['delete'] = 'Reverse this journal?';
         this.prompts['deletestatus'] = 'Reversing journal...';
+    }
+    else if (this.object === 'purchaseinvoice') {
+        var journal = this.data["FORMDATA"].find('journal').text();
+        if ($.isNumeric(journal)) {
+            /* PI has been posted to journal - make readonly */
+            t.find('input,select').prop('readonly', true);
+            t.find('button').hide();
+        }
     }
 }
 
