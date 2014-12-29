@@ -16,6 +16,17 @@
 		<xsl:text>BEGIN;</xsl:text>
                 <xsl:apply-templates select="data/purchaseinvoice"/>
 		<xsl:text>COMMIT;</xsl:text>
+		<xsl:text>SELECT * FROM purchaseinvoice_current WHERE id=</xsl:text>
+                <xsl:choose>
+                        <xsl:when test="$id">
+                                <xsl:text>'</xsl:text>
+                                <xsl:value-of select="$id"/>
+                                <xsl:text>';</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                                <xsl:text>currval(pg_get_serial_sequence('purchaseinvoice','id'));</xsl:text>
+                        </xsl:otherwise>
+                </xsl:choose>
         </xsl:template>
 
 </xsl:stylesheet>
