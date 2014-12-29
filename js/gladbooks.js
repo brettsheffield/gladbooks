@@ -2485,7 +2485,7 @@ customClickElement = function(row) {
     }
     else if (tab.collection == 'purchaseinvoices') {
         var id = row.find('td.xml-id').text();
-        var name = 'Edit Purchase Invoice #' + id;
+        var name = 'Purchase Invoice #' + id;
         showForm('purchaseinvoice', 'update', name, id);
         return true;
     }
