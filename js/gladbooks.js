@@ -2646,11 +2646,13 @@ Form.prototype.overrides = function() {
         this.prompts['deletestatus'] = 'Reversing journal...';
     }
     else if (this.object === 'purchaseinvoice') {
-        var journal = this.data["FORMDATA"].find('journal').text();
-        if ($.isNumeric(journal)) {
-            /* PI has been posted to journal - make readonly */
-            t.find('input,select').prop('readonly', true);
-            t.find('button').hide();
+        if (this.data["FORMDATA"]) {
+            var journal = this.data["FORMDATA"].find('journal').text();
+            if ($.isNumeric(journal)) {
+                /* PI has been posted to journal - make readonly */
+                t.find('input,select').prop('readonly', true);
+                t.find('button').hide();
+            }
         }
     }
 }
