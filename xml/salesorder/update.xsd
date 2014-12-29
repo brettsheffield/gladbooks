@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
+<xs:include schemaLocation="../types/nildate.xsd"/>
+<xs:include schemaLocation="../salesitem/salesitem.xsd"/>
+
 <xs:element name="request">
   <xs:complexType>
     <xs:sequence>
@@ -17,24 +20,10 @@
 									<xs:element name="ponumber" type="xs:string" minOccurs="0"/>
 									<xs:element name="description" type="xs:string" minOccurs="0"/>
 									<xs:element name="cycle" type="xs:nonNegativeInteger" minOccurs="0"/>
-									<xs:element name="start_date" type="xs:date" minOccurs="0" nillable="true"/>
-									<xs:element name="end_date" type="xs:date" minOccurs="0" nillable="true"/>
+									<xs:element name="start_date" type="nildate" minOccurs="0"/>
+									<xs:element name="end_date" type="nildate" minOccurs="0"/>
 
-									<xs:element name="salesorderitem" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:sequence>
-												<xs:element name="product" type="xs:positiveInteger" minOccurs="0"/>
-												<xs:element name="is_deleted" type="xs:boolean" minOccurs="0"/>
-												<xs:element name="linetext" type="xs:string" minOccurs="0"/>
-												<xs:element name="discount" type="xs:decimal" minOccurs="0"/>
-												<xs:element name="price" type="xs:decimal" minOccurs="0"/>
-												<xs:element name="qty" type="xs:decimal" minOccurs="0"/>
-											</xs:sequence>
-											<xs:attribute name="id" type="xs:positiveInteger"/>
-											<xs:attribute name="uuid" type="xs:string"/>
-											<xs:attribute name="is_deleted" type="xs:boolean"/>
-										</xs:complexType>
-									</xs:element><!--salesorderitem-->
+									<xs:element name="salesorderitem" type="salesitem" minOccurs="0" maxOccurs="unbounded"/>
 
 								</xs:sequence>
 								<xs:attribute name="is_open" type="xs:boolean"/>

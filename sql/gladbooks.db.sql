@@ -2524,10 +2524,14 @@ BEGIN
                 IF NEW.linetext IS NULL THEN
                         NEW.linetext := olinetext;
                 END IF;
-                IF NEW.discount IS NULL THEN
+                IF NEW.discount_null THEN
+                        NEW.discount := NULL;
+                ELSIF NEW.discount IS NULL THEN
                         NEW.discount := odiscount;
                 END IF;
-                IF NEW.price IS NULL THEN
+                IF NEW.price_null THEN
+                        NEW.price := NULL;
+                ELSIF NEW.price IS NULL THEN
                         NEW.price := oprice;
                 END IF;
                 IF NEW.qty IS NULL THEN

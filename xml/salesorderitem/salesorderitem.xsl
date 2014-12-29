@@ -31,8 +31,14 @@
 		<xsl:if test="discount">
 			<xsl:text>discount,</xsl:text>
 		</xsl:if>
+		<xsl:if test="discount = ''">
+			<xsl:text>discount_null,</xsl:text>
+		</xsl:if>
 		<xsl:if test="price">
 			<xsl:text>price,</xsl:text>
+		</xsl:if>
+		<xsl:if test="price = ''">
+			<xsl:text>price_null,</xsl:text>
 		</xsl:if>
 		<xsl:if test="qty">
 			<xsl:text>qty,</xsl:text>
@@ -88,15 +94,29 @@
 		</xsl:if>
 
 		<xsl:if test="discount">
-			<xsl:text>'</xsl:text>
-			<xsl:value-of select="discount"/>
-			<xsl:text>',</xsl:text>
+                        <xsl:choose>
+                                <xsl:when test="discount = ''">
+                                        <xsl:text>NULL,true,</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                        <xsl:text>'</xsl:text>
+                                        <xsl:value-of select="discount"/>
+                                        <xsl:text>',</xsl:text>
+                                </xsl:otherwise>
+                        </xsl:choose>
 		</xsl:if>
 
 		<xsl:if test="price">
-			<xsl:text>'</xsl:text>
-			<xsl:value-of select="price"/>
-			<xsl:text>',</xsl:text>
+                        <xsl:choose>
+                                <xsl:when test="price = ''">
+                                        <xsl:text>NULL,true,</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                        <xsl:text>'</xsl:text>
+                                        <xsl:value-of select="price"/>
+                                        <xsl:text>',</xsl:text>
+                                </xsl:otherwise>
+                        </xsl:choose>
 		</xsl:if>
 
 		<xsl:if test="qty">
