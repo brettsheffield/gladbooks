@@ -2554,7 +2554,7 @@ Form.prototype.eventsCustom = function() {
         t.find('button.post').click(function() {
             if (form.validate()) {
                 form.draft = false;
-                form.submit();
+                form.submit(true);
             }
         });
     }
