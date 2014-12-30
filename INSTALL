@@ -1,6 +1,80 @@
-(incomplete)
+== Ubuntu 12.04 ==
 
-== Postgres setup ==
+=== Install Prerequisites ===
+
+ apt-get install git build-essential
+
+=== Install openldap ===
+Install from git master - ldif bits of libgladdb need stuff (ldif api) that isn't due to be released until 2.5.
+
+ cd /usr/local/src
+ git clone git://git.openldap.org/openldap.git
+ cd openldap
+ ./configure --prefix=/usr
+ make depend
+ make
+ make install
+ 
+=== Install libgladdb ===
+
+ apt-get install libpq5 libpq-dev
+ apt-get install libmysqlclient18 libmysqlclient-dev
+ apt-get install freetds-common freetds-dev libsybdb5
+ 
+ cd /usr/local/src
+ git clone https://github.com/brettsheffield/gladdb.git
+ cd gladdb/src
+ make
+ make install
+ 
+=== Install gladd ===
+
+ apt-get install libxslt1.1
+ apt-get install libcurl3
+ apt-get install libcurl4-openssl-dev
+ apt-get install libxml2-dev libxslt1-dev
+ apt-get install libpam0g-dev
+ apt-get install uuid-dev
+
+ cd /usr/local/src
+ git clone https://github.com/brettsheffield/gladd.git
+
+ # oh dear - this really should be in a Makefile
+ cd gladd/libs/libb64-1.2/src
+ make
+ cp libb64.a /usr/local/lib/
+ cp -r ../include/b64/ /usr/local/include
+
+ cd gladd/src
+ ./configure --with-openssl
+ make
+ make install
+
+=== Install gladbooks ===
+
+ mkdir /usr/local/gladd
+ cd /usr/local/gladd
+ git clone https://github.com/brettsheffield/gladbooks.git gladbooks-ui
+ cd /etc
+ ln -s /usr/local/gladd/gladbooks-ui/gladd.conf
+ 
+=== Install gladd.js ===
+
+ cd /usr/local/src
+ git clone https://github.com/brettsheffield/gladd.js.git
+ cd /usr/local/gladd/gladbooks-ui/js/
+ ln -s /usr/local/src/gladd.js/js/gladd.js
+ 
+=== gladd.conf.local ===
+
+ cp /usr/local/gladd/gladbooks-ui/gladd.conf.local.sample /etc/gladd.conf.local
+ 
+Update /etc/gladd.conf.local with ssl certificate and key details.
+
+=== Set up database ===
+
+apt-get install postgresql-9.1 postgresql-client postgresql-server-dev-9.1
+
 pg_hba.conf - allow from gladd server
 
 From a fresh postgres setup (ie no existing gladbooks database)
@@ -19,21 +93,26 @@ postgres=# ALTER USER gladd CREATEDB;
 postgres=#\q
 postgres:~$ exit
 
-Added the demo database:
-# su - gladd
-$ cd /usr/local/gladd/gladbooks-ui/sql
-$ make dropdb ## fail is OK if you have already dropped the db
-$ make all    ## will fail is /etc/gladbooks/conf.d/ has old directories
-$ make demo
+ cd /usr/local/gladd/gladbooks-ui/sql
+ make all
+ make demo (optional)
+ 
+=== Install Plugins ===
 
-== Reset the db ==
-As root
-# mv   /etc/gladbooks/conf.d/  /etc/gladbooks/conf.d.XXX
-# su - postgres
-# psql
-postgres=# drop database gladbooks;
-postgres=# drop user gladbook;
-postgres=# drop user gladd;
+yes, yes, this needs to be in a Makefile somewhere too...
 
+ cd /usr/local/gladd/gladbooks-ui/src/csvtoxml
+ make
+ make install
+ cd ../pg
+ make
+ make install
+ 
+ # ignore clerkd for now
 
-This allows the user to create the c language functions.
+=== Start gladd ===
+
+ gladd start
+ # check syslog for messages
+ 
+View https://your-server.example.com/ in your browser.
