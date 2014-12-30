@@ -1387,7 +1387,7 @@ BEGIN
 	LOOP
 		INSERT INTO emailrecipient (
 			contact, emailname, emailaddress, is_to
-		) VALUES (r_to.contact, r_to.name, r_to.email, 'true');
+		) VALUES (r_to.id, r_to.name, r_to.email, 'true');
 	END LOOP;
 
 	RETURN '0';
