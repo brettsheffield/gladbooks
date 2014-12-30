@@ -54,7 +54,7 @@ g_menus = [
     ['salesinvoices', showQuery, 'salesinvoices', 'Sales Invoices', true],
     ['salesorder.create', showForm, 'salesorder', 'create', 'New Sales Order'],
     ['salesorders', showQuery, 'salesorders', 'Sales Orders', true],
-    ['salesorders.process', getForm, 'salesorder', 'process', 'Manual Billing Run'],
+    ['salesorders.process', showForm, 'salesorder', 'process', 'Manual Billing Run'],
     ['salespayment.create', showForm, 'salespayment', 'create', 'Enter Sales Payment'],
     ['salespayments', showQuery, 'salespayments', 'Sales Payments', true],
     ['business.create', getForm, 'business', 'create', 'Add New Business'],
@@ -2558,6 +2558,13 @@ Form.prototype.eventsCustom = function() {
             }
         });
     }
+    else if (this.object === 'salesorder' && this.action === 'process') {
+        t.find('button.post').click(function() {
+            if (form.validate()) {
+                form.submit(true);
+            }
+        });
+    }
 }
 
 Form.prototype.onChangeCustom = function(ctl) {
@@ -2687,6 +2694,9 @@ Form.prototype.submitSuccessCustom = function(xml) {
     && (this.action === 'update'))
     {
         this.processReturnedData = false;
+    }
+    else if (this.object === 'salesorder' && this.action === 'process') {
+        TABS.refresh('salesinvoices');
     }
     return false;
 }
