@@ -1653,7 +1653,7 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
-REATE OR REPLACE FUNCTION post_purchaseinvoice(pi_id INT8)
+CREATE OR REPLACE FUNCTION post_purchaseinvoice(pi_id INT8)
 RETURNS INT4 AS $$
 DECLARE
         r_pi    RECORD;
@@ -1672,11 +1672,11 @@ BEGIN
         VALUES (r_pi.taxpoint, 'Purchase Invoice (' || r_pi.orgcode  || ') ' || r_pi.ref);
 
         IF (r_pi.total > 0) THEN
-                d = '0.00';
+                d = NULL;
                 c = r_pi.total;
         ELSE
                 d = r_pi.total;
-                c = '0.00';
+                c = NULL;
         END IF;
 
         -- 2100 = Creditors Control Account
@@ -1685,22 +1685,22 @@ BEGIN
 
         -- post tax to ledger
         IF (r_pi.tax < 0) THEN
-                d = '0.00';
+                d = NULL;
                 c = r_pi.tax;
         ELSE
                 d = r_pi.tax;
-                c = '0.00';
+                c = NULL;
         END IF;
         RAISE INFO 'Account: 2202 Debit: % Credit %', d, c;
         INSERT INTO ledger (account, debit, credit) VALUES ('2202', d, c);
 
         -- FIXME: where am I posting this?  Need account to be supplied.
         IF (r_pi.subtotal < 0) THEN
-                d = '0.00';
+                d = NULL;
                 c = r_pi.subtotal;
         ELSE
                 d = r_pi.subtotal;
-                c = '0.00';
+                c = NULL;
         END IF;
         RAISE INFO 'Account: 5000 Debit: % Credit %', d, c;
         INSERT INTO ledger (account, debit, credit) VALUES ('5000', d, c);
@@ -1717,74 +1717,74 @@ $$ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION post_salesinvoice(si_id INT8)
 RETURNS INT4 AS $$
 DECLARE
-	r_si		RECORD;
-	r_tax		RECORD;
-	r_item		RECORD;
-	d		NUMERIC;
-	c		NUMERIC;
+        r_si            RECORD;
+        r_tax           RECORD;
+        r_item          RECORD;
+        d               NUMERIC;
+        c               NUMERIC;
 BEGIN
-	-- fetch salesinvoice details
-	SELECT si.salesinvoice, si.taxpoint, si.subtotal, si.total, si.ref
-	INTO r_si
-	FROM salesinvoice_current si
-	WHERE si.salesinvoice=si_id;
+        -- fetch salesinvoice details
+        SELECT si.salesinvoice, si.taxpoint, si.subtotal, si.total, si.ref
+        INTO r_si
+        FROM salesinvoice_current si
+        WHERE si.salesinvoice=si_id;
 
-	-- create journal entry
-	INSERT INTO journal (transactdate, description) 
-	VALUES (r_si.taxpoint, 'Sales Invoice ' || r_si.ref);
+        -- create journal entry
+        INSERT INTO journal (transactdate, description) 
+        VALUES (r_si.taxpoint, 'Sales Invoice ' || r_si.ref);
 
-	IF (r_si.total > 0) THEN
-		d = r_si.total;
-		c = '0.00';
-	ELSE
-		d = '0.00';
-		c = r_si.total;
-	END IF;
+        IF (r_si.total > 0) THEN
+                d = r_si.total;
+                c = NULL;
+        ELSE
+                d = NULL;
+                c = r_si.total;
+        END IF;
 
-	-- TODO: divisions and departments
+        -- TODO: divisions and departments
 
-	-- 1100 = Debtors Control Account
-	RAISE INFO 'Account: % Debit: % Credit %', '1100', d, c;
-	INSERT INTO ledger (account, debit, credit) VALUES ('1100', d, c);
-	
-	-- post tax details to ledger
-	FOR r_tax IN
-	SELECT sit.salesinvoice, sit.account, sit.total
-	FROM salesinvoice_tax sit WHERE sit.salesinvoice=si_id
-	LOOP
-		IF (r_tax.total < 0) THEN
-			d = r_tax.total;
-			c = '0.00';
-		ELSE
-			d = '0.00';
-			c = r_tax.total;
-		END IF;
-		RAISE INFO 'Account: % Debit: % Credit %',r_tax.account, d, c;
-		INSERT INTO ledger (account, debit, credit) 
-		VALUES (r_tax.account, d, c);
-	END LOOP;
+        -- 1100 = Debtors Control Account
+        RAISE INFO 'Account: % Debit: % Credit %', '1100', d, c;
+        INSERT INTO ledger (account, debit, credit) VALUES ('1100', d, c);
+        
+        -- post tax details to ledger
+        FOR r_tax IN
+        SELECT sit.salesinvoice, sit.account, sit.total
+        FROM salesinvoice_tax sit WHERE sit.salesinvoice=si_id
+        LOOP
+                IF (r_tax.total < 0) THEN
+                        d = r_tax.total;
+                        c = NULL;
+                ELSE
+                        d = NULL;
+                        c = r_tax.total;
+                END IF;
+                RAISE INFO 'Account: % Debit: % Credit %',r_tax.account, d, c;
+                INSERT INTO ledger (account, debit, credit) 
+                VALUES (r_tax.account, d, c);
+        END LOOP;
 
 
-	-- post product details to ledger
-	FOR r_item IN
-	SELECT sii.salesinvoice, p.account, sii.linetotal
-	FROM salesinvoiceitem_display sii
-	RIGHT JOIN product_current p ON p.product = sii.product
-	WHERE sii.salesinvoice=si_id
-	LOOP
-		IF (r_item.linetotal < 0) THEN
-			d = r_item.linetotal;
-			c = '0.00';
-		ELSE
-			d = '0.00';
-			c = r_item.linetotal;
-		END IF;
-		RAISE INFO 'Account: % Debit: % Credit %',r_item.account,d,c;
-		INSERT INTO ledger (account, debit, credit) 
-		VALUES (r_item.account, d, c);
-	END LOOP;
+        -- post product details to ledger
+        FOR r_item IN
+        SELECT sii.salesinvoice, p.account, sii.linetotal
+        FROM salesinvoiceitem_display sii
+        RIGHT JOIN product_current p ON p.product = sii.product
+        WHERE sii.salesinvoice=si_id
+        LOOP
+                IF (r_item.linetotal < 0) THEN
+                        d = r_item.linetotal;
+                        c = NULL;
+                ELSE
+                        d = NULL;
+                        c = r_item.linetotal;
+                END IF;
+                RAISE INFO 'Account: % Debit: % Credit %',r_item.account,d,c;
+                INSERT INTO ledger (account, debit, credit) 
+                VALUES (r_item.account, d, c);
+        END LOOP;
 
-	RETURN '0';
+        RETURN '0';
 END;
 $$ LANGUAGE 'plpgsql';
 
@@ -1819,9 +1819,9 @@ BEGIN
 
 	IF (r_si.total > 0) THEN
 		d = r_si.total;
-		c = '0.00';
+		c = NULL;
 	ELSE
-		d = '0.00';
+		d = NULL;
 		c = r_si.total;
 	END IF;
 
@@ -1832,9 +1832,9 @@ BEGIN
 	-- post tax to ledger (quick version, assume Standard Rate VAT)
 	IF (r_si.tax < 0) THEN
 		d = r_si.tax;
-		c = '0.00';
+		c = NULL;
 	ELSE
-		d = '0.00';
+		d = NULL;
 		c = r_si.tax;
 	END IF;
 	RAISE INFO 'Account: 2202 Debit: % Credit %', d, c;
@@ -1843,9 +1843,9 @@ BEGIN
 	-- post nett amount to 4000 General Revenue
 	IF (r_si.subtotal < 0) THEN
 		d = r_si.subtotal;
-		c = '0.00';
+		c = NULL;
 	ELSE
-		d = '0.00';
+		d = NULL;
 		c = r_si.subtotal;
 	END IF;
 	RAISE INFO 'Account: 4000 Debit: % Credit %', d, c;
