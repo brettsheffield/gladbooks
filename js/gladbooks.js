@@ -51,6 +51,7 @@ g_menus = [
     ['rpt_balancesheet', showHTML, 'reports/balancesheet', 'Balance Sheet', false, true],
     ['rpt_profitandloss', showHTML, 'reports/profitandloss', 'Profit & Loss', false, true],
     ['rpt_trialbalance', showQuery, 'reports/trialbalance', 'Trial Balance', false],
+    ['rpt_vat', showForm, 'report', 'update', 'VAT Report', false],
     ['salesinvoices', showQuery, 'salesinvoices', 'Sales Invoices', true],
     ['salesorder.create', showForm, 'salesorder', 'create', 'New Sales Order'],
     ['salesorders', showQuery, 'salesorders', 'Sales Orders', true],
@@ -2558,6 +2559,9 @@ Form.prototype.eventsCustom = function() {
             }
         });
     }
+    else if (this.object === 'report') {
+        this.eventsCustomReport(form, t);
+    }
     else if (this.object === 'salesorder' && this.action === 'process') {
         t.find('button.post').click(function() {
             if (form.validate()) {
@@ -2565,6 +2569,23 @@ Form.prototype.eventsCustom = function() {
             }
         });
     }
+}
+
+Form.prototype.eventsCustomReport = function(form, t) {
+    t.find('input.datefield').change(function() {
+        var start_date = t.find('input[name="start_date"]').val();
+        var end_date = t.find('input[name="end_date"]').val();
+        if (isDate(start_date) && isDate(end_date)) {
+            console.log('got both dates');
+            if (start_date > end_date) {
+                statusMessage('From must be before To', STATUS_WARN);
+                return false;
+            }
+            console.log('displaying VAT report');
+            var collection = 'vatreport/' + start_date + '/' + end_date;
+            showQuery(collection, form.tab.title, form.tab.sort, t);
+        }
+    });
 }
 
 Form.prototype.onChangeCustom = function(ctl) {
