@@ -2586,11 +2586,21 @@ BEGIN
         q7 := 'Total value of purchases and all other inputs excluding any VAT.  Include your box 9 figure.';
         q8 := 'Total value of all supplies of goods and related costs, excluding and VAT, to other EC Member States';
         q9 := 'Total value of acquisitions of goods and related costs excluding any VAT, from other EC Member States';
-        
-        a1 := '0.00'; -- TODO
+       
+        -- TODO: calculate on cash basis if required
+        SELECT SUM(tax) INTO a1 
+        FROM salesinvoice_current 
+        WHERE taxpoint BETWEEN start_date AND end_date;
+
         a2 := '0.00'; -- TODO
+        
         a3 := a1 + a2;
-        a4 := '0.00'; -- TODO
+        
+        -- TODO: calculate on cash basis if required
+        SELECT SUM(tax) INTO a4 
+        FROM purchaseinvoice_current 
+        WHERE taxpoint BETWEEN start_date AND end_date;
+        
         a5 := a3 - a4;
         
         SELECT SUM(subtotal) INTO a6 
