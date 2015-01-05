@@ -574,8 +574,6 @@ CREATE TABLE purchasepaymentallocationdetail (
 	clientip	TEXT
 );
 
--- TODO: trigger to ensure sum of amounts in purchasepaymentallocation do not exceed amount of purchasepayment --
-
 CREATE OR REPLACE VIEW purchasepaymentallocation_current AS
 SELECT * FROM purchasepaymentallocationdetail
 WHERE id IN (
