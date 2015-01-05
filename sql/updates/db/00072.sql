@@ -20,7 +20,6 @@ DECLARE
         a7      NUMERIC;
         a8      NUMERIC;
         a9      NUMERIC;
-        cash    BOOLEAN;
 BEGIN
         DROP TABLE IF EXISTS vatreport;
         CREATE TEMP TABLE vatreport(
@@ -29,9 +28,6 @@ BEGIN
                 a NUMERIC
         );
         
-        -- Find out if we we are reporting VAT on a cash basis
-        SELECT vatcashbasis INTO cash FROM business WHERE id=current_business();
-
         q1 := 'VAT due in this period on sales and other outputs';
         q2 := 'VAT due in this period on acquisitions from other EC Member States';
         q3 := 'Total VAT due (the sum of boxes 1 and 2)';
