@@ -53,23 +53,31 @@ INSERT INTO division (id, name) VALUES (0, 'default');
 INSERT INTO account (id, accounttype, description)
 	VALUES ('1000', '1000', 'Current Account');
 INSERT INTO account (id, accounttype, description)
-	VALUES ('1100', '1000', 'Debtors Control Account');
+	VALUES ('1100', '1000', 'Debtors Control');
 INSERT INTO account (id, accounttype, description)
-	VALUES ('2100', '2000', 'Creditors Control Account');
+	VALUES ('2100', '2000', 'Creditors Control');
 INSERT INTO account (id, accounttype, description)
-	VALUES ('2202', '2000', 'VAT Liability Account');
+	VALUES ('2200', '2000', 'Output VAT (Sales)');
 INSERT INTO account (id, accounttype, description)
-	VALUES ('2210', '2000', 'PAYE Liability Account');
+	VALUES ('2201', '2000', 'Input VAT (Purchases)');
 INSERT INTO account (id, accounttype, description)
-	VALUES ('2211', '2000', 'NI Liability Account');
+	VALUES ('2202', '2000', 'VAT Liability');
 INSERT INTO account (id, accounttype, description)
-	VALUES ('2220', '2000', 'Wages Liability Account');
+	VALUES ('2205', '2000', 'Output VAT (Sales) - Holding Account');
 INSERT INTO account (id, accounttype, description)
-	VALUES ('2230', '2000', 'Pension Liability Account');
+	VALUES ('2206', '2000', 'Input VAT (Purchases) - Holding Account');
+INSERT INTO account (id, accounttype, description)
+	VALUES ('2210', '2000', 'PAYE Liability');
+INSERT INTO account (id, accounttype, description)
+	VALUES ('2211', '2000', 'NI Liability');
+INSERT INTO account (id, accounttype, description)
+	VALUES ('2220', '2000', 'Wages Liability');
+INSERT INTO account (id, accounttype, description)
+	VALUES ('2230', '2000', 'Pension Liability');
 INSERT INTO account (id, accounttype, description)
 	VALUES ('3000', '3000', 'Share Capital');
 INSERT INTO account (id, accounttype, description)
-	VALUES ('3200', '3000', 'Retained Earnings Account');
+	VALUES ('3200', '3000', 'Retained Earnings');
 INSERT INTO account (id, accounttype, description)
 	VALUES ('4000', '4000', 'General Revenues');
 INSERT INTO account (id, accounttype, description)
