@@ -1656,9 +1656,11 @@ $$ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION post_purchaseinvoice(pi_id INT8)
 RETURNS INT4 AS $$
 DECLARE
-        r_pi    RECORD;
+        r_pi            RECORD;
+        code            NUMERIC;
         d               NUMERIC;
         c               NUMERIC;
+        cashbasis       BOOLEAN;
 BEGIN
 
         SELECT pi.id, o.orgcode, pi.invoicenum, pi.ref, pi.taxpoint, pi.subtotal, pi.tax, pi.total
@@ -1666,6 +1668,8 @@ BEGIN
         FROM purchaseinvoice_current pi
         INNER JOIN organisation_current o ON o.id = pi.organisation
         WHERE pi.id = pi_id;
+        
+        SELECT vatcashbasis INTO cashbasis FROM business WHERE id=current_business();
 
         -- create journal entry
         INSERT INTO journal (transactdate, description)
@@ -1691,8 +1695,14 @@ BEGIN
                 d = r_pi.tax;
                 c = NULL;
         END IF;
-        RAISE INFO 'Account: 2202 Debit: % Credit %', d, c;
-        INSERT INTO ledger (account, debit, credit) VALUES ('2202', d, c);
+        
+        IF (cashbasis) THEN
+                code = '2206'; -- cash basis, post to holding account
+        ELSE
+                code = '2201';
+        END IF;
+        RAISE INFO 'Account: % Debit: % Credit %', code, d, c;
+        INSERT INTO ledger (account, debit, credit) VALUES (code, d, c);
 
         -- FIXME: where am I posting this?  Need account to be supplied.
         IF (r_pi.subtotal < 0) THEN
@@ -1720,8 +1730,10 @@ DECLARE
         r_si            RECORD;
         r_tax           RECORD;
         r_item          RECORD;
+        code            NUMERIC;
         d               NUMERIC;
         c               NUMERIC;
+        cashbasis       BOOLEAN;
 BEGIN
         -- fetch salesinvoice details
         SELECT si.salesinvoice, si.taxpoint, si.subtotal, si.total, si.ref
@@ -1729,6 +1741,8 @@ BEGIN
         FROM salesinvoice_current si
         WHERE si.salesinvoice=si_id;
 
+        SELECT vatcashbasis INTO cashbasis FROM business WHERE id=current_business();
+        
         -- create journal entry
         INSERT INTO journal (transactdate, description) 
         VALUES (r_si.taxpoint, 'Sales Invoice ' || r_si.ref);
@@ -1759,9 +1773,19 @@ BEGIN
                         d = NULL;
                         c = r_tax.total;
                 END IF;
-                RAISE INFO 'Account: % Debit: % Credit %',r_tax.account, d, c;
+                -- If VAT, select account to post to
+                IF (r_tax.account = '2202') THEN
+                        IF (cashbasis) THEN
+                                code = '2205'; -- cash basis, post to holding account
+                        ELSE
+                                code = '2200';
+                        END IF;
+                ELSE
+                        code = r_tax.account;
+                END IF;
+                RAISE INFO 'Account: % Debit: % Credit %', code, d, c;
                 INSERT INTO ledger (account, debit, credit) 
-                VALUES (r_tax.account, d, c);
+                VALUES (code, d, c);
         END LOOP;
 
 
@@ -1796,8 +1820,10 @@ DECLARE
 	r_si		RECORD;
 	r_tax		RECORD;
 	r_item		RECORD;
+        code            NUMERIC;
 	d		NUMERIC;
 	c		NUMERIC;
+        cashbasis       BOOLEAN;
 BEGIN
 	-- fetch salesinvoice details
 	SELECT si.salesinvoice, 
@@ -1807,6 +1833,8 @@ BEGIN
 	FROM salesinvoice_current si
 	WHERE si.salesinvoice=si_id;
 
+        SELECT vatcashbasis INTO cashbasis FROM business WHERE id=current_business();
+        
 	-- only post invoices from current period
 	-- TODO: pull this date from business.period_start
 	IF r_si.taxpoint < '2013-04-01' THEN
@@ -1837,8 +1865,14 @@ BEGIN
 		d = NULL;
 		c = r_si.tax;
 	END IF;
-	RAISE INFO 'Account: 2202 Debit: % Credit %', d, c;
-	INSERT INTO ledger (account, debit, credit) VALUES ('2202', d, c);
+        
+        IF (cashbasis) THEN
+                code = '2205'; -- cash basis, post to holding account
+        ELSE
+                code = '2200';
+        END IF;
+	RAISE INFO 'Account: % Debit: % Credit %', code, d, c;
+	INSERT INTO ledger (account, debit, credit) VALUES (code, d, c);
 
 	-- post nett amount to 4000 General Revenue
 	IF (r_si.subtotal < 0) THEN
