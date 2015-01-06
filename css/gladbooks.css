@@ -740,6 +740,10 @@ table.datatable th.xml-tax {
   text-align: right;
   white-space: pre; }
 
+table.datatable .xml-a {
+  text-align: right;
+  white-space: pre; }
+
 .qty {
   text-align: right; }
 
