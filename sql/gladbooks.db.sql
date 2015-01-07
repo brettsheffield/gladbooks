@@ -1824,6 +1824,8 @@ DECLARE
 	d		NUMERIC;
 	c		NUMERIC;
         cashbasis       BOOLEAN;
+        period_s        DATE;
+        period_e        DATE;
 BEGIN
 	-- fetch salesinvoice details
 	SELECT si.salesinvoice, 
@@ -1834,10 +1836,15 @@ BEGIN
 	WHERE si.salesinvoice=si_id;
 
         SELECT vatcashbasis INTO cashbasis FROM business WHERE id=current_business();
+       
+        -- get dates for current tax year
+        SELECT period_start, period_end INTO period_s, period_e
+        FROM business_year
+        WHERE id IN (SELECT MAX(id) FROM business_year GROUP BY business)
+        AND business = current_business();
         
 	-- only post invoices from current period
-	-- TODO: pull this date from business.period_start
-	IF r_si.taxpoint < '2013-04-01' THEN
+	IF r_si.taxpoint < period_s THEN
 		RETURN 0;
 	END IF;
 
