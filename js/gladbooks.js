@@ -2174,6 +2174,9 @@ function validateFormAccount(action, id) {
         type.focus();
         return false;
     }
+    if (action === 'create') {
+        type.addClass('dirty'); /* ensure we submit type */
+    }
 
     var description = mytab.find('input.description');
     if (description.val().length < 1) {
