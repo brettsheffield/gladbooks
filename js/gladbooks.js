@@ -1974,6 +1974,11 @@ function searchRowClick() {
         var name = $(this).find('div.td.name').text();
         showForm('contact', 'update', name, id);
     }
+    if ($(this).hasClass('ledger')) {
+        var journal = $(this).find('div.td.journal').text();
+        console.log('ledger #' + id + ' => journal #' + journal);
+        showForm('journal', 'delete', 'Journal #' + journal, journal);
+    }
     if ($(this).hasClass('organisation')) {
         console.log('organisation ' + id);
         var name = $(this).find('div.td.name').text();
