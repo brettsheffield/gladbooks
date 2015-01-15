@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <request>
-	<data>
-		<organisation id="1" />
-	</data>
+  <instance>test</instance>
+  <business>1</business>
+  <data>
+    <organisation>
+      <name>Rename of Organisation</name>
+      <line_1>Hangar 14</line_1>
+      <line_2>Runway End</line_2>
+      <line_3>Pig Lane</line_3>
+      <town>Hopetoun</town>
+      <postcode>EH30 9SL</postcode>
+      <email>flying.pig@example.com</email>
+      <phone>01 23 45 67 89</phone>
+      <phonealt>01 23 45 67 90</phonealt>
+      <mobile>07 23 45 67 90</mobile>
+      <fax>01 23 45 67 91</fax>
+    </organisation>
+  </data>
 </request>
