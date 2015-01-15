@@ -1,62 +1,61 @@
+<!--div class="map-canvas"/-->
 <div class="organisation update">
-	<h2>Edit Organisation Details</h2>
 	<form class="organisation update form" method="post" action="organisations">
 		<input type="hidden" name="id"/>
 		<ul>
 			<li>
 				<label for="name">Organisation Name</label>
-				<input class="focus" type="text" name="name" placeholder="Organisation Name" title="Name of the Organisation (must not be blank)"/>
-				<span class="form_hint">Name of the Organisation (must not be blank)</span>
+				<input class="focus" type="text" name="name" placeholder="Organisation Name"/>
+			</li>
+			<li>
+				<label for="line_1">Address Line 1</label>
+				<input class="line_1" type="text" name="line_1" placeholder="Address Line 1"/>
+			</li>
+			<li>
+				<label for="line_2">Address Line 2</label>
+				<input class="line_2" type="text" name="line_2" placeholder="Address Line 2"/>
+			</li>
+			<li>
+				<label for="line_3">Address Line 3</label>
+				<input class="line_3" type="text" name="line_3" placeholder="Address Line 3"/>
+			</li>
+			<li>
+				<label for="town">Town</label>
+				<input type="text" name="town" placeholder="Town"/>
+			</li>
+			<li>
+				<label for="county">County</label>
+				<input type="text" name="county" placeholder="County"/>
+			</li>
+			<li>
+				<label for="country">Country</label>
+				<input type="text" name="country" placeholder="Country"/>
+			</li>
+			<li>
+				<label for="postcode">Postcode</label>
+				<input type="text" name="postcode" placeholder="Postcode"/>
+			</li>
+			<li>
+				<label for="email">Email Address</label>
+				<input type="email" name="email" placeholder="Email Address"/>
+			</li>
+			<li>
+				<label for="phone">Telephone (Primary)</label>
+				<input type="text" name="phone" placeholder="Telephone"/>
+			</li>
+			<li>
+				<label for="phonealt">Telephone (Alternate)</label>
+				<input type="text" name="phonealt" placeholder="Telephone (Alternate)"/>
+			</li>
+			<li>
+				<label for="mobile">Telephone (Mobile)</label>
+				<input type="text" name="mobile" placeholder="Telephone (Mobile)"/>
+			</li>
+			<li>
+				<label for="fax">Facsimile</label>
+				<input type="text" name="fax" placeholder="Facsimile Number"/>
 			</li>
 			<li><button class="save">Save</button></li>
 		</ul>
 	</form>
-	<div class="organisation_contacts">
-		<form class="subform" action="organisation_contacts"/>
-		<h3>Contacts</h3>
-
-		<div class="radio untuned">
-			<input type="radio" id="radio1" class="radio1 nosubmit" name="radio" value="0" checked/><label for="radio1">Create Contact</label>
-			<input type="radio" id="radio2" class="radio2 nosubmit" name="radio" value="1"/><label for="radio2">Link Contact</label>
-		</div>
-
-		<table class="datatable">
-			<thead>
-				<tr class="contact create">
-					<th>Name</th>
-					<th>Email</th>
-					<th>Telephone</th>
-					<th>Mobile</th>
-					<th>Type</th>
-					<th>&nbsp;</th>
-				</tr>
-				<tr class="contact create">
-					<td class="name"><input class="nosubmit" name="name" type="text" placeholder="Name"/></td>
-					<td class="email"><input class="nosubmit" name="email" type="email" placeholder="Email"/></td>
-					<td class="phone"><input class="nosubmit" name="phone" type="text" placeholder="Telephone"/></td>
-					<td class="phone"><input class="nosubmit" name="mobile" type="text" placeholder="Mobile"/></td>
-					<td><select name="relationship" multiple class="relationship populate nosubmit" data-source="relationships" data-placeholder="Select type(s)"></select></td>
-					<td><button class="addrow">Add</button></td>
-				</tr>
-				<tr class="contact link">
-					<th>Link Existing Contact</th>
-					<th>&nbsp;</th>
-					<th>&nbsp;</th>
-					<th>&nbsp;</th>
-					<th>&nbsp;</th>
-					<th>&nbsp;</th>
-				</tr>
-				<tr class="contact link">
-					<td><select class="contactlink populate nosubmit" name="contactsearch" data-source="contactssorted" data-placeholder="Select contact"/></select></td>
-					<td><button class="linkcontact">Link Contact</button> </td>
-					<td>&nbsp;</td>
-					<td>&nbsp;</td>
-					<td>&nbsp;</td>
-					<td>&nbsp;</td>
-				</tr>
-			</thead>
-			<tbody>
-			</tbody>
-		</table>
-	</div>
 </div>
