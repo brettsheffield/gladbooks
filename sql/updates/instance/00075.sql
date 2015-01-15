@@ -28,7 +28,7 @@ SELECT
         od.clientip
 FROM organisationdetail od
 INNER JOIN organisation o ON o.id = od.organisation
-INNER JOIN contact_current c ON c.id = od.billcontact
+LEFT JOIN contact_current c ON c.id = od.billcontact
 WHERE od.id IN (
         SELECT MAX(id)
         FROM organisationdetail

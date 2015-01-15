@@ -193,9 +193,13 @@
                         <xsl:copy-of select="$authuser"/>
                         <xsl:text>','</xsl:text>
                         <xsl:copy-of select="$clientip"/>
-                        <xsl:text>' FROM organisation_current WHERE id='</xsl:text>
-                        <xsl:copy-of select="$id"/>
-                        <xsl:text>';</xsl:text>
+                        <xsl:text>' FROM organisation_current</xsl:text>
+                        <xsl:if test="$id">
+                                <xsl:text> WHERE id='</xsl:text>
+                                <xsl:copy-of select="$id"/>
+                                <xsl:text>'</xsl:text>
+                        </xsl:if>
+                        <xsl:text>;</xsl:text>
                 </xsl:if>
 
                 <xsl:if test="not($id)">
@@ -307,9 +311,13 @@
 		<xsl:copy-of select="$authuser"/>
 		<xsl:text>','</xsl:text>
 		<xsl:copy-of select="$clientip"/>
-		<xsl:text>' FROM organisation_current WHERE id='</xsl:text>
-		<xsl:copy-of select="$id"/>
-                <xsl:text>';</xsl:text>
+                <xsl:text>' FROM organisation_current</xsl:text>
+                <xsl:if test="$id">
+                        <xsl:text> WHERE id='</xsl:text>
+                        <xsl:copy-of select="$id"/>
+                        <xsl:text>'</xsl:text>
+                </xsl:if>
+                <xsl:text>;</xsl:text>
 
 	</xsl:template>
 
