@@ -636,7 +636,9 @@ BEGIN
 	IF NEW.organisation IS NULL THEN
                 -- organisation needs a default contact
 		INSERT INTO contact DEFAULT VALUES;
-		INSERT INTO contactdetail(name) VALUES (NEW.name);
+		INSERT INTO contactdetail(contact, name) VALUES (
+                        currval(pg_get_serial_sequence('contact','id')),NEW.name
+                );
                 
 		INSERT INTO organisation DEFAULT VALUES;
 		INSERT INTO organisationdetail(name,billcontact) VALUES (

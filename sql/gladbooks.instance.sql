@@ -42,7 +42,8 @@ CREATE TABLE contact (
 
 CREATE TABLE contactdetail (
         id              SERIAL PRIMARY KEY,
-        contact         INT4 references contact(id) ON DELETE RESTRICT,
+        contact         INT4 NOT NULL 
+                        references contact(id) ON DELETE RESTRICT,
         is_active       boolean DEFAULT true,
         is_deleted      boolean DEFAULT false,
         name            TEXT NOT NULL,
