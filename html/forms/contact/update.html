@@ -1,7 +1,14 @@
 <div class="map-canvas"/>
 <div class="contact update">
+  <button class="save">Save</button>
 	<form class="contact update form" method="post" action="contacts">
 		<input type="hidden" name="id"/>
+    <div class="formbar">
+      <select class="actions">
+        <option value="-1">Other actions ...</option>
+        <option value="DELETE">Delete this Contact</option>
+      </select>
+    </div>
 		<ul>
 			<li>
 				<label for="name">Contact Name</label>
@@ -55,7 +62,6 @@
 				<label for="fax">Facsimile</label>
 				<input type="text" name="fax" placeholder="Facsimile Number"/>
 			</li>
-			<li><button class="save">Save</button></li>
 		</ul>
 	</form>
 </div>

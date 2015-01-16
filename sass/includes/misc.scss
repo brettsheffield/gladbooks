@@ -361,6 +361,13 @@ div.organisation_contacts tr:not(:first-child) {
 	background-color: white;
 }
 
+div.contact.update div.formbar {
+        width: 100%;
+}
+div.contact.update div.formbar select.actions {
+        width: 15em;
+}
+
 /*
 button.addrow {
 	float: right;

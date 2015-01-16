@@ -94,7 +94,8 @@ WHERE id IN (
 	SELECT MAX(id)
 	FROM contactdetail
 	GROUP BY contact
-);
+)
+AND is_deleted = false;
 
 CREATE TABLE organisation (
         id              SERIAL PRIMARY KEY,
@@ -352,6 +353,7 @@ WHERE id IN (
         GROUP BY contact
 )
 AND contact NOT IN (SELECT billcontact FROM organisation_current)
+AND is_deleted = false
 ORDER BY contact ASC
 ;
 

@@ -2552,7 +2552,19 @@ Form.prototype.customXML = function() {
 Form.prototype.eventsCustom = function() {
     var form = this;
     var t = this.tab.tablet;
-    if (this.object === 'journal') {
+    if (this.object === 'contact' && this.action === 'update') {
+        t.find('select.actions').change(function() {
+            if ($(this).val() === 'DELETE') {
+                if (form.submitDelete()) {
+                    form.tab.close();
+                }
+                else {
+                    $(this).val('-1');
+                }
+            }
+        });
+    }
+    else if (this.object === 'journal') {
         t.find('input[name="reverseid"]').click(function() {
             var id = $(this).val();
             showForm('journal', 'delete', 'Journal #' + id, id);
