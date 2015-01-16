@@ -351,6 +351,7 @@ WHERE id IN (
         FROM contactdetail
         GROUP BY contact
 )
+AND contact NOT IN (SELECT billcontact FROM organisation_current)
 ORDER BY contact ASC
 ;
 
