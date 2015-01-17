@@ -143,7 +143,6 @@ div.navitab-box-front {
 nav.site {
   background-color: #56708a;
   border-top: 5px solid #b2cde0;
-  display: none;
   font-size: 90%;
   margin-top: 5px;
   z-index: 1; }
@@ -151,7 +150,6 @@ nav.site {
 @media all and (min-width: 1024px) {
   nav.site {
     border-top: 0;
-    display: block;
     margin-top: 0; } }
 nav.site ul li a {
   background-color: #56708a;
@@ -458,12 +456,10 @@ div.tabtitle {
 div.tabhead {
   border-bottom: solid #56708a 1px;
   text-align: center;
-  width: 100%;
-  display: none; }
+  width: 100%; }
 
 .active div.tabhead {
-  background-color: white;
-  display: block; }
+  background-color: white; }
 
 div.tabx {
   display: none; }
@@ -786,7 +782,7 @@ td.xml-id, td.xml-journal {
   width: 3em; }
 
 td.xml-orgcode {
-  width: 10em; }
+  width: 8em; }
 
 /*
 td.xml-product {
@@ -1943,3 +1939,7 @@ div.chzn-search > input {
   div.video {
     min-height: 600px;
     width: 100%; } }
+/* styles that apply only to small screens */
+@media all and (max-width: 1024px) {
+  .smallscreen-hidden {
+    display: none; } }

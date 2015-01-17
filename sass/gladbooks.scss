@@ -175,7 +175,6 @@ div.navitab-box-front {
 nav.site {
 	background-color: darken($color-dark, 10%);
 	border-top: 5px solid $color-light;
-	display: none;
 	font-size: 90%;
 	margin-top: 5px;
 	z-index: 1;
@@ -185,7 +184,6 @@ nav.site {
 
 	nav.site {
 		border-top: 0;
-		display: block;
 		margin-top: 0;
 	}
 }
@@ -333,3 +331,4 @@ input.search-query {
 @import "sass/includes/tabs.scss";
 @import "sass/includes/maps.scss";
 @import "sass/includes/misc.scss";
+@import "sass/includes/smallscreen.scss";

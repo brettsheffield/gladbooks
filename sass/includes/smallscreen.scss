@@ -1,0 +1,8 @@
+/* styles that apply only to small screens */
+@media all and (max-width: $small-screen-width) {
+
+.smallscreen-hidden {
+        display: none;
+}
+
+}
