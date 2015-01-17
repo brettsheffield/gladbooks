@@ -1,0 +1,27 @@
+.map-canvas {
+        display: none;
+        float: right;
+        height: 100%;
+        width: 100%;
+}
+.map-canvas img {
+        max-width: none;
+}
+
+@media all and (min-width: $small-screen-width) {
+        .map-canvas {
+                width: 40%;
+        }
+}
+
+@media only screen and (min-width: 1366px) {
+        .map-canvas {
+                width: 35%;
+        }
+}
+
+@media only screen and (min-width: 1500px) {
+        .map-canvas {
+                width: 40%%;
+        }
+}

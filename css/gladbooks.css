@@ -458,10 +458,12 @@ div.tabtitle {
 div.tabhead {
   border-bottom: solid #56708a 1px;
   text-align: center;
-  width: 100%; }
+  width: 100%;
+  display: none; }
 
 .active div.tabhead {
-  background-color: white; }
+  background-color: white;
+  display: block; }
 
 div.tabx {
   display: none; }
@@ -501,6 +503,24 @@ div.tabx {
   ul.tablist > li {
     width: 19.9%;
     /* five tabs per line */ } }
+.map-canvas {
+  display: none;
+  float: right;
+  height: 100%;
+  width: 100%; }
+
+.map-canvas img {
+  max-width: none; }
+
+@media all and (min-width: 1024px) {
+  .map-canvas {
+    width: 40%; } }
+@media only screen and (min-width: 1366px) {
+  .map-canvas {
+    width: 35%; } }
+@media only screen and (min-width: 1500px) {
+  .map-canvas {
+    width: 40%%; } }
 /*
 img {
 	max-width: 100%;
@@ -1532,16 +1552,6 @@ div.product div.price {
 div.organisation.update div.chzn-container {
   margin: 7px; }
 
-/* map */
-.map-canvas {
-  display: none;
-  float: right;
-  height: 300px;
-  width: 300px; }
-
-.map-canvas img {
-  max-width: none; }
-
 /* status msg boxes */
 div.statusmsg {
   background-color: white;
@@ -1649,11 +1659,6 @@ div.chzn-search > input {
   form.journalform select.account {
     max-width: 78%; }
 
-  /* map */
-  .map-canvas {
-    height: 140px;
-    width: 33%; }
-
   /* report panels */
   div.report {
     font-size: 75%;
@@ -1710,11 +1715,6 @@ div.chzn-search > input {
   body {
     font-size: 12pt; }
 
-  /* map */
-  .map-canvas {
-    height: 230px;
-    width: 230px; }
-
   /* report panels */
   div.report {
     font-size: 75%; }
@@ -1763,11 +1763,7 @@ div.chzn-search > input {
   /* forms */
   .contact.form input,
   .organisation.form input {
-    width: 49%; }
-
-  /* map */
-  .map-canvas {
-    height: 395px; }
+    width: 33%; }
 
   /* *report panels , NULL*/
   div.report {
@@ -1810,11 +1806,6 @@ div.chzn-search > input {
   .organisation.form input {
     width: 33%; }
 
-  /* map */
-  .map-canvas {
-    height: 450px;
-    width: 450px; }
-
   /* report panels */
   div.report {
     font-size: 80%; }
@@ -1849,11 +1840,6 @@ div.chzn-search > input {
   .contact.form input,
   .organisation.form input {
     width: 40%; }
-
-  /* map */
-  .map-canvas {
-    height: 395px;
-    width: 395px; }
 
   /* report panels */
   div.report {
@@ -1893,11 +1879,6 @@ div.chzn-search > input {
   .organisation.form input {
     width: 40%; }
 
-  /* map */
-  .map-canvas {
-    height: 450px;
-    width: 450px; }
-
   /* report panels */
   div.report {
     font-size: 80%; }
@@ -1930,11 +1911,6 @@ div.chzn-search > input {
   .contact.form input,
   .organisation.form input {
     width: 33%; }
-
-  /* map */
-  .map-canvas {
-    height: 600px;
-    width: 600px; }
 
   /* report panels */
   div.report.balancesheet {

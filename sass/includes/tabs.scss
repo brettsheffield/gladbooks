@@ -150,10 +150,12 @@ div.tabhead {
 	border-bottom: solid darken($color-dark, 10%) 1px;
 	text-align: center;
 	width: 100%;
+        display: none;
 }
 
 .active div.tabhead {
 	background-color: white;
+        display: block;
 }
 
 div.tabx {
