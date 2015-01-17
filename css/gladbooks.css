@@ -1582,30 +1582,6 @@ tr.contact.link {
 tr.contact.link > td {
   padding: 5px; }
 
-/* reports */
-div.report {
-  background-color: #fff8cb;
-  border: solid 1px black;
-  font-size: 50%;
-  padding: 20px; }
-
-div.report * div.linespace {
-  min-height: 20px; }
-
-div.report * div.bsaccount {
-  float: left; }
-
-div.report * div.bsamount {
-  float: right; }
-
-div.panel.left {
-  font-size: 80%;
-  font-family: monospace; }
-
-div.panel.right {
-  font-size: 80%;
-  font-family: monospace; }
-
 /* pdf */
 object.pdf {
   height: 100px;
@@ -1940,6 +1916,33 @@ div.chzn-search > input {
   div.video {
     min-height: 600px;
     width: 100%; } }
+/* reports */
+div.report {
+  background-color: #fff8cb;
+  border: solid 1px black;
+  font-size: 50%;
+  padding: 20px; }
+
+div.report * div.linespace {
+  min-height: 20px; }
+
+div.report * div.bsaccount {
+  float: left; }
+
+div.report * div.bsamount {
+  float: right; }
+
+div.panel.left {
+  font-size: 80%;
+  font-family: monospace; }
+
+div.panel.right {
+  font-size: 80%;
+  font-family: monospace; }
+
+@media all and (max-width: 1024px) {
+  div.report {
+    height: 100%; } }
 /* styles that apply only to small screens */
 @media all and (max-width: 1024px) {
   .smallscreen-hidden {

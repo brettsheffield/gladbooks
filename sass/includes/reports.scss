@@ -1,0 +1,31 @@
+/* reports */
+
+div.report {
+        background-color: $color-even;
+        border: solid 1px black;
+        font-size: 50%;
+        padding: 20px;
+}
+div.report * div.linespace {
+        min-height: 20px;
+}
+div.report * div.bsaccount {
+        float: left;
+}
+div.report * div.bsamount {
+        float: right;
+}
+div.panel.left {
+        font-size: 80%;
+        font-family: monospace;
+}
+div.panel.right {
+        font-size: 80%;
+        font-family: monospace;
+}
+
+@media all and (max-width: $small-screen-width) {
+        div.report {
+                height: 100%;
+        }
+}
