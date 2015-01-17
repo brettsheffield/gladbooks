@@ -215,6 +215,13 @@ table.datatable {
 	width: 100%;
 }
 
+@media all and (max-width: $small-screen-width) {
+        table.datatable tr.row td {
+                padding-top: 1em;
+                padding-bottom: 1em;
+        }
+}
+
 table.datatable th {
 	color: white;
         font-family: verdana,helvetica,arial,sans-serif;
