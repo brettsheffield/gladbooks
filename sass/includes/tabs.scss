@@ -156,11 +156,6 @@ div.tabhead {
 	background-color: white;
 }
 
-div.tabx {
-	display: none;
-}
-
-
 @media all and (min-width: $small-screen-width) {
 
 	div.tabhead {
@@ -170,13 +165,7 @@ div.tabx {
 		text-align: left;
 	}
 
-	div.tabx {
-		display: block;
-	}
-
 }
-
-
 
 @media all and (min-width: $small-screen-width) {
 

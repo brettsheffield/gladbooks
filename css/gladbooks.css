@@ -461,18 +461,12 @@ div.tabhead {
 .active div.tabhead {
   background-color: white; }
 
-div.tabx {
-  display: none; }
-
 @media all and (min-width: 1024px) {
   div.tabhead {
     border-bottom: 0;
     border-radius: 5px 5px 0 0;
     position: relative;
-    text-align: left; }
-
-  div.tabx {
-    display: block; } }
+    text-align: left; } }
 @media all and (min-width: 1024px) {
   .tabheaders ul > li {
     padding-top: 0;
