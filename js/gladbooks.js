@@ -126,6 +126,9 @@ FORMDATA = {
 MAPFIELDS = {
     'contact': ['line_1', 'line_2', 'line_3', 'town', 'county', 'country',
         'postcode'
+    ],
+    'organisation': ['line_1', 'line_2', 'line_3', 'town', 'county', 'country',
+        'postcode'
     ]
 }
 
