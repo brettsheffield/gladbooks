@@ -1,14 +1,14 @@
 <div class="map-canvas"/>
 <div class="contact update">
-  <button class="save">Save</button>
+  <div class="formbar">
+    <button class="save">Save</button>
+    <select class="actions">
+      <option value="-1">Other actions ...</option>
+      <option value="DELETE">Delete this Contact</option>
+    </select>
+  </div>
 	<form class="contact update form" method="post" action="contacts">
 		<input type="hidden" name="id"/>
-    <div class="formbar">
-      <select class="actions">
-        <option value="-1">Other actions ...</option>
-        <option value="DELETE">Delete this Contact</option>
-      </select>
-    </div>
 		<ul>
 			<li>
 				<label for="name">Contact Name</label>

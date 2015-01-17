@@ -1,5 +1,13 @@
 <div class="map-canvas"/>
 <div class="organisation update">
+  <div class="formbar">
+    <button class="save">Save</button>
+    <select class="actions">
+      <option value="-1">Other actions ...</option>
+      <option value="DELETE">Delete this Organisation</option>
+    </select>
+  </div>
+
 	<form class="organisation update form" method="post" action="organisations">
 		<input type="hidden" name="id"/>
 		<ul>
@@ -55,7 +63,6 @@
 				<label for="fax">Facsimile</label>
 				<input type="text" name="fax" placeholder="Facsimile Number"/>
 			</li>
-			<li><button class="save">Save</button></li>
 		</ul>
 	</form>
 </div>
