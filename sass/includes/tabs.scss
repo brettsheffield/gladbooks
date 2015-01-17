@@ -152,6 +152,12 @@ div.tabhead {
 	width: 100%;
 }
 
+@media all and (max-width: $small-screen-width) {
+        div.tabhead {
+                padding: 1em;
+        }
+}
+
 .active div.tabhead {
 	background-color: white;
 }

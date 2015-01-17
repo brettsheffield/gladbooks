@@ -458,6 +458,9 @@ div.tabhead {
   text-align: center;
   width: 100%; }
 
+@media all and (max-width: 1024px) {
+  div.tabhead {
+    padding: 1em; } }
 .active div.tabhead {
   background-color: white; }
 
