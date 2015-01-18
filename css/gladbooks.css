@@ -55,7 +55,7 @@ html, body {
 #sitediv {
   height: auto !important;
   height: 100%;
-  margin: 0 auto -20px;
+  margin: 0 auto -31px;
   /* bottom margin == height of footer.site */ }
 
 footer.site {
@@ -68,7 +68,7 @@ footer.site {
   width: 100%; }
 
 footer.site, #pagearea-spacer-bottom {
-  height: 20px;
+  height: 31px;
   /* height == #sitediv bottom margin */ }
 
 header.site {
@@ -240,16 +240,14 @@ select.businessselect {
     width: 299px; } }
 div.navbar-search {
   border-radius: 25px;
-  display: none;
   font-size: 14pt;
   margin-bottom: 12px;
   margin-left: 5%;
   margin-right: 5%;
+  padding-top: 2px;
+  padding-bottom: 2px;
   width: 90%; }
 
-@media all and (min-width: 1024px) {
-  div.navbar-search {
-    display: block; } }
 input.search-query {
   width: 100%; }
 

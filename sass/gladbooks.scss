@@ -69,7 +69,7 @@ html, body {
 #sitediv {
 	height: auto !important;
 	height: 100%;
-	margin: 0 auto -20px; /* bottom margin == height of footer.site */
+	margin: 0 auto -31px; /* bottom margin == height of footer.site */
 }
 
 footer.site {
@@ -83,7 +83,7 @@ footer.site {
 }
 
 footer.site, #pagearea-spacer-bottom {
-        height: 20px; /* height == #sitediv bottom margin */
+        height: 31px; /* height == #sitediv bottom margin */
 }
 
 header.site {
@@ -107,7 +107,6 @@ header.site {
 
 	header.site, #pagearea-spacer-top {
 		background-color: white;
-		//height: 100px;
 		height: auto;
 	}
 
@@ -307,20 +306,13 @@ select.businessselect {
 
 div.navbar-search {
 	border-radius: 25px;
-	display: none;
 	font-size: 14pt;
 	margin-bottom: 12px;
 	margin-left: 5%;
 	margin-right: 5%;
+        padding-top: 2px;
+        padding-bottom: 2px;
 	width: 90%;
-}
-
-@media all and (min-width: $small-screen-width) {
-
-	div.navbar-search {
-		display: block;
-	}
-
 }
 
 input.search-query {
