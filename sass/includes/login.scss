@@ -10,22 +10,37 @@
     z-index: 999;
 }
 */
+
+div.logoback {
+        background-color: white;
+        margin-top: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 90%;
+}
+
+#logo {
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+}
+
 .login-popup{
         display:none;
-        background: #6e89a5;
-        padding: 10px;
+        background: white;
         border: 2px solid #ddd;
         float: left;
         font-size: 1.2em;
+        padding-bottom: 0.2em;
         position: fixed;
         top: 33%; left: 50%;
         z-index: 99999;
         box-shadow: 0px 0px 20px #999; /* CSS3 */
         -moz-box-shadow: 0px 0px 20px #999; /* Firefox */
         -webkit-box-shadow: 0px 0px 20px #999; /* Safari, Chrome */
-        border-radius:3px 3px 3px 3px;
-        -moz-border-radius: 3px; /* Firefox */
-        -webkit-border-radius: 3px; /* Safari, Chrome */
+        border-radius: 23px;
+        -moz-border-radius: 23px; /* Firefox */
+        -webkit-border-radius: 23px; /* Safari, Chrome */
         text-align: center;
 }
 

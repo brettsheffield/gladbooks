@@ -31,22 +31,6 @@ html, body {
         box-sizing: border-box;         /* Opera/IE 8+ */
 }
 
-#logo {
-	display: none;
-        padding-top: 0.2em;
-        padding-bottom: 0.1em;
-        margin-left: auto;
-        margin-right: auto;
-}
-
-@media all and (min-width: $small-screen-width) {
-
-	#logo {
-		display: block;
-	}
-
-}
-
 /* mask to grey out whole site */
 #mask {
 	background: #000;

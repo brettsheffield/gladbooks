@@ -25,16 +25,6 @@ html, body {
   box-sizing: border-box;
   /* Opera/IE 8+ */ }
 
-#logo {
-  display: none;
-  padding-top: 0.2em;
-  padding-bottom: 0.1em;
-  margin-left: auto;
-  margin-right: auto; }
-
-@media all and (min-width: 1024px) {
-  #logo {
-    display: block; } }
 /* mask to grey out whole site */
 #mask {
   background: #000;
@@ -262,13 +252,25 @@ input.search-query {
     z-index: 999;
 }
 */
+div.logoback {
+  background-color: white;
+  margin-top: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%; }
+
+#logo {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%; }
+
 .login-popup {
   display: none;
-  background: #6e89a5;
-  padding: 10px;
+  background: white;
   border: 2px solid #dddddd;
   float: left;
   font-size: 1.2em;
+  padding-bottom: 0.2em;
   position: fixed;
   top: 33%;
   left: 50%;
@@ -279,10 +281,10 @@ input.search-query {
   /* Firefox */
   -webkit-box-shadow: 0px 0px 20px #999999;
   /* Safari, Chrome */
-  border-radius: 3px 3px 3px 3px;
-  -moz-border-radius: 3px;
+  border-radius: 23px;
+  -moz-border-radius: 23px;
   /* Firefox */
-  -webkit-border-radius: 3px;
+  -webkit-border-radius: 23px;
   /* Safari, Chrome */
   text-align: center; }
 
