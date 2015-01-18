@@ -13,21 +13,23 @@
 
 div.logoback {
         background-color: white;
-        margin-top: 5px;
+        border-radius: 25px 25px 0 0;
         margin-left: auto;
         margin-right: auto;
-        width: 90%;
+        padding-top: 1px;
+        padding-bottom: 1px;
+        width: 100%;
 }
 
 #logo {
         margin-left: auto;
         margin-right: auto;
-        width: 100%;
+        width: 85%;
 }
 
 .login-popup{
         display:none;
-        background: white;
+        background: $color-dark;
         border: 2px solid #ddd;
         float: left;
         font-size: 1.2em;
@@ -38,9 +40,9 @@ div.logoback {
         box-shadow: 0px 0px 20px #999; /* CSS3 */
         -moz-box-shadow: 0px 0px 20px #999; /* Firefox */
         -webkit-box-shadow: 0px 0px 20px #999; /* Safari, Chrome */
-        border-radius: 23px;
-        -moz-border-radius: 23px; /* Firefox */
-        -webkit-border-radius: 23px; /* Safari, Chrome */
+        border-radius: 28px;
+        -moz-border-radius: 28px; /* Firefox */
+        -webkit-border-radius: 28px; /* Safari, Chrome */
         text-align: center;
 }
 
