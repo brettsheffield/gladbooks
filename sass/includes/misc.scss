@@ -1141,6 +1141,17 @@ div.statusmsg {
 	z-index: 10;
 }
 
+div.closer {
+        color: black;
+        font-weight: bold;
+        height: 15px;
+        padding: 0;
+        position: absolute;
+        right: -5;
+        top: -6;
+        width: 15px;
+}
+
 .info {
 	border: 1px solid $color-dark;
 	color: $color-dark;
