@@ -1,13 +1,3 @@
-/*
-img {
-	max-width: 100%;
-}
-
-h2 {
-	font-size: 1.2em;
-}
-*/
-
 table {
 	color: $color-dark;
 }
@@ -55,11 +45,6 @@ button#journalsubmit {
 .datefield {
 	width: 6em;
 }
-
-/*input.description {
-	min-width: 20em;
-	max-width: 95%;
-}*/
 
 input.amount,
 input.currency {
@@ -289,24 +274,6 @@ td.xml-orgcode {
 	width: 8em;
 }
 
-/*
-td.xml-product {
-}
-
-td.linetext {
-	font-size: 90%;
-	width: 50%;
-}
-
-input.linetext {
-	width: 90%;
-}
-
-input.qty {
-	width: 4em;
-}
-*/
-
 .search-choice-close {
 	padding: 0;	
 }
@@ -351,18 +318,6 @@ div.formbar {
 div.formbar select.actions {
         width: 15em;
 }
-
-/*
-button.addrow {
-	float: right;
-	margin-right: 1em;
-}
-
-button.removerow {
-	float: right;
-	margin-right: 1em;
-}
-*/
 
 select {
         width: 100%;
@@ -556,18 +511,7 @@ div.bank.journal button.add:before {
 div.bank.journal.tr:first-child button.del {
 	display: none;
 }
-/*
-div.bank.entries button.del:before {
-	content: "\2718";
-	font-size: 1.2em;
-}
-*/
-/* temp: hide add/del buttons */
-/*div.bank.journal.tr button.add,
-div.bank.journal.tr button.del {
-	display: none;
-}
-*/
+
 div.td.xml-total {
 	width: 10em;
 }
@@ -699,14 +643,6 @@ div.reconcile p {
 div.reconcile div.accordion {
 	display: none;
 }
-div.bank.reconcile div.accordion > div {
-	//height: 80%; /* FIXME: make proportional */
-	//display: inline-block;
-	//height: calc(100% - 2px - 3*19px);;
-}
-div.bank.reconcile input.amount {
-	//width: 6em;
-}
 
 /* Bank Suggestions */
 div.bank.suggestions {
@@ -722,10 +658,6 @@ div.bank.data div.tr:nth-child(odd):not(.selected) {
 }
 div.bank.data div.tr:nth-child(even):not(.selected) {
 	background-color: $color-feint;
-}
-//div.bank.suggestions div.accordion > div.section {
-div.accordion > div.section > div.content {
-	//min-height: 450px;
 }
 
 /* search results */
@@ -1063,20 +995,21 @@ div.tablewrapper {
 .contact.form label,
 .organisation.form label {
 	display: inline-block;
-	font-size: 85%;
+	font-size: 66%;
 	float: left;
-	min-width: 25%;
+	min-width: 10%;
+        padding-right: 0.8em;
+        padding-top: 0.5em;
+        text-align: right;
 }
 .contact.form input,
 .organisation.form input {
-	width: 40%;
+	width: 20%;
 }
 
 /* formtable */
 div.formtable {
 	background-color: $color-dark;
-       	//border: 1px solid white;
-	//padding: 0 5px;
 	text-color: black;
 }
 
@@ -1096,10 +1029,6 @@ div.th {
 	font-weight: bold;
 	text-align: left;
 	text-transform: capitalize;
-}
-
-div.td {
-	//line-height: 24px;
 }
 
 /* form: product.create & product.update */

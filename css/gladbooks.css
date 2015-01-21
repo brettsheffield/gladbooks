@@ -517,15 +517,6 @@ div.tabhead {
 @media only screen and (min-width: 1500px) {
   .map-canvas {
     width: 40%%; } }
-/*
-img {
-	max-width: 100%;
-}
-
-h2 {
-	font-size: 1.2em;
-}
-*/
 table {
   color: #6e89a5; }
 
@@ -564,10 +555,6 @@ button#journalsubmit {
 .datefield {
   width: 6em; }
 
-/*input.description {
-	min-width: 20em;
-	max-width: 95%;
-}*/
 input.amount,
 input.currency {
   font-family: Courier, Monospace;
@@ -767,23 +754,6 @@ td.xml-id, td.xml-journal {
 td.xml-orgcode {
   width: 8em; }
 
-/*
-td.xml-product {
-}
-
-td.linetext {
-	font-size: 90%;
-	width: 50%;
-}
-
-input.linetext {
-	width: 90%;
-}
-
-input.qty {
-	width: 4em;
-}
-*/
 .search-choice-close {
   padding: 0; }
 
@@ -819,17 +789,6 @@ div.formbar {
 div.formbar select.actions {
   width: 15em; }
 
-/*
-button.addrow {
-	float: right;
-	margin-right: 1em;
-}
-
-button.removerow {
-	float: right;
-	margin-right: 1em;
-}
-*/
 select {
   width: 100%; }
 
@@ -1007,18 +966,6 @@ div.bank.journal button.add:before {
 div.bank.journal.tr:first-child button.del {
   display: none; }
 
-/*
-div.bank.entries button.del:before {
-	content: "\2718";
-	font-size: 1.2em;
-}
-*/
-/* temp: hide add/del buttons */
-/*div.bank.journal.tr button.add,
-div.bank.journal.tr button.del {
-	display: none;
-}
-*/
 div.td.xml-total {
   width: 10em; }
 
@@ -1478,13 +1425,16 @@ div.tablewrapper {
 .contact.form label,
 .organisation.form label {
   display: inline-block;
-  font-size: 85%;
+  font-size: 66%;
   float: left;
-  min-width: 25%; }
+  min-width: 10%;
+  padding-right: 0.8em;
+  padding-top: 0.5em;
+  text-align: right; }
 
 .contact.form input,
 .organisation.form input {
-  width: 40%; }
+  width: 20%; }
 
 /* formtable */
 div.formtable {
@@ -1725,11 +1675,6 @@ div.chzn-search > input {
   body {
     font-size: 12pt; }
 
-  /* forms */
-  .contact.form input,
-  .organisation.form input {
-    width: 33%; }
-
   /* *report panels , NULL*/
   div.report {
     font-size: 75%; }
@@ -1766,11 +1711,6 @@ div.chzn-search > input {
  * Large screen edition
  */
 @media only screen and (min-width: 1280px) {
-  /* forms */
-  .contact.form input,
-  .organisation.form input {
-    width: 33%; }
-
   /* report panels */
   div.report {
     font-size: 80%; }
@@ -1801,11 +1741,6 @@ div.chzn-search > input {
  * Large screen edition
  */
 @media only screen and (min-width: 1366px) {
-  /* forms */
-  .contact.form input,
-  .organisation.form input {
-    width: 40%; }
-
   /* report panels */
   div.report {
     font-size: 80%; }
@@ -1839,11 +1774,6 @@ div.chzn-search > input {
  * Large screen edition
  */
 @media only screen and (min-width: 1440px) {
-  /* forms */
-  .contact.form input,
-  .organisation.form input {
-    width: 40%; }
-
   /* report panels */
   div.report {
     font-size: 80%; }
@@ -1872,11 +1802,6 @@ div.chzn-search > input {
     min-height: 400px;
     width: 100%; } }
 @media only screen and (min-width: 1500px) {
-  /* forms */
-  .contact.form input,
-  .organisation.form input {
-    width: 33%; }
-
   /* report panels */
   div.report.balancesheet {
     width: 1200px; }
