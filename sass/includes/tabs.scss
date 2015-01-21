@@ -28,6 +28,7 @@
 
 .tabheaders {
 	background-color: $color-light;
+        min-height: 3em;
         padding: 0;
 }
 
@@ -116,7 +117,7 @@ div.tabhead div > a {
 	.tablet {
 		border: solid 1px $color-dark;
 		overflow: auto;
-		height: 75%;
+		height: 79%;
 		top: 0;
 		bottom: 0;
 	}

@@ -370,6 +370,7 @@ form.signin input::-webkit-input-placeholder {
 
 .tabheaders {
   background-color: #b2cde0;
+  min-height: 3em;
   padding: 0; }
 
 .tablist {
@@ -433,7 +434,7 @@ div.tabhead div > a {
   .tablet {
     border: solid 1px #6e89a5;
     overflow: auto;
-    height: 75%;
+    height: 79%;
     top: 0;
     bottom: 0; } }
 .tablet.noscroll {
