@@ -2853,7 +2853,6 @@ Form.prototype.validateSalesOrder = function() {
  * btnClickRemoveRow()
  * submitForm()
  * submitFormError()
- * fetchElementData()
  * displayResultsGeneric()
  * switchBusiness() - refers to orgcode
  */
