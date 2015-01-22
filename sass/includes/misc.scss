@@ -316,7 +316,7 @@ div.formbar {
         width: 100%;
 }
 div.formbar select.actions {
-        width: 15em;
+        width: 12em;
 }
 
 select {
@@ -1007,6 +1007,15 @@ div.tablewrapper {
 	width: 20%;
 }
 
+div.organisation div.formbar {
+        position: relative;
+        width: 30%;
+}
+div.organisation div.formbar select.actions {
+        position: absolute;
+        right: 0;
+}
+
 /* formtable */
 div.formtable {
 	background-color: $color-dark;
@@ -1096,7 +1105,6 @@ div.closer {
 	font-weight: bold;
 }
 
-/* organisation form */
 tr.contact.link {
 	display: none;
 }
