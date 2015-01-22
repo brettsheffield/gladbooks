@@ -288,12 +288,12 @@ div.update {
 
 div.organisation_contacts {
 	min-height: 100px;
-	width: 100%;
+	width: 50%;
 }
 
 div.organisation_contacts table {
-	border: 1px solid black;
-	width: 100%;
+	border: 1px solid darken($color-dark, 20%);
+	//width: 100%;
 }
 
 div.organisation_contacts th {
@@ -305,7 +305,7 @@ div.organisation_contacts td {
 }
 
 div.organisation_contacts td > input {
-	width: 100%;
+	//width: 30%;
 }
 
 div.organisation_contacts tr:not(:first-child) {

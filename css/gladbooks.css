@@ -765,20 +765,16 @@ div.update {
 
 div.organisation_contacts {
   min-height: 100px;
-  width: 100%; }
+  width: 50%; }
 
 div.organisation_contacts table {
-  border: 1px solid black;
-  width: 100%; }
+  border: 1px solid #42566b; }
 
 div.organisation_contacts th {
   background-color: #6e89a5; }
 
 div.organisation_contacts td {
   width: 20%; }
-
-div.organisation_contacts td > input {
-  width: 100%; }
 
 div.organisation_contacts tr:not(:first-child) {
   background-color: white; }
