@@ -697,7 +697,8 @@ table.datatable td, div.td {
   font-weight: normal; }
 
 div.th, div.td {
-  float: left; }
+  float: left;
+  min-height: 1px; }
 
 .even, tr.even > td {
   background-color: #eeeeff; }
@@ -764,7 +765,6 @@ div.update {
   padding: 0 2%; }
 
 div.organisation_contacts {
-  background-color: #6e89a5;
   border: 1px solid #6e89a5;
   height: 45%;
   width: 65%; }
@@ -773,9 +773,19 @@ div.organisation_contacts div.th {
   font-size: 0.8em; }
 
 div.organisation_contacts div.tr {
-  clear: none; }
+  clear: none;
+  height: 1.5em; }
+
+div.organisation_contacts div.tr:nth-child(odd) {
+  background-color: #ffec9b; }
+
+div.organisation_contacts div.tr:nth-child(even) {
+  background-color: #fff8cb; }
 
 div.organisation_contacts div.th {
+  width: 20%; }
+
+div.organisation_contacts div.td {
   width: 20%; }
 
 div.formbar {

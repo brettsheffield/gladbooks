@@ -204,6 +204,7 @@ table.datatable td, div.td {
 
 div.th, div.td {
 	float: left;
+        min-height: 1px;
 }
 
 .even, tr.even > td {
@@ -287,7 +288,6 @@ div.update {
 }
 
 div.organisation_contacts {
-        background-color: $color-dark;
         border: 1px solid $color-dark;
         height: 45%;
         width: 65%;
@@ -297,8 +297,18 @@ div.organisation_contacts div.th {
 }
 div.organisation_contacts div.tr {
         clear: none;
+        height: 1.5em;
+}
+div.organisation_contacts div.tr:nth-child(odd) {
+        background-color: $color-odd;
+}
+div.organisation_contacts div.tr:nth-child(even) {
+        background-color: $color-even;
 }
 div.organisation_contacts div.th {
+        width: 20%;
+}
+div.organisation_contacts div.td {
         width: 20%;
 }
 

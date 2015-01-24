@@ -3,9 +3,7 @@
 <xsl:output method="html" encoding="UTF-8" indent="yes" />
 
 <xsl:template match="resources">
-	<div class="organisation_contact">
-		<xsl:apply-templates select="row"/>
-	</div>
+        <xsl:apply-templates select="row"/>
 </xsl:template>
 <xsl:template match="row">
 	<div class="tr">
