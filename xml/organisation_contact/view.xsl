@@ -9,9 +9,7 @@
 </xsl:template>
 <xsl:template match="row">
 	<div class="tr">
-                <input name="id" type="hidden">
-			<xsl:value-of select="id"/>
-		</input>
+                <input name="id" type="hidden" value="{id}"/>
 		<div class="td xml-name">
 			<xsl:value-of select="name"/>
 		</div>
