@@ -99,7 +99,10 @@ FORMDATA = {
         'delete': ['journallines/{id}/'],
     },
     'organisation': {
-        'update': ['contactssorted', 'relationships'],
+        'update': ['contactssorted'],
+    },
+    'organisation_contact': {
+        'update': ['relationships'],
     },
     'product': {
         'create': ['accounts.revenue'],

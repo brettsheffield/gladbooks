@@ -287,29 +287,19 @@ div.update {
 }
 
 div.organisation_contacts {
-	min-height: 100px;
-	width: 50%;
+        background-color: $color-dark;
+        border: 1px solid $color-dark;
+        height: 45%;
+        width: 65%;
 }
-
-div.organisation_contacts table {
-	border: 1px solid darken($color-dark, 20%);
-	//width: 100%;
+div.organisation_contacts div.th {
+        font-size: 0.8em;
 }
-
-div.organisation_contacts th {
-	background-color: $color-dark;
+div.organisation_contacts div.tr {
+        clear: none;
 }
-
-div.organisation_contacts td {
-	width: 20%;
-}
-
-div.organisation_contacts td > input {
-	//width: 30%;
-}
-
-div.organisation_contacts tr:not(:first-child) {
-	background-color: white;
+div.organisation_contacts div.th {
+        width: 20%;
 }
 
 div.formbar {
@@ -1105,10 +1095,10 @@ div.closer {
 	font-weight: bold;
 }
 
-tr.contact.link {
+div.tr.contact.link {
 	display: none;
 }
-tr.contact.link > td {
+div.tr.contact.link > td {
 	padding: 5px;
 }
 
