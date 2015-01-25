@@ -15,7 +15,9 @@
 			<xsl:value-of select="name"/>
 		</div>
 		<div class="td xml-email">
-			<xsl:value-of select="description"/>
+                        <a href="mailto:{email}">
+			<xsl:value-of select="email"/>
+                        </a>
 		</div>
 		<div class="td xml-phone">
 			<xsl:value-of select="phone"/>
@@ -26,9 +28,6 @@
 		<div class="td xml-type">
                         <input name="type" type="hidden" value="{type}"/>
                         <select name="relationship" multiple="multiple" class="relationship populate nosubmit" data-source="relationships" data-placeholder="Select type(s)"></select>
-		</div>
-		<div class="td buttons">
-                        <button class="delete">X</button>
 		</div>
 	</div>
 </xsl:template>
