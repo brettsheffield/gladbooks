@@ -2468,7 +2468,10 @@ customSubmitFormSuccess = function(object, action, id, collection, xml) {
     }
     if (object === 'contact' && action === 'create') {
         /* organisation_contact htmlpane */
-        TABS.active.form._populateHTMLPanes();
+        var tab = TABS.active;
+        var t = tab.tablet;
+        t.find('div.organisation_contact.create input').val('');
+        tab.form._populateHTMLPanes();
         return false;
     }
     return true;
