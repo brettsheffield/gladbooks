@@ -764,29 +764,81 @@ div.create {
 div.update {
   padding: 0 2%; }
 
-div.organisation_contacts {
-  border: 1px solid #6e89a5;
-  height: 45%;
-  width: 65%; }
+div.organisation.update div.formwrapper {
+  width: 33%; }
 
-div.organisation_contacts div.th {
-  font-size: 0.8em; }
+div.organisation.update {
+  padding: 0; }
 
-div.organisation_contacts div.tr {
-  clear: none;
+div.organisation.update form label {
+  width: 40%; }
+
+div.organisation.update form input {
+  width: 60%; }
+
+div.organisation div.update {
+  padding: 0; }
+
+div.organisation_contact.th {
   height: 1.5em; }
 
-div.organisation_contacts div.tr:nth-child(odd) {
+div.organisation_contact {
+  padding: 0;
+  width: 65%; }
+
+div.organisation_contact input {
+  width: 100%; }
+
+div.organisation_contact.create {
+  background-color: #6e89a5;
+  color: white; }
+
+div.organisation_contact.update {
+  border: 1px solid #6e89a5;
+  height: 35%; }
+
+div.organisation_contact div.th {
+  font-size: 0.8em; }
+
+div.organisation_contact div.tr {
+  clear: none;
+  height: 1.5em;
+  width: 100%; }
+
+div.organisation_contact div.td {
+  height: 1.5em; }
+
+div.organisation_contact.update div.tr {
+  clear: none; }
+
+div.organisation_contact.update div.tr:nth-child(odd) {
   background-color: #ffec9b; }
 
-div.organisation_contacts div.tr:nth-child(even) {
+div.organisation_contact.update div.tr:nth-child(even) {
   background-color: #fff8cb; }
 
-div.organisation_contacts div.th {
+div.organisation_contact div.selector {
+  padding: 5px;
+  width: 5%; }
+
+div.organisation_contact div.xml-name {
   width: 20%; }
 
-div.organisation_contacts div.td {
+div.organisation_contact div.xml-email {
   width: 20%; }
+
+div.organisation_contact div.xml-phone {
+  width: 20%; }
+
+div.organisation_contact div.xml-mobile {
+  width: 20%; }
+
+div.organisation_contact div.xml-type {
+  width: 10%; }
+
+div.organisation_contact div.buttons {
+  text-align: right;
+  width: 5%; }
 
 div.formbar {
   width: 100%; }

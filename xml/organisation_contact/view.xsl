@@ -8,6 +8,9 @@
 <xsl:template match="row">
 	<div class="tr">
                 <input name="id" type="hidden" value="{id}"/>
+		<div class="td selector">
+			<input type="checkbox"/>
+		</div>
 		<div class="td xml-name">
 			<xsl:value-of select="name"/>
 		</div>
@@ -22,6 +25,9 @@
 		</div>
 		<div class="td xml-type">
 			<xsl:value-of select="type"/>
+		</div>
+		<div class="td buttons">
+                        <button class="delete">X</button>
 		</div>
 	</div>
 </xsl:template>

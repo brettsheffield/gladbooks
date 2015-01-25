@@ -8,63 +8,86 @@
     </select>
   </div>
 
-	<form class="organisation update form" method="post" action="organisations">
-		<input type="hidden" name="id"/>
-		<ul>
-			<li>
-				<label for="name">Organisation Name</label>
-				<input class="focus" type="text" name="name" placeholder="Organisation Name"/>
-			</li>
-			<li>
-				<label for="line_1">Address Line 1</label>
-				<input class="line_1" type="text" name="line_1" placeholder="Address Line 1"/>
-			</li>
-			<li>
-				<label for="line_2">Address Line 2</label>
-				<input class="line_2" type="text" name="line_2" placeholder="Address Line 2"/>
-			</li>
-			<li>
-				<label for="line_3">Address Line 3</label>
-				<input class="line_3" type="text" name="line_3" placeholder="Address Line 3"/>
-			</li>
-			<li>
-				<label for="town">Town</label>
-				<input type="text" name="town" placeholder="Town"/>
-			</li>
-			<li>
-				<label for="county">County</label>
-				<input type="text" name="county" placeholder="County"/>
-			</li>
-			<li>
-				<label for="country">Country</label>
-				<input type="text" name="country" placeholder="Country"/>
-			</li>
-			<li>
-				<label for="postcode">Postcode</label>
-				<input type="text" name="postcode" placeholder="Postcode"/>
-			</li>
-			<li>
-				<label for="email">Email Address</label>
-				<input type="email" name="email" placeholder="Email Address"/>
-			</li>
-			<li>
-				<label for="phone">Telephone (Primary)</label>
-				<input type="text" name="phone" placeholder="Telephone"/>
-			</li>
-			<li>
-				<label for="phonealt">Telephone (Alternate)</label>
-				<input type="text" name="phonealt" placeholder="Telephone (Alternate)"/>
-			</li>
-			<li>
-				<label for="mobile">Telephone (Mobile)</label>
-				<input type="text" name="mobile" placeholder="Telephone (Mobile)"/>
-			</li>
-			<li>
-				<label for="fax">Facsimile</label>
-				<input type="text" name="fax" placeholder="Facsimile Number"/>
-			</li>
-		</ul>
-	</form>
- 
-  <div class="organisation_contacts loadhtml" data-url="/{instance}/{business}/organisation_contacts/{id}/"/>
+  <div class="formwrapper">
+    <form class="organisation update form" method="post" action="organisations">
+      <input type="hidden" name="id"/>
+      <ul>
+        <li>
+          <label for="name">Organisation Name</label>
+          <input class="focus" type="text" name="name" placeholder="Organisation Name"/>
+        </li>
+        <li>
+          <label for="line_1">Address Line 1</label>
+          <input class="line_1" type="text" name="line_1" placeholder="Address Line 1"/>
+        </li>
+        <li>
+          <label for="line_2">Address Line 2</label>
+          <input class="line_2" type="text" name="line_2" placeholder="Address Line 2"/>
+        </li>
+        <li>
+          <label for="line_3">Address Line 3</label>
+          <input class="line_3" type="text" name="line_3" placeholder="Address Line 3"/>
+        </li>
+        <li>
+          <label for="town">Town</label>
+          <input type="text" name="town" placeholder="Town"/>
+        </li>
+        <li>
+          <label for="county">County</label>
+          <input type="text" name="county" placeholder="County"/>
+        </li>
+        <li>
+          <label for="country">Country</label>
+          <input type="text" name="country" placeholder="Country"/>
+        </li>
+        <li>
+          <label for="postcode">Postcode</label>
+          <input type="text" name="postcode" placeholder="Postcode"/>
+        </li>
+        <li>
+          <label for="email">Email Address</label>
+          <input type="email" name="email" placeholder="Email Address"/>
+        </li>
+        <li>
+          <label for="phone">Telephone (Primary)</label>
+          <input type="text" name="phone" placeholder="Telephone"/>
+        </li>
+        <li>
+          <label for="phonealt">Telephone (Alternate)</label>
+          <input type="text" name="phonealt" placeholder="Telephone (Alternate)"/>
+        </li>
+        <li>
+          <label for="mobile">Telephone (Mobile)</label>
+          <input type="text" name="mobile" placeholder="Telephone (Mobile)"/>
+        </li>
+        <li>
+          <label for="fax">Facsimile</label>
+          <input type="text" name="fax" placeholder="Facsimile Number"/>
+        </li>
+      </ul>
+    </form>
+  </div>
+
+  <div class="organisation_contact create">
+
+      <div class="tr">
+        <div class="th xml-name">Name</div>
+        <div class="th xml-email">Email</div>
+        <div class="th xml-phone">Telephone</div>
+        <div class="th xml-phone">Mobile</div>
+        <div class="th xml-type">Type</div>
+        <div class="th buttons">&nbsp;</div>
+      </div>
+
+      <div class="tr">
+        <div class="td xml-name"><input class="nosubmit" name="name" type="text" placeholder="Name"/></div>
+        <div class="td xml-email"><input class="nosubmit" name="email" type="email" placeholder="Email"/></div>
+        <div class="td xml-phone"><input class="nosubmit" name="phone" type="text" placeholder="Telephone"/></div>
+        <div class="td xml-phone"><input class="nosubmit" name="mobile" type="text" placeholder="Mobile"/></div>
+        <div class="td xml-type"><select name="relationship" multiple class="relationship populate nosubmit" data-source="relationships" data-placeholder="Select type(s)"></select></div>
+        <div class="td buttons"><button class="addrow">Add</button></div>
+      </div>
+  </div>
+   
+  <div class="organisation_contact update loadhtml" data-url="/{instance}/{business}/organisation_contacts/{id}/"/>
 </div>
