@@ -2544,6 +2544,11 @@ customClickElement = function(row) {
     }
 }
 
+/* TODO */
+Form.prototype.addOrganisationContact = function() {
+    console.log('Form.prototype.addOrganisationContact()');
+}
+
 Form.prototype.customXML = function() {
     var xml = $.parseXML(this.xml);
     if (this.object === 'product' && this.action === 'create') {
@@ -2557,11 +2562,16 @@ Form.prototype.customXML = function() {
     this.xml = flattenXml(xml);
 }
 
+/* TODO */
+Form.prototype.delOrganisationContact = function(id) {
+    console.log('Form.prototype.delOrganisationContact(' + id +  ')');
+}
+
 Form.prototype.eventsCustom = function() {
     var form = this;
     var t = this.tab.tablet;
     if (this.object === 'contact' && this.action === 'update') {
-        t.find('select.actions').change(function() {
+        t.find('select.actions').off('change').change(function() {
             if ($(this).val() === 'DELETE') {
                 if (form.submitDelete()) {
                     form.tab.close();
@@ -2573,14 +2583,25 @@ Form.prototype.eventsCustom = function() {
         });
     }
     else if (this.object === 'journal') {
-        t.find('input[name="reverseid"]').click(function() {
+        t.find('input[name="reverseid"]').off('click').click(function() {
             var id = $(this).val();
             showForm('journal', 'delete', 'Journal #' + id, id);
         });
     }
+    else if (this.object === 'organisation' && this.action === 'update') {
+        var c = t.find('div.organisation_contact.create button.addcontact');
+        c.off('click').click(function() {
+            form.addOrganisationContact();
+        });
+        c = t.find('div.organisation_contact.update button.delete');
+        c.off('click').click(function() {
+            var id = $(this).closest('div.tr').find('input[name="id"]').val();
+            form.delOrganisationContact(id);
+        });
+    }
     else if (this.object === 'purchaseinvoice') {
         form.draft = true;
-        t.find('button.post').click(function() {
+        t.find('button.post').off('click').click(function() {
             if (form.validate()) {
                 form.draft = false;
                 form.submit(true);
@@ -2591,7 +2612,7 @@ Form.prototype.eventsCustom = function() {
         this.eventsCustomReport(form, t);
     }
     else if (this.object === 'salesorder' && this.action === 'process') {
-        t.find('button.post').click(function() {
+        t.find('button.post').off('click').click(function() {
             if (form.validate()) {
                 form.submit(true);
             }
