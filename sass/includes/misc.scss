@@ -329,6 +329,8 @@ div.organisation_contact div.tr {
 }
 div.organisation_contact div.td {
         height: 1.5em;
+        overflow: hidden;
+        text-overflow: ellipsis;
 }
 div.organisation_contact.update div.tr {
         clear: none;
@@ -357,10 +359,6 @@ div.organisation_contact div.xml-mobile {
 }
 div.organisation_contact div.xml-type {
         width: 10%;
-}
-div.organisation_contact div.buttons {
-        text-align: right;
-        width: 5%;
 }
 
 div.formbar {
