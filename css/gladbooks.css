@@ -850,8 +850,7 @@ select {
 
 select.relationship {
   height: 16px;
-  opacity: 0.0;
-  width: 20em; }
+  opacity: 0.0; }
 
 select.cycle {
   width: 10em; }

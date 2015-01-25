@@ -24,7 +24,8 @@
 			<xsl:value-of select="mobile"/>
 		</div>
 		<div class="td xml-type">
-			<xsl:value-of select="type"/>
+                        <input name="type" type="hidden" value="{type}"/>
+                        <select name="relationship" multiple="multiple" class="relationship populate nosubmit" data-source="relationships" data-placeholder="Select type(s)"></select>
 		</div>
 		<div class="td buttons">
                         <button class="delete">X</button>

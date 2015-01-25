@@ -99,10 +99,10 @@ FORMDATA = {
         'delete': ['journallines/{id}/'],
     },
     'organisation': {
-        'update': ['contactssorted'],
+        'update': ['contactssorted','relationships'],
     },
     'organisation_contact': {
-        'update': ['relationships'],
+        'update': [],
     },
     'product': {
         'create': ['accounts.revenue'],
@@ -2466,6 +2466,11 @@ customSubmitFormSuccess = function(object, action, id, collection, xml) {
         hideSpinner();
         return false;
     }
+    if (object === 'contact' && action === 'create') {
+        /* organisation_contact htmlpane */
+        TABS.active.form._populateHTMLPanes();
+        return false;
+    }
     return true;
 }
 
@@ -2544,9 +2549,22 @@ customClickElement = function(row) {
     }
 }
 
-/* TODO */
 Form.prototype.addOrganisationContact = function() {
     console.log('Form.prototype.addOrganisationContact()');
+    var t = this.tab.tablet;
+    var object = 'contact';
+    var action = 'create';
+    var collection = object + 's';
+    var url = collection_url(collection);
+    var form = t.find('div.organisation_contact.create');
+    var xml = formToXML(form, object, action);
+    xml = $.parseXML(xml);
+    /* FIXME: pull types from combo */
+    var rels = '<relationship organisation="' + this.id + '" type="0" />';
+    $(xml).find(object).append(rels);
+    xml = flattenXml(xml);
+    console.log(xml);
+    postXML(url, xml, object, action);
 }
 
 Form.prototype.customXML = function() {
