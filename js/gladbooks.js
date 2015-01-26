@@ -2627,10 +2627,12 @@ Form.prototype.eventsCustom = function() {
         });
     }
     else if (this.object === 'organisation' && this.action === 'update') {
+
         var c = t.find('div.organisation_contact.create button.addcontact');
         c.off('click').click(function() {
             form.addOrganisationContact();
         });
+
         c = t.find('div.organisation_contact button.removecontact');
         c.off('click').click(function() {
             var contacts =
@@ -2642,10 +2644,19 @@ Form.prototype.eventsCustom = function() {
                 form.delOrganisationContact(id);
             });
         });
+
         c = t.find('div.organisation_contact.create input[name="selectall"]');
         c.off('change').change(function() {
             t.find('div.organisation_contact.update input[type="checkbox"]')
             .prop('checked', c.prop("checked"));
+        });
+
+        t.find('div.organisation_contact.update div.xml-name').click(function(){
+            var row = $(this).closest('div.tr');
+            var id = row.find('input[name="id"]').val();
+            var name = $(this).text();
+            console.log("showForm('contact', 'update', " + name + ", " + id + ")");
+            showForm('contact', 'update', name, id);
         });
     }
     else if (this.object === 'purchaseinvoice') {
