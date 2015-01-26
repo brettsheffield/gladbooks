@@ -809,6 +809,9 @@ div.organisation_contact div.td {
   overflow: hidden;
   text-overflow: ellipsis; }
 
+div.organisation_contact.update {
+  overflow-y: auto; }
+
 div.organisation_contact.update div.tr {
   clear: none; }
 
