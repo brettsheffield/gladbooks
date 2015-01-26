@@ -511,12 +511,6 @@ div.tabhead {
 @media all and (min-width: 1024px) {
   .map-canvas {
     width: 40%; } }
-@media only screen and (min-width: 1366px) {
-  .map-canvas {
-    width: 35%; } }
-@media only screen and (min-width: 1500px) {
-  .map-canvas {
-    width: 40%%; } }
 table {
   color: #6e89a5; }
 
@@ -784,7 +778,7 @@ div.organisation_contact.th {
 
 div.organisation_contact {
   padding: 0;
-  width: 65%; }
+  width: 60%; }
 
 div.organisation_contact input {
   width: 100%; }
