@@ -2621,9 +2621,8 @@ Form.prototype.eventsCustom = function() {
         });
         c = t.find('div.organisation_contact.create input[name="selectall"]');
         c.off('change').change(function() {
-            console.log('check changed');
             t.find('div.organisation_contact.update input[type="checkbox"]')
-            .attr('checked', c.prop("checked"));
+            .prop('checked', c.prop("checked"));
         });
     }
     else if (this.object === 'purchaseinvoice') {
