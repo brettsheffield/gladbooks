@@ -1,5 +1,6 @@
 <div class="map-canvas"/>
 <div class="organisation update">
+ <div class="orgwrapper">
   <div class="formbar">
     <button class="save">Save</button>
     <select class="actions">
@@ -67,7 +68,9 @@
       </ul>
     </form>
   </div>
+ </div>
 
+ <div class="contactwrapper">
   <div class="organisation_contact create">
 
       <div class="tr">
@@ -93,10 +96,14 @@
         <div class="td selector">
           <input type="checkbox" name="selectall"/>
         </div>
+        <div class="td buttons">
+          <button class="removecontact">Remove</button>
+        </div>
       </div>
 
 
   </div>
    
   <div class="organisation_contact update loadhtml" data-url="/{instance}/{business}/organisation_contacts/{id}/"/>
+ </div>
 </div>

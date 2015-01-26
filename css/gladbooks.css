@@ -758,6 +758,18 @@ div.create {
 div.update {
   padding: 0 2%; }
 
+div.organisation.update {
+  height: 100%; }
+
+div.organisation.update div.orgwrapper {
+  height: 333px; }
+
+div.organisation.update button.removecontact {
+  border-radius: 0; }
+
+div.organisation.update div.contactwrapper {
+  height: calc(100%-333px); }
+
 div.organisation.update div.formwrapper {
   width: 33%; }
 
@@ -785,10 +797,11 @@ div.organisation_contact input {
 
 div.organisation_contact.create {
   background-color: #6e89a5;
-  color: white; }
+  color: white;
+  height: 4.5em; }
 
 div.organisation_contact.update {
-  height: 35%; }
+  height: calc(100% - 4.5em); }
 
 div.organisation_contact div.th {
   font-size: 0.8em; }
