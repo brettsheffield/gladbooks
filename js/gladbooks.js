@@ -1744,57 +1744,6 @@ function relationshipCombo(datatable, tag, id, tab) {
 }
 
 /* link contact to organisation */
-function relationshipUpdate(organisation, contact, relationships, refresh) {
-    console.log('Updating relationship');
-
-    /* ensure we were called with required arguments */
-    if (!organisation) {
-        console.log('relationshipUpdate() called without organisation.  Aborting.');
-        return false;
-    }
-    if (!contact) {
-        console.log('relationshipUpdate() called without contact.  Aborting.');
-        return false;
-    }
-
-    var xml = createRequestXml();
-
-    xml += '<organisation id="' + organisation + '"/>';
-    xml += '<contact id="' + contact + '"/>';
-    xml += '<relationship id="0"/>'; /* base "contact" relationship */
-
-    /* any other relationship types we've been given */
-    if (relationships) {
-        for (var x = 0; x < relationships.length; x++) {
-            xml += '<relationship id="' + relationships[x] + '"/>';
-        }
-    }
-
-    xml += '</data></request>';
-
-    console.log(xml);
-
-    var url = collection_url('organisation_contacts') + organisation
-    url += '/' + contact + '/';
-
-    console.log('POST ' + url);
-    $.ajax({
-        url: url,
-        data: xml,
-        contentType: 'text/xml',
-        type: 'POST',
-        beforeSend: function(xhr) {
-            setAuthHeader(xhr);
-        },
-        complete: function(xml) {
-            console.log('relationship updated');
-            if (refresh) {
-                loadSubformData('organisation_contacts', organisation);
-            }
-        }
-    });
-}
-
 function resetSalesOrderProductDefaults() {
     activeTab().find('select.product.nosubmit').each(function() {
         var parentrow = $(this).parent().parent();
@@ -2794,6 +2743,59 @@ Form.prototype.overrides = function() {
     }
 }
 
+Form.prototype.relationshipUpdate =
+function (organisation, contact, relationships, refresh) {
+    console.log('Updating relationship');
+    var form = this;
+
+    /* ensure we were called with required arguments */
+    if (!organisation) {
+        console.log('relationshipUpdate() called without organisation.  Aborting.');
+        return false;
+    }
+    if (!contact) {
+        console.log('relationshipUpdate() called without contact.  Aborting.');
+        return false;
+    }
+
+    var xml = createRequestXml();
+
+    xml += '<organisation id="' + organisation + '"/>';
+    xml += '<contact id="' + contact + '"/>';
+    xml += '<relationship id="0"/>'; /* base "contact" relationship */
+
+    /* any other relationship types we've been given */
+    if (relationships) {
+        for (var x = 0; x < relationships.length; x++) {
+            xml += '<relationship id="' + relationships[x] + '"/>';
+        }
+    }
+
+    xml += '</data></request>';
+
+    console.log(xml);
+
+    var url = collection_url('organisation_contacts') + organisation
+    url += '/' + contact + '/';
+
+    console.log('POST ' + url);
+    $.ajax({
+        url: url,
+        data: xml,
+        contentType: 'text/xml',
+        type: 'POST',
+        beforeSend: function(xhr) {
+            setAuthHeader(xhr);
+        },
+        complete: function(xml) {
+            console.log('relationship updated');
+            if (refresh) {
+                form._populateHTMLPanes();
+            }
+        }
+    });
+}
+
 Form.prototype.submitErrorCustom = function(xhr, s, err) {
     var xml = xhr.responseXML;
     var responsecode = $(xml).find('responsecode').text();
@@ -2920,6 +2922,20 @@ Form.prototype.validateSalesOrder = function() {
     }
 
     return b;
+}
+
+Tab.prototype.eventsCustomDrop = function(title, object, id) {
+    var form = this.form;
+    if (form === undefined) return false;
+
+    if (object === 'contact' && form.object === 'organisation' &&
+            form.action === 'update' && id !== undefined)
+    {
+        /* link contact to organisation */
+        console.log('linking contact ' + id + ' to organisation "' +
+                form.title + '"');
+        form.relationshipUpdate(form.id, id, '', true);
+    }
 }
 
 /* TODO  - gladd.js functions that have Gladbooks-specific stuff in them: */
