@@ -2583,9 +2583,26 @@ Form.prototype.customXML = function() {
     this.xml = flattenXml(xml);
 }
 
-/* TODO */
 Form.prototype.delOrganisationContact = function(id) {
     console.log('Form.prototype.delOrganisationContact(' + id +  ')');
+    var collection = 'organisation_contacts/' + this.id + '/' + id + '/';
+    var url = collection_url(collection);
+    var form = this;
+
+    $.ajax({
+        url: url,
+        method: 'DELETE',
+        dataType: 'html',
+        beforeSend: function(xhr) {
+            setAuthHeader(xhr);
+        },
+        success: function(html) {
+            form._populateHTMLPanes();
+        },
+        error: function() {
+            console.log('error loading ' + url);
+        }
+    });
 }
 
 Form.prototype.eventsCustom = function() {
@@ -2614,10 +2631,16 @@ Form.prototype.eventsCustom = function() {
         c.off('click').click(function() {
             form.addOrganisationContact();
         });
-        c = t.find('div.organisation_contact.update button.delete');
+        c = t.find('div.organisation_contact button.removecontact');
         c.off('click').click(function() {
-            var id = $(this).closest('div.tr').find('input[name="id"]').val();
-            form.delOrganisationContact(id);
+            var contacts =
+                t.find('div.organisation_contact.update input[type="checkbox"]')
+                .filter(':checked');
+            console.log('contacts selected: ' + contacts.length);
+            contacts.each(function() {
+                var id = $(this).closest('div.tr').find('input[name="id"]').val();
+                form.delOrganisationContact(id);
+            });
         });
         c = t.find('div.organisation_contact.create input[name="selectall"]');
         c.off('change').change(function() {
