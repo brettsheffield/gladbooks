@@ -884,6 +884,9 @@ div.journal div.datatable div.form input.credit {
 div.journal div.datatable div.form input {
 	width: 100%;
 }
+form.journalform select {
+        width: unset;
+}
 
 /* purchaseinvoice, purchaseorder and salesorder screens */
 div.purchaseinvoice div.datatable div.organisation {
