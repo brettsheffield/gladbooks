@@ -26,7 +26,7 @@
 			<xsl:value-of select="mobile"/>
 		</div>
 		<div class="td xml-type">
-                        <input name="type" type="hidden" value="{type}"/>
+                        <input name="combovals" type="hidden" value="{type}"/>
                         <select name="relationship" multiple="multiple" class="relationship populate chozify nosubmit" data-source="relationships" data-placeholder="Select type(s)"></select>
 		</div>
 	</div>

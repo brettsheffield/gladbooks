@@ -2607,6 +2607,13 @@ Form.prototype.eventsCustom = function() {
             console.log("showForm('contact', 'update', " + name + ", " + id + ")");
             showForm('contact', 'update', name, id);
         });
+
+        c = t.find('div.organisation_contact.update select.relationship.chozify');
+        c.chosen().change(function() {
+            var row = $(this).closest('div.tr');
+            var id = row.find('input[name="id"]').val();
+            form.relationshipUpdate(form.id, id, $(this).val(), false);
+        });
     }
     else if (this.object === 'purchaseinvoice') {
         form.draft = true;

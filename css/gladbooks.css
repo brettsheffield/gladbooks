@@ -861,6 +861,9 @@ div.organisation_contact ul.chosen-choices {
   background-image: none;
   border: none; }
 
+div.organisation_contact ul.chosen-choices li.search-choice {
+  margin: 1px; }
+
 select.relationship {
   height: 100%;
   width: 100%; }
