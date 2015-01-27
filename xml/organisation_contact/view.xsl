@@ -27,7 +27,7 @@
 		</div>
 		<div class="td xml-type">
                         <input name="type" type="hidden" value="{type}"/>
-                        <select name="relationship" multiple="multiple" class="relationship populate nosubmit" data-source="relationships" data-placeholder="Select type(s)"></select>
+                        <select name="relationship" multiple="multiple" class="relationship populate chozify nosubmit" data-source="relationships" data-placeholder="Select type(s)"></select>
 		</div>
 	</div>
 </xsl:template>
