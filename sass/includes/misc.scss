@@ -52,6 +52,10 @@ input.currency {
         text-align: right;
 }
 
+input[type="number"] {
+        -moz-appearance: textfield;
+}
+
 fieldset.ledger {
 }
 

@@ -554,6 +554,9 @@ input.currency {
   font-family: Courier, Monospace;
   text-align: right; }
 
+input[type="number"] {
+  -moz-appearance: textfield; }
+
 button.cancel,
 button.reset,
 button.save,
