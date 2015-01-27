@@ -819,9 +819,6 @@ div.organisation_contact div.td {
 div.organisation_contact div.td.xml-type {
   overflow: visible; }
 
-div.organisation_contact.update {
-  overflow-y: auto; }
-
 div.organisation_contact.update div.tr {
   clear: none; }
 
