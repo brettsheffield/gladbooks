@@ -2942,6 +2942,7 @@ Tab.prototype.eventsCustomDrop = function(title, object, id) {
         console.log('linking contact ' + id + ' to organisation "' +
                 form.title + '"');
         form.relationshipUpdate(form.id, id, '', true);
+        form.activate();
     }
 }
 
