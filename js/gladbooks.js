@@ -2420,7 +2420,7 @@ customSubmitFormSuccess = function(object, action, id, collection, xml) {
         var tab = TABS.active;
         var t = tab.tablet;
         t.find('div.organisation_contact.create input').val('');
-        tab.form._populateHTMLPanes();
+        if (tab.form !== undefined) tab.form._populateHTMLPanes();
         return false;
     }
     return true;
