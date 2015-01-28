@@ -344,17 +344,13 @@ ORDER BY contact ASC
 
 CREATE OR REPLACE VIEW contactlist AS
 SELECT
-        contact as id,
-        name
-FROM contactdetail
-WHERE id IN (
-        SELECT MAX(id)
-        FROM contactdetail
-        GROUP BY contact
-)
-AND contact NOT IN (SELECT billcontact FROM organisation_current)
-AND is_deleted = false
-ORDER BY contact ASC
+        c.id,
+        c.name
+FROM contact_current c
+LEFT JOIN organisation_current o ON c.id = o.billcontact 
+WHERE o.billcontact IS NULL
+AND c.is_deleted = false
+ORDER BY c.name ASC
 ;
 
 CREATE OR REPLACE VIEW organisationlist AS
