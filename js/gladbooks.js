@@ -22,7 +22,7 @@
 
 /* global variables **********************************************************/
 
-g_gladbooks_version = '1.0.0';
+g_gladbooks_version = '0.2.1a';
 console.log('Loaded gladbooks.js version ' + g_gladbooks_version);
 
 g_menus = [
