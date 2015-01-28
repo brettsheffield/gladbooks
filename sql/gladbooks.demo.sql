@@ -49,6 +49,7 @@ INSERT INTO productdetail (account, shortname, description, price_buy, price_sel
 INSERT INTO product_tax (product, tax) VALUES (currval(pg_get_serial_sequence('product','id')), '1');
 
 INSERT INTO contact (authuser, clientip) VALUES ('demouser','127.0.0.1');
+INSERT INTO contactdetail (contact,name,line_1,line_2,line_3,town,county,country,postcode,email,phone,phonealt,mobile,fax,authuser,clientip) VALUES (currval(pg_get_serial_sequence('contact','id')),'Tropicana Fruitarium','Line 1','Line 2','Line 3','Townsville','County','Grand Europia','EU01 23RO','someone@example.com','01234 5678','0123 123','333 3333','456 4567','demouser','127.0.0.1');
 INSERT INTO organisation VALUES (DEFAULT);
 INSERT INTO organisationdetail (name,billcontact) VALUES ('Tropicana Fruitarium',(currval(pg_get_serial_sequence('contact','id'))));
 
@@ -65,6 +66,7 @@ INSERT INTO organisation_contact(organisation, contact, relationship)
 VALUES ( currval(pg_get_serial_sequence('organisation','id')), currval(pg_get_serial_sequence('contact','id')), '1');
 
 INSERT INTO contact (authuser, clientip) VALUES ('testdata','127.0.0.1');
+INSERT INTO contactdetail (contact,name,line_1,line_2,line_3,town,county,country,postcode,email,phone,phonealt,mobile,fax,authuser,clientip) VALUES (currval(pg_get_serial_sequence('contact','id')),'Universal Exports','Pinewood Studios','Pinewood Road','Iver Heath','SL0 0NH','Buckinghamshire','United Kingdom','','someone@example.com','01234 5678','0123 123','333 3333','456 4567','demouser','127.0.0.1');
 INSERT INTO organisation VALUES (DEFAULT);
 INSERT INTO organisationdetail (name,billcontact) VALUES ('Universal Exports', currval(pg_get_serial_sequence('contact','id')));
 
