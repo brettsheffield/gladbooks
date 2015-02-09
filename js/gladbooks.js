@@ -2829,7 +2829,10 @@ Form.prototype.submitErrorCustom = function(xhr, s, err) {
 }
 
 Form.prototype.submitSuccessCustom = function(xml) {
-    if ((['purchaseorder', 'salesorder'].indexOf(this.object) !== -1)
+    if (this.object === 'contact' && this.action === 'update') {
+        this.submitSuccessCustomContact(xml);
+    }
+    else if ((['purchaseorder', 'salesorder'].indexOf(this.object) !== -1)
     && (this.action === 'update'))
     {
         this.processReturnedData = false;
@@ -2838,6 +2841,21 @@ Form.prototype.submitSuccessCustom = function(xml) {
         TABS.refresh('salesinvoices');
     }
     return false;
+}
+
+Form.prototype.submitSuccessCustomContact = function(xml) {
+    var tab;
+    var f;
+    for (var i = 0; i < TABS.byId.length; ++i) {
+        console.log(TABS.byId[i].title);
+        tab = TABS.byId[i];
+        f = tab.form;
+        if (f !== undefined) {
+            if (f.object === 'organisation' && f.action === "update") {
+                f._populateHTMLPanes();
+            }
+        }
+    }
 }
 
 Form.prototype.validateCustom = function() {
