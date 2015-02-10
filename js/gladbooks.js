@@ -2847,12 +2847,14 @@ Form.prototype.submitSuccessCustomContact = function(xml) {
     var tab;
     var f;
     for (var i = 0; i < TABS.byId.length; ++i) {
-        console.log(TABS.byId[i].title);
-        tab = TABS.byId[i];
-        f = tab.form;
-        if (f !== undefined) {
-            if (f.object === 'organisation' && f.action === "update") {
-                f._populateHTMLPanes();
+        if (TABS.byId[i] !== undefined) {
+            console.log(TABS.byId[i].title);
+            tab = TABS.byId[i];
+            f = tab.form;
+            if (f !== undefined) {
+                if (f.object === 'organisation' && f.action === "update") {
+                    f._populateHTMLPanes();
+                }
             }
         }
     }
