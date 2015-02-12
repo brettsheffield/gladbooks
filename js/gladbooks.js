@@ -2860,6 +2860,46 @@ Form.prototype.submitSuccessCustomContact = function(xml) {
     }
 }
 
+Form.prototype.tabToolClick = function(btn) {
+    console.log(btn.attr('title') + ' toolbar button clicked');
+    var f = this;
+    var t = this.tab.tablet;
+    var w = t.find('div.tabworkspace');
+    w.empty();
+    if (btn.hasClass('btnhome')) {
+        btn.removeClass('selected');
+        var url = '/html/forms/organisation/detail.html';
+        showHTML(url, '', w)
+        .done(function() {
+                f.map = new Map();
+                f.populate(w);
+                f.finalize();
+                f.updateMap();
+        });
+    }
+    else if (btn.hasClass('btndetails')) {
+        /* TODO */
+    }
+    else if (btn.hasClass('btncontacts')) {
+        btn.removeClass('selected');
+        var url = '/html/forms/organisation_contact/update.html';
+        showHTML(url, '', w)
+        .done(function() {
+                f._populateHTMLPanes();
+        });
+    }
+    else if (btn.hasClass('btnfinancial')) {
+        /* TODO */
+    }
+    else if (btn.hasClass('btnmap')) {
+        w.append('<div class="map-canvas"/>');
+        f.updateMap();
+    }
+    else {
+        console.log('unknown tool button - ignoring');
+    }
+}
+
 Form.prototype.validateCustom = function() {
     console.log('Form().validateCustom()');
     var b = true;

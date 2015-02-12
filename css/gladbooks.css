@@ -534,6 +534,35 @@ button.last {
   padding-bottom: 2px;
   line-height: 1.1em; }
 
+button.selected {
+  background-color: white; }
+
+div.tabtoolbar {
+  background-color: #6e89a5; }
+
+div.tabtoolbar button {
+  border-radius: 0;
+  font-size: 16pt;
+  font-weight: bold;
+  height: 30px;
+  margin: 0;
+  width: 30px; }
+
+button.btnhome:before {
+  content: "\2302"; }
+
+button.btndetails:before {
+  content: "\2026"; }
+
+button.btncontacts:before {
+  content: "\2698"; }
+
+button.btnfinancial:before {
+  content: "\0024"; }
+
+button.btnmap:before {
+  content: "\2638"; }
+
 button:hover, button:focus {
   background-color: white; }
 
