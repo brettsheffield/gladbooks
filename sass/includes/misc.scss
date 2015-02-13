@@ -69,6 +69,11 @@ button.btnmap:before {
 }
 div.tabworkspace div.tr div.th {
         background-color: $color-dark;
+        padding-right: 1em;
+}
+div.tabworkspace div.tr div.td {
+	font-family: Courier, Monospace;
+        padding-right: 1em;
 }
 div.tabworkspace div.tr:nth-child(odd) {
         background-color: $color-odd;

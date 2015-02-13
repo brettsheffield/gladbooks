@@ -575,7 +575,12 @@ button.btnmap:before {
   content: "\2638"; }
 
 div.tabworkspace div.tr div.th {
-  background-color: #6e89a5; }
+  background-color: #6e89a5;
+  padding-right: 1em; }
+
+div.tabworkspace div.tr div.td {
+  font-family: Courier, Monospace;
+  padding-right: 1em; }
 
 div.tabworkspace div.tr:nth-child(odd) {
   background-color: #ffec9b; }
