@@ -96,6 +96,9 @@ div.tabworkspace div.xml-total {
         text-align: right;
         width: 10%;
 }
+div.tabworkspace div.organisation_contact.create div.tr {
+        background-color: $color-dark;
+}
 
 button:hover, button:focus {
 	background-color: white;
