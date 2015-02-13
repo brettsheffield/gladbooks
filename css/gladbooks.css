@@ -537,8 +537,12 @@ button.last {
 button.selected {
   background-color: white; }
 
+div.organisation.update {
+  position: relative; }
+
 div.tabtoolbar {
-  background-color: #6e89a5; }
+  background-color: #6e89a5;
+  height: 30px; }
 
 div.tabtoolbar button {
   border-radius: 0;
@@ -547,6 +551,13 @@ div.tabtoolbar button {
   height: 30px;
   margin: 0;
   width: 30px; }
+
+div.tabworkspace {
+  position: absolute;
+  top: 31px;
+  bottom: 0;
+  width: 100%;
+  height: auto; }
 
 button.btnhome:before {
   content: "\2302"; }
