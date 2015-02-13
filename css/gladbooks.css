@@ -574,6 +574,35 @@ button.btnfinancial:before {
 button.btnmap:before {
   content: "\2638"; }
 
+div.tabworkspace div.tr div.th {
+  background-color: #6e89a5; }
+
+div.tabworkspace div.tr:nth-child(odd) {
+  background-color: #ffec9b; }
+
+div.tabworkspace div.tr:nth-child(even) {
+  background-color: #fff8cb; }
+
+div.tabworkspace div.xml-ref {
+  width: 10%; }
+
+div.tabworkspace div.xml-salesorder {
+  width: 10%; }
+
+div.tabworkspace div.xml-ponumber {
+  width: 20%; }
+
+div.tabworkspace div.xml-taxpoint,
+div.tabworkspace div.xml-issued,
+div.tabworkspace div.xml-due {
+  width: 10%; }
+
+div.tabworkspace div.xml-subtotal,
+div.tabworkspace div.xml-tax,
+div.tabworkspace div.xml-total {
+  text-align: right;
+  width: 10%; }
+
 button:hover, button:focus {
   background-color: white; }
 

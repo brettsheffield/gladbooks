@@ -2889,7 +2889,12 @@ Form.prototype.tabToolClick = function(btn) {
         });
     }
     else if (btn.hasClass('btnfinancial')) {
-        /* TODO */
+        btn.removeClass('selected');
+        var url = '/html/forms/organisation_salesinvoice/update.html';
+        showHTML(url, '', w)
+        .done(function() {
+                f._populateHTMLPanes();
+        });
     }
     else if (btn.hasClass('btnmap')) {
         w.append('<div class="map-canvas"/>');
