@@ -869,8 +869,7 @@ div.organisation_contact.th {
   height: 1.5em; }
 
 div.organisation_contact {
-  padding: 0;
-  width: 60%; }
+  padding: 0; }
 
 div.organisation_contact input {
   width: 100%; }
