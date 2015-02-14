@@ -2614,6 +2614,15 @@ Form.prototype.eventsCustom = function() {
             var id = row.find('input[name="id"]').val();
             form.relationshipUpdate(form.id, id, $(this).val(), false);
         });
+
+        c = t.find('div.organisation_salesinvoice div.tr div.td');
+        c.off('click').click(function() {
+            var row = $(this).closest('div.tr');
+            var ref = row.find('div.td.xml-ref').text();
+            var si = 'SI-' + ref.replace('/', '-') + '.pdf';
+            var url = '/pdf/' + g_orgcode + '/' + si;
+            window.open(url);
+        });
     }
     else if (this.object === 'purchaseinvoice') {
         form.draft = true;
