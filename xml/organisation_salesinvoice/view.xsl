@@ -8,13 +8,13 @@
 			<input type="checkbox"/>
 		</div-->
 		<div class="th xml-ref">Ref</div>
-		<div class="th xml-salesorder">SO</div>
-		<div class="th xml-ponumber">PO</div>
+		<div class="th xml-salesorder smallscreen-hidden">SO</div>
+		<div class="th xml-ponumber smallscreen-hidden">PO</div>
 		<div class="th xml-taxpoint">Taxpoint</div>
-		<div class="th xml-issued">Issued</div>
-		<div class="th xml-due">Due</div>
-		<div class="th xml-subtotal">Subtotal</div>
-		<div class="th xml-tax">Tax</div>
+		<div class="th xml-issued smallscreen-hidden">Issued</div>
+		<div class="th xml-due smallscreen-hidden">Due</div>
+		<div class="th xml-subtotal smallscreen-hidden">Subtotal</div>
+		<div class="th xml-tax smallscreen-hidden">Tax</div>
 		<div class="th xml-total">Total</div>
 	</div>
         <xsl:apply-templates select="row"/>
@@ -28,25 +28,25 @@
 		<div class="td xml-ref">
 			<xsl:value-of select="ref"/>
 		</div>
-		<div class="td xml-salesorder">
+		<div class="td xml-salesorder smallscreen-hidden">
 			<xsl:value-of select="salesorder"/>
 		</div>
-		<div class="td xml-ponumber">
+		<div class="td xml-ponumber smallscreen-hidden">
 			<xsl:value-of select="ponumber"/>
 		</div>
 		<div class="td xml-taxpoint">
 			<xsl:value-of select="taxpoint"/>
 		</div>
-		<div class="td xml-issued">
+		<div class="td xml-issued smallscreen-hidden">
 			<xsl:value-of select="issued"/>
 		</div>
-		<div class="td xml-due">
+		<div class="td xml-due smallscreen-hidden">
 			<xsl:value-of select="due"/>
 		</div>
-		<div class="td xml-subtotal">
+		<div class="td xml-subtotal smallscreen-hidden">
 			<xsl:value-of select="subtotal"/>
 		</div>
-		<div class="td xml-tax">
+		<div class="td xml-tax smallscreen-hidden">
 			<xsl:value-of select="tax"/>
 		</div>
 		<div class="td xml-total">

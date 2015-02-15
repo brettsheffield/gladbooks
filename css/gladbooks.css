@@ -2029,4 +2029,13 @@ div.panel.right {
 /* styles that apply only to small screens */
 @media all and (max-width: 1024px) {
   .smallscreen-hidden {
-    display: none; } }
+    display: none; }
+
+  div.organisation_salesinvoice div.xml-ref {
+    width: 40%; }
+
+  div.organisation_salesinvoice div.xml-taxpoint {
+    width: 30%; }
+
+  div.organisation_salesinvoice div.xml-total {
+    width: 30%; } }
