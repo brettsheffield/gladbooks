@@ -39,11 +39,7 @@ Install from git master - ldif bits of libgladdb need stuff (ldif api) that isn'
  cd /usr/local/src
  git clone https://github.com/brettsheffield/gladd.git
 
- # oh dear - this really should be in a Makefile
- cd gladd/libs/libb64-1.2/src
- make
- cp libb64.a /usr/local/lib/
- cp -r ../include/b64/ /usr/local/include
+ make libb64.a # as root
 
  cd /usr/local/src/gladd/src
  ./configure --with-openssl
