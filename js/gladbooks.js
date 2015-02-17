@@ -2614,6 +2614,15 @@ Form.prototype.eventsCustom = function() {
             var id = row.find('input[name="id"]').val();
             form.relationshipUpdate(form.id, id, $(this).val(), false);
         });
+
+        c = t.find('div.organisation_salesinvoice div.tr div.td');
+        c.off('click').click(function() {
+            var row = $(this).closest('div.tr');
+            var ref = row.find('div.td.xml-ref').text();
+            var si = 'SI-' + ref.replace('/', '-') + '.pdf';
+            var url = '/pdf/' + g_orgcode + '/' + si;
+            window.open(url);
+        });
     }
     else if (this.object === 'purchaseinvoice') {
         form.draft = true;
@@ -2829,7 +2838,10 @@ Form.prototype.submitErrorCustom = function(xhr, s, err) {
 }
 
 Form.prototype.submitSuccessCustom = function(xml) {
-    if ((['purchaseorder', 'salesorder'].indexOf(this.object) !== -1)
+    if (this.object === 'contact' && this.action === 'update') {
+        this.submitSuccessCustomContact(xml);
+    }
+    else if ((['purchaseorder', 'salesorder'].indexOf(this.object) !== -1)
     && (this.action === 'update'))
     {
         this.processReturnedData = false;
@@ -2838,6 +2850,68 @@ Form.prototype.submitSuccessCustom = function(xml) {
         TABS.refresh('salesinvoices');
     }
     return false;
+}
+
+Form.prototype.submitSuccessCustomContact = function(xml) {
+    var tab;
+    var f;
+    for (var i = 0; i < TABS.byId.length; ++i) {
+        if (TABS.byId[i] !== undefined) {
+            console.log(TABS.byId[i].title);
+            tab = TABS.byId[i];
+            f = tab.form;
+            if (f !== undefined) {
+                if (f.object === 'organisation' && f.action === "update") {
+                    f._populateHTMLPanes();
+                }
+            }
+        }
+    }
+}
+
+Form.prototype.tabToolClick = function(btn) {
+    console.log(btn.attr('title') + ' toolbar button clicked');
+    var f = this;
+    var t = this.tab.tablet;
+    var w = t.find('div.tabworkspace');
+    w.empty();
+    if (btn.hasClass('btnhome')) {
+        btn.removeClass('selected');
+        var url = '/html/forms/organisation/detail.html';
+        showHTML(url, '', w)
+        .done(function() {
+                f.map = new Map();
+                f.populate(w);
+                f.finalize();
+                f.updateMap();
+        });
+    }
+    else if (btn.hasClass('btndetails')) {
+        /* TODO */
+    }
+    else if (btn.hasClass('btncontacts')) {
+        btn.removeClass('selected');
+        var url = '/html/forms/organisation_contact/update.html';
+        showHTML(url, '', w)
+        .done(function() {
+                f._populateHTMLPanes();
+        });
+    }
+    else if (btn.hasClass('btnfinancial')) {
+        btn.removeClass('selected');
+        var url = '/html/forms/organisation_salesinvoice/update.html';
+        showHTML(url, '', w)
+        .done(function() {
+                f._populateHTMLPanes();
+        });
+    }
+    else if (btn.hasClass('btnmap')) {
+        w.append('<div class="map-canvas"/>');
+        f.updateMap();
+    }
+    else {
+        console.log('unknown tool button - ignoring');
+    }
 }
 
 Form.prototype.validateCustom = function() {

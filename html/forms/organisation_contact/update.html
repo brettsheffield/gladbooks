@@ -1,21 +1,34 @@
-<div class="organisation_contact update">
- 
+<div class="contactwrapper">
+  <div class="organisation_contact create">
+
       <div class="tr">
-        <div class="th">Name</div>
-        <div class="th">Email</div>
-        <div class="th">Telephone</div>
-        <div class="th">Mobile</div>
-        <div class="th">Type</div>
-        <div class="th">&nbsp;</div>
+        <div class="td selector"/>
+        <div class="th xml-name">Name</div>
+        <div class="th xml-email">Email</div>
+        <div class="th xml-phone">Telephone</div>
+        <div class="th xml-phone">Mobile</div>
+        <div class="th buttons">&nbsp;</div>
       </div>
 
-    <div class="tr" data-minOccurs="1">
-      <div class="td name"><input class="nosubmit" name="name" type="text" placeholder="Name"/></div>
-      <div class="td email"><input class="nosubmit" name="email" type="email" placeholder="Email"/></div>
-      <div class="td phone"><input class="nosubmit" name="phone" type="text" placeholder="Telephone"/></div>
-      <div class="td phone"><input class="nosubmit" name="mobile" type="text" placeholder="Mobile"/></div>
-      <div class="td"><select name="relationship" multiple class="relationship populate nosubmit" data-source="relationships" data-placeholder="Select type(s)"></select></div>
-      <div class="td"><button class="addrow">Add</button></div>
-    </div>
+      <div class="tr">
+        <div class="td selector"/>
+        <div class="td xml-name"><input name="name" type="text" placeholder="Name"/></div>
+        <div class="td xml-email"><input name="email" type="email" placeholder="Email"/></div>
+        <div class="td xml-phone"><input name="phone" type="text" placeholder="Telephone"/></div>
+        <div class="td xml-phone"><input name="mobile" type="text" placeholder="Mobile"/></div>
+        <div class="td buttons addcontact"><button class="addcontact">Add</button></div>
+      </div>
+      <div class="tr">
+        <div class="td selector">
+          <input type="checkbox" name="selectall"/>
+        </div>
+        <div class="td buttons">
+          <button class="removecontact">Remove</button>
+        </div>
+      </div>
 
+
+  </div>
+
+  <div class="organisation_contact update loadhtml" data-url="/{instance}/{business}/organisation_contacts/{id}/"/>
 </div>

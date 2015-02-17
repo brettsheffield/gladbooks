@@ -534,6 +534,83 @@ button.last {
   padding-bottom: 2px;
   line-height: 1.1em; }
 
+button.selected {
+  background-color: white; }
+
+div.organisation.update {
+  position: relative; }
+
+div.tabtoolbar {
+  background-color: #6e89a5;
+  height: 30px; }
+
+div.tabtoolbar button {
+  border-radius: 0;
+  font-size: 16pt;
+  font-weight: bold;
+  height: 30px;
+  margin: 0;
+  width: 30px; }
+
+div.tabworkspace {
+  position: absolute;
+  top: 31px;
+  bottom: 0;
+  width: 100%;
+  height: auto; }
+
+button.btnhome:before {
+  content: "\2302"; }
+
+button.btndetails:before {
+  content: "\2026"; }
+
+button.btncontacts:before {
+  content: "\2698"; }
+
+button.btnfinancial:before {
+  content: "\0024"; }
+
+button.btnmap:before {
+  content: "\2638"; }
+
+div.tabworkspace div.tr div.th {
+  background-color: #6e89a5;
+  padding-right: 1em; }
+
+div.tabworkspace div.tr div.td {
+  font-family: Courier, Monospace;
+  padding-right: 1em; }
+
+div.tabworkspace div.tr:nth-child(odd) {
+  background-color: #ffec9b; }
+
+div.tabworkspace div.tr:nth-child(even) {
+  background-color: #fff8cb; }
+
+div.tabworkspace div.xml-ref {
+  width: 10%; }
+
+div.tabworkspace div.xml-salesorder {
+  width: 10%; }
+
+div.tabworkspace div.xml-ponumber {
+  width: 20%; }
+
+div.tabworkspace div.xml-taxpoint,
+div.tabworkspace div.xml-issued,
+div.tabworkspace div.xml-due {
+  width: 10%; }
+
+div.tabworkspace div.xml-subtotal,
+div.tabworkspace div.xml-tax,
+div.tabworkspace div.xml-total {
+  text-align: right;
+  width: 10%; }
+
+div.tabworkspace div.organisation_contact.create div.tr {
+  background-color: #6e89a5; }
+
 button:hover, button:focus {
   background-color: white; }
 
@@ -792,8 +869,7 @@ div.organisation_contact.th {
   height: 1.5em; }
 
 div.organisation_contact {
-  padding: 0;
-  width: 60%; }
+  padding: 0; }
 
 div.organisation_contact input {
   width: 100%; }
@@ -1953,4 +2029,13 @@ div.panel.right {
 /* styles that apply only to small screens */
 @media all and (max-width: 1024px) {
   .smallscreen-hidden {
-    display: none; } }
+    display: none; }
+
+  div.organisation_salesinvoice div.xml-ref {
+    width: 40%; }
+
+  div.organisation_salesinvoice div.xml-taxpoint {
+    width: 30%; }
+
+  div.organisation_salesinvoice div.xml-total {
+    width: 30%; } }
