@@ -67,6 +67,19 @@ Install from git master - ldif bits of libgladdb need stuff (ldif api) that isn'
  
 Update /etc/gladd.conf.local with ssl certificate and key details.
 
+=== Install Plugins ===
+
+yes, yes, this needs to be in a Makefile somewhere too...
+
+ cd /usr/local/gladd/gladbooks-ui/src/csvtoxml
+ make
+ make install
+ cd ../pg
+ make
+ make install
+ 
+ # ignore clerkd for now
+ 
 === Set up database ===
 
 apt-get install postgresql-9.1 postgresql-client postgresql-server-dev-9.1
@@ -93,18 +106,11 @@ postgres:~$ exit
  make all
  make demo (optional)
  
-=== Install Plugins ===
+=== Configuration and Templates ===
 
-yes, yes, this needs to be in a Makefile somewhere too...
+TODO
 
- cd /usr/local/gladd/gladbooks-ui/src/csvtoxml
- make
- make install
- cd ../pg
- make
- make install
- 
- # ignore clerkd for now
+/etc/gladbooks/conf.d/
 
 === Start gladd ===
 
