@@ -3,6 +3,11 @@
 === Install Prerequisites ===
 
  apt-get install git build-essential
+ 
+== Other Packages ==
+
+xetex (xelatex)
+media-fonts/freefont
 
 === Install openldap ===
 Install from git master - ldif bits of libgladdb need stuff (ldif api) that isn't due to be released until 2.5.
