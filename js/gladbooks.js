@@ -2750,6 +2750,25 @@ Form.prototype.overrides = function() {
         this.prompts['delete'] = 'Reverse this journal?';
         this.prompts['deletestatus'] = 'Reversing journal...';
     }
+    else if (this.object === 'organisation' && this.action === 'update') {
+        /* fill in totals for organisation statement */
+        var total = '0.00';
+        t.find('div.organisation_statement div.tr').each(function() {
+            $(this).find('div.xml-debit').each(function() {
+                debit = $(this).text();
+                if ($.isNumeric(debit)) {
+                    total = decimalAdd(total, debit);
+                }
+            });
+            $(this).find('div.xml-credit').each(function() {
+                credit = $(this).text();
+                if ($.isNumeric(credit)) {
+                    total = decimalSubtract(total, credit);
+                }
+            });
+            $(this).find('div.xml-total').text(decimalPad(total,2));
+        });
+    }
     else if (this.object === 'purchaseinvoice') {
         if (this.data["FORMDATA"]) {
             var journal = this.data["FORMDATA"].find('journal').text();
