@@ -602,6 +602,8 @@ div.tabworkspace div.xml-issued,
 div.tabworkspace div.xml-due {
   width: 10%; }
 
+div.tabworkspace div.xml-debit,
+div.tabworkspace div.xml-credit,
 div.tabworkspace div.xml-subtotal,
 div.tabworkspace div.xml-tax,
 div.tabworkspace div.xml-total {
