@@ -17,6 +17,9 @@
 <xsl:template match="row">
         <xsl:if test="taxpoint != '0001-01-01'">
 	<div class="tr">
+                <xsl:if test="type = 'TOTAL'">
+                        <xsl:attribute name="class">tr total</xsl:attribute>
+                </xsl:if>
                 <input name="id" type="hidden" value="{lineid}"/>
                 <input name="type" type="hidden" value="{type}"/>
                 <input name="ref" type="hidden" value="{ref}"/>

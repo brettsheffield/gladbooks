@@ -103,6 +103,10 @@ div.tabworkspace div.xml-total {
         text-align: right;
         width: 10%;
 }
+div.organisation_statement div.tr.total div.td {
+        border-top: 2px solid $color-dark;
+        font-weight: bolder;
+}
 div.tabworkspace div.organisation_contact.create div.tr {
         background-color: $color-dark;
 }
