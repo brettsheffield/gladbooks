@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <row>
+    <type>ORG_NAME</type>
+    <id>2</id>
+    <salesinvoice></salesinvoice>
+    <taxpoint>0001-01-01</taxpoint>
+    <issued></issued>
+    <due></due>
+    <ref>Customer Limited (CUSTOMER)</ref>
+    <subtotal></subtotal>
+    <tax></tax>
+    <total></total>
+  </row>
+  <row>
+    <type>SP</type>
+    <id>2</id>
+    <salesinvoice></salesinvoice>
+    <taxpoint>2013-03-20</taxpoint>
+    <issued></issued>
+    <due></due>
+    <ref>Payment Received</ref>
+    <subtotal></subtotal>
+    <tax></tax>
+    <total>60.00</total>
+  </row>
+  <row>
+    <type>SI</type>
+    <id>2</id>
+    <salesinvoice>4</salesinvoice>
+    <taxpoint>2015-02-18</taxpoint>
+    <issued>2015-02-18 19:19:43.241944+00</issued>
+    <due>2015-03-04</due>
+    <ref>Invoice: CUSTOMER/0001</ref>
+    <subtotal>9.99</subtotal>
+    <tax>2.00</tax>
+    <total>11.99</total>
+  </row>
+  <row>
+    <type>SI</type>
+    <id>2</id>
+    <salesinvoice>5</salesinvoice>
+    <taxpoint>2015-02-18</taxpoint>
+    <issued>2015-02-18 19:23:24.64974+00</issued>
+    <due>2015-03-04</due>
+    <ref>Invoice: CUSTOMER/0002</ref>
+    <subtotal>119.88</subtotal>
+    <tax>23.98</tax>
+    <total>143.86</total>
+  </row>
+  <row>
+    <type>SI</type>
+    <id>2</id>
+    <salesinvoice>6</salesinvoice>
+    <taxpoint>2015-02-19</taxpoint>
+    <issued>2015-02-19 13:30:33.483651+00</issued>
+    <due>2015-03-05</due>
+    <ref>Invoice: CUSTOMER/0003</ref>
+    <subtotal>99.90</subtotal>
+    <tax>19.98</tax>
+    <total>119.88</total>
+  </row>
+  <row>
+    <type>SP</type>
+    <id>2</id>
+    <salesinvoice></salesinvoice>
+    <taxpoint>2015-02-23</taxpoint>
+    <issued></issued>
+    <due></due>
+    <ref>Payment Received</ref>
+    <subtotal></subtotal>
+    <tax></tax>
+    <total>100.00</total>
+  </row>
+  <row>
+    <type>TOTAL</type>
+    <id>2</id>
+    <salesinvoice></salesinvoice>
+    <taxpoint></taxpoint>
+    <issued></issued>
+    <due></due>
+    <ref>Total Amount Due</ref>
+    <subtotal></subtotal>
+    <tax></tax>
+    <total>115.73</total>
+  </row>
+</resources>

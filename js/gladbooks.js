@@ -2899,7 +2899,7 @@ Form.prototype.tabToolClick = function(btn) {
     }
     else if (btn.hasClass('btnfinancial')) {
         btn.removeClass('selected');
-        var url = '/html/forms/organisation_salesinvoice/update.html';
+        var url = '/html/forms/organisation_statement/update.html';
         showHTML(url, '', w)
         .done(function() {
                 f._populateHTMLPanes();

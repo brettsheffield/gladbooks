@@ -149,11 +149,11 @@ nav.site ul li a {
   text-decoration: none;
   text-shadow: 0 1px 0 grey;
   white-space: nowrap;
-  -webkit-transition: background-color 1s ease;
-  -moz-transition: background-color 1s ease;
-  -o-transition: background-color 1s ease;
-  -ms-transition: background-color 1s ease;
-  transition: background-color 1s ease; }
+  -webkit-transition: background-color 1.0s ease;
+  -moz-transition: background-color 1.0s ease;
+  -o-transition: background-color 1.0s ease;
+  -ms-transition: background-color 1.0s ease;
+  transition: background-color 1.0s ease; }
 
 nav.site ul li a:hover {
   background: #6e89a5; }
@@ -269,7 +269,7 @@ div.logoback {
 .login-popup {
   display: none;
   background: #6e89a5;
-  border: 2px solid #dddddd;
+  border: 2px solid #ddd;
   float: left;
   font-size: 1.2em;
   padding-bottom: 0.2em;
@@ -277,11 +277,11 @@ div.logoback {
   top: 33%;
   left: 50%;
   z-index: 99999;
-  box-shadow: 0px 0px 20px #999999;
+  box-shadow: 0px 0px 20px #999;
   /* CSS3 */
-  -moz-box-shadow: 0px 0px 20px #999999;
+  -moz-box-shadow: 0px 0px 20px #999;
   /* Firefox */
-  -webkit-box-shadow: 0px 0px 20px #999999;
+  -webkit-box-shadow: 0px 0px 20px #999;
   /* Safari, Chrome */
   border-radius: 28px;
   -moz-border-radius: 28px;
@@ -307,10 +307,10 @@ form.signin p, form.signin span {
 
 form.signin .textbox input {
   background: #b2cde0;
-  border-bottom: 1px solid #333333;
-  border-left: 1px solid black;
-  border-right: 1px solid #333333;
-  border-top: 1px solid black;
+  border-bottom: 1px solid #333;
+  border-left: 1px solid #000;
+  border-right: 1px solid #333;
+  border-top: 1px solid #000;
   color: #333;
   border-radius: 3px 3px 3px 3px;
   -moz-border-radius: 3px;
@@ -322,11 +322,11 @@ form.signin .textbox input {
 
 form.signin input:-moz-placeholder {
   color: #6e89a5;
-  text-shadow: 0 0 2px white; }
+  text-shadow: 0 0 2px #fff; }
 
 form.signin input::-webkit-input-placeholder {
   color: #6e89a5;
-  text-shadow: 0 0 2px black; }
+  text-shadow: 0 0 2px #000; }
 
 #btnLogin {
   background: -moz-linear-gradient(center top, #f3f3f3, #dddddd);
@@ -589,7 +589,7 @@ div.tabworkspace div.tr:nth-child(even) {
   background-color: #fff8cb; }
 
 div.tabworkspace div.xml-ref {
-  width: 10%; }
+  width: 40%; }
 
 div.tabworkspace div.xml-salesorder {
   width: 10%; }
