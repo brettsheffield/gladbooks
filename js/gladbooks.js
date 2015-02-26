@@ -2615,13 +2615,16 @@ Form.prototype.eventsCustom = function() {
             form.relationshipUpdate(form.id, id, $(this).val(), false);
         });
 
-        c = t.find('div.organisation_salesinvoice div.tr div.td');
+        c = t.find('div.organisation_statement div.tr div.td');
         c.off('click').click(function() {
             var row = $(this).closest('div.tr');
-            var ref = row.find('div.td.xml-ref').text();
-            var si = 'SI-' + ref.replace('/', '-') + '.pdf';
-            var url = '/pdf/' + g_orgcode + '/' + si;
-            window.open(url);
+            var type = row.find('input[name="type"]').val();
+            if (type === 'SI') {
+                var ref = row.find('input[name="ref"]').val();
+                var si = 'SI-' + ref.replace('/', '-') + '.pdf';
+                var url = '/pdf/' + g_orgcode + '/' + si;
+                window.open(url);
+            }
         });
     }
     else if (this.object === 'purchaseinvoice') {

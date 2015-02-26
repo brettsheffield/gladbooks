@@ -17,7 +17,9 @@
 <xsl:template match="row">
         <xsl:if test="taxpoint != '0001-01-01'">
 	<div class="tr">
-                <input name="id" type="hidden" value="{id}"/>
+                <input name="id" type="hidden" value="{lineid}"/>
+                <input name="type" type="hidden" value="{type}"/>
+                <input name="ref" type="hidden" value="{ref}"/>
 		<div class="td xml-taxpoint">
 			<xsl:value-of select="taxpoint"/>
 		</div>
@@ -28,7 +30,7 @@
 			<xsl:value-of select="due"/>
 		</div>
 		<div class="td xml-ref">
-			<xsl:value-of select="ref"/>
+			<xsl:value-of select="description"/>
 		</div>
 		<div class="td xml-debit">
                 <xsl:if test="type = 'SI'">
