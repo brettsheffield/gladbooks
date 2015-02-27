@@ -6,7 +6,8 @@ SELECT
         DATE(si.taxpoint) AS taxpoint,
         DATE(si.issued) AS issued,
         DATE(si.due) as due,
-        'Invoice: ' || si.ref AS ref,
+        si.ref AS ref,
+        'Invoice: ' || si.ref AS description,
         format_accounting(si.subtotal) AS subtotal,
         format_accounting(si.tax) AS tax,
         format_accounting(si.total) AS total
@@ -20,6 +21,7 @@ SELECT
         NULL AS issued,
         NULL AS due,
         'Payment Received' AS ref,
+        'Payment Received' AS description,
         NULL AS subtotal,
         NULL AS tax,
         format_accounting(amount) AS total
@@ -33,6 +35,7 @@ SELECT
         NULL AS issued,
         NULL AS due,
         'Total Amount Due' AS ref,
+        'Total Amount Due' AS description,
         NULL AS subtotal,
         NULL AS tax,
         format_accounting(
@@ -43,4 +46,3 @@ LEFT JOIN organisation_invoiced oi ON o.id = oi.id
 LEFT JOIN organisation_paid op ON o.id = op.id
 ORDER BY taxpoint ASC, type ASC, lineid ASC
 ;
-
