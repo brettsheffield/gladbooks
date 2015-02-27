@@ -1437,7 +1437,7 @@ SELECT
 FROM organisation o
 LEFT JOIN organisation_invoiced oi ON o.id = oi.id
 LEFT JOIN organisation_paid op ON o.id = op.id
-ORDER BY taxpoint ASC
+ORDER BY taxpoint ASC, type ASC, lineid ASC
 ;
 
 CREATE OR REPLACE VIEW salesstatement AS

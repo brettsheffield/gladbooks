@@ -21,6 +21,7 @@
                         <xsl:attribute name="class">tr total</xsl:attribute>
                 </xsl:if>
                 <input name="id" type="hidden" value="{lineid}"/>
+                <input name="org" type="hidden" value="{id}"/>
                 <input name="type" type="hidden" value="{type}"/>
                 <input name="ref" type="hidden" value="{ref}"/>
 		<div class="td xml-taxpoint">

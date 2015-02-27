@@ -107,6 +107,13 @@ div.organisation_statement div.tr.total div.td {
         border-top: 2px solid $color-dark;
         font-weight: bolder;
 }
+div.popup {
+        border: 2px solid $color-dark;
+        display: none;
+        height: 50%;
+        width: 50%;
+        z-index: 998;
+}
 div.tabworkspace div.organisation_contact.create div.tr {
         background-color: $color-dark;
 }
