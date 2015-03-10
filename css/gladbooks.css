@@ -1982,13 +1982,6 @@ div.chzn-search > input {
     width: 100%; } }
 @media only screen and (min-width: 1500px) {
   /* report panels */
-  div.report.balancesheet {
-    width: 1200px; }
-
-  div.report.profitandloss,
-  div.report.statement {
-    width: 700px; }
-
   div.panel.left {
     width: 570px; }
 
@@ -2014,8 +2007,7 @@ div.chzn-search > input {
     width: 100%; } }
 /* reports */
 div.report {
-  background-color: #fff8cb;
-  border: solid 1px black;
+  color: black;
   padding: 20px; }
 
 div.report * div.linespace {
