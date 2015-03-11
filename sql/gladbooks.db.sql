@@ -1166,6 +1166,26 @@ BEGIN
 END;
 $process_salesorders$ LANGUAGE 'plpgsql';
 
+-- returns number of invoices already raised against this sales order
+CREATE OR REPLACE FUNCTION salesorderinvoices(soid INT4)
+RETURNS INT4 as $$
+DECLARE
+        so_raised               INT4;
+
+BEGIN
+        SELECT COUNT(*) INTO so_raised
+        FROM salesinvoicedetail
+        WHERE id IN (
+                SELECT MAX(id)
+                FROM salesinvoicedetail
+                GROUP BY salesinvoice
+        )
+        AND salesorder = soid;
+
+        RETURN so_raised;
+END;
+$$ LANGUAGE 'plpgsql';
+
 -- process_salesorder() - create missing salesinvoices for a given salesorder
 -- RETURN INT4 number of salesinvoices generated
 CREATE OR REPLACE FUNCTION process_salesorder(soid INT4)
@@ -1208,14 +1228,7 @@ BEGIN
 	END IF;
 
 	-- fetch invoices already raised against this salesorder --
-	SELECT COUNT(*) INTO so_raised
-	FROM salesinvoicedetail
-	WHERE id IN (
-		SELECT MAX(id)
-		FROM salesinvoicedetail
-		GROUP BY salesinvoice
-	)
-	AND salesorder = soid;
+        SELECT salesorderinvoices(soid) INTO so_raised;
 
 	RAISE NOTICE '% / % invoices raised', so_raised, so_due;
 
