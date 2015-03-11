@@ -1269,6 +1269,15 @@ BEGIN
 	ELSIF periods_unissued < 0 THEN
 		RAISE NOTICE 'too many salesinvoices exist for salesorder %', soid;
 	END IF;
+        -- close salesorder if all invoices raised
+        IF so.end_date IS NOT NULL OR so.cycle = 1 THEN
+                IF so.end_date < DATE(NOW()) OR so.cycle = 1 THEN
+                        SELECT salesorderinvoices(soid) INTO so_raised;
+                        IF so_raised = so_due THEN
+                                PERFORM close_salesorder(soid);
+                        END IF;
+                END IF;
+        END IF;
 
 	RETURN periods_unissued;
 END;
