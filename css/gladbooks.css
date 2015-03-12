@@ -618,6 +618,9 @@ div.popup {
   border: 2px solid #6e89a5;
   display: none;
   height: 50%;
+  left: 25%;
+  top: 25%;
+  position: absolute;
   width: 50%;
   z-index: 998; }
 

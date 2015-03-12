@@ -103,6 +103,8 @@ div.tabworkspace div.xml-total {
         text-align: right;
         width: 10%;
 }
+div.organisation_statement {
+}
 div.organisation_statement div.tr.total div.td {
         border-top: 2px solid $color-dark;
         font-weight: bolder;
@@ -111,6 +113,9 @@ div.popup {
         border: 2px solid $color-dark;
         display: none;
         height: 50%;
+        left: 25%;
+        top: 25%;
+        position: absolute;
         width: 50%;
         z-index: 998;
 }
