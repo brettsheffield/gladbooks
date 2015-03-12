@@ -621,6 +621,23 @@ div.popup {
   width: 50%;
   z-index: 998; }
 
+div.popup div.popselection div.tr {
+  background-color: #6e89a5;
+  color: white; }
+
+div.popup div.popselection div.td.xml-taxpoint {
+  width: 20%; }
+
+div.popup div.popselection div.td.xml-description {
+  width: 60%; }
+
+div.popup div.popselection div.td.xml-total,
+div.popup div.popselection div.td.xml-credit {
+  width: 10%; }
+
+div.popup div.popselection div.td.xml-total {
+  display: none; }
+
 div.tabworkspace div.organisation_contact.create div.tr {
   background-color: #6e89a5; }
 
