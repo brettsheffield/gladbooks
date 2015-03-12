@@ -2630,6 +2630,9 @@ Form.prototype.eventsCustom = function() {
                 var w = $(this).closest('div.tabworkspace');
                 var pop = w.find('div.popup');
                 var row = $(this).clone();
+                $(this).closest('div.organisation_statement').find('div.tr')
+                    .removeClass('selected');
+                $(this).addClass('selected');
                 var pops = pop.find('div.popselection');
                 var popr = pop.find('div.popresults');
                 pops.empty().append(row);

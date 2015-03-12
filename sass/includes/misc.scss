@@ -114,6 +114,8 @@ div.popup {
         width: 50%;
         z-index: 998;
 }
+div.organisation_statement div.tr.selected,
+div.organisation_statement div.tr.selected div.td,
 div.popup div.popselection div.tr {
         background-color: $color-dark;
         color: white;
