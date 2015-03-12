@@ -2629,9 +2629,14 @@ Form.prototype.eventsCustom = function() {
                 var org = $(this).find('input[name="org"]').val();
                 var w = $(this).closest('div.tabworkspace');
                 var pop = w.find('div.popup');
+                var row = $(this).clone();
+                var pops = pop.find('div.popselection');
+                var popr = pop.find('div.popresults');
+                pops.empty().append(row);
                 pop.show();
+                
                 var url = collection_url('salesinvoice.suggestions' + '/' + org);
-                showHTML(url, '', pop);
+                showHTML(url, '', popr);
                 
             }
             console.log('test)');
