@@ -124,6 +124,17 @@ div.popup div.poptitle {
         color: white;
         padding-left: 1em;
 }
+div.popup div.popfooter {
+        background-color: $color-dark;
+        border: 2px solid $color-dark;
+        color: white;
+        padding-left: 1em;
+        margin-left: -2px;
+        position: absolute;
+        top: 100%;
+        height: 1.5em;
+        width: calc(100% + 4px);
+}
 div.organisation_statement div.tr.selected,
 div.organisation_statement div.tr.selected div.td,
 div.popup div.popselection div.tr {
