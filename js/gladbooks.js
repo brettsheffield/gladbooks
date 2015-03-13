@@ -2633,12 +2633,14 @@ Form.prototype.eventsCustom = function() {
                 $(this).closest('div.organisation_statement').find('div.tr')
                     .removeClass('selected');
                 $(this).addClass('selected');
+                var popt = pop.find('div.poptitle');
                 var pops = pop.find('div.popselection');
                 var popr = pop.find('div.popresults');
+                popt.empty().append('Allocate Payment');
                 pops.empty().append(row);
                 pop.show();
                 
-                var url = collection_url('salesinvoice.suggestions' + '/' + org);
+                var url = collection_url('salespayment.suggestions' + '/' + org);
                 showHTML(url, '', popr);
                 
             }

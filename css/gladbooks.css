@@ -624,22 +624,31 @@ div.popup {
   width: 50%;
   z-index: 998; }
 
+div.popup div.poptitle {
+  background-color: #6e89a5;
+  color: white;
+  padding-left: 1em; }
+
 div.organisation_statement div.tr.selected,
 div.organisation_statement div.tr.selected div.td,
 div.popup div.popselection div.tr {
-  background-color: #6e89a5;
-  color: white; }
+  background-color: white;
+  color: #6e89a5; }
 
-div.popup div.popselection div.td.xml-taxpoint {
+div.popup div.popselection div.td.xml-taxpoint,
+div.popup div.popresults div.td.xml-date {
   width: 20%; }
 
-div.popup div.popselection div.td.xml-description {
+div.popup div.popselection div.td.xml-ref {
   width: 60%; }
 
 div.popup div.popselection div.td.xml-total,
 div.popup div.popselection div.td.xml-credit {
   width: 10%; }
 
+div.popup div.popresults div.td.xml-id,
+div.popup div.popselection div.td.xml-issued,
+div.popup div.popselection div.td.xml-due,
 div.popup div.popselection div.td.xml-total {
   display: none; }
 
