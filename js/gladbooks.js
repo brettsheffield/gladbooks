@@ -2673,6 +2673,17 @@ Form.prototype.eventsCustomOrganisationSalesPayment = function(sp) {
     .done(function() {
         popr.find('div.tr.salesinvoice input.allocate').click(function() {
             return false; // do nothing
+        })
+        .blur(function() {
+            if ($(this).val() === '0.00') {
+                $(this).closest('div.tr.salesinvoice').removeClass('selected');
+            }
+        })
+        .change(function() {
+            $(this).val(decimalPad($(this).val(), 2));
+            if ($(this).val() === '0.00') {
+                $(this).closest('div.tr.salesinvoice').removeClass('selected');
+            }
         });
         popr.find('div.tr.salesinvoice').click(function() {
             $(this).toggleClass('selected');
