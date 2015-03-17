@@ -2676,6 +2676,7 @@ Form.prototype.eventsCustomOrganisationSalesPayment = function(sp) {
         });
         popr.find('div.tr.salesinvoice').click(function() {
             $(this).toggleClass('selected');
+            $(this).find('input.allocate').focus().select();
         });
     });
 }
