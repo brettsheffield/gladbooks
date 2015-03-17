@@ -2625,31 +2625,8 @@ Form.prototype.eventsCustom = function() {
                 window.open(url);
             }
             else if (type === 'SP') {
-                var id = $(this).find('input[name="id"]').val();
-                var org = $(this).find('input[name="org"]').val();
-                var w = $(this).closest('div.tabworkspace');
-                var pop = w.find('div.popup');
-                var row = $(this).clone();
-                $(this).closest('div.organisation_statement').find('div.tr')
-                    .removeClass('selected');
-                $(this).addClass('selected');
-                var popt = pop.find('div.poptitle');
-                var pops = pop.find('div.popselection');
-                var popr = pop.find('div.popresults');
-                popt.empty().append('Allocate Payment');
-                pops.empty().append(row);
-                pop.show();
-                
-                var url = collection_url('salespayment.suggestions' + '/' + org);
-                showHTML(url, '', popr)
-                .done(function() {
-                    popr.find('div.tr.salesinvoice').click(function() {
-                        $(this).toggleClass('selected');
-                    });
-                });
-                
+                form.eventsCustomOrganisationSalesPayment($(this));
             }
-            console.log('test)');
         });
     }
     else if (this.object === 'purchaseinvoice') {
@@ -2671,6 +2648,33 @@ Form.prototype.eventsCustom = function() {
             }
         });
     }
+}
+
+Form.prototype.eventsCustomOrganisationSalesPayment = function(sp) {
+    var form = this;
+    var t = this.tab.tablet;
+    var id = sp.find('input[name="id"]').val();
+    var org = sp.find('input[name="org"]').val();
+    var w = sp.closest('div.tabworkspace');
+    var pop = w.find('div.popup');
+    var row = sp.clone();
+    sp.closest('div.organisation_statement').find('div.tr')
+        .removeClass('selected');
+    sp.addClass('selected');
+    var popt = pop.find('div.poptitle');
+    var pops = pop.find('div.popselection');
+    var popr = pop.find('div.popresults');
+    popt.empty().append('Allocate Payment');
+    pops.empty().append(row);
+    pop.show();
+    
+    var url = collection_url('salespayment.suggestions' + '/' + org);
+    showHTML(url, '', popr)
+    .done(function() {
+        popr.find('div.tr.salesinvoice').click(function() {
+            $(this).toggleClass('selected');
+        });
+    });
 }
 
 Form.prototype.eventsCustomReport = function(form, t) {
