@@ -2671,6 +2671,9 @@ Form.prototype.eventsCustomOrganisationSalesPayment = function(sp) {
     var url = collection_url('salespayment.suggestions' + '/' + org);
     showHTML(url, '', popr)
     .done(function() {
+        popr.find('div.tr.salesinvoice input.allocate').click(function() {
+            return false; // do nothing
+        });
         popr.find('div.tr.salesinvoice').click(function() {
             $(this).toggleClass('selected');
         });
