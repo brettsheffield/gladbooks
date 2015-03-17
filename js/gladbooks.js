@@ -2691,9 +2691,7 @@ Form.prototype.eventsCustomOrganisationSalesPayment = function(sp) {
             if ($(this).not('.selected')) {
                 allocate.val('0.00');
             }
-            else {
-                $(this).find('input.allocate').focus().select();
-            }
+            $(this).find('input.allocate').focus().select();
         });
     });
 }
