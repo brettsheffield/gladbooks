@@ -657,6 +657,15 @@ div.popup div.popselection div.td.xml-total,
 div.popup div.popselection div.td.xml-credit {
   width: 10%; }
 
+div.popup div.popresults div.xml-description {
+  width: 50%; }
+
+div.popup div.popresults div.td.allocate {
+  width: 20%; }
+
+div.popup div.popresults input.allocate {
+  width: 100%; }
+
 div.popup div.popresults div.td.xml-id,
 div.popup div.popselection div.td.xml-issued,
 div.popup div.popselection div.td.xml-due,
