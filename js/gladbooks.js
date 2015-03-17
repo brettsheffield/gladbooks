@@ -2686,8 +2686,14 @@ Form.prototype.eventsCustomOrganisationSalesPayment = function(sp) {
             }
         });
         popr.find('div.tr.salesinvoice').click(function() {
+            var allocate = $(this).find('input.allocate');
             $(this).toggleClass('selected');
-            $(this).find('input.allocate').focus().select();
+            if ($(this).not('.selected')) {
+                allocate.val('0.00');
+            }
+            else {
+                $(this).find('input.allocate').focus().select();
+            }
         });
     });
 }
