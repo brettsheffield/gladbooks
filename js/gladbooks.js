@@ -2641,7 +2641,12 @@ Form.prototype.eventsCustom = function() {
                 pop.show();
                 
                 var url = collection_url('salespayment.suggestions' + '/' + org);
-                showHTML(url, '', popr);
+                showHTML(url, '', popr)
+                .done(function() {
+                    popr.find('div.tr.salesinvoice').click(function() {
+                        $(this).toggleClass('selected');
+                    });
+                });
                 
             }
             console.log('test)');
