@@ -2664,6 +2664,7 @@ Form.prototype.eventsCustomOrganisationSalesPayment = function(sp) {
     var popt = pop.find('div.poptitle');
     var pops = pop.find('div.popselection');
     var popr = pop.find('div.popresults');
+    var popf = pop.find('div.popfooter');
     popt.empty().append('Allocate Payment');
     pops.empty().append(row);
     pop.show();
@@ -2692,6 +2693,9 @@ Form.prototype.eventsCustomOrganisationSalesPayment = function(sp) {
                 allocate.val('0.00');
             }
             $(this).find('input.allocate').focus().select();
+        });
+        popf.find('button.allocate').click(function() {
+            console.log('button.allocate');
         });
     });
 }
