@@ -2741,6 +2741,7 @@ Form.prototype.eventsCustomOrganisationSalesPaymentAllocate = function(sp) {
             },
             success: function(xml) {
                 pop.hide();
+                sp.removeClass('selected');
             },
             error: function(xhr, s, err) {
                 var xml = xhr.responseXML;
