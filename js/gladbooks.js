@@ -2693,6 +2693,9 @@ Form.prototype.eventsCustomOrganisationSalesPayment = function(sp) {
         });
         popr.find('div.tr.salesinvoice').off('click').click(function() {
             var allocate = $(this).find('input.allocate');
+            var total = $(this).find('div.xml-total').text();
+            var paid = $(this).find('div.xml-paid').text();
+            var unpaid = decimalSubtract(total, paid);
             $(this).toggleClass('selected');
             if ($(this).not('.selected')) {
                 /* allocate the maximum available */
@@ -2701,7 +2704,12 @@ Form.prototype.eventsCustomOrganisationSalesPayment = function(sp) {
                     var v = decimalPad($(this).val(), 2);
                     max = decimalSubtract(max, v);
                 });
-                allocate.val(decimalPad(max, 2));
+                if (max > unpaid) {
+                    allocate.val(decimalPad(unpaid, 2));
+                }
+                else {
+                    allocate.val(decimalPad(max, 2));
+                }
             }
             else {
                 allocate.val('0.00');
