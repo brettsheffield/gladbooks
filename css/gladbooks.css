@@ -658,7 +658,11 @@ div.popup div.popselection div.td.xml-credit {
   width: 10%; }
 
 div.popup div.popresults div.xml-description {
-  width: 50%; }
+  width: 40%; }
+
+div.popup div.popresults div.xml-paid {
+  text-align: right;
+  width: 10%; }
 
 div.popup div.popresults div.td.allocate {
   width: 20%; }

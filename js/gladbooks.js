@@ -2669,9 +2669,14 @@ Form.prototype.eventsCustomOrganisationSalesPayment = function(sp) {
     pops.empty().append(row);
     pop.show();
     
-    var url = collection_url('salespayment.suggestions' + '/' + org);
+    var url = collection_url('salespayment.suggestions' + '/' + org + '/' + id);
     showHTML(url, '', popr)
     .done(function() {
+        popr.find('div.tr.salesinvoice input.allocate').each(function() {
+            if ($(this).val() !== '0.00') {
+                $(this).closest('div.tr').addClass('selected');
+            }
+        });
         popr.find('div.tr.salesinvoice input.allocate').click(function() {
             return false; // do nothing
         })
@@ -2711,6 +2716,7 @@ Form.prototype.eventsCustomOrganisationSalesPaymentAllocate = function(sp) {
     console.log('allocating payment ' + salespayment);
     var salesinvoices = popr.find('div.tr.salesinvoice');
     var xml = createRequestXml();
+    xml += '<salespayment>' + salespayment + '</salespayment>';
     var c = 0;
     salesinvoices.each(function() {
         var amount = $(this).find('input.allocate').val();
@@ -2720,7 +2726,6 @@ Form.prototype.eventsCustomOrganisationSalesPaymentAllocate = function(sp) {
             console.log('allocating ' + amount + ' to SI #' + salesinvoice);
             c++;
             xml += '<salespaymentallocation>';
-            xml += '<salespayment>' + salespayment + '</salespayment>';
             xml += '<salesinvoice>' + salesinvoice + '</salesinvoice>';
             xml += '<amount>' + amount + '</amount>';
             xml += '</salespaymentallocation>';
@@ -2728,33 +2733,30 @@ Form.prototype.eventsCustomOrganisationSalesPaymentAllocate = function(sp) {
     });
     console.log(c + ' invoice(s) allocated');
     xml += '</data></request>';
-    if (c > 0) {
-        var url = collection_url('salespaymentallocations');
-        return $.ajax({
-            url: url,
-            type: 'POST',
-            data: xml,
-            contentType: 'text/xml',
-            timeout: g_timeout,
-            beforeSend: function(xhr) {
-                setAuthHeader(xhr);
-            },
-            success: function(xml) {
-                pop.hide();
-                sp.removeClass('selected');
-            },
-            error: function(xhr, s, err) {
-                var xml = xhr.responseXML;
-                var responsecode = $(xml).find('responsecode').text();
-                var responsetext = $(xml).find('responsetext').text();
-                if (responsetext) {
-                    err = responsetext;
-                }
-                statusMessage('Error: ' + responsetext, STATUS_CRIT);
+    var url = collection_url('salespaymentreallocations');
+    return $.ajax({
+        url: url,
+        type: 'POST',
+        data: xml,
+        contentType: 'text/xml',
+        timeout: g_timeout,
+        beforeSend: function(xhr) {
+            setAuthHeader(xhr);
+        },
+        success: function(xml) {
+            pop.hide();
+            sp.removeClass('selected');
+        },
+        error: function(xhr, s, err) {
+            var xml = xhr.responseXML;
+            var responsecode = $(xml).find('responsecode').text();
+            var responsetext = $(xml).find('responsetext').text();
+            if (responsetext) {
+                err = responsetext;
             }
-        });
- 
-    }
+            statusMessage('Error: ' + responsetext, STATUS_CRIT);
+        }
+    });
 }
 
 Form.prototype.eventsCustomReport = function(form, t) {

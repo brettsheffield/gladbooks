@@ -22,8 +22,11 @@
 		<div class="td xml-total">
 			<xsl:value-of select="total"/>
 		</div>
+		<div class="td xml-paid">
+			<xsl:value-of select="paid"/>
+		</div>
 		<div class="td allocate">
-			<input class="allocate" type="text" value="0.00"/>
+			<input class="allocate" type="text" value="{allocated}"/>
 		</div>
 	</div>
 </xsl:template>
