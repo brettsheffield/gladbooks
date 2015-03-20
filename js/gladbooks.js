@@ -2695,16 +2695,17 @@ Form.prototype.eventsCustomOrganisationSalesPayment = function(sp) {
             var allocate = $(this).find('input.allocate');
             var total = $(this).find('div.xml-total').text();
             var paid = $(this).find('div.xml-paid').text();
-            var unpaid = decimalSubtract(total, paid);
+            var unpaid = new Big(decimalSubtract(total, paid));
             $(this).toggleClass('selected');
-            if ($(this).not('.selected')) {
+            if ($(this).hasClass('selected')) {
                 /* allocate the maximum available */
                 var max = pops.find('div.xml-credit').text();
                 popr.find('input.allocate').each(function() {
                     var v = decimalPad($(this).val(), 2);
                     max = decimalSubtract(max, v);
                 });
-                if (max > unpaid) {
+                var maxB = new Big(max);
+                if (maxB.gt(unpaid)) { /* FIXME */
                     allocate.val(decimalPad(unpaid, 2));
                 }
                 else {
