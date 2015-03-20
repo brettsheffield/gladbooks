@@ -3,14 +3,12 @@
 <xsl:output method="text" disable-output-escaping="yes" />
 
 	<xsl:template match="salespaymentallocation">
-                <xsl:if test="not(@id)">
-                        <xsl:text>INSERT INTO salespaymentallocation (</xsl:text>
-			<xsl:text>authuser, clientip) VALUES ('</xsl:text>
-                        <xsl:copy-of select="$authuser"/>
-                        <xsl:text>','</xsl:text>
-                        <xsl:copy-of select="$clientip"/>
-                        <xsl:text>');</xsl:text>
-                </xsl:if>
+                <xsl:text>INSERT INTO salespaymentallocation (</xsl:text>
+                <xsl:text>authuser, clientip) VALUES ('</xsl:text>
+                <xsl:copy-of select="$authuser"/>
+                <xsl:text>','</xsl:text>
+                <xsl:copy-of select="$clientip"/>
+                <xsl:text>');</xsl:text>
 
 		<xsl:text>INSERT INTO salespaymentallocationdetail (</xsl:text>
 		<xsl:text>salespaymentallocation,</xsl:text>
@@ -35,16 +33,9 @@
                         </xsl:otherwise>
                 </xsl:choose>
 
-		<xsl:choose>
-			<xsl:when test="salespayment">
-				<xsl:text>'</xsl:text>
-				<xsl:value-of select="salespayment"/>
-				<xsl:text>',</xsl:text>
-			</xsl:when>
-			<xsl:otherwise>
-                                <xsl:text>currval(pg_get_serial_sequence('salespayment','id')),</xsl:text>
-			</xsl:otherwise>
-		</xsl:choose>
+                <xsl:text>'</xsl:text>
+                <xsl:value-of select="../salespayment"/>
+                <xsl:text>',</xsl:text>
 		<xsl:if test="salesinvoice">
 			<xsl:text>'</xsl:text>
 			<xsl:value-of select="salesinvoice"/>
