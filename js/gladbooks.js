@@ -2686,7 +2686,7 @@ Form.prototype.eventsCustomOrganisationSalesPayment = function(sp) {
                 $(this).closest('div.tr.salesinvoice').removeClass('selected');
             }
         });
-        popr.find('div.tr.salesinvoice').click(function() {
+        popr.find('div.tr.salesinvoice').off('click').click(function() {
             var allocate = $(this).find('input.allocate');
             $(this).toggleClass('selected');
             if ($(this).not('.selected')) {
@@ -2694,10 +2694,66 @@ Form.prototype.eventsCustomOrganisationSalesPayment = function(sp) {
             }
             $(this).find('input.allocate').focus().select();
         });
-        popf.find('button.allocate').click(function() {
+        popf.find('button.allocate').off('click').click(function() {
             console.log('button.allocate');
+            form.eventsCustomOrganisationSalesPaymentAllocate(sp);
         });
     });
+}
+
+Form.prototype.eventsCustomOrganisationSalesPaymentAllocate = function(sp) {
+    var form = this;
+    var w = sp.closest('div.tabworkspace');
+    var pop = w.find('div.popup');
+    var pops = pop.find('div.popselection');
+    var popr = pop.find('div.popresults');
+    var salespayment = pops.find('input[name="id"]').val();
+    console.log('allocating payment ' + salespayment);
+    var salesinvoices = popr.find('div.tr.salesinvoice');
+    var xml = createRequestXml();
+    var c = 0;
+    salesinvoices.each(function() {
+        var amount = $(this).find('input.allocate').val();
+        var salesinvoice = $(this).find('div.xml-id').text();
+        amount = decimalPad(amount,2);
+        if (amount !== '0.00') {
+            console.log('allocating ' + amount + ' to SI #' + salesinvoice);
+            c++;
+            xml += '<salespaymentallocation>';
+            xml += '<salespayment>' + salespayment + '</salespayment>';
+            xml += '<salesinvoice>' + salesinvoice + '</salesinvoice>';
+            xml += '<amount>' + amount + '</amount>';
+            xml += '</salespaymentallocation>';
+        }
+    });
+    console.log(c + ' invoice(s) allocated');
+    xml += '</data></request>';
+    if (c > 0) {
+        var url = collection_url('salespaymentallocations');
+        return $.ajax({
+            url: url,
+            type: 'POST',
+            data: xml,
+            contentType: 'text/xml',
+            timeout: g_timeout,
+            beforeSend: function(xhr) {
+                setAuthHeader(xhr);
+            },
+            success: function(xml) {
+                pop.hide();
+            },
+            error: function(xhr, s, err) {
+                var xml = xhr.responseXML;
+                var responsecode = $(xml).find('responsecode').text();
+                var responsetext = $(xml).find('responsetext').text();
+                if (responsetext) {
+                    err = responsetext;
+                }
+                statusMessage('Error: ' + responsetext, STATUS_CRIT);
+            }
+        });
+ 
+    }
 }
 
 Form.prototype.eventsCustomReport = function(form, t) {
