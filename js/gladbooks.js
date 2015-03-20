@@ -2695,9 +2695,18 @@ Form.prototype.eventsCustomOrganisationSalesPayment = function(sp) {
             var allocate = $(this).find('input.allocate');
             $(this).toggleClass('selected');
             if ($(this).not('.selected')) {
+                /* allocate the maximum available */
+                var max = pops.find('div.xml-credit').text();
+                popr.find('input.allocate').each(function() {
+                    var v = decimalPad($(this).val(), 2);
+                    max = decimalSubtract(max, v);
+                });
+                allocate.val(decimalPad(max, 2));
+            }
+            else {
                 allocate.val('0.00');
             }
-            $(this).find('input.allocate').focus().select();
+            allocate.focus().select();
         });
         popf.find('button.allocate').off('click').click(function() {
             console.log('button.allocate');
