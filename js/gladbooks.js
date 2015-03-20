@@ -2734,6 +2734,8 @@ Form.prototype.eventsCustomOrganisationSalesPaymentAllocate = function(sp) {
     console.log(c + ' invoice(s) allocated');
     xml += '</data></request>';
     var url = collection_url('salespaymentreallocations');
+    statusHide();
+    showSpinner('Saving...');
     return $.ajax({
         url: url,
         type: 'POST',
@@ -2744,10 +2746,12 @@ Form.prototype.eventsCustomOrganisationSalesPaymentAllocate = function(sp) {
             setAuthHeader(xhr);
         },
         success: function(xml) {
+            hideSpinner();
             pop.hide();
             sp.removeClass('selected');
         },
         error: function(xhr, s, err) {
+            hideSpinner();
             var xml = xhr.responseXML;
             var responsecode = $(xml).find('responsecode').text();
             var responsetext = $(xml).find('responsetext').text();
