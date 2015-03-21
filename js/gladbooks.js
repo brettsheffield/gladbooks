@@ -2495,6 +2495,9 @@ customClickElement = function(row) {
             var title = 'Statement: ' + row.find('td.xml-orgcode').text();
         }
         else if (tab.collection === 'reports/ageddebtors') {
+            var id = row.find('td.xml-id').text();
+            var name = row.find('td.xml-customer').text();
+            showForm('organisation', 'update', name, id);
             return true;
         }
         else {
