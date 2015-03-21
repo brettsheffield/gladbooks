@@ -1182,18 +1182,23 @@ GROUP BY
 HAVING COALESCE(SUM(sip.amount), '0.00') < sic.total
 ;
 
-CREATE VIEW ageddebtors AS
+CREATE OR REPLACE VIEW ageddebtors AS 
 SELECT
         si.organisation,
         COALESCE(sic.unpaid, '0.00') AS current,
         COALESCE(s30.unpaid, '0.00') AS days30,
         COALESCE(s60.unpaid, '0.00') AS days60,
         COALESCE(s90.unpaid, '0.00') AS days90,
-        COALESCE(s120.unpaid, '0.00') AS days120
+        COALESCE(s91.unpaid, '0.00') AS days91,
+        COALESCE(sic.unpaid, '0.00') +
+        COALESCE(s30.unpaid, '0.00') +
+        COALESCE(s60.unpaid, '0.00') +
+        COALESCE(s90.unpaid, '0.00') +
+        COALESCE(s91.unpaid, '0.00') AS total
 FROM salesinvoice_unpaid si
 LEFT JOIN (
-        SELECT organisation, SUM(total) - SUM(paid) AS unpaid 
-        FROM salesinvoice_unpaid 
+        SELECT organisation, SUM(total) - SUM(paid) AS unpaid
+        FROM salesinvoice_unpaid
         WHERE age <= 0 GROUP BY organisation
 ) sic ON si.organisation = sic.organisation
 LEFT JOIN (
@@ -1215,12 +1220,12 @@ LEFT JOIN (
         GROUP BY organisation
 ) s90 ON si.organisation = s90.organisation
 LEFT JOIN (
-        SELECT organisation, SUM(total) - SUM(paid) AS unpaid 
-        FROM salesinvoice_unpaid 
-        WHERE age BETWEEN 91 AND 120
+        SELECT organisation, SUM(total) - SUM(paid) AS unpaid
+        FROM salesinvoice_unpaid
+        WHERE age >= 91 
         GROUP BY organisation
-) s120 ON si.organisation = s120.organisation
-GROUP BY si.organisation, sic.unpaid, s30.unpaid, s60.unpaid, s90.unpaid, s120.unpaid
+) s91 ON si.organisation = s91.organisation
+GROUP BY si.organisation, sic.unpaid, s30.unpaid, s60.unpaid, s90.unpaid, s91.unpaid
 ;
 
 CREATE OR REPLACE VIEW trialbalance AS

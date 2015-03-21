@@ -48,6 +48,7 @@ g_menus = [
     ['product.create', showForm, 'product', 'create', 'Add New Product'],
     ['products', showQuery, 'products', 'Products', true],
     ['rpt_accountsreceivable', showQuery, 'reports/accountsreceivable', 'Accounts Receivable', true],
+    ['rpt_ageddebtors', showQuery, 'reports/ageddebtors', 'Aged Debtors', false, false],
     ['rpt_balancesheet', showHTML, 'reports/balancesheet', 'Balance Sheet', false, true],
     ['rpt_profitandloss', showHTML, 'reports/profitandloss', 'Profit & Loss', false, true],
     ['rpt_trialbalance', showQuery, 'reports/trialbalance', 'Trial Balance', false],
@@ -2492,6 +2493,9 @@ customClickElement = function(row) {
         var id = row.find('td.xml-id').text();
         if (tab.collection === 'reports/accountsreceivable') {
             var title = 'Statement: ' + row.find('td.xml-orgcode').text();
+        }
+        else if (tab.collection === 'reports/ageddebtors') {
+            return true;
         }
         else {
             var title = null;

@@ -5,7 +5,12 @@ SELECT
         COALESCE(s30.unpaid, '0.00') AS days30,
         COALESCE(s60.unpaid, '0.00') AS days60,
         COALESCE(s90.unpaid, '0.00') AS days90,
-        COALESCE(s120.unpaid, '0.00') AS days120
+        COALESCE(s91.unpaid, '0.00') AS days91,
+        COALESCE(sic.unpaid, '0.00') +
+        COALESCE(s30.unpaid, '0.00') +
+        COALESCE(s60.unpaid, '0.00') +
+        COALESCE(s90.unpaid, '0.00') +
+        COALESCE(s91.unpaid, '0.00') AS total
 FROM salesinvoice_unpaid si
 LEFT JOIN (
         SELECT organisation, SUM(total) - SUM(paid) AS unpaid 
@@ -33,8 +38,8 @@ LEFT JOIN (
 LEFT JOIN (
         SELECT organisation, SUM(total) - SUM(paid) AS unpaid 
         FROM salesinvoice_unpaid 
-        WHERE age BETWEEN 91 AND 120
+        WHERE age >= 91
         GROUP BY organisation
-) s120 ON si.organisation = s120.organisation
-GROUP BY si.organisation, sic.unpaid, s30.unpaid, s60.unpaid, s90.unpaid, s120.unpaid
+) s91 ON si.organisation = s91.organisation
+GROUP BY si.organisation, sic.unpaid, s30.unpaid, s60.unpaid, s90.unpaid, s91.unpaid
 ;
