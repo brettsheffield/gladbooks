@@ -2705,7 +2705,7 @@ Form.prototype.eventsCustomOrganisationSalesPayment = function(sp) {
                     max = decimalSubtract(max, v);
                 });
                 var maxB = new Big(max);
-                if (maxB.gt(unpaid)) { /* FIXME */
+                if (maxB.gt(unpaid)) {
                     allocate.val(decimalPad(unpaid, 2));
                 }
                 else {
