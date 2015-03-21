@@ -864,7 +864,8 @@ SELECT 	sod.id,
 	SUM(COALESCE(soi.price, p.price_sell, '0.00') * soi.qty)),2) AS subtotal,
 	COALESCE(sod.tax, sit.tax, '0.00') AS tax,
 	roundhalfeven(COALESCE(sod.total, SUM(COALESCE(soi.price, p.price_sell, '0.00')
-	* soi.qty) + COALESCE(sod.tax, sit.tax, '0.00')),2) AS total
+	* soi.qty) + COALESCE(sod.tax, sit.tax, '0.00')),2) AS total,
+        date_part('day', age(due, current_timestamp)) AS age
 FROM salesinvoicedetail sod
 INNER JOIN salesinvoice so ON so.id = sod.salesinvoice
 LEFT JOIN salesinvoiceitem_current soi ON so.id = soi.salesinvoice
@@ -875,7 +876,7 @@ LEFT JOIN (
 ) sit ON so.id = sit.salesinvoice
 LEFT JOIN product_current p ON p.product = soi.product
 INNER JOIN organisation o ON o.id = so.organisation
-GROUP BY sod.id, so.organisation, so.invoicenum, sit.tax, o.orgcode;
+GROUP BY sod.id, so.organisation, so.invoicenum, sit.tax, o.orgcode, sod.due;
 
 CREATE TABLE salespayment (
 	id		SERIAL PRIMARY KEY,
