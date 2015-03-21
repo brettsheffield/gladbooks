@@ -865,7 +865,7 @@ SELECT 	sod.id,
 	COALESCE(sod.tax, sit.tax, '0.00') AS tax,
 	roundhalfeven(COALESCE(sod.total, SUM(COALESCE(soi.price, p.price_sell, '0.00')
 	* soi.qty) + COALESCE(sod.tax, sit.tax, '0.00')),2) AS total,
-        date_part('day', age(due, current_timestamp)) AS age
+        date_part('day', age(current_timestamp, due)) AS age
 FROM salesinvoicedetail sod
 INNER JOIN salesinvoice so ON so.id = sod.salesinvoice
 LEFT JOIN salesinvoiceitem_current soi ON so.id = soi.salesinvoice
@@ -1180,6 +1180,47 @@ GROUP BY
 	sic.total,
         sic.age
 HAVING COALESCE(SUM(sip.amount), '0.00') < sic.total
+;
+
+CREATE VIEW ageddebtors AS
+SELECT
+        si.organisation,
+        COALESCE(sic.unpaid, '0.00') AS current,
+        COALESCE(s30.unpaid, '0.00') AS days30,
+        COALESCE(s60.unpaid, '0.00') AS days60,
+        COALESCE(s90.unpaid, '0.00') AS days90,
+        COALESCE(s120.unpaid, '0.00') AS days120
+FROM salesinvoice_unpaid si
+LEFT JOIN (
+        SELECT organisation, SUM(total) - SUM(paid) AS unpaid 
+        FROM salesinvoice_unpaid 
+        WHERE age <= 0 GROUP BY organisation
+) sic ON si.organisation = sic.organisation
+LEFT JOIN (
+        SELECT organisation, SUM(total) - SUM(paid) AS unpaid
+        FROM salesinvoice_unpaid
+        WHERE age BETWEEN 1 AND 30
+        GROUP BY organisation
+) s30 ON si.organisation = s30.organisation
+LEFT JOIN (
+        SELECT organisation, SUM(total) - SUM(paid) AS unpaid
+        FROM salesinvoice_unpaid
+        WHERE age BETWEEN 31 AND 60
+        GROUP BY organisation
+) s60 ON si.organisation = s60.organisation
+LEFT JOIN (
+        SELECT organisation, SUM(total) - SUM(paid) AS unpaid
+        FROM salesinvoice_unpaid
+        WHERE age BETWEEN 61 AND 90
+        GROUP BY organisation
+) s90 ON si.organisation = s90.organisation
+LEFT JOIN (
+        SELECT organisation, SUM(total) - SUM(paid) AS unpaid 
+        FROM salesinvoice_unpaid 
+        WHERE age BETWEEN 91 AND 120
+        GROUP BY organisation
+) s120 ON si.organisation = s120.organisation
+GROUP BY si.organisation, sic.unpaid, s30.unpaid, s60.unpaid, s90.unpaid, s120.unpaid
 ;
 
 CREATE OR REPLACE VIEW trialbalance AS
