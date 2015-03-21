@@ -1156,7 +1156,8 @@ SELECT 	sic.id,
 	sic.subtotal,
 	sic.tax,
 	sic.total,
-	COALESCE(SUM(sip.amount), '0.00') AS paid
+	COALESCE(SUM(sip.amount), '0.00') AS paid,
+        sic.age
 FROM salesinvoice_current sic
 LEFT JOIN salespaymentallocation_current sip
 ON sic.id = sip.salesinvoice
@@ -1176,7 +1177,8 @@ GROUP BY
 	sic.ref,
 	sic.subtotal,
 	sic.tax,
-	sic.total
+	sic.total,
+        sic.age
 HAVING COALESCE(SUM(sip.amount), '0.00') < sic.total
 ;
 
