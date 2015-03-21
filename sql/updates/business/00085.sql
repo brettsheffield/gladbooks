@@ -17,7 +17,7 @@ SELECT  sod.id,
         COALESCE(sod.tax, sit.tax, '0.00') AS tax,
         roundhalfeven(COALESCE(sod.total, SUM(COALESCE(soi.price, p.price_sell, '0.00')
         * soi.qty) + COALESCE(sod.tax, sit.tax, '0.00')),2) AS total,
-        date_part('day', age(current_timestamp, due)) AS age
+        date_part('day', current_timestamp - due) AS age
 FROM salesinvoicedetail sod
 INNER JOIN salesinvoice so ON so.id = sod.salesinvoice
 LEFT JOIN salesinvoiceitem_current soi ON so.id = soi.salesinvoice
